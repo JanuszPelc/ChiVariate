@@ -1,0 +1,29 @@
+# Build outputs
+bin/
+obj/
+out/
+
+# Tooling output
+generated_sequences/
+
+# Rider project files
+.idea/
+*.sln.iml
+
+# User-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# VS Code project settings (if opened there)
+.vscode/
+
+# OS-generated files
+.DS_Store
+Thumbs.db
+
+# NuGet Packages
+*.nupkg
+*.snupkg
+packages/
