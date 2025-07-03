@@ -762,11 +762,11 @@ New features are considered carefully but take lower priority than maintaining t
 
 ## Contributing
 
-See [Contributing](./CONTRIBUTING.md) for details. Bug reports and performance optimizations are especially welcome and receive priority support.
+See [Contributing](https://github.com/JanuszPelc/ChiVariate/blob/master/CONTRIBUTING.md) for details. Bug reports and performance optimizations are especially welcome and receive priority support.
 
 ## License
 
-ChiVariate is distributed under the [MIT license](./LICENSE).
+ChiVariate is distributed under the [MIT license](https://github.com/JanuszPelc/ChiVariate/blob/master/LICENSE).
 
 ## Related projects
 

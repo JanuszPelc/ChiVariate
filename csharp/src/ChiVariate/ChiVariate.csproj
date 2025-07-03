@@ -1,10 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
     <PropertyGroup>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 
         <PackageId>ChiVariate</PackageId>
-        <Version>1.0.0-rc1</Version>
+        <Version>1.0.0-rc2</Version>
         <Authors>Janusz Pelc</Authors>
         <Description>
             Deterministic, data-oriented random engine seamlessly bridging expressive everyday randomness and statistically rigorous, domain-specific simulations.
@@ -18,6 +17,8 @@
         <RepositoryUrl>https://github.com/JanuszPelc/ChiVariate</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
 
+        <PublishRepositoryUrl>true</PublishRepositoryUrl>
+        <EmbedUntrackedSources>true</EmbedUntrackedSources>
         <IncludeSymbols>true</IncludeSymbols>
         <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     </PropertyGroup>
@@ -26,4 +27,7 @@
         <None Include="..\..\..\README.md" Pack="true" PackagePath=""/>
     </ItemGroup>
 
+    <ItemGroup>
+        <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All"/>
+    </ItemGroup>
 </Project>
