@@ -153,6 +153,10 @@ public static class ChiIntegerGenerator
                 var shift = availableBits - bitCount;
                 return T.CreateChecked(sample >> shift);
             }
+            case 0:
+            {
+                return T.Zero;
+            }
             default:
                 throw new UnreachableException();
         }
