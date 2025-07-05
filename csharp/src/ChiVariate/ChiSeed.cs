@@ -102,67 +102,90 @@ public static class ChiSeed
         ArgumentNullException.ThrowIfNull(@string);
 
         var selector = long.CreateTruncating(number);
-        var index = HashString(@string);
+        var index = Core.Hash64(@string);
 
         return Chi32.ApplyCascadingHashInterleave(selector, index);
     }
 
-    #region Internal & Boierplate
-
-    private static long HashString(string? @string)
+    /// <summary>
+    ///     Provides advanced utility methods.
+    /// </summary>
+    public static class Core
     {
-        if (string.IsNullOrEmpty(@string))
-            return 0;
-
-        const int maxStackAllocSize = 512;
-
-        var byteCount = Encoding.UTF8.GetByteCount(@string);
-        byte[]? rentedArray = null;
-        var byteSpan = byteCount <= maxStackAllocSize
-            ? stackalloc byte[byteCount]
-            : RentArray(byteCount, out rentedArray);
-
-        var result = InitializeCombiner();
-
-        try
+        /// <summary>
+        ///     Computes a deterministic 64-bit hash value from a string using cross-platform
+        ///     Unicode normalization and endianness handling.
+        /// </summary>
+        /// <param name="string">
+        ///     The string to hash. Can be null or empty.
+        /// </param>
+        /// <returns>
+        ///     A <see cref="long" /> hash value that is deterministic across all platforms
+        ///     and .NET implementations. Returns 0 for null or empty strings.
+        /// </returns>
+        /// <remarks>
+        ///     This method uses UTF-8 encoding and endianness normalization to ensure
+        ///     identical results on little-endian and big-endian systems, making it
+        ///     suitable for scenarios requiring reproducible hashes across different
+        ///     architectures and operating systems.
+        /// </remarks>
+        public static long Hash64(string? @string)
         {
-            Encoding.UTF8.GetBytes(@string, byteSpan);
+            if (string.IsNullOrEmpty(@string))
+                return 0;
 
-            var intCount = byteSpan.Length & ~3;
-            var intSpan = MemoryMarshal.Cast<byte, int>(byteSpan[..intCount]);
+            const int maxStackAllocSize = 512;
 
-            if (!BitConverter.IsLittleEndian)
-                for (var index = 0; index < intSpan.Length; index++)
-                    intSpan[index] = BinaryPrimitives.ReverseEndianness(intSpan[index]);
+            var byteCount = Encoding.UTF8.GetByteCount(@string);
+            byte[]? rentedArray = null;
+            var byteSpan = byteCount <= maxStackAllocSize
+                ? stackalloc byte[byteCount]
+                : RentArray(byteCount, out rentedArray);
 
-            foreach (var int32 in intSpan)
-                CombineValue(ref result, int32);
+            var result = InitializeCombiner();
 
-            var orphanCount = byteSpan.Length & 3;
-            if (orphanCount > 0)
+            try
             {
-                var tailBytes = byteSpan[^orphanCount..];
-                var last = 0;
-                for (var i = 0; i < orphanCount; i++)
-                    last |= tailBytes[i] << (i * 8);
+                Encoding.UTF8.GetBytes(@string, byteSpan);
 
-                CombineValue(ref result, last);
+                var intCount = byteSpan.Length & ~3;
+                var intSpan = MemoryMarshal.Cast<byte, int>(byteSpan[..intCount]);
+
+                if (!BitConverter.IsLittleEndian)
+                    for (var index = 0; index < intSpan.Length; index++)
+                        intSpan[index] = BinaryPrimitives.ReverseEndianness(intSpan[index]);
+
+                foreach (var int32 in intSpan)
+                    CombineValue(ref result, int32);
+
+                var orphanCount = byteSpan.Length & 3;
+                if (orphanCount > 0)
+                {
+                    var tailBytes = byteSpan[^orphanCount..];
+                    var last = 0;
+                    for (var i = 0; i < orphanCount; i++)
+                        last |= tailBytes[i] << (i * 8);
+
+                    CombineValue(ref result, last);
+                }
+            }
+            finally
+            {
+                if (byteSpan.Length > maxStackAllocSize)
+                    ArrayPool<byte>.Shared.Return(rentedArray!);
+            }
+
+            return result;
+
+            static Span<byte> RentArray(int byteCount, out byte[] rentedArray)
+            {
+                rentedArray = ArrayPool<byte>.Shared.Rent(byteCount);
+                return rentedArray.AsSpan(0, byteCount);
             }
         }
-        finally
-        {
-            if (byteSpan.Length > maxStackAllocSize)
-                ArrayPool<byte>.Shared.Return(rentedArray!);
-        }
-
-        return result;
-
-        static Span<byte> RentArray(int byteCount, out byte[] rentedArray)
-        {
-            rentedArray = ArrayPool<byte>.Shared.Rent(byteCount);
-            return rentedArray.AsSpan(0, byteCount);
-        }
     }
+
+    #region Private and boierplate
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static long InitializeCombiner()
@@ -184,51 +207,52 @@ public static class ChiSeed
         combinedValue ^= (long)BitOperations.RotateRight(combinedHash ^ bitmaskPrime, offset);
     }
 
-    private static string BuildRuntimeFingerprint()
-    {
-        var components = new List<string>();
-
-        TryAddComponent(() => AppContext.BaseDirectory);
-        TryAddComponent(() => RuntimeInformation.OSDescription);
-        TryAddComponent(() => Guid.NewGuid().ToString());
-        TryAddComponent(() => Stopwatch.GetTimestamp().ToString());
-        TryAddComponent(() => DateTime.Now.ToLongDateString());
-        TryAddComponent(() => DateTime.Now.ToLongTimeString());
-        TryAddComponent(() => DateTime.Now.Ticks.ToString());
-        TryAddComponent(() => CultureInfo.CurrentCulture.DisplayName);
-        TryAddComponent(() => Environment.Version.ToString());
-
-        var separator = CultureInfo.CurrentCulture.TextInfo.ListSeparator;
-        new Random().Shuffle(CollectionsMarshal.AsSpan(components));
-        return string.Join(separator, components);
-
-        void TryAddComponent(Func<string> valueFactory)
-        {
-            try
-            {
-                var value = valueFactory();
-                if (!string.IsNullOrEmpty(value))
-                    components.Add(value);
-            }
-            catch
-            {
-                // Silently ignore failed sources
-            }
-        }
-    }
-
     private static class Global
     {
         public static ulong RuntimeSelector { get; } =
-            (ulong)Chi32.ApplyCascadingHashInterleave(
-                HashString(BuildRuntimeFingerprint()), HashString(TimerTicks.ToString()));
+            (ulong)BuildRuntimeFingerprint(TimerTicks);
 
         public static ulong CurrentIndex { get; set; } =
-            (ulong)HashString(
-                BitConverter.DoubleToInt64Bits(Math.Sin(TimerTicks)).ToString());
+            (ulong)BuildRuntimeFingerprint(Math.Sin(TimerTicks));
 
         public static ulong TimerTicks => (ulong)Stopwatch.GetTimestamp();
         public static object Lock { get; } = new();
+
+        private static long BuildRuntimeFingerprint(double value)
+        {
+            var components = new List<string>();
+
+            TryAddComponent(() => $"{value:C53}");
+            TryAddComponent(() => AppContext.BaseDirectory);
+            TryAddComponent(() => RuntimeInformation.OSDescription);
+            TryAddComponent(() => Guid.NewGuid().ToString());
+            TryAddComponent(() => DateTime.Now.ToLongDateString());
+            TryAddComponent(() => DateTime.Now.ToLongTimeString());
+            TryAddComponent(() => DateTime.Now.Ticks.ToString());
+            TryAddComponent(() => CultureInfo.CurrentCulture.DisplayName);
+            TryAddComponent(() => Environment.Version.ToString());
+
+            var separator = CultureInfo.CurrentCulture.TextInfo.ListSeparator;
+            new Random().Shuffle(CollectionsMarshal.AsSpan(components));
+            var selector = Core.Hash64(string.Join(separator, components));
+            var index = (long)TimerTicks;
+
+            return Chi32.ApplyCascadingHashInterleave(selector, index);
+
+            void TryAddComponent(Func<string> valueFactory)
+            {
+                try
+                {
+                    var componentValue = valueFactory();
+                    if (!string.IsNullOrEmpty(componentValue))
+                        components.Add(componentValue);
+                }
+                catch
+                {
+                    // Silently ignore failed sources
+                }
+            }
+        }
     }
 
     #endregion
