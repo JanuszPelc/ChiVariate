@@ -1,7 +1,9 @@
 using AwesomeAssertions;
 using Xunit;
 
-namespace ChiVariate.Tests.ChiHashTests;
+#pragma warning disable CS1591
+
+namespace ChiVariate.Tests.ChiSeedTests;
 
 /// <summary>
 ///     Contains unit tests for the static methods within the <see cref="ChiHash" /> class.
