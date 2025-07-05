@@ -225,7 +225,7 @@ public static class ChiSeed
 
         public static ulong CurrentIndex { get; set; } =
             (ulong)HashString(
-                new string(TimerTicks.ToString().Reverse().ToArray()));
+                BitConverter.DoubleToInt64Bits(Math.Sin(TimerTicks)).ToString());
 
         public static ulong TimerTicks => (ulong)Stopwatch.GetTimestamp();
         public static object Lock { get; } = new();
