@@ -1,5 +1,5 @@
+using AwesomeAssertions;
 using ChiVariate.Tests.TestInfrastructure;
-using FluentAssertions;
 using Xunit;
 using Xunit.Abstractions;
 

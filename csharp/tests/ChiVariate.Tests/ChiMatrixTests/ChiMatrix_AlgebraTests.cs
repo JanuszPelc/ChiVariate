@@ -1,5 +1,5 @@
 using System.Numerics;
-using FluentAssertions;
+using AwesomeAssertions;
 using Xunit;
 
 #pragma warning disable CS1591

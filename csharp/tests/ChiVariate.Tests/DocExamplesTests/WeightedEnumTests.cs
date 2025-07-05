@@ -1,4 +1,4 @@
-using FluentAssertions;
+using AwesomeAssertions;
 using Xunit;
 using Rarity = ChiVariate.Tests.DocExamplesTests.WeightedEnumTests.ConvenientMagicCardGenerator.Rarity;
 

@@ -6,7 +6,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\..\src\ChiVariate\ChiVariate.csproj"/>
-        <PackageReference Include="FluentAssertions" Version="8.2.0"/>
+        <PackageReference Include="AwesomeAssertions" Version="9.0.0"/>
         <PackageReference Include="xunit" Version="2.8.0"/>
         <PackageReference Include="xunit.runner.visualstudio" Version="2.8.0"/>
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.12.0"/>

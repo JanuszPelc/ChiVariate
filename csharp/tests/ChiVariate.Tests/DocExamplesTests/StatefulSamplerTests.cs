@@ -1,8 +1,8 @@
 using System.Numerics;
 using System.Runtime.CompilerServices;
+using AwesomeAssertions;
 using ChiVariate.Generators;
 using ChiVariate.Tests.TestInfrastructure;
-using FluentAssertions;
 using Xunit;
 using Xunit.Abstractions;
 

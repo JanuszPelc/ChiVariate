@@ -1,5 +1,5 @@
 using System.Numerics;
-using FluentAssertions;
+using AwesomeAssertions;
 
 namespace ChiVariate.Tests.TestInfrastructure;
 

@@ -1,4 +1,4 @@
-using FluentAssertions;
+using AwesomeAssertions;
 
 #pragma warning disable CS1591
 
