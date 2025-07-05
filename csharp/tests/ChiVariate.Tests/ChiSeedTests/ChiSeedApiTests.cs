@@ -8,7 +8,7 @@ namespace ChiVariate.Tests.ChiSeedTests;
 /// <summary>
 ///     Contains unit tests for the static methods within the <see cref="ChiHash" /> class.
 /// </summary>
-public class ChiHashScrambleTests
+public class ChiSeedApiTests
 {
     /// <summary>
     ///     Verifies that <see cref="ChiSeed.Scramble(long)" /> produces the same output when called
@@ -182,5 +182,25 @@ public class ChiHashScrambleTests
         // Assert
         scrambled1.Should().Be(scrambled2);
         scrambled1.Should().NotBe(0L);
+    }
+
+    /// <summary>
+    ///     Verifies that <see cref="ChiSeed.Core.Hash64(string)" /> produces a deterministic output.
+    /// </summary>
+    [Theory]
+    [InlineData("", 0L)] // Empty string
+    [InlineData("test", 5151988072576516256L)]
+    [InlineData("Hello, World!", -5175036796766112071L)]
+    [InlineData("A moderately long string seed for testing determinism.", -6960743544550810265L)]
+    [InlineData("\t\n\r ", -7339662360663615370L)] // Whitespace variations
+    [InlineData("你好世界", -1060883054426207415L)] // Non-ASCII BMP
+    [InlineData("👍", -8015312806335124022L)] // Supplementary character
+    public void CoreHash64_GivenStringInput_ReturnsDeterministicOutput(string input, long expected)
+    {
+        // Arrange & Act
+        var scrambled = ChiSeed.Core.Hash64(input);
+
+        // Assert
+        scrambled.Should().Be(expected);
     }
 }
