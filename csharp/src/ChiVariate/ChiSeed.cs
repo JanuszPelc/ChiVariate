@@ -1,6 +1,7 @@
 using System.Buffers;
 using System.Buffers.Binary;
 using System.Diagnostics;
+using System.Globalization;
 using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
@@ -32,11 +33,10 @@ public static class ChiSeed
         {
             unchecked
             {
-                var timeSeed = Global.TimerTicks;
+                const ulong deltaPrime = 0x1F844CB7FD2C1EAD;
+                Global.CurrentIndex += Global.TimerTicks + deltaPrime;
 
-                Global.SeedCounter += 0x1F844CB7FD2C1EAD;
-
-                return Chi32.ApplyCascadingHashInterleave((long)timeSeed, (long)Global.SeedCounter);
+                return Chi32.ApplyCascadingHashInterleave((long)Global.RuntimeSelector, (long)Global.CurrentIndex);
             }
         }
     }
@@ -84,7 +84,7 @@ public static class ChiSeed
     }
 
     /// <summary>
-    ///     Produces a well-mixed 64-bit hash value by combining a scrambled string and a numeric input.
+    ///     Produces a well-mixed 64-bit value by combining a scrambled string and a numeric input.
     /// </summary>
     /// <param name="string">The <see cref="string" /> value to be incorporated into the hash calculation.</param>
     /// <param name="number">A numeric value of type <typeparamref name="TNumber" /> to contribute to the hash.</param>
@@ -107,8 +107,13 @@ public static class ChiSeed
         return Chi32.ApplyCascadingHashInterleave(selector, index);
     }
 
-    private static long HashString(string @string)
+    #region Internal & Boierplate
+
+    private static long HashString(string? @string)
     {
+        if (string.IsNullOrEmpty(@string))
+            return 0;
+
         const int maxStackAllocSize = 512;
 
         var byteCount = Encoding.UTF8.GetByteCount(@string);
@@ -125,6 +130,10 @@ public static class ChiSeed
 
             var intCount = byteSpan.Length & ~3;
             var intSpan = MemoryMarshal.Cast<byte, int>(byteSpan[..intCount]);
+
+            if (!BitConverter.IsLittleEndian)
+                for (var index = 0; index < intSpan.Length; index++)
+                    intSpan[index] = BinaryPrimitives.ReverseEndianness(intSpan[index]);
 
             foreach (var int32 in intSpan)
                 CombineValue(ref result, int32);
@@ -158,27 +167,69 @@ public static class ChiSeed
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static long InitializeCombiner()
     {
-        const ulong initialStateSeed = 0x46A74A57896EA3C9;
+        const ulong initialPrime = 0x46A74A57896EA3C9;
 
-        return (long)initialStateSeed;
+        return (long)initialPrime;
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static void CombineValue(ref long combinedValue, int value)
     {
-        const ulong multiplier = 0x8A2AB4D322468F2D;
-        const ulong xorValue = 0xFC2ED86788EEAD7F;
+        const ulong multiplierPrime = 0x8A2AB4D322468F2D;
+        const ulong bitmaskPrime = 0xFC2ED86788EEAD7F;
 
-        var combinedHash = (uint)(combinedValue ^ value) * multiplier;
+        var combinedHash = (uint)(combinedValue ^ value) * multiplierPrime;
         var offset = (int)combinedHash & 63;
 
-        combinedValue ^= (long)BitOperations.RotateRight(combinedHash ^ xorValue, offset);
+        combinedValue ^= (long)BitOperations.RotateRight(combinedHash ^ bitmaskPrime, offset);
+    }
+
+    private static string BuildRuntimeFingerprint()
+    {
+        var components = new List<string>();
+
+        TryAddComponent(() => AppContext.BaseDirectory);
+        TryAddComponent(() => RuntimeInformation.OSDescription);
+        TryAddComponent(() => Guid.NewGuid().ToString());
+        TryAddComponent(() => Stopwatch.GetTimestamp().ToString());
+        TryAddComponent(() => DateTime.Now.ToLongDateString());
+        TryAddComponent(() => DateTime.Now.ToLongTimeString());
+        TryAddComponent(() => DateTime.Now.Ticks.ToString());
+        TryAddComponent(() => CultureInfo.CurrentCulture.DisplayName);
+        TryAddComponent(() => Environment.Version.ToString());
+
+        var separator = CultureInfo.CurrentCulture.TextInfo.ListSeparator;
+        new Random().Shuffle(CollectionsMarshal.AsSpan(components));
+        return string.Join(separator, components);
+
+        void TryAddComponent(Func<string> valueFactory)
+        {
+            try
+            {
+                var value = valueFactory();
+                if (!string.IsNullOrEmpty(value))
+                    components.Add(value);
+            }
+            catch
+            {
+                // Silently ignore failed sources
+            }
+        }
     }
 
     private static class Global
     {
+        public static ulong RuntimeSelector { get; } =
+            (ulong)Chi32.ApplyCascadingHashInterleave(
+                HashString(BuildRuntimeFingerprint()), HashString(TimerTicks.ToString()));
+
+        public static ulong CurrentIndex { get; set; } =
+            (ulong)HashString(
+                new string(TimerTicks.ToString().Reverse().ToArray()));
+
         public static ulong TimerTicks => (ulong)Stopwatch.GetTimestamp();
         public static object Lock { get; } = new();
-        public static ulong SeedCounter { get; set; } = ~BinaryPrimitives.ReverseEndianness(TimerTicks);
     }
+
+    #endregion
 }
