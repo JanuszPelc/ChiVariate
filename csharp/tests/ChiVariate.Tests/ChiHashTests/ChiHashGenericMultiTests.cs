@@ -6,7 +6,7 @@ namespace ChiVariate.Tests.ChiHashTests;
 
 /// <summary>
 ///     Contains unit tests targeting the generic <see cref="ChiHash.Hash{T1, T2}" /> methods family
-///     for various unmanaged numeric types implementing <see cref="INumber{TSelf}" />.
+///     for various unmanaged numeric types implementing <see cref="INumberBase{TSelf}" />.
 /// </summary>
 public class ChiHashGenericMultiTests
 {

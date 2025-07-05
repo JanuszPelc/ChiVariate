@@ -12,7 +12,7 @@ namespace ChiVariate;
 /// </remarks>
 public readonly ref struct ChiSamplerPoisson<TRng, T>(ref TRng rng, double mean)
     where TRng : struct, IChiRngSource<TRng>
-    where T : unmanaged, INumber<T>
+    where T : unmanaged, INumberBase<T>
 {
     private readonly ref TRng _rng = ref rng;
 

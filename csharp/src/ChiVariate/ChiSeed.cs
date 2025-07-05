@@ -88,7 +88,7 @@ public static class ChiSeed
     /// </summary>
     /// <param name="string">The <see cref="string" /> value to be incorporated into the hash calculation.</param>
     /// <param name="number">A numeric value of type <typeparamref name="TNumber" /> to contribute to the hash.</param>
-    /// <typeparam name="TNumber">The unmanaged numeric type implementing <see cref="System.Numerics.INumber{T}" />.</typeparam>
+    /// <typeparam name="TNumber">The unmanaged numeric type implementing <see cref="System.Numerics.INumberBase{T}" />.</typeparam>
     /// <returns>
     ///     A <see cref="long" /> representing a well-mixed value derived from the input string.
     /// </returns>
@@ -97,7 +97,7 @@ public static class ChiSeed
     /// </exception>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static long Scramble<TNumber>(string @string, TNumber number)
-        where TNumber : unmanaged, INumber<TNumber>
+        where TNumber : unmanaged, INumberBase<TNumber>
     {
         ArgumentNullException.ThrowIfNull(@string);
 

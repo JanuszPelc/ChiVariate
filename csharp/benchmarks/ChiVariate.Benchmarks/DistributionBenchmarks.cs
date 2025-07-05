@@ -1704,7 +1704,7 @@ public class DistributionBenchmarks
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static T SumValues<T>(ChiEnumerable<T> enumerable)
-        where T : unmanaged, INumber<T>
+        where T : unmanaged, INumberBase<T>
     {
         if (typeof(T) == typeof(float))
             return T.CreateTruncating(enumerable.Sum(float.CreateTruncating));
@@ -1729,7 +1729,7 @@ public class DistributionBenchmarks
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static T SumValues<T>(IEnumerable<T> enumerable)
-        where T : unmanaged, INumber<T>
+        where T : unmanaged, INumberBase<T>
     {
         if (typeof(T) == typeof(float))
             return T.CreateTruncating(enumerable.Sum(float.CreateTruncating));

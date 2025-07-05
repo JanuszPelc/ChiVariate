@@ -6,7 +6,7 @@ namespace ChiVariate.Tests.ChiHashTests;
 
 /// <summary>
 ///     Contains unit tests targeting the generic <see cref="ChiHash.Hash{T1}(T1)" /> methods
-///     for various unmanaged numeric types implementing <see cref="INumber{TSelf}" />.
+///     for various unmanaged numeric types implementing <see cref="INumberBase{TSelf}" />.
 /// </summary>
 public class ChiHashGenericSingleTests
 {
@@ -96,14 +96,14 @@ public class ChiHashGenericSingleTests
         hashDouble.Should().NotBe(hashHalf);
     }
 
-    private static void VerifyDeterminism<T>(T input) where T : unmanaged, INumber<T>
+    private static void VerifyDeterminism<T>(T input) where T : unmanaged, INumberBase<T>
     {
         var hash1 = ChiHash.Hash(input);
         var hash2 = ChiHash.Hash(input);
         hash2.Should().Be(hash1);
     }
 
-    private static void VerifySensitivity<T>(T input1, T input2) where T : unmanaged, INumber<T>
+    private static void VerifySensitivity<T>(T input1, T input2) where T : unmanaged, INumberBase<T>
     {
         var hash1 = ChiHash.Hash(input1);
         var hash2 = ChiHash.Hash(input2);

@@ -100,7 +100,7 @@ public static class ChiHash
 
     /// <summary>
     ///     Computes a 32-bit hash value from a numeric inputs span of an unmanaged type
-    ///     implementing <see cref="INumber{TSelf}" />.
+    ///     implementing <see cref="INumberBase{TSelf}" />.
     /// </summary>
     /// <typeparam name="T">The type of the value.</typeparam>
     /// <param name="values">The span of numeric value to hash.</param>
@@ -115,7 +115,7 @@ public static class ChiHash
     /// </remarks>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static int Hash<T>(scoped ReadOnlySpan<T> values)
-        where T : unmanaged, INumber<T>
+        where T : unmanaged, INumberBase<T>
     {
         var combinedValue = InitializeCombiner();
 
@@ -127,7 +127,7 @@ public static class ChiHash
 
     /// <summary>
     ///     Computes a 32-bit hash value from a single numeric input of an unmanaged type
-    ///     implementing <see cref="INumber{TSelf}" />.
+    ///     implementing <see cref="INumberBase{TSelf}" />.
     /// </summary>
     /// <typeparam name="T1">The type of the value.</typeparam>
     /// <param name="v1">The numeric value to hash.</param>
@@ -141,14 +141,14 @@ public static class ChiHash
     ///     </para>
     /// </remarks>
     public static int Hash<T1>(T1 v1)
-        where T1 : unmanaged, INumber<T1>
+        where T1 : unmanaged, INumberBase<T1>
     {
         return Chi32.UpdateHashValue(0, ReduceToInt32(v1));
     }
 
     /// <summary>
     ///     Computes a 32-bit hash value from two numeric inputs of unmanaged types
-    ///     implementing <see cref="INumber{TSelf}" />.
+    ///     implementing <see cref="INumberBase{TSelf}" />.
     /// </summary>
     /// <typeparam name="T1">The type of the first value.</typeparam>
     /// <typeparam name="T2">The type of the second value.</typeparam>
@@ -157,8 +157,8 @@ public static class ChiHash
     /// <returns>An <see cref="int" /> representing the 32-bit integer hash value.</returns>
     /// <inheritdoc cref="Hash{T1}(T1)" />
     public static int Hash<T1, T2>(T1 v1, T2 v2)
-        where T1 : unmanaged, INumber<T1>
-        where T2 : unmanaged, INumber<T2>
+        where T1 : unmanaged, INumberBase<T1>
+        where T2 : unmanaged, INumberBase<T2>
     {
         var combinedValue = InitializeCombiner();
 
@@ -170,7 +170,7 @@ public static class ChiHash
 
     /// <summary>
     ///     Computes a 32-bit hash value from three numeric inputs of unmanaged types
-    ///     implementing <see cref="INumber{TSelf}" />.
+    ///     implementing <see cref="INumberBase{TSelf}" />.
     /// </summary>
     /// <typeparam name="T1">The type of the first value.</typeparam>
     /// <typeparam name="T2">The type of the second value.</typeparam>
@@ -181,9 +181,9 @@ public static class ChiHash
     /// <returns>An <see cref="int" /> representing the 32-bit integer hash value.</returns>
     /// <inheritdoc cref="Hash{T1}(T1)" />
     public static int Hash<T1, T2, T3>(T1 v1, T2 v2, T3 v3)
-        where T1 : unmanaged, INumber<T1>
-        where T2 : unmanaged, INumber<T2>
-        where T3 : unmanaged, INumber<T3>
+        where T1 : unmanaged, INumberBase<T1>
+        where T2 : unmanaged, INumberBase<T2>
+        where T3 : unmanaged, INumberBase<T3>
     {
         var combinedValue = InitializeCombiner();
 
@@ -196,7 +196,7 @@ public static class ChiHash
 
     /// <summary>
     ///     Computes a 32-bit hash value from four numeric inputs of unmanaged types
-    ///     implementing <see cref="INumber{TSelf}" />.
+    ///     implementing <see cref="INumberBase{TSelf}" />.
     /// </summary>
     /// <typeparam name="T1">The type of the first value.</typeparam>
     /// <typeparam name="T2">The type of the second value.</typeparam>
@@ -209,10 +209,10 @@ public static class ChiHash
     /// <returns>An <see cref="int" /> representing the 32-bit integer hash value.</returns>
     /// <inheritdoc cref="Hash{T1}(T1)" />
     public static int Hash<T1, T2, T3, T4>(T1 v1, T2 v2, T3 v3, T4 v4)
-        where T1 : unmanaged, INumber<T1>
-        where T2 : unmanaged, INumber<T2>
-        where T3 : unmanaged, INumber<T3>
-        where T4 : unmanaged, INumber<T4>
+        where T1 : unmanaged, INumberBase<T1>
+        where T2 : unmanaged, INumberBase<T2>
+        where T3 : unmanaged, INumberBase<T3>
+        where T4 : unmanaged, INumberBase<T4>
     {
         var combinedValue = InitializeCombiner();
 
@@ -226,7 +226,7 @@ public static class ChiHash
 
     /// <summary>
     ///     Computes a 32-bit hash value from five numeric inputs of unmanaged types
-    ///     implementing <see cref="INumber{TSelf}" />.
+    ///     implementing <see cref="INumberBase{TSelf}" />.
     /// </summary>
     /// <typeparam name="T1">The type of the first value.</typeparam>
     /// <typeparam name="T2">The type of the second value.</typeparam>
@@ -241,11 +241,11 @@ public static class ChiHash
     /// <returns>An <see cref="int" /> representing the 32-bit integer hash value.</returns>
     /// <inheritdoc cref="Hash{T1}(T1)" />
     public static int Hash<T1, T2, T3, T4, T5>(T1 v1, T2 v2, T3 v3, T4 v4, T5 v5)
-        where T1 : unmanaged, INumber<T1>
-        where T2 : unmanaged, INumber<T2>
-        where T3 : unmanaged, INumber<T3>
-        where T4 : unmanaged, INumber<T4>
-        where T5 : unmanaged, INumber<T5>
+        where T1 : unmanaged, INumberBase<T1>
+        where T2 : unmanaged, INumberBase<T2>
+        where T3 : unmanaged, INumberBase<T3>
+        where T4 : unmanaged, INumberBase<T4>
+        where T5 : unmanaged, INumberBase<T5>
     {
         var combinedValue = InitializeCombiner();
 
@@ -260,7 +260,7 @@ public static class ChiHash
 
     /// <summary>
     ///     Computes a 32-bit hash value from six numeric inputs of unmanaged types
-    ///     implementing <see cref="INumber{TSelf}" />.
+    ///     implementing <see cref="INumberBase{TSelf}" />.
     /// </summary>
     /// <typeparam name="T1">The type of the first value.</typeparam>
     /// <typeparam name="T2">The type of the second value.</typeparam>
@@ -277,12 +277,12 @@ public static class ChiHash
     /// <returns>An <see cref="int" /> representing the 32-bit integer hash value.</returns>
     /// <inheritdoc cref="Hash{T1}(T1)" />
     public static int Hash<T1, T2, T3, T4, T5, T6>(T1 v1, T2 v2, T3 v3, T4 v4, T5 v5, T6 v6)
-        where T1 : unmanaged, INumber<T1>
-        where T2 : unmanaged, INumber<T2>
-        where T3 : unmanaged, INumber<T3>
-        where T4 : unmanaged, INumber<T4>
-        where T5 : unmanaged, INumber<T5>
-        where T6 : unmanaged, INumber<T6>
+        where T1 : unmanaged, INumberBase<T1>
+        where T2 : unmanaged, INumberBase<T2>
+        where T3 : unmanaged, INumberBase<T3>
+        where T4 : unmanaged, INumberBase<T4>
+        where T5 : unmanaged, INumberBase<T5>
+        where T6 : unmanaged, INumberBase<T6>
     {
         var combinedValue = InitializeCombiner();
 
@@ -318,7 +318,7 @@ public static class ChiHash
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static int ReduceToInt32<T>(T value)
-        where T : unmanaged, INumber<T>
+        where T : unmanaged, INumberBase<T>
     {
         if (typeof(T) == typeof(sbyte) || typeof(T) == typeof(byte))
         {

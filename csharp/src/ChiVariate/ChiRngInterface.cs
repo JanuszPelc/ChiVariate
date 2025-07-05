@@ -95,7 +95,7 @@ internal enum ChiPointSamplingMode
 /// <typeparam name="T">The numeric type of the components.</typeparam>
 /// <param name="X">The X-component of the vector.</param>
 /// <param name="Y">The Y-component of the vector.</param>
-public readonly record struct ChiNum2<T>(T X, T Y) where T : INumber<T>;
+public readonly record struct ChiNum2<T>(T X, T Y) where T : INumberBase<T>;
 
 /// <summary>
 ///     Represents a three-dimensional numeric vector used for data transfer.
@@ -104,7 +104,7 @@ public readonly record struct ChiNum2<T>(T X, T Y) where T : INumber<T>;
 /// <param name="X">The X-component of the vector.</param>
 /// <param name="Y">The Y-component of the vector.</param>
 /// <param name="Z">The Z-component of the vector.</param>
-public readonly record struct ChiNum3<T>(T X, T Y, T Z) where T : INumber<T>;
+public readonly record struct ChiNum3<T>(T X, T Y, T Z) where T : INumberBase<T>;
 
 /// <summary>
 ///     Provides extension methods for converting ChiVariate numeric vectors to standard `System.Numerics` types.
