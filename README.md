@@ -275,6 +275,17 @@ These performance-focused design principles extend beyond core distributions to 
 
 Beyond statistical distributions, ChiVariate provides specialized tools for uniform spatial sampling, quasi-random sequences, and general-purpose randomness tasks.
 
+### Prime number sampling
+
+A specialized sampler for generating provably prime numbers from specified ranges. This sampler uses various optimization techniques and deterministic Miller-Rabin testing to guarantee mathematical correctness.
+
+```csharp
+// Generate a set of large primes for research or simulation
+var largePrimes = rng.Primes(1_000_000_000_000L, 10_000_000_000_000L)
+    .Sample(100)
+    .ToList();
+```
+
 ### Quasi-random sequences
 
 Quasi-random sequences, also known as low-discrepancy sequences (LDS), are deterministic tools for generating points that cover a sample space as evenly and uniformly as possible. They provide a powerful alternative to pseudo-random numbers when uniform coverage is the primary goal.
@@ -534,6 +545,12 @@ Utility samplers provide practical, expressive APIs for common randomization tas
 > A toolkit for uniform spatial sampling within or on the surface of geometric primitives. Delivers a simple, reliable API for tasks like picking random positions in areas (`InSquare`, `InCube`) or generating random direction vectors (`OnCircle`, `OnSphere`), handling all mathematical corrections internally to prevent common statistical biases.
 >
 > *Complexity: `O(1)`. Tier 2*
+
+#### Primes
+
+> Generates provably prime numbers from specified integer ranges using deterministic Miller-Rabin testing. Ideal for number theory research, simulations, and applications requiring mathematically guaranteed primes with uniform distribution.
+>
+> *Complexity: *`O(r/π(r) × √n)`* expected, where r is range size, π(r) is prime density, and √n is primality test cost. Performance varies significantly with range density. Tier 5*
 
 #### Halton
 

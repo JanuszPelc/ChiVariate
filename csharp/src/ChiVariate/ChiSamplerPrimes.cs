@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using System.Numerics;
 using System.Runtime.CompilerServices;
+using ChiVariate.Generators;
 
 namespace ChiVariate;
 
@@ -9,7 +10,7 @@ namespace ChiVariate;
 /// </summary>
 public readonly ref struct ChiSamplerPrimes<TRng, T>
     where TRng : struct, IChiRngSource<TRng>
-    where T : IBinaryInteger<T>, IBitwiseOperators<T, T, T>, IMinMaxValue<T>
+    where T : unmanaged, IBinaryInteger<T>, IBitwiseOperators<T, T, T>, IMinMaxValue<T>
 {
     private readonly ref TRng _rng;
     private readonly T _minInclusive;
@@ -19,7 +20,9 @@ public readonly ref struct ChiSamplerPrimes<TRng, T>
     internal ChiSamplerPrimes(ref TRng rng, T minInclusive, T maxExclusive, int minEstimatePopulation)
     {
         if (Unsafe.SizeOf<T>() > 8)
-            throw new NotSupportedException("The Primes sampler currently supports integer types up to 64 bits wide.");
+            if (maxExclusive > T.CreateChecked(ulong.MaxValue))
+                throw new ArgumentOutOfRangeException(nameof(maxExclusive),
+                    "128-bit integer types are currently limited to the 64-bit range (0 to ulong.MaxValue).");
 
         ArgumentOutOfRangeException.ThrowIfNegative(minEstimatePopulation);
         ArgumentOutOfRangeException.ThrowIfNegative(minInclusive);
@@ -47,8 +50,9 @@ public readonly ref struct ChiSamplerPrimes<TRng, T>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public T Sample()
     {
+        var two = T.CreateChecked(2);
         var rangeSize = _maxExclusive - _minInclusive;
-        var startOffset = _rng.Chance().Next(T.Zero, rangeSize);
+        var startOffset = ChiIntegerGenerator.Next(ref _rng, T.Zero, rangeSize);
 
         for (var i = T.Zero; i < rangeSize; i++)
         {
@@ -56,11 +60,13 @@ public readonly ref struct ChiSamplerPrimes<TRng, T>
 
             if (T.IsEvenInteger(candidate))
             {
-                if (candidate == T.CreateChecked(2)) return T.CreateChecked(2);
+                if (candidate == two)
+                    return two;
                 continue;
             }
 
-            if (IsPrime(candidate)) return candidate;
+            if (IsPrime(candidate))
+                return candidate;
         }
 
         throw new InvalidOperationException("No prime numbers exist in the specified range.");
@@ -88,7 +94,7 @@ public readonly ref struct ChiSamplerPrimes<TRng, T>
         if (n % T.CreateChecked(2) == T.Zero || n % T.CreateChecked(3) == T.Zero) return false;
 
         // Trial division against precomputed small primes using Sieve of Eratosthenes
-        var smallPrimes = PrimeEstimator.PrimesBelowLimit.Value;
+        var smallPrimes = PrimeEstimator.PrimesBelowLimit;
         foreach (var pInt in smallPrimes)
         {
             if (pInt <= 3) continue;
@@ -118,8 +124,8 @@ public static class ChiSamplerPrimesExtensions
     /// <param name="minInclusive">The inclusive lower bound of the range. Must be non-negative.</param>
     /// <param name="maxExclusive">The exclusive upper bound of the range.</param>
     /// <param name="minEstimatePopulation">
-    ///     The minimum estimated number of primes required to be in the range. If the estimated 
-    ///     count is below this threshold, an <see cref="ArgumentException" /> is thrown in the constructor. 
+    ///     The minimum estimated number of primes required to be in the range. If the estimated
+    ///     count is below this threshold, an <see cref="ArgumentException" /> is thrown in the constructor.
     ///     Set to 0 to disable the population check entirely.
     /// </param>
     /// <returns>A sampler that can be used to generate random prime numbers.</returns>
@@ -133,26 +139,22 @@ public static class ChiSamplerPrimesExtensions
     ///         Miller-Rabin test.
     ///     </para>
     ///     <para>
-    ///         <b>Performance:</b> The sampler generates primes on-the-fly with predictable performance. The underlying
-    ///         primality test is highly optimized.
+    ///         <b>Performance:</b> `O(r/π(r) × √n)`* expected, where r is range size, π(r) is prime density,
+    ///         and √n is primality test cost. Performance varies significantly with range density.
     ///     </para>
     /// </remarks>
     /// <example>
     ///     <code><![CDATA[
     /// var rng = new ChiRng();
-    /// 
-    /// // Get a single, large 64-bit prime.
-    /// long largePrime = rng.Primes(1_000_000_000_000_000_000L, 2_000_000_000_000_000_000L).Sample();
-    /// 
-    /// // Get a prime from a smaller range by overriding the population check.
-    /// int smallPrime = rng.Primes(1_000, 2_000, minEstimatePopulation: 10).Sample();
+    /// // Generate deterministic prime-based ID
+    /// var uniqueId = rng.Primes(1000, int.MaxValue).Sample();
     /// ]]></code>
     /// </example>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static ChiSamplerPrimes<TRng, T> Primes<TRng, T>(this ref TRng rng,
         T minInclusive, T maxExclusive, int minEstimatePopulation = 256)
         where TRng : struct, IChiRngSource<TRng>
-        where T : IBinaryInteger<T>, IBitwiseOperators<T, T, T>, IMinMaxValue<T>
+        where T : unmanaged, IBinaryInteger<T>, IBitwiseOperators<T, T, T>, IMinMaxValue<T>
     {
         return new ChiSamplerPrimes<TRng, T>(ref rng, minInclusive, maxExclusive, minEstimatePopulation);
     }
@@ -163,10 +165,12 @@ public static class ChiSamplerPrimesExtensions
 file static class PrimeEstimator
 {
     private const int SmallSieveLimit = 1000;
-    public static readonly Lazy<int[]> PrimesBelowLimit = new(GeneratePrimesBelowLimit);
+    private static readonly Lazy<int[]> LazyPrimesBelowLimit = new(GeneratePrimesBelowLimit);
+
+    public static ReadOnlySpan<int> PrimesBelowLimit => LazyPrimesBelowLimit.Value.AsSpan();
 
     public static ulong EstimateCount<T>(T min, T max)
-        where T : IBinaryInteger<T>
+        where T : unmanaged, IBinaryInteger<T>
     {
         if (max < T.CreateChecked(SmallSieveLimit))
         {
@@ -217,13 +221,13 @@ file static class PrimeEstimator
     {
         Debug.Assert(limit < SmallSieveLimit);
         if (limit < 2) return 0;
-        var index = Array.BinarySearch(PrimesBelowLimit.Value, limit);
+        var index = PrimesBelowLimit.BinarySearch(limit);
         return index >= 0 ? index + 1 : ~index;
     }
 }
 
 file static class MillerRabin<T>
-    where T : IBinaryInteger<T>
+    where T : unmanaged, IBinaryInteger<T>
 {
     /// <summary>
     ///     Deterministic Miller-Rabin bases for testing integers up to 64 bits.
@@ -259,7 +263,7 @@ file static class MillerRabin<T>
 
         for (var r = T.Zero; r < s; r++)
         {
-            x = MultiplyModulo(x, x, n);
+            x = ModMul(x, x, n);
             if (x == nMinus1) return true;
         }
 
@@ -277,8 +281,8 @@ file static class MillerRabin<T>
 
         while (exp > T.Zero)
         {
-            if (T.IsOddInteger(exp)) result = MultiplyModulo(result, b, mod);
-            b = MultiplyModulo(b, b, mod);
+            if (T.IsOddInteger(exp)) result = ModMul(result, b, mod);
+            b = ModMul(b, b, mod);
             exp >>= 1;
         }
 
@@ -289,7 +293,7 @@ file static class MillerRabin<T>
     ///     Computes (a * b) mod m using the Russian peasant multiplication algorithm
     ///     to prevent overflow for large integer types.
     /// </summary>
-    private static T MultiplyModulo(T a, T b, T m)
+    private static T ModMul(T a, T b, T m)
     {
         if (m <= T.Zero) throw new DivideByZeroException();
 

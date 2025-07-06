@@ -90,7 +90,7 @@ public readonly ref struct ChiSamplerUniformDiscrete<TRng, T>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public T Sample()
     {
-        return _rng.Chance().Next(_minInclusive, _maxExclusive);
+        return ChiIntegerGenerator.Next(ref _rng, _minInclusive, _maxExclusive);
     }
 
     /// <summary>

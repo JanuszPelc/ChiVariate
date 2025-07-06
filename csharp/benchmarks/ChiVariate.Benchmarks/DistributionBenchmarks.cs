@@ -1189,6 +1189,51 @@ public class DistributionBenchmarks
         }
     }
 
+    [Benchmark(Description = "Primes")]
+    public bool ChiVariatePrimes()
+    {
+        return ValueTypeParam switch
+        {
+            ValueType._32Bit => RunUniformDiscreteBenchmark(int.MaxValue),
+            ValueType._64Bit => RunUniformDiscreteBenchmark(long.MaxValue),
+            ValueType._128Bit => RunUniformDiscreteBenchmark<Int128>(ulong.MaxValue),
+            _ => throw new UnreachableException()
+        };
+
+        bool RunUniformDiscreteBenchmark<T>(T max)
+            where T : unmanaged, IBinaryInteger<T>, IMinMaxValue<T>
+        {
+            var sampler = _rng.Primes(T.Zero, max);
+            var sum = T.Zero;
+
+            switch (IterationTypeParam)
+            {
+                case IterationType.ForLoop:
+                {
+                    for (var i = 0; i < SampleCount; i++)
+                        sum += sampler.Sample() / T.CreateChecked(10_000);
+
+                    break;
+                }
+                case IterationType.ForEach:
+                {
+                    foreach (var sample in sampler.Sample(SampleCount))
+                        sum += sample / T.CreateChecked(10_000);
+                    break;
+                }
+                case IterationType.Linq:
+                {
+                    var enumerable = sampler.Sample(SampleCount).Select(value => value / T.CreateChecked(10_000));
+                    sum = SumValues(enumerable);
+                    break;
+                }
+                default: throw new UnreachableException();
+            }
+
+            return Consume(sum);
+        }
+    }
+
     [Benchmark(Description = "Rayleigh")]
     public bool ChiVariateRayleigh()
     {

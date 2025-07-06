@@ -288,9 +288,9 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     {
         var rng = new ChiRng(1337);
 
-        var result = rng.Primes(1000, 2000, 10).Sample();
+        var result = rng.Primes((Int128)0, uint.MaxValue, 10).Sample();
 
-        result.Should().Be(1597);
+        result.Should().Be(4075324157);
     }
 
     [Fact]
