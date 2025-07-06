@@ -1189,8 +1189,8 @@ public class DistributionBenchmarks
         }
     }
 
-    [Benchmark(Description = "Primes")]
-    public bool ChiVariatePrimes()
+    [Benchmark(Description = "Prime")]
+    public bool ChiVariatePrime()
     {
         return ValueTypeParam switch
         {
@@ -1203,7 +1203,7 @@ public class DistributionBenchmarks
         bool RunUniformDiscreteBenchmark<T>(T max)
             where T : unmanaged, IBinaryInteger<T>, IMinMaxValue<T>
         {
-            var sampler = _rng.Primes(T.Zero, max);
+            var sampler = _rng.Prime(T.Zero, max);
             var sum = T.Zero;
 
             switch (IterationTypeParam)

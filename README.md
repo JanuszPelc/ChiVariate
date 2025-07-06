@@ -517,7 +517,7 @@ var pointInSquare = rng.Spatial().InSquare(0.5f).Sample();
 var randomDirection = rng.Spatial().OnSphere(1.0f).Sample().AsVector3();
 ```
 
-#### Primes
+#### Prime
 
 > Generates provably prime numbers from specified integer ranges up to 128-bit using deterministic Miller-Rabin testing and various optimization techniques. Ideal for number theory research, cryptographic experiments, and applications requiring mathematically guaranteed primes with uniform distribution.
 >
@@ -528,7 +528,7 @@ This specialized sampler uses various optimization techniques and deterministic 
 ```csharp
 // Generate a set of very large primes
 var max = UInt128.MaxValue;
-var primes = rng.Primes(max / 2, max).Sample(100).ToList();
+var primes = rng.Prime(max / 2, max).Sample(100).ToList();
 ```
 
 ### Quasi-random sequences

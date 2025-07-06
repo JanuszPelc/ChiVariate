@@ -8,7 +8,7 @@ namespace ChiVariate;
 /// <summary>
 ///     Samples prime numbers from a specified integer range using an on-the-fly generation algorithm.
 /// </summary>
-public readonly ref struct ChiSamplerPrimes<TRng, T>
+public readonly ref struct ChiSamplerPrime<TRng, T>
     where TRng : struct, IChiRngSource<TRng>
     where T : unmanaged, IBinaryInteger<T>, IBitwiseOperators<T, T, T>, IMinMaxValue<T>
 {
@@ -17,7 +17,7 @@ public readonly ref struct ChiSamplerPrimes<TRng, T>
     private readonly T _maxExclusive;
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    internal ChiSamplerPrimes(ref TRng rng, T minInclusive, T maxExclusive, int minEstimatePopulation)
+    internal ChiSamplerPrime(ref TRng rng, T minInclusive, T maxExclusive, int minEstimatePopulation)
     {
         ArgumentOutOfRangeException.ThrowIfLessThan(Unsafe.SizeOf<T>(), 2);
         ArgumentOutOfRangeException.ThrowIfNegative(minEstimatePopulation);
@@ -93,8 +93,8 @@ public readonly ref struct ChiSamplerPrimes<TRng, T>
         if (n % T.CreateChecked(2) == T.Zero || n % T.CreateChecked(3) == T.Zero) return false;
 
         // Trial division against precomputed small primes using Sieve of Eratosthenes
-        var smallPrimes = PrimeCounting.PrimesBelowLimit;
-        foreach (var pInt in smallPrimes)
+        var smallPrimesSpan = PrimeCounting.PrimesBelowLimit;
+        foreach (var pInt in smallPrimesSpan)
         {
             if (pInt <= 3) continue;
 
@@ -111,7 +111,7 @@ public readonly ref struct ChiSamplerPrimes<TRng, T>
 /// <summary>
 ///     Provides extension methods for sampling prime numbers.
 /// </summary>
-public static class ChiSamplerPrimesExtensions
+public static class ChiSamplerPrimeExtensions
 {
     /// <summary>
     ///     Returns a sampler that generates random prime numbers from a specified integer range.
@@ -146,16 +146,16 @@ public static class ChiSamplerPrimesExtensions
     ///     <code><![CDATA[
     ///     // Generate a set of very large primes
     ///     var max = UInt128.MaxValue;
-    ///     var primes = rng.Primes(max / 2, max).Sample(100).ToList();
+    ///     var primes = rng.Prime(max / 2, max).Sample(100).ToList();
     /// ]]></code>
     /// </example>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static ChiSamplerPrimes<TRng, T> Primes<TRng, T>(this ref TRng rng,
+    public static ChiSamplerPrime<TRng, T> Prime<TRng, T>(this ref TRng rng,
         T minInclusive, T maxExclusive, int minEstimatePopulation = 256)
         where TRng : struct, IChiRngSource<TRng>
         where T : unmanaged, IBinaryInteger<T>, IBitwiseOperators<T, T, T>, IMinMaxValue<T>
     {
-        return new ChiSamplerPrimes<TRng, T>(ref rng, minInclusive, maxExclusive, minEstimatePopulation);
+        return new ChiSamplerPrime<TRng, T>(ref rng, minInclusive, maxExclusive, minEstimatePopulation);
     }
 }
 

@@ -289,7 +289,7 @@ public class MainReadmeTests(ITestOutputHelper testOutputHelper)
         // --- example code begin ---
         // Generate a set of very large primes
         var max = UInt128.MaxValue;
-        var primes = rng.Primes(max / 2, max).Sample(100).ToList();
+        var primes = rng.Prime(max / 2, max).Sample(100).ToList();
         // --- example code end ---
 
         testOutputHelper.WriteLine($"Generated {primes.Count} large primes:");

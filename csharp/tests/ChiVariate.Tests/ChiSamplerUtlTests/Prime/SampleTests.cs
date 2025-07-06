@@ -5,7 +5,7 @@ using Xunit.Abstractions;
 
 #pragma warning disable CS1591
 
-namespace ChiVariate.Tests.ChiSamplerUtlTests.Primes;
+namespace ChiVariate.Tests.ChiSamplerUtlTests.Prime;
 
 public class SampleTests(ITestOutputHelper testOutputHelper)
 {
@@ -16,7 +16,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     public void PrimeSampler_TwinPrimes_FollowExpectedDistribution()
     {
         var rng = new ChiRng("TwinPrimes");
-        var sampler = rng.Primes(1000L, 100_000L, 1);
+        var sampler = rng.Prime(1000L, 100_000L, 1);
 
         var twinPrimeCount = 0;
         var totalSamples = SmallSampleCount;
@@ -42,7 +42,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     public void PrimeSampler_SophieGermainPrimes_AreDetected()
     {
         var rng = new ChiRng("SophieGermain");
-        var sampler = rng.Primes(100L, 10_000L, 1);
+        var sampler = rng.Prime(100L, 10_000L, 1);
 
         var sophieGermainPrimes = new List<long>();
 
@@ -66,7 +66,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     public void PrimeSampler_DigitalRoot_ShowsCorrectDistribution()
     {
         var rng = new ChiRng("DigitalRoot");
-        var sampler = rng.Primes(100L, 1_000_000L, 1);
+        var sampler = rng.Prime(100L, 1_000_000L, 1);
 
         var digitalRootCounts = new int[10];
 
@@ -102,7 +102,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     public void PrimeSampler_LastDigit_RespectsModularConstraints()
     {
         var rng = new ChiRng("LastDigit");
-        var sampler = rng.Primes(100L, 1_000_000L, 1);
+        var sampler = rng.Prime(100L, 1_000_000L, 1);
 
         var lastDigitCounts = new int[10];
 
@@ -138,7 +138,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     public void PrimeSampler_SampledPrimes_ShowReasonableDistribution()
     {
         var rng = new ChiRng("PrimeDistribution");
-        var sampler = rng.Primes(1_000L, 100_000L, 1);
+        var sampler = rng.Prime(1_000L, 100_000L, 1);
 
         var uniquePrimes = new SortedSet<long>();
         for (var i = 0; i < 5000; i++)
@@ -167,7 +167,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     public void PrimeSampler_Goldbach_CanFindPairs()
     {
         var rng = new ChiRng("Goldbach");
-        var sampler = rng.Primes(2L, 10_000L, 1);
+        var sampler = rng.Prime(2L, 10_000L, 1);
 
         var primeSet = new HashSet<long>();
         for (var i = 0; i < 5000; i++)
@@ -203,7 +203,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     public void PrimeSampler_LargePrimes_MaintainPrimality()
     {
         var rng = new ChiRng("LargePrimes");
-        var sampler = rng.Primes(uint.MaxValue - 1000, uint.MaxValue, 1);
+        var sampler = rng.Prime(uint.MaxValue - 1000, uint.MaxValue, 1);
 
         testOutputHelper.WriteLine("Testing large primes near uint.MaxValue:");
 
@@ -226,7 +226,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     public void PrimeSampler_SpecificRanges_ReturnsExpectedPrimes(long min, long max, long expectedPrime)
     {
         var rng = new ChiRng($"Specific_{min}_{max}");
-        var sampler = rng.Primes(min, max, 0);
+        var sampler = rng.Prime(min, max, 0);
 
         var foundExpected = false;
         for (var i = 0; i < 1000; i++)
@@ -249,7 +249,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
         const uint min = 0;
         const uint max = uint.MaxValue;
 
-        var sampler = rng.Primes(min, max, 1);
+        var sampler = rng.Prime(min, max, 1);
 
         const int segmentCount = 50;
         var histogram = new Histogram(min, max, segmentCount);
@@ -271,7 +271,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     public void Sample_Always_ReturnsAPrimeWithinTheSpecifiedRange(long min, long max)
     {
         var rng = new ChiRng(ChiSeed.Scramble("PrimesContractTest", min + max));
-        var sampler = rng.Primes(min, max, 1);
+        var sampler = rng.Prime(min, max, 1);
 
         for (var i = 0; i < 1000; i++)
         {
@@ -290,7 +290,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
         var min = UInt128.MaxValue - uint.MaxValue;
         var max = UInt128.MaxValue;
 
-        var result = rng.Primes(min, max, 0).Sample();
+        var result = rng.Prime(min, max, 0).Sample();
 
         result.Should().Be(UInt128.Parse("340282366920938463463374607431646647643"));
     }
@@ -302,7 +302,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
         var min = uint.MaxValue - 100;
         var max = uint.MaxValue;
 
-        var result = rng.Primes(min, max, 1).Sample();
+        var result = rng.Prime(min, max, 1).Sample();
 
         result.Should().Be(4294967279u);
     }
@@ -314,7 +314,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
         var min = uint.MinValue;
         var max = uint.MaxValue;
 
-        var result = rng.Primes(min, max, 1).Sample();
+        var result = rng.Prime(min, max, 1).Sample();
 
         result.Should().Be(3526690091u);
     }
@@ -326,7 +326,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
         var min = ushort.MinValue;
         var max = ushort.MaxValue;
 
-        var result = rng.Primes(min, max, 1).Sample();
+        var result = rng.Prime(min, max, 1).Sample();
 
         result.Should().Be(55127);
     }
@@ -335,7 +335,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     public void Sample_RangeWithNoPrimes_ThrowsInvalidOperationException()
     {
         var rng = new ChiRng();
-        var act = () => rng.Primes(24, 28, 0).Sample();
+        var act = () => rng.Prime(24, 28, 0).Sample();
 
         act.Should().Throw<InvalidOperationException>()
             .WithMessage("No prime numbers exist in the specified range.");
@@ -348,7 +348,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     public void Primes_WithInvalidParameters_ThrowsArgumentOutOfRangeException(int min, int max, int minPop = 256)
     {
         var rng = new ChiRng();
-        var act = () => { rng.Primes(min, max, minPop); };
+        var act = () => { rng.Prime(min, max, minPop); };
 
         act.Should().Throw<ArgumentOutOfRangeException>();
     }
@@ -357,7 +357,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     public void Primes_WithInsufficientEstimatedPopulation_ThrowsArgumentException()
     {
         var rng = new ChiRng();
-        var act = () => { rng.Primes(140, 180); };
+        var act = () => { rng.Prime(140, 180); };
 
         act.Should().Throw<ArgumentException>()
             .WithMessage("*The specified range is estimated to contain only ~7 primes*");
