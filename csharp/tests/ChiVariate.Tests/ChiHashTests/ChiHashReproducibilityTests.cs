@@ -5,6 +5,10 @@ using Xunit;
 
 namespace ChiVariate.Tests.ChiHashTests;
 
+/// <summary>
+/// Provides a series of tests to validate the reproducibility and consistency
+/// of the ChiHash implementation under various scenarios.
+/// </summary>
 public class ChiHashReproducibilityTests
 {
     [Fact]

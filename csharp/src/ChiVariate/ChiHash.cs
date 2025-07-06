@@ -71,8 +71,7 @@ public ref struct ChiHash
     /// <returns>A new ChiHash instance with the string incorporated into the hash calculation.</returns>
     /// <remarks>
     ///     <para>
-    ///         This method returns a new ChiHash instance and does not modify the original.
-    ///         Always use the returned value:
+    ///         This method returns a new ChiHash instance. It is recommended to always use the returned value:
     ///     </para>
     ///     <code>
     /// // Recommended - fluent style
@@ -82,12 +81,11 @@ public ref struct ChiHash
     /// var builder = new ChiHash();
     /// builder = builder.Add(value);
     ///  
-    /// // Incorrect - mutation is lost
+    /// // Discouraged - class-like usage
     /// var builder = new ChiHash();
-    /// builder.Add(value); // Has no effect
+    /// builder.Add(value);
     /// </code>
     /// </remarks>
-    [Pure]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public ChiHash Add(string? value)
     {
@@ -107,59 +105,56 @@ public ref struct ChiHash
     ///     </para>
     /// </remarks>
     /// <inheritdoc cref="Add(string)" />
-    [Pure]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public ChiHash Add<T>(T value)
     {
-        var result = this;
-
         if (typeof(T) == typeof(sbyte) || typeof(T) == typeof(byte))
         {
             var byteValue = Unsafe.As<T, byte>(ref value);
-            result.Hash = Chi32.UpdateHashValue(result.Hash, byteValue);
+            Hash = Chi32.UpdateHashValue(Hash, byteValue);
         }
         else if (typeof(T) == typeof(short) || typeof(T) == typeof(ushort) || typeof(T) == typeof(char))
         {
             var shortValue = Unsafe.As<T, ushort>(ref value);
-            result.Hash = Chi32.UpdateHashValue(result.Hash, shortValue);
+            Hash = Chi32.UpdateHashValue(Hash, shortValue);
         }
         else if (typeof(T) == typeof(int) || typeof(T) == typeof(uint))
         {
             var intValue = Unsafe.As<T, uint>(ref value);
-            result.Hash = Chi32.UpdateHashValue(result.Hash, (int)intValue);
+            Hash = Chi32.UpdateHashValue(Hash, (int)intValue);
         }
         else if (typeof(T) == typeof(long) || typeof(T) == typeof(ulong))
         {
             var longValue = Unsafe.As<T, ulong>(ref value);
-            result.Hash = Chi32.UpdateHashValue(result.Hash, (int)(longValue & 0xFFFFFFFF));
-            result.Hash = Chi32.UpdateHashValue(result.Hash, (int)(longValue >> 32));
+            Hash = Chi32.UpdateHashValue(Hash, (int)(longValue & 0xFFFFFFFF));
+            Hash = Chi32.UpdateHashValue(Hash, (int)(longValue >> 32));
         }
         else if (typeof(T) == typeof(Int128) || typeof(T) == typeof(UInt128))
         {
             var int128Value = Unsafe.As<T, UInt128>(ref value);
-            result.Hash = Chi32.UpdateHashValue(result.Hash, (int)(int128Value & 0xFFFFFFFF));
-            result.Hash = Chi32.UpdateHashValue(result.Hash, (int)((int128Value >> 32) & 0xFFFFFFFF));
-            result.Hash = Chi32.UpdateHashValue(result.Hash, (int)((int128Value >> 64) & 0xFFFFFFFF));
-            result.Hash = Chi32.UpdateHashValue(result.Hash, (int)((int128Value >> 96) & 0xFFFFFFFF));
+            Hash = Chi32.UpdateHashValue(Hash, (int)(int128Value & 0xFFFFFFFF));
+            Hash = Chi32.UpdateHashValue(Hash, (int)((int128Value >> 32) & 0xFFFFFFFF));
+            Hash = Chi32.UpdateHashValue(Hash, (int)((int128Value >> 64) & 0xFFFFFFFF));
+            Hash = Chi32.UpdateHashValue(Hash, (int)((int128Value >> 96) & 0xFFFFFFFF));
         }
         else if (typeof(T) == typeof(double))
         {
             var doubleValue = Unsafe.As<T, double>(ref value);
             var bits = BitConverter.DoubleToUInt64Bits(doubleValue);
-            result.Hash = Chi32.UpdateHashValue(result.Hash, (int)(bits & 0xFFFFFFFF));
-            result.Hash = Chi32.UpdateHashValue(result.Hash, (int)(bits >> 32));
+            Hash = Chi32.UpdateHashValue(Hash, (int)(bits & 0xFFFFFFFF));
+            Hash = Chi32.UpdateHashValue(Hash, (int)(bits >> 32));
         }
         else if (typeof(T) == typeof(float))
         {
             var floatValue = Unsafe.As<T, float>(ref value);
             var bits = BitConverter.SingleToUInt32Bits(floatValue);
-            result.Hash = Chi32.UpdateHashValue(result.Hash, (int)bits);
+            Hash = Chi32.UpdateHashValue(Hash, (int)bits);
         }
         else if (typeof(T) == typeof(Half))
         {
             var halfValue = Unsafe.As<T, Half>(ref value);
             var bits = BitConverter.HalfToUInt16Bits(halfValue);
-            result.Hash = Chi32.UpdateHashValue(result.Hash, bits);
+            Hash = Chi32.UpdateHashValue(Hash, bits);
         }
         else if (typeof(T) == typeof(decimal))
         {
@@ -167,12 +162,12 @@ public ref struct ChiHash
             Span<int> parts = stackalloc int[4];
             decimal.TryGetBits(decimalValue, parts, out _);
             for (var i = 0; i < 4; i++)
-                result.Hash = Chi32.UpdateHashValue(result.Hash, parts[i]);
+                Hash = Chi32.UpdateHashValue(Hash, parts[i]);
         }
         else if (typeof(T) == typeof(bool))
         {
             var boolValue = Unsafe.As<T, bool>(ref value);
-            result.Hash = Chi32.UpdateHashValue(result.Hash, boolValue ? 1 : 0);
+            Hash = Chi32.UpdateHashValue(Hash, boolValue ? 1 : 0);
         }
         else if (typeof(T).IsEnum)
         {
@@ -180,21 +175,21 @@ public ref struct ChiHash
 
             if (underlyingType == typeof(byte) || underlyingType == typeof(sbyte))
             {
-                result.Hash = Chi32.UpdateHashValue(result.Hash, Unsafe.As<T, byte>(ref value));
+                Hash = Chi32.UpdateHashValue(Hash, Unsafe.As<T, byte>(ref value));
             }
             else if (underlyingType == typeof(short) || underlyingType == typeof(ushort))
             {
-                result.Hash = Chi32.UpdateHashValue(result.Hash, Unsafe.As<T, ushort>(ref value));
+                Hash = Chi32.UpdateHashValue(Hash, Unsafe.As<T, ushort>(ref value));
             }
             else if (underlyingType == typeof(int) || underlyingType == typeof(uint))
             {
-                result.Hash = Chi32.UpdateHashValue(result.Hash, (int)Unsafe.As<T, uint>(ref value));
+                Hash = Chi32.UpdateHashValue(Hash, (int)Unsafe.As<T, uint>(ref value));
             }
             else if (underlyingType == typeof(long) || underlyingType == typeof(ulong))
             {
                 var longValue = Unsafe.As<T, ulong>(ref value);
-                result.Hash = Chi32.UpdateHashValue(result.Hash, (int)(longValue & 0xFFFFFFFF));
-                result.Hash = Chi32.UpdateHashValue(result.Hash, (int)(longValue >> 32));
+                Hash = Chi32.UpdateHashValue(Hash, (int)(longValue & 0xFFFFFFFF));
+                Hash = Chi32.UpdateHashValue(Hash, (int)(longValue >> 32));
             }
             else
             {
@@ -215,27 +210,29 @@ public ref struct ChiHash
                     intSpan[index] = BinaryPrimitives.ReverseEndianness(intSpan[index]);
 
             foreach (var chunk in intSpan)
-                result.Hash = Chi32.UpdateHashValue(result.Hash, chunk);
+                Hash = Chi32.UpdateHashValue(Hash, chunk);
         }
         else if (typeof(T) == typeof(Complex))
         {
             var complex = Unsafe.As<T, Complex>(ref value);
-            return result.Add(complex.Real).Add(complex.Imaginary);
+            this = Add(complex.Real);
+            this = Add(complex.Imaginary);
         }
         else if (typeof(T) == typeof(DateTime))
         {
             var dateTime = Unsafe.As<T, DateTime>(ref value);
-            return result.Add(dateTime.ToBinary());
+            this = Add(dateTime.ToBinary());
         }
         else if (typeof(T) == typeof(DateTimeOffset))
         {
             var dateTimeOffset = Unsafe.As<T, DateTimeOffset>(ref value);
-            return result.Add(dateTimeOffset.Ticks).Add(dateTimeOffset.Offset.Ticks);
+            this = Add(dateTimeOffset.Ticks);
+            this = Add(dateTimeOffset.Offset.Ticks);
         }
         else if (typeof(T) == typeof(TimeSpan))
         {
             var timeSpan = Unsafe.As<T, TimeSpan>(ref value);
-            return result.Add(timeSpan.Ticks);
+            this = Add(timeSpan.Ticks);
         }
         else
         {
@@ -245,7 +242,7 @@ public ref struct ChiHash
                 $"Guid, Complex, DateTime, DateTimeOffset, TimeSpan.");
         }
 
-        return result;
+        return this;
     }
 
     /// <summary>
@@ -255,14 +252,12 @@ public ref struct ChiHash
     /// <param name="values">The span of values to add to the hash.</param>
     /// <returns>A new ChiHash instance with all values incorporated into the hash calculation.</returns>
     /// <inheritdoc cref="Add(string)" />
-    [Pure]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public ChiHash Add<T>(scoped ReadOnlySpan<T> values)
     {
-        var result = this;
         foreach (var value in values)
-            result = result.Add(value);
-        return result;
+            this = Add(value);
+        return this;
     }
 
     /// <summary>
@@ -272,14 +267,12 @@ public ref struct ChiHash
     /// <param name="values">The span of values to add to the hash.</param>
     /// <returns>A new ChiHash instance with all values incorporated into the hash calculation.</returns>
     /// <inheritdoc cref="Add(string)" />
-    [Pure]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public ChiHash Add<T>(scoped Span<T> values)
     {
-        var result = this;
         foreach (var value in values)
-            result = result.Add(value);
-        return result;
+            this = Add(value);
+        return this;
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
