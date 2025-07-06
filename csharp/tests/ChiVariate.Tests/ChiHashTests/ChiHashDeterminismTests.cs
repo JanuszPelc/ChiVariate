@@ -77,14 +77,6 @@ public class ChiHashDeterminismTests
         Assert.Equal(-286954189, new ChiHash().Add(complex1).Hash);
         Assert.Equal(44345189, new ChiHash().Add(complex2).Hash);
 
-        // BigInteger values
-        var big1 = BigInteger.Parse("123456789012345678901234567890");
-        var big2 = BigInteger.Zero;
-        var big3 = BigInteger.One;
-        Assert.Equal(-2096083249, new ChiHash().Add(big1).Hash);
-        Assert.Equal(150996269, new ChiHash().Add(big2).Hash);
-        Assert.Equal(-747144466, new ChiHash().Add(big3).Hash);
-
         // Enum values
         Assert.Equal(1915432565, new ChiHash().Add(TestEnum.Value1).Hash);
         Assert.Equal(-1080233084, new ChiHash().Add(TestEnum.Value2).Hash);

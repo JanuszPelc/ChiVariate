@@ -211,13 +211,6 @@ public class ChiHashReproducibilityTests
         VerifyDeterminism(complex1);
         VerifyDeterminism(complex2);
         VerifySensitivity(complex1, complex2);
-
-        // BigInteger
-        var big1 = BigInteger.Parse("123456789012345678901234567890");
-        var big2 = BigInteger.Parse("123456789012345678901234567891");
-        VerifyDeterminism(big1);
-        VerifyDeterminism(big2);
-        VerifySensitivity(big1, big2);
     }
 
     [Fact]
@@ -264,7 +257,6 @@ public class ChiHashReproducibilityTests
         // Complex mixed scenario
         var guid = Guid.Parse("12345678-1234-5678-9abc-123456789abc");
         var dateTime = new DateTime(2023, 12, 25, 15, 30, 45, DateTimeKind.Utc);
-        var bigInt = BigInteger.Parse("123456789012345678901234567890");
 
         var hash1 = new ChiHash()
             .Add(ChiHash.Seed)
@@ -275,7 +267,6 @@ public class ChiHashReproducibilityTests
             .Add(guid)
             .Add(dateTime)
             .Add(TestEnum.Value1)
-            .Add(bigInt)
             .Hash;
 
         var hash2 = new ChiHash()
@@ -287,7 +278,6 @@ public class ChiHashReproducibilityTests
             .Add(guid)
             .Add(dateTime)
             .Add(TestEnum.Value1)
-            .Add(bigInt)
             .Hash;
 
         Assert.Equal(hash1, hash2);

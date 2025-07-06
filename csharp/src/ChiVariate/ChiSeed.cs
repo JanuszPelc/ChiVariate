@@ -28,8 +28,8 @@ public static class ChiSeed
         {
             unchecked
             {
-                const ulong deltaPrime = 0x1F844CB7FD2C1EAD;
-                Global.CurrentIndex += Global.TimerTicks + deltaPrime;
+                const ulong multiplierPrime = 0x1F844CB7FD2C1EAD;
+                Global.CurrentIndex = (Global.CurrentIndex ^ Global.TimerTicks) * multiplierPrime;
 
                 return Chi32.ApplyCascadingHashInterleave((long)Global.RuntimeSelector, (long)Global.CurrentIndex);
             }

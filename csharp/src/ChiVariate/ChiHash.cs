@@ -21,11 +21,11 @@ namespace ChiVariate;
 ///         networking protocols, procedural generation, and distributed systems.
 ///     </para>
 ///     <para>
-///         For hash table security and DoS protection, seed with ChiHash.Seed
+///         For hash table security and DoS protection, use ChiHash.Seed value
 ///         or a custom entropy source to introduce per-application randomization.
 ///     </para>
 ///     <para>
-///         Important: This is not cryptographically secure and must not be used for
+///         This hashing algorithm is not cryptographically secure and should not be used for
 ///         security-sensitive purposes such as password hashing or digital signatures.
 ///     </para>
 /// </remarks>
@@ -36,13 +36,13 @@ namespace ChiVariate;
 ///     .Add(playerId)
 ///     .Add(playerName)
 ///     .Add(level)
-///     .HashCode;
-/// 
-/// // Security-conscious hashing (DoS protection)
+///     .Hash;
+///  
+/// // Security-conscious hashing
 /// var secureHash = new ChiHash()
 ///     .Add(ChiHash.Seed)
 ///     .Add(data)
-///     .HashCode;
+///     .Hash;
 /// </code>
 /// </example>
 public ref struct ChiHash
@@ -52,7 +52,7 @@ public ref struct ChiHash
     ///     of the current application instance. Each application restart generates a new value.
     /// </summary>
     /// <remarks>
-    ///     Use this seed when you need non-deterministic hashing for security purposes
+    ///     This seed enables non-deterministic hashing for security purposes
     ///     (e.g., DoS protection in hash tables) while maintaining consistency within
     ///     the current application session.
     /// </remarks>
@@ -75,8 +75,8 @@ public ref struct ChiHash
     ///         Always use the returned value:
     ///     </para>
     ///     <code>
-    /// // Correct - fluent style
-    /// var hash = new ChiHash().Add(value1).Add(value2).HashCode;
+    /// // Recommended - fluent style
+    /// var hash = new ChiHash().Add(value1).Add(value2).Hash;
     ///  
     /// // Correct - with reassignment  
     /// var builder = new ChiHash();
@@ -84,10 +84,11 @@ public ref struct ChiHash
     ///  
     /// // Incorrect - mutation is lost
     /// var builder = new ChiHash();
-    /// builder.Add(value); // This does nothing!
+    /// builder.Add(value); // Has no effect
     /// </code>
     /// </remarks>
     [Pure]
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public ChiHash Add(string? value)
     {
         HashString(value ?? "");
@@ -102,17 +103,16 @@ public ref struct ChiHash
     /// <returns>A new ChiHash instance with the value incorporated into the hash calculation.</returns>
     /// <remarks>
     ///     <para>
-    ///         Supports all standard numeric types, bool, enums, BigInteger, Guid, Complex,
-    ///         DateTime, DateTimeOffset, and TimeSpan.
+    ///         Supports standard numeric types, bool, enums, Guid, Complex, DateTime, DateTimeOffset, and TimeSpan.
     ///     </para>
     /// </remarks>
     /// <inheritdoc cref="Add(string)" />
     [Pure]
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public ChiHash Add<T>(T value)
     {
         var result = this;
 
-        // Standard numeric types
         if (typeof(T) == typeof(sbyte) || typeof(T) == typeof(byte))
         {
             var byteValue = Unsafe.As<T, byte>(ref value);
@@ -169,7 +169,6 @@ public ref struct ChiHash
             for (var i = 0; i < 4; i++)
                 result.Hash = Chi32.UpdateHashValue(result.Hash, parts[i]);
         }
-        // Special types
         else if (typeof(T) == typeof(bool))
         {
             var boolValue = Unsafe.As<T, bool>(ref value);
@@ -179,62 +178,29 @@ public ref struct ChiHash
         {
             var underlyingType = Enum.GetUnderlyingType(typeof(T));
 
-            if (underlyingType == typeof(byte))
+            if (underlyingType == typeof(byte) || underlyingType == typeof(sbyte))
             {
                 result.Hash = Chi32.UpdateHashValue(result.Hash, Unsafe.As<T, byte>(ref value));
             }
-            else if (underlyingType == typeof(sbyte))
-            {
-                result.Hash = Chi32.UpdateHashValue(result.Hash, Unsafe.As<T, sbyte>(ref value));
-            }
-            else if (underlyingType == typeof(short))
-            {
-                result.Hash = Chi32.UpdateHashValue(result.Hash, Unsafe.As<T, short>(ref value));
-            }
-            else if (underlyingType == typeof(ushort))
+            else if (underlyingType == typeof(short) || underlyingType == typeof(ushort))
             {
                 result.Hash = Chi32.UpdateHashValue(result.Hash, Unsafe.As<T, ushort>(ref value));
             }
-            else if (underlyingType == typeof(int))
-            {
-                result.Hash = Chi32.UpdateHashValue(result.Hash, Unsafe.As<T, int>(ref value));
-            }
-            else if (underlyingType == typeof(uint))
+            else if (underlyingType == typeof(int) || underlyingType == typeof(uint))
             {
                 result.Hash = Chi32.UpdateHashValue(result.Hash, (int)Unsafe.As<T, uint>(ref value));
             }
-            else if (underlyingType == typeof(long))
+            else if (underlyingType == typeof(long) || underlyingType == typeof(ulong))
             {
                 var longValue = Unsafe.As<T, ulong>(ref value);
                 result.Hash = Chi32.UpdateHashValue(result.Hash, (int)(longValue & 0xFFFFFFFF));
                 result.Hash = Chi32.UpdateHashValue(result.Hash, (int)(longValue >> 32));
             }
-            else if (underlyingType == typeof(ulong))
+            else
             {
-                var longValue = Unsafe.As<T, ulong>(ref value);
-                result.Hash = Chi32.UpdateHashValue(result.Hash, (int)(longValue & 0xFFFFFFFF));
-                result.Hash = Chi32.UpdateHashValue(result.Hash, (int)(longValue >> 32));
-            }
-        }
-        else if (typeof(T) == typeof(BigInteger))
-        {
-            var bigInt = Unsafe.As<T, BigInteger>(ref value);
-            var bytes = bigInt.ToByteArray();
-
-            var intCount = bytes.Length & ~3;
-            for (var i = 0; i < intCount; i += 4)
-            {
-                var chunk = bytes[i] | (bytes[i + 1] << 8) | (bytes[i + 2] << 16) | (bytes[i + 3] << 24);
-                result.Hash = Chi32.UpdateHashValue(result.Hash, chunk);
-            }
-
-            var orphanCount = bytes.Length & 3;
-            if (orphanCount > 0)
-            {
-                var lastChunk = 0;
-                for (var i = 0; i < orphanCount; i++)
-                    lastChunk |= bytes[intCount + i] << (i * 8);
-                result.Hash = Chi32.UpdateHashValue(result.Hash, lastChunk);
+                throw new NotSupportedException(
+                    $"Enum type {typeof(T).Name} is not supported. " +
+                    $"Supported enum types: byte, sbyte, short, ushort, int, uint, long, ulong.");
             }
         }
         else if (typeof(T) == typeof(Guid))
@@ -276,20 +242,21 @@ public ref struct ChiHash
             throw new NotSupportedException(
                 $"Type {typeof(T).Name} is not supported. " +
                 $"Supported types: all numeric types implementing INumber<T>, string, bool, enums, " +
-                $"BigInteger, Guid, Complex, DateTime, DateTimeOffset, TimeSpan.");
+                $"Guid, Complex, DateTime, DateTimeOffset, TimeSpan.");
         }
 
         return result;
     }
 
     /// <summary>
-    ///     Adds a span of values to the hash calculation.
+    ///     Adds a span of values supported by <see cref="Add{T}(T)" /> to the hash calculation.
     /// </summary>
     /// <typeparam name="T">The type of values to add.</typeparam>
     /// <param name="values">The span of values to add to the hash.</param>
     /// <returns>A new ChiHash instance with all values incorporated into the hash calculation.</returns>
     /// <inheritdoc cref="Add(string)" />
     [Pure]
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public ChiHash Add<T>(scoped ReadOnlySpan<T> values)
     {
         var result = this;
@@ -299,13 +266,14 @@ public ref struct ChiHash
     }
 
     /// <summary>
-    ///     Adds a span of values to the hash calculation.
+    ///     Adds a span of values supported by <see cref="Add{T}(T)" /> to the hash calculation.
     /// </summary>
     /// <typeparam name="T">The type of values to add.</typeparam>
     /// <param name="values">The span of values to add to the hash.</param>
     /// <returns>A new ChiHash instance with all values incorporated into the hash calculation.</returns>
     /// <inheritdoc cref="Add(string)" />
     [Pure]
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public ChiHash Add<T>(scoped Span<T> values)
     {
         var result = this;
@@ -314,6 +282,7 @@ public ref struct ChiHash
         return result;
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private void HashString(string value)
     {
         const int maxStackAllocSize = 512;
@@ -328,11 +297,9 @@ public ref struct ChiHash
         {
             Encoding.UTF8.GetBytes(value, byteSpan);
 
-            // Process in 32-bit chunks with endianness normalization for determinism
             var intCount = byteSpan.Length & ~3;
             var intSpan = MemoryMarshal.Cast<byte, int>(byteSpan[..intCount]);
 
-            // Normalize endianness to ensure cross-platform determinism
             if (!BitConverter.IsLittleEndian)
                 for (var index = 0; index < intSpan.Length; index++)
                     intSpan[index] = BinaryPrimitives.ReverseEndianness(intSpan[index]);
@@ -340,7 +307,6 @@ public ref struct ChiHash
             foreach (var chunk in intSpan)
                 Hash = Chi32.UpdateHashValue(Hash, chunk);
 
-            // Handle remaining bytes (always in little-endian order)
             var orphanCount = byteSpan.Length & 3;
             if (orphanCount > 0)
             {
@@ -356,6 +322,9 @@ public ref struct ChiHash
             if (rentedArray != null) ArrayPool<byte>.Shared.Return(rentedArray);
         }
 
+        return;
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static Span<byte> RentArray(int byteCount, out byte[] rentedArray)
         {
             rentedArray = ArrayPool<byte>.Shared.Rent(byteCount);
