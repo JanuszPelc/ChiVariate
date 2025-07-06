@@ -43,7 +43,8 @@ ChiVariate is quick to install and easy to explore.
    ```
 
 3. **Explore available samplers**
-   Autocomplete in modern IDEs shows all available samplers on `rng`, each with inline documentation and examples.
+
+    Autocomplete in modern IDEs shows all available samplers on `rng`, each with inline documentation and examples.
 
 ## Overview of design principles
 
