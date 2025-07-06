@@ -1218,7 +1218,7 @@ public class SamplerBenchmarks
                 case IterationType.ForEach:
                 {
                     foreach (var sample in sampler.Sample(SampleCount))
-                        sum += (sampler.Sample() & T.Zero) | T.One;
+                        sum += (sample & T.Zero) | T.One;
                     break;
                 }
                 case IterationType.Linq:
