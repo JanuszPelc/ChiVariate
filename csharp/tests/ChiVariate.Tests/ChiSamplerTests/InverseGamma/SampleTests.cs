@@ -22,7 +22,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
         // distribution is much better behaved and its statistics are easier to verify.
 
         // Arrange
-        var rng = new ChiRng(ChiSeed.Scramble("InverseGammaReciprocal", ChiHash.Hash(shape, scale)));
+        var rng = new ChiRng(ChiSeed.Scramble("InverseGammaReciprocal", ChiHashObsolete.Hash(shape, scale)));
         var sampler = rng.InverseGamma(shape, scale);
 
         // Theoretical properties of the RECONSTRUCTED Gamma distribution
@@ -59,7 +59,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
         // Arrange
         const decimal shape = 3.0m;
         const decimal scale = 5.0m;
-        var rng = new ChiRng(ChiSeed.Scramble("InvGammaDecimalReciprocal", ChiHash.Hash((double)shape, (double)scale)));
+        var rng = new ChiRng(ChiSeed.Scramble("InvGammaDecimalReciprocal", ChiHashObsolete.Hash((double)shape, (double)scale)));
         var sampler = rng.InverseGamma(shape, scale);
 
         var gammaShape = shape;

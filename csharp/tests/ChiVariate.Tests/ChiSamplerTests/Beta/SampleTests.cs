@@ -66,7 +66,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
         var beta = decimal.Parse(betaStr);
         var expectedMean = (double)alpha / (double)(alpha + beta);
 
-        var rng = new ChiRng(ChiSeed.Scramble("BetaDecimal", ChiHash.Hash(alpha, beta)));
+        var rng = new ChiRng(ChiSeed.Scramble("BetaDecimal", ChiHashObsolete.Hash(alpha, beta)));
         var histogram = new Histogram(0, 1, 100);
         var sampler = new DecimalBetaSampler(alpha, beta);
 

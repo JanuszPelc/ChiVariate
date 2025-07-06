@@ -15,7 +15,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     public void Sample_WithStandardRange_ProducesUniformDistribution()
     {
         // Arrange
-        var rng = new ChiRng(ChiHash.Hash("BoundedUniform_Standard"));
+        var rng = new ChiRng(ChiHashObsolete.Hash("BoundedUniform_Standard"));
         const double min = 0.0;
         const double max = 1.0;
         var histogram = new Histogram(min, max, 10);
@@ -36,7 +36,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     public void Sample_WithShiftedRange_ProducesUniformDistribution()
     {
         // Arrange
-        var rng = new ChiRng(ChiHash.Hash("BoundedUniform_Shifted"));
+        var rng = new ChiRng(ChiHashObsolete.Hash("BoundedUniform_Shifted"));
         const float min = -100.0f;
         const float max = 100.0f;
         var histogram = new Histogram(min, max, 20);
@@ -57,7 +57,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     public void Sample_Always_StaysWithinBounds()
     {
         // Arrange
-        var rng = new ChiRng(ChiHash.Hash("BoundedUniform_BoundsCheck"));
+        var rng = new ChiRng(ChiHashObsolete.Hash("BoundedUniform_BoundsCheck"));
         const double min = 10.0;
         const double max = 20.0;
 

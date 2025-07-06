@@ -32,25 +32,25 @@ public class HashStringBenchmarks
     [Benchmark(Description = "ChiHash.Hash(string) [Short]")]
     public int ChiHash_String_Short()
     {
-        return ChiHash.Hash(ShortString);
+        return ChiHashObsolete.Hash(ShortString);
     }
 
     [Benchmark(Description = "ChiHash.Hash(string) [Medium]")]
     public int ChiHash_String_Medium()
     {
-        return ChiHash.Hash(MediumString);
+        return ChiHashObsolete.Hash(MediumString);
     }
 
     [Benchmark(Description = "ChiHash.Hash(string) [Long]")]
     public int ChiHash_String_Long()
     {
-        return ChiHash.Hash(LongString);
+        return ChiHashObsolete.Hash(LongString);
     }
 
     [Benchmark(Description = "ChiHash.HashUnicode(string) [Unicode]")]
     public int ChiHash_UnicodeString()
     {
-        return ChiHash.Hash(UnicodeString);
+        return ChiHashObsolete.Hash(UnicodeString);
     }
 
     [Benchmark(Description = "HashCode.Combine(string) [Short]")]

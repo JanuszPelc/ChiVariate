@@ -18,7 +18,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     public void Sample_ProducesDistributionWithCorrectStatistics(double mu, double sigma)
     {
         // Arrange
-        var rng = new ChiRng(ChiSeed.Scramble("LogNormal", ChiHash.Hash(mu, sigma)));
+        var rng = new ChiRng(ChiSeed.Scramble("LogNormal", ChiHashObsolete.Hash(mu, sigma)));
 
         var expectedMean = Math.Exp(mu + sigma * sigma / 2.0);
         var expectedVariance = (Math.Exp(sigma * sigma) - 1) * Math.Exp(2 * mu + sigma * sigma);
@@ -64,7 +64,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
         var mu = decimal.Parse(muStr);
         var sigma = decimal.Parse(sigmaStr);
 
-        var rng = new ChiRng(ChiSeed.Scramble("LogNormalDecimal", ChiHash.Hash(mu, sigma)));
+        var rng = new ChiRng(ChiSeed.Scramble("LogNormalDecimal", ChiHashObsolete.Hash(mu, sigma)));
 
         var expectedMean = Math.Exp((double)mu + (double)sigma * (double)sigma / 2.0);
         var expectedVariance = (Math.Exp((double)sigma * (double)sigma) - 1) *

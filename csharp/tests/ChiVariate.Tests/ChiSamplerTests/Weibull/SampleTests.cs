@@ -19,7 +19,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     public void Sample_ProducesDistributionWithCorrectShape(double shape, double scale)
     {
         // Arrange
-        var rng = new ChiRng(ChiSeed.Scramble("Weibull", ChiHash.Hash(shape, scale)));
+        var rng = new ChiRng(ChiSeed.Scramble("Weibull", ChiHashObsolete.Hash(shape, scale)));
         var maxBound = scale * 10;
         var histogram = new Histogram(0, maxBound, 150);
 
@@ -59,7 +59,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
         var shape = decimal.Parse(shapeStr);
         var scale = decimal.Parse(scaleStr);
 
-        var rng = new ChiRng(ChiSeed.Scramble("WeibullDecimal", ChiHash.Hash(shape, scale)));
+        var rng = new ChiRng(ChiSeed.Scramble("WeibullDecimal", ChiHashObsolete.Hash(shape, scale)));
         var maxBound = (double)scale * 4; // Weibull can have a long tail
         var histogram = new Histogram(0, maxBound, 150);
         var sampler = new DecimalWeibullSampler(shape, scale);

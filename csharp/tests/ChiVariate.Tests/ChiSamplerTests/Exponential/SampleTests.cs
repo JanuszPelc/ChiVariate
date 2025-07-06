@@ -17,7 +17,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
         // Arrange
         const double rateLambda = 1.0;
         const double expectedMean = 1.0 / rateLambda;
-        var rng = new ChiRng(ChiHash.Hash("Exponential_Rate1"));
+        var rng = new ChiRng(ChiHashObsolete.Hash("Exponential_Rate1"));
         var histogram = new Histogram(0.0, 10.0, 100);
 
         // Act
@@ -38,7 +38,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
         // Arrange
         const double rateLambda = 0.5;
         const double expectedMean = 1.0 / rateLambda;
-        var rng = new ChiRng(ChiHash.Hash("Exponential_Rate0.5"));
+        var rng = new ChiRng(ChiHashObsolete.Hash("Exponential_Rate0.5"));
         var histogram = new Histogram(0.0, 20.0, 100);
 
         // Act
@@ -75,7 +75,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
         const decimal rateLambda = 1.0m;
         const double expectedMean = 1.0 / (double)rateLambda;
 
-        var rng = new ChiRng(ChiHash.Hash("Exponential_Decimal_Rate1"));
+        var rng = new ChiRng(ChiHashObsolete.Hash("Exponential_Decimal_Rate1"));
         var histogram = new Histogram(0.0, 10.0, 100);
         var sampler = new DecimalExponentialSampler(rateLambda); // Use our new sampler
 

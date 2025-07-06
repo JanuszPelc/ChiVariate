@@ -14,11 +14,6 @@ namespace ChiVariate;
 ///     Provides static utility methods for generating and manipulating long seed values
 ///     for pseudo-random number generation.
 /// </summary>
-/// <remarks>
-///     This class uses a more complex and statistically robust mixing algorithm than the general-purpose
-///     <see cref="ChiHash" /> utility, making it ideal for creating the high-entropy seeds required
-///     by <see cref="ChiRng" />.
-/// </remarks>
 public static class ChiSeed
 {
     /// <summary>

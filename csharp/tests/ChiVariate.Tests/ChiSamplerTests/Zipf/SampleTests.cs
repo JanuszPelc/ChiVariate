@@ -19,7 +19,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     public void Sample_ProducesDistributionWithCorrectShape(int numElements, double exponent)
     {
         // Arrange
-        var rng = new ChiRng(ChiSeed.Scramble("Zipf", ChiHash.Hash(numElements, exponent)));
+        var rng = new ChiRng(ChiSeed.Scramble("Zipf", ChiHashObsolete.Hash(numElements, exponent)));
         var histogram = new Histogram(1, numElements + 1, numElements, true);
 
         // Act

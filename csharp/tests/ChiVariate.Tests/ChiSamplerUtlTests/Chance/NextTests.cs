@@ -82,7 +82,7 @@ public class NextTests(ITestOutputHelper testOutputHelper)
     public void Next_WithValidRange_StaysWithinBounds(int minInclusive, int maxExclusive)
     {
         // Arrange
-        var rng = new ChiRng(ChiHash.Hash(minInclusive, maxExclusive));
+        var rng = new ChiRng(ChiHashObsolete.Hash(minInclusive, maxExclusive));
         const int sampleCount = 1000;
 
         // Act & Assert
@@ -114,7 +114,7 @@ public class NextTests(ITestOutputHelper testOutputHelper)
         where TSampler : IHistogramSamplerWithRange<T, ChiRng>
     {
         // Arrange
-        var rng = new ChiRng(ChiHash.Hash(typeof(T).Name));
+        var rng = new ChiRng(ChiHashObsolete.Hash(typeof(T).Name));
         var histogram = new Histogram(0.0, 1.0, 10);
 
         // Act
@@ -131,7 +131,7 @@ public class NextTests(ITestOutputHelper testOutputHelper)
         where TSampler : IHistogramSamplerWithRange<T, ChiRng>
     {
         // Arrange
-        var rng = new ChiRng(ChiHash.Hash(typeof(T).Name));
+        var rng = new ChiRng(ChiHashObsolete.Hash(typeof(T).Name));
         var histogram = new Histogram(0.0, 1.0, 10);
         const int sampleCount = 100_000;
 

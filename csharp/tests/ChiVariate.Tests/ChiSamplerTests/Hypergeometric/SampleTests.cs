@@ -20,7 +20,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     {
         // Arrange
         var rng = new ChiRng(ChiSeed.Scramble("Hypergeometric",
-            ChiHash.Hash(populationSize, numSuccesses, sampleSize)));
+            ChiHashObsolete.Hash(populationSize, numSuccesses, sampleSize)));
 
         var minPossible = Math.Max(0, sampleSize - (populationSize - numSuccesses));
         var maxPossible = Math.Min(sampleSize, numSuccesses);

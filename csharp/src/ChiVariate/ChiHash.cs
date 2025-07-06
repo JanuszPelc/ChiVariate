@@ -1,4 +1,6 @@
 using System.Buffers;
+using System.Buffers.Binary;
+using System.Diagnostics.Contracts;
 using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
@@ -8,50 +10,300 @@ using ChiVariate.Internal;
 namespace ChiVariate;
 
 /// <summary>
-///     Provides a collection of static methods for generating non-cryptographic hash values
-///     from various input types.
+///     A deterministic hash builder that provides cross-platform reproducible hash codes
+///     for non-cryptographic purposes.
 /// </summary>
 /// <remarks>
 ///     <para>
-///         Important: this class isn't cryptographically secure, and not suitable for security-sensitive purposes.
+///         ChiHash produces deterministic hash values that remain consistent across
+///         different platforms, .NET versions, and application runs. This makes it
+///         suitable for scenarios requiring reproducible hashing: save files, 
+///         networking protocols, procedural generation, and distributed systems.
 ///     </para>
 ///     <para>
-///         Designed for use in scenarios such as data indexing and retrieval, deterministic data transformation
-///         and partitioning, and non-cryptographic hashing. For generating high-entropy `long` seed values
-///         suitable for `ChiRng`, see the <see cref="ChiSeed" /> class.
+///         For hash table security and DoS protection, seed with ChiHash.Seed 
+///         or a custom entropy source to introduce per-application randomization.
+///     </para>
+///     <para>
+///         Important: This is not cryptographically secure and must not be used for
+///         security-sensitive purposes such as password hashing or digital signatures.
 ///     </para>
 /// </remarks>
-public static class ChiHash
+/// <example>
+///     <code>
+/// // Deterministic hashing
+/// var hash = new ChiHash()
+///     .Add(playerId)
+///     .Add(playerName)
+///     .Add(level)
+///     .HashCode;
+/// 
+/// // Security-conscious hashing (DoS protection)
+/// var secureHash = new ChiHash()
+///     .Add(ChiHash.Seed)
+///     .Add(data)
+///     .HashCode;
+/// </code>
+/// </example>
+public ref struct ChiHash
 {
     /// <summary>
-    ///     Computes a 32-bit hash for an integer value.
+    ///     A pseudo-randomly generated seed value that remains constant for the lifetime
+    ///     of the current application instance. Each application restart generates a new value.
     /// </summary>
-    /// <param name="value">The <see cref="int" /> value to incorporate into the hash calculation.</param>
-    /// <returns>An <see cref="int" /> representing the 32-bit integer hash value.</returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static int Hash(int value)
+    /// <remarks>
+    ///     Use this seed when you need non-deterministic hashing for security purposes
+    ///     (e.g., DoS protection in hash tables) while maintaining consistency within
+    ///     the current application session.
+    /// </remarks>
+    public static long Seed { get; } = ChiSeed.GenerateUnique();
+
+    /// <summary>
+    ///     Gets the current 32-bit hash code based on all values added so far.
+    /// </summary>
+    /// <value>A 32-bit signed integer hash code.</value>
+    public int HashCode { get; private set; }
+
+    /// <summary>
+    ///     Adds a string value to the hash calculation.
+    /// </summary>
+    /// <param name="value">The string to add to the hash. Null values are treated as empty strings.</param>
+    /// <returns>A new ChiHash instance with the string incorporated into the hash calculation.</returns>
+    /// <remarks>
+    ///     <para>
+    ///         This method returns a new ChiHash instance and does not modify the original.
+    ///         Always use the returned value:
+    ///     </para>
+    ///     <code>
+    /// // ✅ Correct - fluent style
+    /// var hash = new ChiHash().Add(value1).Add(value2).HashCode;
+    /// 
+    /// // ✅ Correct - with reassignment  
+    /// var builder = new ChiHash();
+    /// builder = builder.Add(value);
+    /// 
+    /// // ❌ Incorrect - mutation is lost
+    /// var builder = new ChiHash();
+    /// builder.Add(value); // This does nothing!
+    /// </code>
+    /// </remarks>
+    [Pure]
+    public ChiHash Add(string? value)
     {
-        return Chi32.UpdateHashValue(0, value);
+        HashString(value ?? "");
+        return this;
     }
 
     /// <summary>
-    ///     Computes a 32-bit hash for any number of strings.
+    ///     Adds a value of any supported type to the hash calculation.
     /// </summary>
-    /// <param name="value">A <see cref="string" /> value to be hashed. Can't be null.</param>
-    /// <returns>An <see cref="int" /> representing the 32-bit integer hash value.</returns>
+    /// <typeparam name="T">The type of value to add.</typeparam>
+    /// <param name="value">The value to add to the hash.</param>
+    /// <returns>A new ChiHash instance with the value incorporated into the hash calculation.</returns>
     /// <remarks>
-    ///     Computes a 32-bit hash for the specified string by processing its UTF-8 byte representation.
-    ///     This ensures deterministic results across different platforms.
-    ///     Handles buffer allocation efficiently using <c>stackalloc</c> for smaller strings
-    ///     and <see cref="ArrayPool{T}" /> for larger ones.
+    ///     <para>
+    ///         Supports all standard numeric types, bool, enums, BigInteger, Guid, Complex,
+    ///         DateTime, DateTimeOffset, and TimeSpan.
+    ///     </para>
     /// </remarks>
-    /// <exception cref="ArgumentNullException">
-    ///     Thrown if <paramref name="value" /> is null.
-    /// </exception>
-    public static int Hash(string value)
+    /// <inheritdoc cref="Add(string)" />
+    [Pure]
+    public ChiHash Add<T>(T value)
     {
-        ArgumentNullException.ThrowIfNull(value);
+        var result = this;
 
+        // Standard numeric types
+        if (typeof(T) == typeof(sbyte) || typeof(T) == typeof(byte))
+        {
+            var byteValue = Unsafe.As<T, byte>(ref value);
+            result.HashCode = Chi32.UpdateHashValue(result.HashCode, byteValue);
+        }
+        else if (typeof(T) == typeof(short) || typeof(T) == typeof(ushort) || typeof(T) == typeof(char))
+        {
+            var shortValue = Unsafe.As<T, ushort>(ref value);
+            result.HashCode = Chi32.UpdateHashValue(result.HashCode, shortValue);
+        }
+        else if (typeof(T) == typeof(int) || typeof(T) == typeof(uint))
+        {
+            var intValue = Unsafe.As<T, uint>(ref value);
+            result.HashCode = Chi32.UpdateHashValue(result.HashCode, (int)intValue);
+        }
+        else if (typeof(T) == typeof(long) || typeof(T) == typeof(ulong))
+        {
+            var longValue = Unsafe.As<T, ulong>(ref value);
+            result.HashCode = Chi32.UpdateHashValue(result.HashCode, (int)(longValue & 0xFFFFFFFF));
+            result.HashCode = Chi32.UpdateHashValue(result.HashCode, (int)(longValue >> 32));
+        }
+        else if (typeof(T) == typeof(Int128) || typeof(T) == typeof(UInt128))
+        {
+            var int128Value = Unsafe.As<T, UInt128>(ref value);
+            result.HashCode = Chi32.UpdateHashValue(result.HashCode, (int)(int128Value & 0xFFFFFFFF));
+            result.HashCode = Chi32.UpdateHashValue(result.HashCode, (int)((int128Value >> 32) & 0xFFFFFFFF));
+            result.HashCode = Chi32.UpdateHashValue(result.HashCode, (int)((int128Value >> 64) & 0xFFFFFFFF));
+            result.HashCode = Chi32.UpdateHashValue(result.HashCode, (int)((int128Value >> 96) & 0xFFFFFFFF));
+        }
+        else if (typeof(T) == typeof(double))
+        {
+            var doubleValue = Unsafe.As<T, double>(ref value);
+            var bits = BitConverter.DoubleToUInt64Bits(doubleValue);
+            result.HashCode = Chi32.UpdateHashValue(result.HashCode, (int)(bits & 0xFFFFFFFF));
+            result.HashCode = Chi32.UpdateHashValue(result.HashCode, (int)(bits >> 32));
+        }
+        else if (typeof(T) == typeof(float))
+        {
+            var floatValue = Unsafe.As<T, float>(ref value);
+            var bits = BitConverter.SingleToUInt32Bits(floatValue);
+            result.HashCode = Chi32.UpdateHashValue(result.HashCode, (int)bits);
+        }
+        else if (typeof(T) == typeof(Half))
+        {
+            var halfValue = Unsafe.As<T, Half>(ref value);
+            var bits = BitConverter.HalfToUInt16Bits(halfValue);
+            result.HashCode = Chi32.UpdateHashValue(result.HashCode, bits);
+        }
+        else if (typeof(T) == typeof(decimal))
+        {
+            var decimalValue = Unsafe.As<T, decimal>(ref value);
+            Span<int> parts = stackalloc int[4];
+            decimal.TryGetBits(decimalValue, parts, out _);
+            for (var i = 0; i < 4; i++) 
+                result.HashCode = Chi32.UpdateHashValue(result.HashCode, parts[i]);
+        }
+        // Special types
+        else if (typeof(T) == typeof(bool))
+        {
+            var boolValue = Unsafe.As<T, bool>(ref value);
+            result.HashCode = Chi32.UpdateHashValue(result.HashCode, boolValue ? 1 : 0);
+        }
+        else if (typeof(T).IsEnum)
+        {
+            var underlyingType = Enum.GetUnderlyingType(typeof(T));
+            
+            if (underlyingType == typeof(byte))
+                result.HashCode = Chi32.UpdateHashValue(result.HashCode, Unsafe.As<T, byte>(ref value));
+            else if (underlyingType == typeof(sbyte))
+                result.HashCode = Chi32.UpdateHashValue(result.HashCode, Unsafe.As<T, sbyte>(ref value));
+            else if (underlyingType == typeof(short))
+                result.HashCode = Chi32.UpdateHashValue(result.HashCode, Unsafe.As<T, short>(ref value));
+            else if (underlyingType == typeof(ushort))
+                result.HashCode = Chi32.UpdateHashValue(result.HashCode, Unsafe.As<T, ushort>(ref value));
+            else if (underlyingType == typeof(int))
+                result.HashCode = Chi32.UpdateHashValue(result.HashCode, Unsafe.As<T, int>(ref value));
+            else if (underlyingType == typeof(uint))
+                result.HashCode = Chi32.UpdateHashValue(result.HashCode, (int)Unsafe.As<T, uint>(ref value));
+            else if (underlyingType == typeof(long))
+            {
+                var longValue = Unsafe.As<T, ulong>(ref value);
+                result.HashCode = Chi32.UpdateHashValue(result.HashCode, (int)(longValue & 0xFFFFFFFF));
+                result.HashCode = Chi32.UpdateHashValue(result.HashCode, (int)(longValue >> 32));
+            }
+            else if (underlyingType == typeof(ulong))
+            {
+                var longValue = Unsafe.As<T, ulong>(ref value);
+                result.HashCode = Chi32.UpdateHashValue(result.HashCode, (int)(longValue & 0xFFFFFFFF));
+                result.HashCode = Chi32.UpdateHashValue(result.HashCode, (int)(longValue >> 32));
+            }
+        }
+        else if (typeof(T) == typeof(BigInteger))
+        {
+            var bigInt = Unsafe.As<T, BigInteger>(ref value);
+            var bytes = bigInt.ToByteArray();
+            
+            var intCount = bytes.Length & ~3;
+            for (var i = 0; i < intCount; i += 4)
+            {
+                var chunk = bytes[i] | (bytes[i + 1] << 8) | (bytes[i + 2] << 16) | (bytes[i + 3] << 24);
+                result.HashCode = Chi32.UpdateHashValue(result.HashCode, chunk);
+            }
+            
+            var orphanCount = bytes.Length & 3;
+            if (orphanCount > 0)
+            {
+                var lastChunk = 0;
+                for (var i = 0; i < orphanCount; i++)
+                    lastChunk |= bytes[intCount + i] << (i * 8);
+                result.HashCode = Chi32.UpdateHashValue(result.HashCode, lastChunk);
+            }
+        }
+        else if (typeof(T) == typeof(Guid))
+        {
+            var guid = Unsafe.As<T, Guid>(ref value);
+            Span<byte> bytes = stackalloc byte[16];
+            guid.TryWriteBytes(bytes);
+            
+            var intSpan = MemoryMarshal.Cast<byte, int>(bytes);
+            if (!BitConverter.IsLittleEndian)
+                for (var index = 0; index < intSpan.Length; index++)
+                    intSpan[index] = BinaryPrimitives.ReverseEndianness(intSpan[index]);
+            
+            foreach (var chunk in intSpan)
+                result.HashCode = Chi32.UpdateHashValue(result.HashCode, chunk);
+        }
+        else if (typeof(T) == typeof(Complex))
+        {
+            var complex = Unsafe.As<T, Complex>(ref value);
+            return result.Add(complex.Real).Add(complex.Imaginary);
+        }
+        else if (typeof(T) == typeof(DateTime))
+        {
+            var dateTime = Unsafe.As<T, DateTime>(ref value);
+            return result.Add(dateTime.ToBinary());
+        }
+        else if (typeof(T) == typeof(DateTimeOffset))
+        {
+            var dateTimeOffset = Unsafe.As<T, DateTimeOffset>(ref value);
+            return result.Add(dateTimeOffset.Ticks).Add(dateTimeOffset.Offset.Ticks);
+        }
+        else if (typeof(T) == typeof(TimeSpan))
+        {
+            var timeSpan = Unsafe.As<T, TimeSpan>(ref value);
+            return result.Add(timeSpan.Ticks);
+        }
+        else
+        {
+            throw new NotSupportedException(
+                $"Type {typeof(T).Name} is not supported. " +
+                $"Supported types: all numeric types implementing INumber<T>, string, bool, enums, " +
+                $"BigInteger, Guid, Complex, DateTime, DateTimeOffset, TimeSpan.");
+        }
+
+        return result;
+    }
+
+    /// <summary>
+    ///     Adds a span of values to the hash calculation.
+    /// </summary>
+    /// <typeparam name="T">The type of values to add.</typeparam>
+    /// <param name="values">The span of values to add to the hash.</param>
+    /// <returns>A new ChiHash instance with all values incorporated into the hash calculation.</returns>
+    /// <inheritdoc cref="Add(string)" />
+    [Pure]
+    public ChiHash Add<T>(scoped ReadOnlySpan<T> values)
+    {
+        var result = this;
+        foreach (var value in values)
+            result = result.Add(value);
+        return result;
+    }
+
+    /// <summary>
+    ///     Adds a span of values to the hash calculation.
+    /// </summary>
+    /// <typeparam name="T">The type of values to add.</typeparam>
+    /// <param name="values">The span of values to add to the hash.</param>
+    /// <returns>A new ChiHash instance with all values incorporated into the hash calculation.</returns>
+    /// <inheritdoc cref="Add(string)" />
+    [Pure]
+    public ChiHash Add<T>(scoped Span<T> values)
+    {
+        var result = this;
+        foreach (var value in values)
+            result = result.Add(value);
+        return result;
+    }
+
+    private void HashString(string value)
+    {
         const int maxStackAllocSize = 512;
 
         var byteCount = Encoding.UTF8.GetByteCount(value);
@@ -60,355 +312,42 @@ public static class ChiHash
             ? stackalloc byte[byteCount]
             : RentArray(byteCount, out rentedArray);
 
-        var combinedValue = InitializeCombiner();
-
         try
         {
             Encoding.UTF8.GetBytes(value, byteSpan);
 
+            // Process in 32-bit chunks with endianness normalization for determinism
             var intCount = byteSpan.Length & ~3;
             var intSpan = MemoryMarshal.Cast<byte, int>(byteSpan[..intCount]);
 
-            foreach (var int32 in intSpan)
-                CombineValue(ref combinedValue, int32);
+            // Normalize endianness to ensure cross-platform determinism
+            if (!BitConverter.IsLittleEndian)
+                for (var index = 0; index < intSpan.Length; index++)
+                    intSpan[index] = BinaryPrimitives.ReverseEndianness(intSpan[index]);
 
+            foreach (var chunk in intSpan) 
+                HashCode = Chi32.UpdateHashValue(HashCode, chunk);
+
+            // Handle remaining bytes (always in little-endian order)
             var orphanCount = byteSpan.Length & 3;
             if (orphanCount > 0)
             {
                 var tailBytes = byteSpan[^orphanCount..];
-                var last = 0;
-                for (var i = 0; i < orphanCount; i++)
-                    last |= tailBytes[i] << (i * 8);
-
-                CombineValue(ref combinedValue, last);
+                var lastChunk = 0;
+                for (var i = 0; i < orphanCount; i++) 
+                    lastChunk |= tailBytes[i] << (i * 8);
+                HashCode = Chi32.UpdateHashValue(HashCode, lastChunk);
             }
         }
         finally
         {
-            if (byteSpan.Length > maxStackAllocSize)
-                ArrayPool<byte>.Shared.Return(rentedArray!);
+            if (rentedArray != null) ArrayPool<byte>.Shared.Return(rentedArray);
         }
-
-        return Chi32.UpdateHashValue(0, combinedValue);
 
         static Span<byte> RentArray(int byteCount, out byte[] rentedArray)
         {
             rentedArray = ArrayPool<byte>.Shared.Rent(byteCount);
             return rentedArray.AsSpan(0, byteCount);
         }
-    }
-
-    /// <summary>
-    ///     Computes a 32-bit hash value from a numeric inputs span of an unmanaged type
-    ///     implementing <see cref="INumberBase{TSelf}" />.
-    /// </summary>
-    /// <typeparam name="T">The type of the value.</typeparam>
-    /// <param name="values">The span of numeric value to hash.</param>
-    /// <returns>An <see cref="int" /> representing the 32-bit integer hash value.</returns>
-    /// <remarks>
-    ///     <para>
-    ///         This method computes a deterministic 32-bit hash.
-    ///         Each input value's complete bit pattern contributes to the final result, ensuring cross-platform
-    ///         and cross-version reproducibility.
-    ///         Values are reduced and combined using an intermediate mixing process before finalization.
-    ///     </para>
-    /// </remarks>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static int Hash<T>(scoped ReadOnlySpan<T> values)
-        where T : unmanaged, INumberBase<T>
-    {
-        var combinedValue = InitializeCombiner();
-
-        foreach (var value in values)
-            CombineValue(ref combinedValue, ReduceToInt32(value));
-
-        return Chi32.UpdateHashValue(0, combinedValue);
-    }
-
-    /// <summary>
-    ///     Computes a 32-bit hash value from a single numeric input of an unmanaged type
-    ///     implementing <see cref="INumberBase{TSelf}" />.
-    /// </summary>
-    /// <typeparam name="T1">The type of the value.</typeparam>
-    /// <param name="v1">The numeric value to hash.</param>
-    /// <returns>An <see cref="int" /> representing the 32-bit integer hash value.</returns>
-    /// <remarks>
-    ///     <para>
-    ///         This method computes a deterministic 32-bit hash.
-    ///         Each input value's complete bit pattern contributes to the final result, ensuring cross-platform
-    ///         and cross-version reproducibility.
-    ///         Values are reduced and combined using an intermediate mixing process before finalization.
-    ///     </para>
-    /// </remarks>
-    public static int Hash<T1>(T1 v1)
-        where T1 : unmanaged, INumberBase<T1>
-    {
-        return Chi32.UpdateHashValue(0, ReduceToInt32(v1));
-    }
-
-    /// <summary>
-    ///     Computes a 32-bit hash value from two numeric inputs of unmanaged types
-    ///     implementing <see cref="INumberBase{TSelf}" />.
-    /// </summary>
-    /// <typeparam name="T1">The type of the first value.</typeparam>
-    /// <typeparam name="T2">The type of the second value.</typeparam>
-    /// <param name="v1">The first numeric value to hash.</param>
-    /// <param name="v2">The second numeric value to hash.</param>
-    /// <returns>An <see cref="int" /> representing the 32-bit integer hash value.</returns>
-    /// <inheritdoc cref="Hash{T1}(T1)" />
-    public static int Hash<T1, T2>(T1 v1, T2 v2)
-        where T1 : unmanaged, INumberBase<T1>
-        where T2 : unmanaged, INumberBase<T2>
-    {
-        var combinedValue = InitializeCombiner();
-
-        CombineValue(ref combinedValue, ReduceToInt32(v1));
-        CombineValue(ref combinedValue, ReduceToInt32(v2));
-
-        return Chi32.UpdateHashValue(0, combinedValue);
-    }
-
-    /// <summary>
-    ///     Computes a 32-bit hash value from three numeric inputs of unmanaged types
-    ///     implementing <see cref="INumberBase{TSelf}" />.
-    /// </summary>
-    /// <typeparam name="T1">The type of the first value.</typeparam>
-    /// <typeparam name="T2">The type of the second value.</typeparam>
-    /// <typeparam name="T3">The type of the third value.</typeparam>
-    /// <param name="v1">The first numeric value to hash.</param>
-    /// <param name="v2">The second numeric value to hash.</param>
-    /// <param name="v3">The third numeric value to hash.</param>
-    /// <returns>An <see cref="int" /> representing the 32-bit integer hash value.</returns>
-    /// <inheritdoc cref="Hash{T1}(T1)" />
-    public static int Hash<T1, T2, T3>(T1 v1, T2 v2, T3 v3)
-        where T1 : unmanaged, INumberBase<T1>
-        where T2 : unmanaged, INumberBase<T2>
-        where T3 : unmanaged, INumberBase<T3>
-    {
-        var combinedValue = InitializeCombiner();
-
-        CombineValue(ref combinedValue, ReduceToInt32(v1));
-        CombineValue(ref combinedValue, ReduceToInt32(v2));
-        CombineValue(ref combinedValue, ReduceToInt32(v3));
-
-        return Chi32.UpdateHashValue(0, combinedValue);
-    }
-
-    /// <summary>
-    ///     Computes a 32-bit hash value from four numeric inputs of unmanaged types
-    ///     implementing <see cref="INumberBase{TSelf}" />.
-    /// </summary>
-    /// <typeparam name="T1">The type of the first value.</typeparam>
-    /// <typeparam name="T2">The type of the second value.</typeparam>
-    /// <typeparam name="T3">The type of the third value.</typeparam>
-    /// <typeparam name="T4">The type of the fourth value.</typeparam>
-    /// <param name="v1">The first numeric value to hash.</param>
-    /// <param name="v2">The second numeric value to hash.</param>
-    /// <param name="v3">The third numeric value to hash.</param>
-    /// <param name="v4">The fourth numeric value to hash.</param>
-    /// <returns>An <see cref="int" /> representing the 32-bit integer hash value.</returns>
-    /// <inheritdoc cref="Hash{T1}(T1)" />
-    public static int Hash<T1, T2, T3, T4>(T1 v1, T2 v2, T3 v3, T4 v4)
-        where T1 : unmanaged, INumberBase<T1>
-        where T2 : unmanaged, INumberBase<T2>
-        where T3 : unmanaged, INumberBase<T3>
-        where T4 : unmanaged, INumberBase<T4>
-    {
-        var combinedValue = InitializeCombiner();
-
-        CombineValue(ref combinedValue, ReduceToInt32(v1));
-        CombineValue(ref combinedValue, ReduceToInt32(v2));
-        CombineValue(ref combinedValue, ReduceToInt32(v3));
-        CombineValue(ref combinedValue, ReduceToInt32(v4));
-
-        return Chi32.UpdateHashValue(0, combinedValue);
-    }
-
-    /// <summary>
-    ///     Computes a 32-bit hash value from five numeric inputs of unmanaged types
-    ///     implementing <see cref="INumberBase{TSelf}" />.
-    /// </summary>
-    /// <typeparam name="T1">The type of the first value.</typeparam>
-    /// <typeparam name="T2">The type of the second value.</typeparam>
-    /// <typeparam name="T3">The type of the third value.</typeparam>
-    /// <typeparam name="T4">The type of the fourth value.</typeparam>
-    /// <typeparam name="T5">The type of the fifth value.</typeparam>
-    /// <param name="v1">The first numeric value to hash.</param>
-    /// <param name="v2">The second numeric value to hash.</param>
-    /// <param name="v3">The third numeric value to hash.</param>
-    /// <param name="v4">The fourth numeric value to hash.</param>
-    /// <param name="v5">The fifth numeric value to hash.</param>
-    /// <returns>An <see cref="int" /> representing the 32-bit integer hash value.</returns>
-    /// <inheritdoc cref="Hash{T1}(T1)" />
-    public static int Hash<T1, T2, T3, T4, T5>(T1 v1, T2 v2, T3 v3, T4 v4, T5 v5)
-        where T1 : unmanaged, INumberBase<T1>
-        where T2 : unmanaged, INumberBase<T2>
-        where T3 : unmanaged, INumberBase<T3>
-        where T4 : unmanaged, INumberBase<T4>
-        where T5 : unmanaged, INumberBase<T5>
-    {
-        var combinedValue = InitializeCombiner();
-
-        CombineValue(ref combinedValue, ReduceToInt32(v1));
-        CombineValue(ref combinedValue, ReduceToInt32(v2));
-        CombineValue(ref combinedValue, ReduceToInt32(v3));
-        CombineValue(ref combinedValue, ReduceToInt32(v4));
-        CombineValue(ref combinedValue, ReduceToInt32(v5));
-
-        return Chi32.UpdateHashValue(0, combinedValue);
-    }
-
-    /// <summary>
-    ///     Computes a 32-bit hash value from six numeric inputs of unmanaged types
-    ///     implementing <see cref="INumberBase{TSelf}" />.
-    /// </summary>
-    /// <typeparam name="T1">The type of the first value.</typeparam>
-    /// <typeparam name="T2">The type of the second value.</typeparam>
-    /// <typeparam name="T3">The type of the third value.</typeparam>
-    /// <typeparam name="T4">The type of the fourth value.</typeparam>
-    /// <typeparam name="T5">The type of the fifth value.</typeparam>
-    /// <typeparam name="T6">The type of the sixth value.</typeparam>
-    /// <param name="v1">The first numeric value to hash.</param>
-    /// <param name="v2">The second numeric value to hash.</param>
-    /// <param name="v3">The third numeric value to hash.</param>
-    /// <param name="v4">The fourth numeric value to hash.</param>
-    /// <param name="v5">The fifth numeric value to hash.</param>
-    /// <param name="v6">The sixth numeric value to hash.</param>
-    /// <returns>An <see cref="int" /> representing the 32-bit integer hash value.</returns>
-    /// <inheritdoc cref="Hash{T1}(T1)" />
-    public static int Hash<T1, T2, T3, T4, T5, T6>(T1 v1, T2 v2, T3 v3, T4 v4, T5 v5, T6 v6)
-        where T1 : unmanaged, INumberBase<T1>
-        where T2 : unmanaged, INumberBase<T2>
-        where T3 : unmanaged, INumberBase<T3>
-        where T4 : unmanaged, INumberBase<T4>
-        where T5 : unmanaged, INumberBase<T5>
-        where T6 : unmanaged, INumberBase<T6>
-    {
-        var combinedValue = InitializeCombiner();
-
-        CombineValue(ref combinedValue, ReduceToInt32(v1));
-        CombineValue(ref combinedValue, ReduceToInt32(v2));
-        CombineValue(ref combinedValue, ReduceToInt32(v3));
-        CombineValue(ref combinedValue, ReduceToInt32(v4));
-        CombineValue(ref combinedValue, ReduceToInt32(v5));
-        CombineValue(ref combinedValue, ReduceToInt32(v6));
-
-        return Chi32.UpdateHashValue(0, combinedValue);
-    }
-
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    private static int InitializeCombiner()
-    {
-        const int initialSeed = 0x46a74a57;
-
-        return initialSeed;
-    }
-
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    private static void CombineValue(ref int combinedValue, int value)
-    {
-        const uint multiplier = 0x8a2ab4d3;
-        const uint xorValue = 0xfc2ed867;
-
-        var combinedHash = (uint)(combinedValue ^ value) * multiplier;
-        var offset = (int)combinedHash & 31;
-
-        combinedValue ^= (int)BitOperations.RotateRight(combinedHash ^ xorValue, offset);
-    }
-
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    private static int ReduceToInt32<T>(T value)
-        where T : unmanaged, INumberBase<T>
-    {
-        if (typeof(T) == typeof(sbyte) || typeof(T) == typeof(byte))
-        {
-            var valueAsByte = (uint)Unsafe.As<T, byte>(ref value);
-            return (int)valueAsByte;
-        }
-
-        if (typeof(T) == typeof(short) || typeof(T) == typeof(ushort) || typeof(T) == typeof(char))
-        {
-            var valueAsUShort = (uint)Unsafe.As<T, ushort>(ref value);
-            return (int)valueAsUShort;
-        }
-
-        if (typeof(T) == typeof(int) || typeof(T) == typeof(uint))
-        {
-            var valueAsUInt = Unsafe.As<T, uint>(ref value);
-            return (int)valueAsUInt;
-        }
-
-        if (typeof(T) == typeof(long) || typeof(T) == typeof(ulong))
-        {
-            var valueAsULong = Unsafe.As<T, ulong>(ref value);
-            return FoldInt64ToInt32(valueAsULong);
-        }
-
-        if (typeof(T) == typeof(Int128) || typeof(T) == typeof(UInt128))
-        {
-            var valueAsUInt128 = Unsafe.As<T, UInt128>(ref value);
-            return FoldInt128ToInt32(valueAsUInt128);
-        }
-
-        if (typeof(T) == typeof(double))
-        {
-            var valueAsULong = BitConverter.DoubleToUInt64Bits(Unsafe.As<T, double>(ref value));
-            return FoldInt64ToInt32(valueAsULong);
-        }
-
-        if (typeof(T) == typeof(float))
-        {
-            var valueAsUInt = BitConverter.SingleToUInt32Bits(Unsafe.As<T, float>(ref value));
-            return (int)valueAsUInt;
-        }
-
-        if (typeof(T) == typeof(Half))
-        {
-            var valueAsUInt = BitConverter.HalfToUInt16Bits(Unsafe.As<T, Half>(ref value));
-            return valueAsUInt;
-        }
-
-        if (typeof(T) == typeof(decimal))
-        {
-            var decimalValue = Unsafe.As<T, decimal>(ref value);
-            return FoldDecimalToInt32(decimalValue);
-        }
-
-        throw new NotSupportedException(
-            $"Unsupported type provided: {typeof(T).Name}. " +
-            $"{nameof(Hash)} requires types that can be explicitly converted to numeric values.");
-    }
-
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    private static int FoldInt64ToInt32(ulong value)
-    {
-        var mixed = unchecked((uint)value);
-        value >>= 32;
-        mixed ^= unchecked((uint)value);
-
-        return (int)mixed;
-    }
-
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    private static int FoldInt128ToInt32(UInt128 value)
-    {
-        var mixed = unchecked((uint)value);
-        value >>= 32;
-        mixed ^= unchecked((uint)value);
-        value >>= 32;
-        mixed ^= unchecked((uint)value);
-        value >>= 32;
-        mixed ^= unchecked((uint)value);
-
-        return (int)mixed;
-    }
-
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    private static int FoldDecimalToInt32(decimal value)
-    {
-        Span<int> parts = stackalloc int[4];
-        decimal.TryGetBits(value, parts, out _);
-
-        return parts[0] ^ parts[1] ^ parts[2] ^ parts[3];
     }
 }

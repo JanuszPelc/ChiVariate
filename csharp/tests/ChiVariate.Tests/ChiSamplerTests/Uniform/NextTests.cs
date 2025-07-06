@@ -22,7 +22,7 @@ public class NextTests(ITestOutputHelper testOutputHelper)
     public void NextSingle_WithBounds_ProducesUniformDistribution()
     {
         // Arrange
-        var rng = new ChiRng(ChiHash.Hash($"{nameof(Single)}_bounded"));
+        var rng = new ChiRng(ChiHashObsolete.Hash($"{nameof(Single)}_bounded"));
         var histogram = new Histogram(0.0, 1.0, 10);
         var sampler = new BoundedSingleSampler();
 
@@ -43,7 +43,7 @@ public class NextTests(ITestOutputHelper testOutputHelper)
         where TSampler : IHistogramSamplerWithRange<T, ChiRng>
     {
         // Arrange
-        var rng = new ChiRng(ChiHash.Hash(typeof(T).Name));
+        var rng = new ChiRng(ChiHashObsolete.Hash(typeof(T).Name));
         var histogram = new Histogram(0.0, 1.0, 10);
 
         // Act
@@ -60,7 +60,7 @@ public class NextTests(ITestOutputHelper testOutputHelper)
         where TSampler : IHistogramSamplerWithRange<T, ChiRng>
     {
         // Arrange
-        var rng = new ChiRng(ChiHash.Hash(typeof(T).Name));
+        var rng = new ChiRng(ChiHashObsolete.Hash(typeof(T).Name));
         var histogram = new Histogram(0.0, 1.0, 10);
         const int sampleCount = 100_000;
 

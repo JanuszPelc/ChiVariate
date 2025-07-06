@@ -18,7 +18,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     public void Sample_ProducesDistributionWithCorrectStatistics(int numSuccesses, double probability)
     {
         // Arrange
-        var rng = new ChiRng(ChiSeed.Scramble("NegativeBinomial", ChiHash.Hash(numSuccesses, probability)));
+        var rng = new ChiRng(ChiSeed.Scramble("NegativeBinomial", ChiHashObsolete.Hash(numSuccesses, probability)));
         var expectedMean = numSuccesses / probability;
         var maxBound = (int)Math.Ceiling(expectedMean * 3);
         var histogram = new Histogram(numSuccesses, maxBound, maxBound - numSuccesses, true);

@@ -42,7 +42,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
         var location = decimal.Parse(locationStr);
         var scale = decimal.Parse(scaleStr);
 
-        var rng = new ChiRng(ChiSeed.Scramble("LogisticDecimal", ChiHash.Hash(location, scale)));
+        var rng = new ChiRng(ChiSeed.Scramble("LogisticDecimal", ChiHashObsolete.Hash(location, scale)));
 
         var stdDev = (double)(scale * (decimal)Math.PI / (decimal)Math.Sqrt(3.0));
         var minBound = (double)location - 6 * stdDev;

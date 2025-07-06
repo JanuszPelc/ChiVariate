@@ -22,19 +22,19 @@ public class HashNumberBenchmarks
     [Benchmark(Description = "ChiHash.Hash(int)")]
     public int ChiHash_Int()
     {
-        return ChiHash.Hash(_intValue++);
+        return ChiHashObsolete.Hash(_intValue++);
     }
 
     [Benchmark(Description = "ChiHash.Hash<long>(long)")]
     public int ChiHash_Generic_Long()
     {
-        return ChiHash.Hash(_longValue++);
+        return ChiHashObsolete.Hash(_longValue++);
     }
 
     [Benchmark(Description = "ChiHash.Hash<int, long, double>")]
     public int ChiHash_Generic_Multi()
     {
-        return ChiHash.Hash(_intValue++, _longValue, _doubleValue);
+        return ChiHashObsolete.Hash(_intValue++, _longValue, _doubleValue);
     }
 
     // --- HashCode.Combine ---

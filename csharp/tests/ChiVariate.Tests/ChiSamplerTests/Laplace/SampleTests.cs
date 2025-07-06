@@ -40,7 +40,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
         var location = decimal.Parse(locationStr);
         var scale = decimal.Parse(scaleStr);
 
-        var rng = new ChiRng(ChiSeed.Scramble("LaplaceDecimal", ChiHash.Hash(location, scale)));
+        var rng = new ChiRng(ChiSeed.Scramble("LaplaceDecimal", ChiHashObsolete.Hash(location, scale)));
 
         var stdDev = (double)scale * Math.Sqrt(2.0);
         var minBound = (double)location - 8 * stdDev;
