@@ -20,13 +20,13 @@ public class SamplerBenchmarks
     {
         return ValueTypeParam switch
         {
-            ValueType._32Bit => RunBernoulliBenchmark<float>(),
-            ValueType._64Bit => RunBernoulliBenchmark<double>(),
-            ValueType._128Bit => RunBernoulliBenchmark<decimal>(),
+            ValueType._32Bit => RunBenchmark<float>(),
+            ValueType._64Bit => RunBenchmark<double>(),
+            ValueType._128Bit => RunBenchmark<decimal>(),
             _ => throw new UnreachableException()
         };
 
-        bool RunBernoulliBenchmark<T>() where T : unmanaged, IFloatingPoint<T>
+        bool RunBenchmark<T>() where T : unmanaged, IFloatingPoint<T>
         {
             var sampler = _rng.Bernoulli(T.CreateChecked(0.5));
             var sum = 0;
@@ -63,13 +63,13 @@ public class SamplerBenchmarks
     {
         return ValueTypeParam switch
         {
-            ValueType._32Bit => RunBetaBenchmark<float>(),
-            ValueType._64Bit => RunBetaBenchmark<double>(),
-            ValueType._128Bit => RunBetaBenchmark<decimal>(),
+            ValueType._32Bit => RunBenchmark<float>(),
+            ValueType._64Bit => RunBenchmark<double>(),
+            ValueType._128Bit => RunBenchmark<decimal>(),
             _ => throw new UnreachableException()
         };
 
-        bool RunBetaBenchmark<T>() where T : unmanaged, IFloatingPoint<T>
+        bool RunBenchmark<T>() where T : unmanaged, IFloatingPoint<T>
         {
             var sampler = _rng.Beta(T.CreateChecked(2.0), T.CreateChecked(5.0)); // alpha=2.0, beta=5.0
             var sum = T.Zero;
@@ -106,13 +106,13 @@ public class SamplerBenchmarks
     {
         return ValueTypeParam switch
         {
-            ValueType._32Bit => RunBinomialBenchmark<int>(),
-            ValueType._64Bit => RunBinomialBenchmark<long>(),
-            ValueType._128Bit => RunBinomialBenchmark<Int128>(),
+            ValueType._32Bit => RunBenchmark<int>(),
+            ValueType._64Bit => RunBenchmark<long>(),
+            ValueType._128Bit => RunBenchmark<Int128>(),
             _ => throw new UnreachableException()
         };
 
-        bool RunBinomialBenchmark<T>() where T : unmanaged, IBinaryInteger<T>
+        bool RunBenchmark<T>() where T : unmanaged, IBinaryInteger<T>
         {
             var sampler = _rng.Binomial(T.CreateChecked(50), 0.25); // n=50, p=0.25
             var sum = T.Zero;
@@ -149,13 +149,13 @@ public class SamplerBenchmarks
     {
         return ValueTypeParam switch
         {
-            ValueType._32Bit => RunCategoricalBenchmark<float>(),
-            ValueType._64Bit => RunCategoricalBenchmark<double>(),
-            ValueType._128Bit => RunCategoricalBenchmark<decimal>(),
+            ValueType._32Bit => RunBenchmark<float>(),
+            ValueType._64Bit => RunBenchmark<double>(),
+            ValueType._128Bit => RunBenchmark<decimal>(),
             _ => throw new UnreachableException()
         };
 
-        bool RunCategoricalBenchmark<T>() where T : unmanaged, IFloatingPoint<T>
+        bool RunBenchmark<T>() where T : unmanaged, IFloatingPoint<T>
         {
             var sampler = _rng.Categorical((ReadOnlySpan<T>)TypedWeight<T>.Data);
             var sum = 0L;
@@ -192,13 +192,13 @@ public class SamplerBenchmarks
     {
         return ValueTypeParam switch
         {
-            ValueType._32Bit => RunCauchyBenchmark<float>(),
-            ValueType._64Bit => RunCauchyBenchmark<double>(),
-            ValueType._128Bit => RunCauchyBenchmark<decimal>(),
+            ValueType._32Bit => RunBenchmark<float>(),
+            ValueType._64Bit => RunBenchmark<double>(),
+            ValueType._128Bit => RunBenchmark<decimal>(),
             _ => throw new UnreachableException()
         };
 
-        bool RunCauchyBenchmark<T>() where T : unmanaged, IFloatingPoint<T>
+        bool RunBenchmark<T>() where T : unmanaged, IFloatingPoint<T>
         {
             var sampler = _rng.Cauchy(T.Zero, T.One); // location=0, scale=1
             var sum = T.Zero;
@@ -235,13 +235,13 @@ public class SamplerBenchmarks
     {
         return ValueTypeParam switch
         {
-            ValueType._32Bit => RunChanceBenchmark<int>(),
-            ValueType._64Bit => RunChanceBenchmark<long>(),
-            ValueType._128Bit => RunChanceBenchmark<Int128>(),
+            ValueType._32Bit => RunBenchmark<int>(),
+            ValueType._64Bit => RunBenchmark<long>(),
+            ValueType._128Bit => RunBenchmark<Int128>(),
             _ => throw new UnreachableException()
         };
 
-        bool RunChanceBenchmark<T>() where T : unmanaged, IBinaryInteger<T>, IMinMaxValue<T>
+        bool RunBenchmark<T>() where T : unmanaged, IBinaryInteger<T>, IMinMaxValue<T>
         {
             var sampler = _rng.Chance();
             var min = T.MinValue / T.CreateChecked(100);
@@ -270,13 +270,13 @@ public class SamplerBenchmarks
     {
         return ValueTypeParam switch
         {
-            ValueType._32Bit => RunChiBenchmark<float>(),
-            ValueType._64Bit => RunChiBenchmark<double>(),
-            ValueType._128Bit => RunChiBenchmark<decimal>(),
+            ValueType._32Bit => RunBenchmark<float>(),
+            ValueType._64Bit => RunBenchmark<double>(),
+            ValueType._128Bit => RunBenchmark<decimal>(),
             _ => throw new UnreachableException()
         };
 
-        bool RunChiBenchmark<T>() where T : unmanaged, IFloatingPoint<T>
+        bool RunBenchmark<T>() where T : unmanaged, IFloatingPoint<T>
         {
             var sampler = _rng.Chi(T.CreateChecked(5.0));
             var sum = T.Zero;
@@ -313,13 +313,13 @@ public class SamplerBenchmarks
     {
         return ValueTypeParam switch
         {
-            ValueType._32Bit => RunChiSquaredBenchmark<float>(),
-            ValueType._64Bit => RunChiSquaredBenchmark<double>(),
-            ValueType._128Bit => RunChiSquaredBenchmark<decimal>(),
+            ValueType._32Bit => RunBenchmark<float>(),
+            ValueType._64Bit => RunBenchmark<double>(),
+            ValueType._128Bit => RunBenchmark<decimal>(),
             _ => throw new UnreachableException()
         };
 
-        bool RunChiSquaredBenchmark<T>() where T : unmanaged, IFloatingPoint<T>
+        bool RunBenchmark<T>() where T : unmanaged, IFloatingPoint<T>
         {
             var sampler = _rng.ChiSquared(T.CreateChecked(5.0));
             var sum = T.Zero;
@@ -356,13 +356,13 @@ public class SamplerBenchmarks
     {
         return ValueTypeParam switch
         {
-            ValueType._32Bit => RunDirichletBenchmark<float>(),
-            ValueType._64Bit => RunDirichletBenchmark<double>(),
-            ValueType._128Bit => RunDirichletBenchmark<decimal>(),
+            ValueType._32Bit => RunBenchmark<float>(),
+            ValueType._64Bit => RunBenchmark<double>(),
+            ValueType._128Bit => RunBenchmark<decimal>(),
             _ => throw new UnreachableException()
         };
 
-        bool RunDirichletBenchmark<T>() where T : unmanaged, IFloatingPoint<T>
+        bool RunBenchmark<T>() where T : unmanaged, IFloatingPoint<T>
         {
             var alpha = (ReadOnlySpan<T>)TypedAlpha<T>.Data;
             var sampler = _rng.Dirichlet(alpha);
@@ -415,13 +415,13 @@ public class SamplerBenchmarks
     {
         return ValueTypeParam switch
         {
-            ValueType._32Bit => RunExponentialBenchmark<float>(),
-            ValueType._64Bit => RunExponentialBenchmark<double>(),
-            ValueType._128Bit => RunExponentialBenchmark<decimal>(),
+            ValueType._32Bit => RunBenchmark<float>(),
+            ValueType._64Bit => RunBenchmark<double>(),
+            ValueType._128Bit => RunBenchmark<decimal>(),
             _ => throw new UnreachableException()
         };
 
-        bool RunExponentialBenchmark<T>() where T : unmanaged, IFloatingPoint<T>
+        bool RunBenchmark<T>() where T : unmanaged, IFloatingPoint<T>
         {
             var sampler = _rng.Exponential(T.One); // lambda = 1.0
             var sum = T.Zero;
@@ -458,13 +458,13 @@ public class SamplerBenchmarks
     {
         return ValueTypeParam switch
         {
-            ValueType._32Bit => RunFBenchmark<float>(),
-            ValueType._64Bit => RunFBenchmark<double>(),
-            ValueType._128Bit => RunFBenchmark<decimal>(),
+            ValueType._32Bit => RunBenchmark<float>(),
+            ValueType._64Bit => RunBenchmark<double>(),
+            ValueType._128Bit => RunBenchmark<decimal>(),
             _ => throw new UnreachableException()
         };
 
-        bool RunFBenchmark<T>() where T : unmanaged, IFloatingPoint<T>
+        bool RunBenchmark<T>() where T : unmanaged, IFloatingPoint<T>
         {
             var sampler = _rng.F(T.CreateChecked(5.0), T.CreateChecked(10.0));
             var sum = T.Zero;
@@ -501,13 +501,13 @@ public class SamplerBenchmarks
     {
         return ValueTypeParam switch
         {
-            ValueType._32Bit => RunGammaBenchmark<float>(),
-            ValueType._64Bit => RunGammaBenchmark<double>(),
-            ValueType._128Bit => RunGammaBenchmark<decimal>(),
+            ValueType._32Bit => RunBenchmark<float>(),
+            ValueType._64Bit => RunBenchmark<double>(),
+            ValueType._128Bit => RunBenchmark<decimal>(),
             _ => throw new UnreachableException()
         };
 
-        bool RunGammaBenchmark<T>() where T : unmanaged, IFloatingPoint<T>
+        bool RunBenchmark<T>() where T : unmanaged, IFloatingPoint<T>
         {
             var sampler = _rng.Gamma(T.CreateChecked(2.5), T.CreateChecked(1.5)); // shape=2.5, scale=1.5
             var sum = T.Zero;
@@ -544,13 +544,13 @@ public class SamplerBenchmarks
     {
         return ValueTypeParam switch
         {
-            ValueType._32Bit => RunGumbelBenchmark<float>(),
-            ValueType._64Bit => RunGumbelBenchmark<double>(),
-            ValueType._128Bit => RunGumbelBenchmark<decimal>(),
+            ValueType._32Bit => RunBenchmark<float>(),
+            ValueType._64Bit => RunBenchmark<double>(),
+            ValueType._128Bit => RunBenchmark<decimal>(),
             _ => throw new UnreachableException()
         };
 
-        bool RunGumbelBenchmark<T>() where T : unmanaged, IFloatingPoint<T>
+        bool RunBenchmark<T>() where T : unmanaged, IFloatingPoint<T>
         {
             var sampler = _rng.Gumbel(T.Zero, T.One);
             var sum = T.Zero;
@@ -587,13 +587,13 @@ public class SamplerBenchmarks
     {
         return ValueTypeParam switch
         {
-            ValueType._32Bit => RunGeometricBenchmark<int>(),
-            ValueType._64Bit => RunGeometricBenchmark<long>(),
-            ValueType._128Bit => RunGeometricBenchmark<Int128>(),
+            ValueType._32Bit => RunBenchmark<int>(),
+            ValueType._64Bit => RunBenchmark<long>(),
+            ValueType._128Bit => RunBenchmark<Int128>(),
             _ => throw new UnreachableException()
         };
 
-        bool RunGeometricBenchmark<T>() where T : unmanaged, IBinaryInteger<T>
+        bool RunBenchmark<T>() where T : unmanaged, IBinaryInteger<T>
         {
             var sampler = _rng.Geometric(0.25);
             var sum = 0;
@@ -630,13 +630,13 @@ public class SamplerBenchmarks
     {
         return ValueTypeParam switch
         {
-            ValueType._32Bit => RunHaltonBenchmark<float>(),
-            ValueType._64Bit => RunHaltonBenchmark<double>(),
-            ValueType._128Bit => RunHaltonBenchmark<decimal>(),
+            ValueType._32Bit => RunBenchmark<float>(),
+            ValueType._64Bit => RunBenchmark<double>(),
+            ValueType._128Bit => RunBenchmark<decimal>(),
             _ => throw new UnreachableException()
         };
 
-        bool RunHaltonBenchmark<T>() where T : unmanaged, IFloatingPoint<T>
+        bool RunBenchmark<T>() where T : unmanaged, IFloatingPoint<T>
         {
             var sampler = _rng.Halton(4).OfType<T>();
             var sum = T.Zero;
@@ -688,13 +688,13 @@ public class SamplerBenchmarks
     {
         return ValueTypeParam switch
         {
-            ValueType._32Bit => RunHypergeometricBenchmark<int>(),
-            ValueType._64Bit => RunHypergeometricBenchmark<long>(),
-            ValueType._128Bit => RunHypergeometricBenchmark<Int128>(),
+            ValueType._32Bit => RunBenchmark<int>(),
+            ValueType._64Bit => RunBenchmark<long>(),
+            ValueType._128Bit => RunBenchmark<Int128>(),
             _ => throw new UnreachableException()
         };
 
-        bool RunHypergeometricBenchmark<T>() where T : unmanaged, IBinaryInteger<T>
+        bool RunBenchmark<T>() where T : unmanaged, IBinaryInteger<T>
         {
             var sampler = _rng.Hypergeometric(T.CreateChecked(100), T.CreateChecked(50), T.CreateChecked(20));
             var sum = T.Zero;
@@ -731,13 +731,13 @@ public class SamplerBenchmarks
     {
         return ValueTypeParam switch
         {
-            ValueType._32Bit => RunInverseGammaBenchmark<float>(),
-            ValueType._64Bit => RunInverseGammaBenchmark<double>(),
-            ValueType._128Bit => RunInverseGammaBenchmark<decimal>(),
+            ValueType._32Bit => RunBenchmark<float>(),
+            ValueType._64Bit => RunBenchmark<double>(),
+            ValueType._128Bit => RunBenchmark<decimal>(),
             _ => throw new UnreachableException()
         };
 
-        bool RunInverseGammaBenchmark<T>() where T : unmanaged, IFloatingPoint<T>
+        bool RunBenchmark<T>() where T : unmanaged, IFloatingPoint<T>
         {
             var sampler = _rng.InverseGamma(T.CreateChecked(3.0), T.CreateChecked(2.0));
             var sum = T.Zero;
@@ -774,13 +774,13 @@ public class SamplerBenchmarks
     {
         return ValueTypeParam switch
         {
-            ValueType._32Bit => RunLaplaceBenchmark<float>(),
-            ValueType._64Bit => RunLaplaceBenchmark<double>(),
-            ValueType._128Bit => RunLaplaceBenchmark<decimal>(),
+            ValueType._32Bit => RunBenchmark<float>(),
+            ValueType._64Bit => RunBenchmark<double>(),
+            ValueType._128Bit => RunBenchmark<decimal>(),
             _ => throw new UnreachableException()
         };
 
-        bool RunLaplaceBenchmark<T>() where T : unmanaged, IFloatingPoint<T>
+        bool RunBenchmark<T>() where T : unmanaged, IFloatingPoint<T>
         {
             var sampler = _rng.Laplace(T.Zero, T.One);
             var sum = T.Zero;
@@ -817,13 +817,13 @@ public class SamplerBenchmarks
     {
         return ValueTypeParam switch
         {
-            ValueType._32Bit => RunLogisticBenchmark<float>(),
-            ValueType._64Bit => RunLogisticBenchmark<double>(),
-            ValueType._128Bit => RunLogisticBenchmark<decimal>(),
+            ValueType._32Bit => RunBenchmark<float>(),
+            ValueType._64Bit => RunBenchmark<double>(),
+            ValueType._128Bit => RunBenchmark<decimal>(),
             _ => throw new UnreachableException()
         };
 
-        bool RunLogisticBenchmark<T>() where T : unmanaged, IFloatingPoint<T>
+        bool RunBenchmark<T>() where T : unmanaged, IFloatingPoint<T>
         {
             var sampler = _rng.Logistic(T.Zero, T.One);
             var sum = T.Zero;
@@ -860,13 +860,13 @@ public class SamplerBenchmarks
     {
         return ValueTypeParam switch
         {
-            ValueType._32Bit => RunLogNormalBenchmark<float>(),
-            ValueType._64Bit => RunLogNormalBenchmark<double>(),
-            ValueType._128Bit => RunLogNormalBenchmark<decimal>(),
+            ValueType._32Bit => RunBenchmark<float>(),
+            ValueType._64Bit => RunBenchmark<double>(),
+            ValueType._128Bit => RunBenchmark<decimal>(),
             _ => throw new UnreachableException()
         };
 
-        bool RunLogNormalBenchmark<T>() where T : unmanaged, IFloatingPoint<T>
+        bool RunBenchmark<T>() where T : unmanaged, IFloatingPoint<T>
         {
             var sampler = _rng.LogNormal(T.Zero, T.One);
             var sum = T.Zero;
@@ -903,13 +903,13 @@ public class SamplerBenchmarks
     {
         return ValueTypeParam switch
         {
-            ValueType._32Bit => RunMultinomialBenchmark<int>(),
-            ValueType._64Bit => RunMultinomialBenchmark<long>(),
-            ValueType._128Bit => RunMultinomialBenchmark<Int128>(),
+            ValueType._32Bit => RunBenchmark<int>(),
+            ValueType._64Bit => RunBenchmark<long>(),
+            ValueType._128Bit => RunBenchmark<Int128>(),
             _ => throw new UnreachableException()
         };
 
-        bool RunMultinomialBenchmark<T>() where T : unmanaged, IBinaryInteger<T>
+        bool RunBenchmark<T>() where T : unmanaged, IBinaryInteger<T>
         {
             var probabilities = TypedWeight<double>.Data;
             var sampler = _rng.Multinomial(T.CreateChecked(50), (ReadOnlySpan<double>)probabilities);
@@ -962,13 +962,13 @@ public class SamplerBenchmarks
     {
         return ValueTypeParam switch
         {
-            ValueType._32Bit => RunMultivariateNormalBenchmark<float>(),
-            ValueType._64Bit => RunMultivariateNormalBenchmark<double>(),
-            ValueType._128Bit => RunMultivariateNormalBenchmark<decimal>(),
+            ValueType._32Bit => RunBenchmark<float>(),
+            ValueType._64Bit => RunBenchmark<double>(),
+            ValueType._128Bit => RunBenchmark<decimal>(),
             _ => throw new UnreachableException()
         };
 
-        bool RunMultivariateNormalBenchmark<T>() where T : unmanaged, IFloatingPoint<T>
+        bool RunBenchmark<T>() where T : unmanaged, IFloatingPoint<T>
         {
             var meanVector = ChiMatrix.Zeros<T>(3, 1);
             var covarianceMatrix = ChiMatrix.With(ScaleMatrix<T>.Data);
@@ -1022,13 +1022,13 @@ public class SamplerBenchmarks
     {
         return ValueTypeParam switch
         {
-            ValueType._32Bit => RunNegativeBinomialBenchmark<int>(),
-            ValueType._64Bit => RunNegativeBinomialBenchmark<long>(),
-            ValueType._128Bit => RunNegativeBinomialBenchmark<Int128>(),
+            ValueType._32Bit => RunBenchmark<int>(),
+            ValueType._64Bit => RunBenchmark<long>(),
+            ValueType._128Bit => RunBenchmark<Int128>(),
             _ => throw new UnreachableException()
         };
 
-        bool RunNegativeBinomialBenchmark<T>() where T : unmanaged, IBinaryInteger<T>
+        bool RunBenchmark<T>() where T : unmanaged, IBinaryInteger<T>
         {
             var sampler = _rng.NegativeBinomial(T.CreateChecked(5), 0.5);
             var sum = T.Zero;
@@ -1065,13 +1065,13 @@ public class SamplerBenchmarks
     {
         return ValueTypeParam switch
         {
-            ValueType._32Bit => RunNormalBenchmark<float>(),
-            ValueType._64Bit => RunNormalBenchmark<double>(),
-            ValueType._128Bit => RunNormalBenchmark<decimal>(),
+            ValueType._32Bit => RunBenchmark<float>(),
+            ValueType._64Bit => RunBenchmark<double>(),
+            ValueType._128Bit => RunBenchmark<decimal>(),
             _ => throw new UnreachableException()
         };
 
-        bool RunNormalBenchmark<T>() where T : unmanaged, IFloatingPoint<T>
+        bool RunBenchmark<T>() where T : unmanaged, IFloatingPoint<T>
         {
             var sampler = _rng.Normal(T.Zero, T.One);
             var sum = T.Zero;
@@ -1108,13 +1108,13 @@ public class SamplerBenchmarks
     {
         return ValueTypeParam switch
         {
-            ValueType._32Bit => RunParetoBenchmark<float>(),
-            ValueType._64Bit => RunParetoBenchmark<double>(),
-            ValueType._128Bit => RunParetoBenchmark<decimal>(),
+            ValueType._32Bit => RunBenchmark<float>(),
+            ValueType._64Bit => RunBenchmark<double>(),
+            ValueType._128Bit => RunBenchmark<decimal>(),
             _ => throw new UnreachableException()
         };
 
-        bool RunParetoBenchmark<T>() where T : unmanaged, IFloatingPoint<T>
+        bool RunBenchmark<T>() where T : unmanaged, IFloatingPoint<T>
         {
             var sampler = _rng.Pareto(T.One, T.CreateChecked(1.16));
             var sum = T.Zero;
@@ -1151,13 +1151,13 @@ public class SamplerBenchmarks
     {
         return ValueTypeParam switch
         {
-            ValueType._32Bit => RunPoissonBenchmark<int>(),
-            ValueType._64Bit => RunPoissonBenchmark<long>(),
-            ValueType._128Bit => RunPoissonBenchmark<Int128>(),
+            ValueType._32Bit => RunBenchmark<int>(),
+            ValueType._64Bit => RunBenchmark<long>(),
+            ValueType._128Bit => RunBenchmark<Int128>(),
             _ => throw new UnreachableException()
         };
 
-        bool RunPoissonBenchmark<T>() where T : unmanaged, IBinaryInteger<T>
+        bool RunBenchmark<T>() where T : unmanaged, IBinaryInteger<T>
         {
             var sampler = _rng.Poisson(10.0);
             var sum = 0;
@@ -1194,16 +1194,16 @@ public class SamplerBenchmarks
     {
         return ValueTypeParam switch
         {
-            ValueType._32Bit => RunUniformDiscreteBenchmark(int.MaxValue),
-            ValueType._64Bit => RunUniformDiscreteBenchmark(long.MaxValue),
-            ValueType._128Bit => RunUniformDiscreteBenchmark<Int128>(ulong.MaxValue),
+            ValueType._32Bit => RunBenchmark<int>(),
+            ValueType._64Bit => RunBenchmark<long>(),
+            ValueType._128Bit => RunBenchmark<Int128>(),
             _ => throw new UnreachableException()
         };
 
-        bool RunUniformDiscreteBenchmark<T>(T max)
+        bool RunBenchmark<T>()
             where T : unmanaged, IBinaryInteger<T>, IMinMaxValue<T>
         {
-            var sampler = _rng.Prime(T.Zero, max);
+            var sampler = _rng.Prime(T.Zero, T.MaxValue);
             var sum = T.Zero;
 
             switch (IterationTypeParam)
@@ -1211,19 +1211,20 @@ public class SamplerBenchmarks
                 case IterationType.ForLoop:
                 {
                     for (var i = 0; i < SampleCount; i++)
-                        sum += sampler.Sample() / T.CreateChecked(10_000);
+                        sum += (sampler.Sample() & T.Zero) | T.One;
 
                     break;
                 }
                 case IterationType.ForEach:
                 {
                     foreach (var sample in sampler.Sample(SampleCount))
-                        sum += sample / T.CreateChecked(10_000);
+                        sum += (sampler.Sample() & T.Zero) | T.One;
                     break;
                 }
                 case IterationType.Linq:
                 {
-                    var enumerable = sampler.Sample(SampleCount).Select(value => value / T.CreateChecked(10_000));
+                    var enumerable = sampler.Sample(SampleCount)
+                        .Select(sample => (sample & T.Zero) | T.One);
                     sum = SumValues(enumerable);
                     break;
                 }
@@ -1239,13 +1240,13 @@ public class SamplerBenchmarks
     {
         return ValueTypeParam switch
         {
-            ValueType._32Bit => RunRayleighBenchmark<float>(),
-            ValueType._64Bit => RunRayleighBenchmark<double>(),
-            ValueType._128Bit => RunRayleighBenchmark<decimal>(),
+            ValueType._32Bit => RunBenchmark<float>(),
+            ValueType._64Bit => RunBenchmark<double>(),
+            ValueType._128Bit => RunBenchmark<decimal>(),
             _ => throw new UnreachableException()
         };
 
-        bool RunRayleighBenchmark<T>() where T : unmanaged, IFloatingPoint<T>
+        bool RunBenchmark<T>() where T : unmanaged, IFloatingPoint<T>
         {
             var sampler = _rng.Rayleigh(T.One);
             var sum = T.Zero;
@@ -1282,13 +1283,13 @@ public class SamplerBenchmarks
     {
         return ValueTypeParam switch
         {
-            ValueType._32Bit => RunSobolBenchmark<float>(),
-            ValueType._64Bit => RunSobolBenchmark<double>(),
-            ValueType._128Bit => RunSobolBenchmark<decimal>(),
+            ValueType._32Bit => RunBenchmark<float>(),
+            ValueType._64Bit => RunBenchmark<double>(),
+            ValueType._128Bit => RunBenchmark<decimal>(),
             _ => throw new UnreachableException()
         };
 
-        bool RunSobolBenchmark<T>() where T : unmanaged, IFloatingPoint<T>
+        bool RunBenchmark<T>() where T : unmanaged, IFloatingPoint<T>
         {
             var sampler = _rng.Sobol(4).OfType<T>();
             var sum = T.Zero;
@@ -1340,13 +1341,13 @@ public class SamplerBenchmarks
     {
         return ValueTypeParam switch
         {
-            ValueType._32Bit => RunSpatialBenchmark<float>(),
-            ValueType._64Bit => RunSpatialBenchmark<double>(),
-            ValueType._128Bit => RunSpatialBenchmark<decimal>(),
+            ValueType._32Bit => RunBenchmark<float>(),
+            ValueType._64Bit => RunBenchmark<double>(),
+            ValueType._128Bit => RunBenchmark<decimal>(),
             _ => throw new UnreachableException()
         };
 
-        bool RunSpatialBenchmark<T>() where T : unmanaged, IFloatingPoint<T>
+        bool RunBenchmark<T>() where T : unmanaged, IFloatingPoint<T>
         {
             var sampler = _rng.Spatial().OnSphere(T.One);
             var sum = T.Zero;
@@ -1383,13 +1384,13 @@ public class SamplerBenchmarks
     {
         return ValueTypeParam switch
         {
-            ValueType._32Bit => RunStudentTBenchmark<float>(),
-            ValueType._64Bit => RunStudentTBenchmark<double>(),
-            ValueType._128Bit => RunStudentTBenchmark<decimal>(),
+            ValueType._32Bit => RunBenchmark<float>(),
+            ValueType._64Bit => RunBenchmark<double>(),
+            ValueType._128Bit => RunBenchmark<decimal>(),
             _ => throw new UnreachableException()
         };
 
-        bool RunStudentTBenchmark<T>() where T : unmanaged, IFloatingPoint<T>
+        bool RunBenchmark<T>() where T : unmanaged, IFloatingPoint<T>
         {
             var sampler = _rng.StudentT(T.CreateChecked(5.0));
             var sum = T.Zero;
@@ -1426,13 +1427,13 @@ public class SamplerBenchmarks
     {
         return ValueTypeParam switch
         {
-            ValueType._32Bit => RunTriangularBenchmark<float>(),
-            ValueType._64Bit => RunTriangularBenchmark<double>(),
-            ValueType._128Bit => RunTriangularBenchmark<decimal>(),
+            ValueType._32Bit => RunBenchmark<float>(),
+            ValueType._64Bit => RunBenchmark<double>(),
+            ValueType._128Bit => RunBenchmark<decimal>(),
             _ => throw new UnreachableException()
         };
 
-        bool RunTriangularBenchmark<T>() where T : unmanaged, IFloatingPoint<T>
+        bool RunBenchmark<T>() where T : unmanaged, IFloatingPoint<T>
         {
             var sampler = _rng.Triangular(T.CreateChecked(-1.0), T.One, T.Zero);
             var sum = T.Zero;
@@ -1464,18 +1465,18 @@ public class SamplerBenchmarks
         }
     }
 
-    [Benchmark(Baseline = true, Description = "Uniform (Continuous)")]
+    [Benchmark(Description = "Uniform (Continuous)", Baseline = true)]
     public bool ChiVariateUniformContinuous()
     {
         return ValueTypeParam switch
         {
-            ValueType._32Bit => RunUniformContinuousBenchmark<float>(),
-            ValueType._64Bit => RunUniformContinuousBenchmark<double>(),
-            ValueType._128Bit => RunUniformContinuousBenchmark<decimal>(),
+            ValueType._32Bit => RunBenchmark<float>(),
+            ValueType._64Bit => RunBenchmark<double>(),
+            ValueType._128Bit => RunBenchmark<decimal>(),
             _ => throw new UnreachableException()
         };
 
-        bool RunUniformContinuousBenchmark<T>() where T : unmanaged, IFloatingPoint<T>
+        bool RunBenchmark<T>() where T : unmanaged, IFloatingPoint<T>
         {
             var sampler = _rng.Uniform(T.CreateChecked(-100.0), T.CreateChecked(100.0));
             var sum = T.Zero;
@@ -1512,13 +1513,13 @@ public class SamplerBenchmarks
     {
         return ValueTypeParam switch
         {
-            ValueType._32Bit => RunUniformDiscreteBenchmark<int>(),
-            ValueType._64Bit => RunUniformDiscreteBenchmark<long>(),
-            ValueType._128Bit => RunUniformDiscreteBenchmark<Int128>(),
+            ValueType._32Bit => RunBenchmark<int>(),
+            ValueType._64Bit => RunBenchmark<long>(),
+            ValueType._128Bit => RunBenchmark<Int128>(),
             _ => throw new UnreachableException()
         };
 
-        bool RunUniformDiscreteBenchmark<T>() where T : unmanaged, IBinaryInteger<T>, IMinMaxValue<T>
+        bool RunBenchmark<T>() where T : unmanaged, IBinaryInteger<T>, IMinMaxValue<T>
         {
             var sampler = _rng.Uniform(T.MinValue / T.CreateChecked(100), T.MaxValue / T.CreateChecked(100));
             var sum = T.Zero;
@@ -1555,13 +1556,13 @@ public class SamplerBenchmarks
     {
         return ValueTypeParam switch
         {
-            ValueType._32Bit => RunWeibullBenchmark<float>(),
-            ValueType._64Bit => RunWeibullBenchmark<double>(),
-            ValueType._128Bit => RunWeibullBenchmark<decimal>(),
+            ValueType._32Bit => RunBenchmark<float>(),
+            ValueType._64Bit => RunBenchmark<double>(),
+            ValueType._128Bit => RunBenchmark<decimal>(),
             _ => throw new UnreachableException()
         };
 
-        bool RunWeibullBenchmark<T>() where T : unmanaged, IFloatingPoint<T>
+        bool RunBenchmark<T>() where T : unmanaged, IFloatingPoint<T>
         {
             var sampler = _rng.Weibull(T.CreateChecked(2.0), T.One);
             var sum = T.Zero;
@@ -1598,13 +1599,13 @@ public class SamplerBenchmarks
     {
         return ValueTypeParam switch
         {
-            ValueType._32Bit => RunWishartBenchmark<float>(),
-            ValueType._64Bit => RunWishartBenchmark<double>(),
-            ValueType._128Bit => RunWishartBenchmark<decimal>(),
+            ValueType._32Bit => RunBenchmark<float>(),
+            ValueType._64Bit => RunBenchmark<double>(),
+            ValueType._128Bit => RunBenchmark<decimal>(),
             _ => throw new UnreachableException()
         };
 
-        bool RunWishartBenchmark<T>() where T : unmanaged, IFloatingPoint<T>
+        bool RunBenchmark<T>() where T : unmanaged, IFloatingPoint<T>
         {
             var scaleMatrix = ChiMatrix.With(ScaleMatrix<T>.Data);
             var dimension = scaleMatrix.RowCount;
@@ -1643,13 +1644,13 @@ public class SamplerBenchmarks
     {
         return ValueTypeParam switch
         {
-            ValueType._32Bit => RunZipfBenchmark<int>(),
-            ValueType._64Bit => RunZipfBenchmark<long>(),
-            ValueType._128Bit => RunZipfBenchmark<Int128>(),
+            ValueType._32Bit => RunBenchmark<int>(),
+            ValueType._64Bit => RunBenchmark<long>(),
+            ValueType._128Bit => RunBenchmark<Int128>(),
             _ => throw new UnreachableException()
         };
 
-        bool RunZipfBenchmark<T>() where T : unmanaged, IBinaryInteger<T>
+        bool RunBenchmark<T>() where T : unmanaged, IBinaryInteger<T>
         {
             var sampler = _rng.Zipf(T.CreateChecked(100), 1.07); // N=100, s=1.07
             var sum = T.Zero;
