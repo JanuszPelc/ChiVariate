@@ -490,9 +490,9 @@ Distributions that produce structured outputs such as vectors or matrices of cor
 >
 >  *Complexity: `O(k³)` per sample, plus `O(k³)` setup, where k is the number of dimensions. Tier 4.*
 
-## Beyond statistical distributions
+## Beyond probability distributions
 
-ChiVariate provides specialized tools for general-purpose randomness tasks and uniform sampling scenarios where traditional statistical distributions aren't the right fit.
+ChiVariate provides specialized tools for general-purpose randomness tasks and uniform sampling scenarios where traditional probability distributions aren't the right fit.
 
 ### Utility samplers
 

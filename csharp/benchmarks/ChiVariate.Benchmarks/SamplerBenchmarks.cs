@@ -11,7 +11,7 @@ namespace ChiVariate.Benchmarks;
 [MemoryDiagnoser]
 [ShortRunJob]
 [GroupBenchmarksBy(BenchmarkLogicalGroupRule.ByParams)]
-public class DistributionBenchmarks
+public class SamplerBenchmarks
 {
     #region Benchmarks
 

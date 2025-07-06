@@ -17,11 +17,22 @@ namespace ChiVariate;
 public static class ChiSeed
 {
     /// <summary>
-    ///     Generates a reasonably unique seed value.
+    ///     Generates a unique seed value with strong unpredictability characteristics.
     /// </summary>
     /// <returns>
     ///     A <see cref="long" /> value representing the generated pseudo-unique seed.
     /// </returns>
+    /// <remarks>
+    ///     <para>
+    ///         Although the generated seed has a high level of resistance to attacks,
+    ///         this algorithm is not cryptographically secure and should not be used for
+    ///         security-sensitive purposes such as password hashing or digital signatures.
+    ///     </para>
+    ///     <para>
+    ///         Suitable for hash table DoS protection, procedural generation, and non-cryptographic
+    ///         applications requiring unpredictable seed values.
+    ///     </para>
+    /// </remarks>
     public static long GenerateUnique()
     {
         lock (Global.Lock)
