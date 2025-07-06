@@ -19,21 +19,20 @@ public readonly ref struct ChiSamplerPrimes<TRng, T>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     internal ChiSamplerPrimes(ref TRng rng, T minInclusive, T maxExclusive, int minEstimatePopulation)
     {
-        if (Unsafe.SizeOf<T>() > 8)
-            if (maxExclusive > T.CreateChecked(ulong.MaxValue))
-                throw new ArgumentOutOfRangeException(nameof(maxExclusive),
-                    "128-bit integer types are currently limited to the 64-bit range (0 to ulong.MaxValue).");
-
+        ArgumentOutOfRangeException.ThrowIfLessThan(Unsafe.SizeOf<T>(), 2);
         ArgumentOutOfRangeException.ThrowIfNegative(minEstimatePopulation);
         ArgumentOutOfRangeException.ThrowIfNegative(minInclusive);
         ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(minInclusive, maxExclusive);
 
-        var estimatedCount = PrimeEstimator.EstimateCount(minInclusive, maxExclusive);
-        if (estimatedCount < (ulong)minEstimatePopulation)
-            throw new ArgumentException(
-                $"The specified range is estimated to contain only ~{estimatedCount} primes, which is below the " +
-                $"required minimum of {minEstimatePopulation}. To sample from this range, provide a smaller " +
-                $"'{nameof(minEstimatePopulation)}' value, or use a wider range.", nameof(minEstimatePopulation));
+        if (minEstimatePopulation > 0)
+        {
+            var estimatedCount = PrimeCounting.EstimatePopulationCount(minInclusive, maxExclusive);
+            if (estimatedCount < (ulong)minEstimatePopulation)
+                throw new ArgumentException(
+                    $"The specified range is estimated to contain only ~{estimatedCount} primes, which is below the " +
+                    $"required minimum of {minEstimatePopulation}. To sample from this range, provide a smaller " +
+                    $"'{nameof(minEstimatePopulation)}' value, or use a wider range.", nameof(minEstimatePopulation));
+        }
 
         _rng = ref rng;
         _minInclusive = minInclusive;
@@ -94,7 +93,7 @@ public readonly ref struct ChiSamplerPrimes<TRng, T>
         if (n % T.CreateChecked(2) == T.Zero || n % T.CreateChecked(3) == T.Zero) return false;
 
         // Trial division against precomputed small primes using Sieve of Eratosthenes
-        var smallPrimes = PrimeEstimator.PrimesBelowLimit;
+        var smallPrimes = PrimeCounting.PrimesBelowLimit;
         foreach (var pInt in smallPrimes)
         {
             if (pInt <= 3) continue;
@@ -116,38 +115,38 @@ public static class ChiSamplerPrimesExtensions
 {
     /// <summary>
     ///     Returns a sampler that generates random prime numbers from a specified integer range.
-    ///     This feature is supported for standard integer types up to 64 bits wide.
+    ///     This feature is supported for integer types up to 128 bits wide.
     /// </summary>
     /// <typeparam name="TRng">The type of the random number generator.</typeparam>
-    /// <typeparam name="T">The integer type of the generated values (e.g., int, long).</typeparam>
+    /// <typeparam name="T">The integer type of the generated values (e.g., int, long, UInt128).</typeparam>
     /// <param name="rng">The random number generator to use for sampling.</param>
     /// <param name="minInclusive">The inclusive lower bound of the range. Must be non-negative.</param>
     /// <param name="maxExclusive">The exclusive upper bound of the range.</param>
     /// <param name="minEstimatePopulation">
     ///     The minimum estimated number of primes required to be in the range. If the estimated
     ///     count is below this threshold, an <see cref="ArgumentException" /> is thrown in the constructor.
-    ///     Set to 0 to disable the population check entirely.
+    ///     Set to 0 to disable the population check entirely and improve construction performance.
     /// </param>
     /// <returns>A sampler that can be used to generate random prime numbers.</returns>
     /// <remarks>
     ///     <para>
-    ///         <b>Use Cases:</b> Essential for cryptography (e.g., generating keys for RSA), number theory simulations,
-    ///         creating hash functions, or any algorithm requiring large, unpredictable prime numbers.
+    ///         <b>Use Cases:</b> Ideal for number theory research, cryptographic experiments, and applications
+    ///         requiring mathematically guaranteed prime numbers with uniform distribution.
     ///     </para>
     ///     <para>
-    ///         <b>Primality Guarantees:</b> This method returns numbers that are **provably prime** using a deterministic
-    ///         Miller-Rabin test.
+    ///         <b>Primality Guarantees:</b> This method returns numbers that are provably prime using deterministic
+    ///         Miller-Rabin testing with various optimization techniques.
     ///     </para>
     ///     <para>
-    ///         <b>Performance:</b> `O(r/π(r) × √n)`* expected, where r is range size, π(r) is prime density,
+    ///         <b>Performance:</b> `O(r/π(r) × √n)` expected, where r is range size, π(r) is prime density,
     ///         and √n is primality test cost. Performance varies significantly with range density.
     ///     </para>
     /// </remarks>
     /// <example>
     ///     <code><![CDATA[
-    /// var rng = new ChiRng();
-    /// // Generate deterministic prime-based ID
-    /// var uniqueId = rng.Primes(1000, int.MaxValue).Sample();
+    ///     // Generate a set of very large primes
+    ///     var max = UInt128.MaxValue;
+    ///     var primes = rng.Primes(max / 2, max).Sample(100).ToList();
     /// ]]></code>
     /// </example>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -162,14 +161,14 @@ public static class ChiSamplerPrimesExtensions
 
 #region File-scoped helpers
 
-file static class PrimeEstimator
+file static class PrimeCounting
 {
     private const int SmallSieveLimit = 1000;
     private static readonly Lazy<int[]> LazyPrimesBelowLimit = new(GeneratePrimesBelowLimit);
 
     public static ReadOnlySpan<int> PrimesBelowLimit => LazyPrimesBelowLimit.Value.AsSpan();
 
-    public static ulong EstimateCount<T>(T min, T max)
+    public static ulong EstimatePopulationCount<T>(T min, T max)
         where T : unmanaged, IBinaryInteger<T>
     {
         if (max < T.CreateChecked(SmallSieveLimit))

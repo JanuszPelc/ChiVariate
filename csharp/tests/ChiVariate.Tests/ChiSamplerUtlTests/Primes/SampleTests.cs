@@ -284,13 +284,15 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void Sample_WithFixedSeed_IsDeterministic()
+    public void Sample_ForUInt128_IsDeterministic()
     {
-        var rng = new ChiRng(1337);
+        var rng = new ChiRng(13);
+        var min = UInt128.MaxValue - uint.MaxValue;
+        var max = UInt128.MaxValue;
 
-        var result = rng.Primes((Int128)0, uint.MaxValue, 10).Sample();
+        var result = rng.Primes(min, max, 0).Sample();
 
-        result.Should().Be(4075324157);
+        result.Should().Be(UInt128.Parse("340282366920938463463374607431646647643"));
     }
 
     [Fact]
@@ -303,6 +305,30 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
         var result = rng.Primes(min, max, 1).Sample();
 
         result.Should().Be(4294967279u);
+    }
+
+    [Fact]
+    public void Sample_ForUint32_IsDeterministic()
+    {
+        var rng = new ChiRng(42);
+        var min = uint.MinValue;
+        var max = uint.MaxValue;
+
+        var result = rng.Primes(min, max, 1).Sample();
+
+        result.Should().Be(3526690091u);
+    }
+
+    [Fact]
+    public void Sample_ForUint16_IsDeterministic()
+    {
+        var rng = new ChiRng(42);
+        var min = ushort.MinValue;
+        var max = ushort.MaxValue;
+
+        var result = rng.Primes(min, max, 1).Sample();
+
+        result.Should().Be(55127);
     }
 
     [Fact]

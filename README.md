@@ -277,13 +277,12 @@ Beyond statistical distributions, ChiVariate provides specialized tools for unif
 
 ### Prime number sampling
 
-A specialized sampler for generating provably prime numbers from specified ranges. This sampler uses various optimization techniques and deterministic Miller-Rabin testing to guarantee mathematical correctness.
+A specialized sampler for generating provably prime numbers from specified ranges up to 128-bit integers. This sampler uses various optimization techniques and deterministic Miller-Rabin testing to deliver mathematically rigorous primes suitable for cryptographic and security-adjacent research.
 
 ```csharp
-// Generate a set of large primes for research or simulation
-var largePrimes = rng.Primes(1_000_000_000_000L, 10_000_000_000_000L)
-    .Sample(100)
-    .ToList();
+// Generate a set of very large primes
+var max = UInt128.MaxValue;
+var primes = rng.Primes(max / 2, max).Sample(100).ToList();
 ```
 
 ### Quasi-random sequences
@@ -548,7 +547,7 @@ Utility samplers provide practical, expressive APIs for common randomization tas
 
 #### Primes
 
-> Generates provably prime numbers from specified integer ranges using deterministic Miller-Rabin testing. Ideal for number theory research, simulations, and applications requiring mathematically guaranteed primes with uniform distribution.
+> Generates provably prime numbers from specified integer ranges up to 128-bit using deterministic Miller-Rabin testing and various optimization techniques. Ideal for number theory research, cryptographic experiments, and applications requiring mathematically guaranteed primes with uniform distribution.
 >
 > *Complexity: *`O(r/π(r) × √n)`* expected, where r is range size, π(r) is prime density, and √n is primality test cost. Performance varies significantly with range density. Tier 5.*
 

@@ -287,35 +287,36 @@ public class MainReadmeTests(ITestOutputHelper testOutputHelper)
         var rng = new ChiRng("ReadmeExample");
 
         // --- example code begin ---
-        // Generate a set of large primes for research or simulation
-        var largePrimes = rng.Primes(1_000_000_000_000L, 10_000_000_000_000L)
-            .Sample(100)
-            .ToList();
+        // Generate a set of very large primes
+        var max = UInt128.MaxValue;
+        var primes = rng.Primes(max / 2, max).Sample(100).ToList();
         // --- example code end ---
 
-        testOutputHelper.WriteLine($"Generated {largePrimes.Count} large primes:");
+        testOutputHelper.WriteLine($"Generated {primes.Count} large primes:");
 
-        foreach (var prime in largePrimes)
+        foreach (var prime in primes)
             testOutputHelper.WriteLine($"  {prime:N0}");
 
-        foreach (var prime in largePrimes)
-            prime.Should().BeGreaterThanOrEqualTo(1_000_000_000_000L)
-                .And.BeLessThan(10_000_000_000_000L, "should be within specified range");
+        var minRange = max / 2;
+        var maxRange = max;
+        foreach (var prime in primes)
+            prime.Should().BeGreaterThanOrEqualTo(minRange)
+                .And.BeLessThan(maxRange, "should be within specified range");
 
-        largePrimes.Count.Should().Be(100, "should generate exactly 20 primes as requested");
+        primes.Count.Should().Be(100, "should generate exactly 20 primes as requested");
 
-        var uniquePrimes = largePrimes.ToHashSet();
-        uniquePrimes.Count.Should().Be(largePrimes.Count, "all primes should be unique");
+        var uniquePrimes = primes.ToHashSet();
+        uniquePrimes.Count.Should().Be(primes.Count, "all primes should be unique");
 
-        var minPrime = largePrimes.Min();
-        var maxPrime = largePrimes.Max();
+        var minPrime = primes.Min();
+        var maxPrime = primes.Max();
         var rangeSpan = maxPrime - minPrime;
-        const long totalRange = 10_000_000_000_000L - 1_000_000_000_000L;
+        var totalRange = maxRange - minRange;
 
         testOutputHelper.WriteLine($"Range coverage: {rangeSpan:N0} / {totalRange:N0} " +
-                                   $"({100.0 * rangeSpan / totalRange:F1}%)");
+                                   $"({100.0 * (double)rangeSpan / (double)totalRange:F1}%)");
 
-        (rangeSpan / (double)totalRange).Should().BeGreaterThan(0.1,
+        ((double)rangeSpan / (double)totalRange).Should().BeGreaterThan(0.1,
             "primes should be reasonably distributed across the range");
     }
 
