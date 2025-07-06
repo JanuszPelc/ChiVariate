@@ -19,14 +19,14 @@ public class ChiHashReproducibilityTests
             .Add(input1)
             .Add(input2)
             .Add(input3)
-            .HashCode;
+            .Hash;
 
         // Act
         var hash2 = new ChiHash()
             .Add(input1)
             .Add(input2)
             .Add(input3)
-            .HashCode;
+            .Hash;
 
         // Assert
         Assert.Equal(hash1, hash2);
@@ -42,13 +42,13 @@ public class ChiHashReproducibilityTests
         var hashOrderAb = new ChiHash()
             .Add(inputA)
             .Add(inputB)
-            .HashCode;
+            .Hash;
 
         // Act
         var hashOrderBa = new ChiHash()
             .Add(inputB)
             .Add(inputA)
-            .HashCode;
+            .Hash;
 
         // Assert
         Assert.NotEqual(hashOrderAb, hashOrderBa);
@@ -67,14 +67,14 @@ public class ChiHashReproducibilityTests
             .Add(input1)
             .Add(input2)
             .Add(input3A)
-            .HashCode;
+            .Hash;
 
         // Act
         var hashB = new ChiHash()
             .Add(input1)
             .Add(input2)
             .Add(input3B)
-            .HashCode;
+            .Hash;
 
         // Assert
         Assert.NotEqual(hashA, hashB);
@@ -91,14 +91,14 @@ public class ChiHashReproducibilityTests
         var hash2Inputs = new ChiHash()
             .Add(input1)
             .Add(input2)
-            .HashCode;
+            .Hash;
 
         // Act
         var hash3Inputs = new ChiHash()
             .Add(input1)
             .Add(input2)
             .Add(input3)
-            .HashCode;
+            .Hash;
 
         // Assert
         Assert.NotEqual(hash2Inputs, hash3Inputs);
@@ -160,12 +160,12 @@ public class ChiHashReproducibilityTests
 
         // Null handling
         string? nullString = null;
-        var hashNull1 = new ChiHash().Add(nullString).HashCode;
-        var hashNull2 = new ChiHash().Add(nullString).HashCode;
+        var hashNull1 = new ChiHash().Add(nullString).Hash;
+        var hashNull2 = new ChiHash().Add(nullString).Hash;
         Assert.Equal(hashNull1, hashNull2);
 
         // Null should equal empty string
-        var hashEmpty = new ChiHash().Add("").HashCode;
+        var hashEmpty = new ChiHash().Add("").Hash;
         Assert.Equal(hashNull1, hashEmpty);
     }
 
@@ -242,19 +242,19 @@ public class ChiHashReproducibilityTests
     {
         // Numeric spans
         var intArray = new[] { 1, 2, 3, 4, 5 };
-        var hash1 = new ChiHash().Add(intArray.AsSpan()).HashCode;
-        var hash2 = new ChiHash().Add(intArray.AsSpan()).HashCode;
+        var hash1 = new ChiHash().Add(intArray.AsSpan()).Hash;
+        var hash2 = new ChiHash().Add(intArray.AsSpan()).Hash;
         Assert.Equal(hash1, hash2);
 
         // Different spans should produce different hashes
         var intArray2 = new[] { 1, 2, 3, 4, 6 };
-        var hash3 = new ChiHash().Add(intArray2.AsSpan()).HashCode;
+        var hash3 = new ChiHash().Add(intArray2.AsSpan()).Hash;
         Assert.NotEqual(hash1, hash3);
 
         // Special type spans
         var guidArray = new[] { Guid.NewGuid(), Guid.NewGuid() };
-        var guidHash1 = new ChiHash().Add(guidArray.AsSpan()).HashCode;
-        var guidHash2 = new ChiHash().Add(guidArray.AsSpan()).HashCode;
+        var guidHash1 = new ChiHash().Add(guidArray.AsSpan()).Hash;
+        var guidHash2 = new ChiHash().Add(guidArray.AsSpan()).Hash;
         Assert.Equal(guidHash1, guidHash2);
     }
 
@@ -276,7 +276,7 @@ public class ChiHashReproducibilityTests
             .Add(dateTime)
             .Add(TestEnum.Value1)
             .Add(bigInt)
-            .HashCode;
+            .Hash;
 
         var hash2 = new ChiHash()
             .Add(ChiHash.Seed)
@@ -288,7 +288,7 @@ public class ChiHashReproducibilityTests
             .Add(dateTime)
             .Add(TestEnum.Value1)
             .Add(bigInt)
-            .HashCode;
+            .Hash;
 
         Assert.Equal(hash1, hash2);
     }
@@ -296,8 +296,8 @@ public class ChiHashReproducibilityTests
     [Fact]
     public void ChiHash_EmptyState_HasConsistentInitialValue()
     {
-        var hash1 = new ChiHash().HashCode;
-        var hash2 = new ChiHash().HashCode;
+        var hash1 = new ChiHash().Hash;
+        var hash2 = new ChiHash().Hash;
         Assert.Equal(hash1, hash2);
         Assert.Equal(0, hash1); // Should start at 0
     }
@@ -314,22 +314,22 @@ public class ChiHashReproducibilityTests
 
     private static void VerifyDeterminism<T>(T input)
     {
-        var hash1 = new ChiHash().Add(input).HashCode;
-        var hash2 = new ChiHash().Add(input).HashCode;
+        var hash1 = new ChiHash().Add(input).Hash;
+        var hash2 = new ChiHash().Add(input).Hash;
         Assert.Equal(hash1, hash2);
     }
 
     private static void VerifySensitivity<T>(T input1, T input2)
     {
-        var hash1 = new ChiHash().Add(input1).HashCode;
-        var hash2 = new ChiHash().Add(input2).HashCode;
+        var hash1 = new ChiHash().Add(input1).Hash;
+        var hash2 = new ChiHash().Add(input2).Hash;
         Assert.NotEqual(hash1, hash2);
     }
 
     private static void VerifyStringDeterminism(string input)
     {
-        var hash1 = new ChiHash().Add(input).HashCode;
-        var hash2 = new ChiHash().Add(input).HashCode;
+        var hash1 = new ChiHash().Add(input).Hash;
+        var hash2 = new ChiHash().Add(input).Hash;
         Assert.Equal(hash1, hash2);
     }
 

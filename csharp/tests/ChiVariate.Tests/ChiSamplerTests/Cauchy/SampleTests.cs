@@ -18,7 +18,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     public void Sample_ProducesDistributionWithCorrectMedian(double location, double scale)
     {
         // Arrange
-        var rng = new ChiRng(ChiSeed.Scramble("Cauchy", ChiHashObsolete.Hash(location, scale)));
+        var rng = new ChiRng(ChiSeed.Scramble("Cauchy", new ChiHash().Add(location).Add(scale).Hash));
         var histogramRange = 10 * scale;
         var minBound = location - histogramRange;
         var maxBound = location + histogramRange;
@@ -61,7 +61,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
         var location = decimal.Parse(locationStr);
         var scale = decimal.Parse(scaleStr);
 
-        var rng = new ChiRng(ChiSeed.Scramble("CauchyDecimal", ChiHashObsolete.Hash(location, scale)));
+        var rng = new ChiRng(ChiSeed.Scramble("CauchyDecimal", new ChiHash().Add(location).Add(scale).Hash));
         var histogramRange = (double)(10 * scale);
         var minBound = (double)location - histogramRange;
         var maxBound = (double)location + histogramRange;

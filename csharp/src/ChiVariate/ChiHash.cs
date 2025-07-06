@@ -17,11 +17,11 @@ namespace ChiVariate;
 ///     <para>
 ///         ChiHash produces deterministic hash values that remain consistent across
 ///         different platforms, .NET versions, and application runs. This makes it
-///         suitable for scenarios requiring reproducible hashing: save files, 
+///         suitable for scenarios requiring reproducible hashing: save files,
 ///         networking protocols, procedural generation, and distributed systems.
 ///     </para>
 ///     <para>
-///         For hash table security and DoS protection, seed with ChiHash.Seed 
+///         For hash table security and DoS protection, seed with ChiHash.Seed
 ///         or a custom entropy source to introduce per-application randomization.
 ///     </para>
 ///     <para>
@@ -62,7 +62,7 @@ public ref struct ChiHash
     ///     Gets the current 32-bit hash code based on all values added so far.
     /// </summary>
     /// <value>A 32-bit signed integer hash code.</value>
-    public int HashCode { get; private set; }
+    public int Hash { get; private set; }
 
     /// <summary>
     ///     Adds a string value to the hash calculation.
@@ -75,14 +75,14 @@ public ref struct ChiHash
     ///         Always use the returned value:
     ///     </para>
     ///     <code>
-    /// // ✅ Correct - fluent style
+    /// // Correct - fluent style
     /// var hash = new ChiHash().Add(value1).Add(value2).HashCode;
-    /// 
-    /// // ✅ Correct - with reassignment  
+    ///  
+    /// // Correct - with reassignment  
     /// var builder = new ChiHash();
     /// builder = builder.Add(value);
-    /// 
-    /// // ❌ Incorrect - mutation is lost
+    ///  
+    /// // Incorrect - mutation is lost
     /// var builder = new ChiHash();
     /// builder.Add(value); // This does nothing!
     /// </code>
@@ -116,113 +116,125 @@ public ref struct ChiHash
         if (typeof(T) == typeof(sbyte) || typeof(T) == typeof(byte))
         {
             var byteValue = Unsafe.As<T, byte>(ref value);
-            result.HashCode = Chi32.UpdateHashValue(result.HashCode, byteValue);
+            result.Hash = Chi32.UpdateHashValue(result.Hash, byteValue);
         }
         else if (typeof(T) == typeof(short) || typeof(T) == typeof(ushort) || typeof(T) == typeof(char))
         {
             var shortValue = Unsafe.As<T, ushort>(ref value);
-            result.HashCode = Chi32.UpdateHashValue(result.HashCode, shortValue);
+            result.Hash = Chi32.UpdateHashValue(result.Hash, shortValue);
         }
         else if (typeof(T) == typeof(int) || typeof(T) == typeof(uint))
         {
             var intValue = Unsafe.As<T, uint>(ref value);
-            result.HashCode = Chi32.UpdateHashValue(result.HashCode, (int)intValue);
+            result.Hash = Chi32.UpdateHashValue(result.Hash, (int)intValue);
         }
         else if (typeof(T) == typeof(long) || typeof(T) == typeof(ulong))
         {
             var longValue = Unsafe.As<T, ulong>(ref value);
-            result.HashCode = Chi32.UpdateHashValue(result.HashCode, (int)(longValue & 0xFFFFFFFF));
-            result.HashCode = Chi32.UpdateHashValue(result.HashCode, (int)(longValue >> 32));
+            result.Hash = Chi32.UpdateHashValue(result.Hash, (int)(longValue & 0xFFFFFFFF));
+            result.Hash = Chi32.UpdateHashValue(result.Hash, (int)(longValue >> 32));
         }
         else if (typeof(T) == typeof(Int128) || typeof(T) == typeof(UInt128))
         {
             var int128Value = Unsafe.As<T, UInt128>(ref value);
-            result.HashCode = Chi32.UpdateHashValue(result.HashCode, (int)(int128Value & 0xFFFFFFFF));
-            result.HashCode = Chi32.UpdateHashValue(result.HashCode, (int)((int128Value >> 32) & 0xFFFFFFFF));
-            result.HashCode = Chi32.UpdateHashValue(result.HashCode, (int)((int128Value >> 64) & 0xFFFFFFFF));
-            result.HashCode = Chi32.UpdateHashValue(result.HashCode, (int)((int128Value >> 96) & 0xFFFFFFFF));
+            result.Hash = Chi32.UpdateHashValue(result.Hash, (int)(int128Value & 0xFFFFFFFF));
+            result.Hash = Chi32.UpdateHashValue(result.Hash, (int)((int128Value >> 32) & 0xFFFFFFFF));
+            result.Hash = Chi32.UpdateHashValue(result.Hash, (int)((int128Value >> 64) & 0xFFFFFFFF));
+            result.Hash = Chi32.UpdateHashValue(result.Hash, (int)((int128Value >> 96) & 0xFFFFFFFF));
         }
         else if (typeof(T) == typeof(double))
         {
             var doubleValue = Unsafe.As<T, double>(ref value);
             var bits = BitConverter.DoubleToUInt64Bits(doubleValue);
-            result.HashCode = Chi32.UpdateHashValue(result.HashCode, (int)(bits & 0xFFFFFFFF));
-            result.HashCode = Chi32.UpdateHashValue(result.HashCode, (int)(bits >> 32));
+            result.Hash = Chi32.UpdateHashValue(result.Hash, (int)(bits & 0xFFFFFFFF));
+            result.Hash = Chi32.UpdateHashValue(result.Hash, (int)(bits >> 32));
         }
         else if (typeof(T) == typeof(float))
         {
             var floatValue = Unsafe.As<T, float>(ref value);
             var bits = BitConverter.SingleToUInt32Bits(floatValue);
-            result.HashCode = Chi32.UpdateHashValue(result.HashCode, (int)bits);
+            result.Hash = Chi32.UpdateHashValue(result.Hash, (int)bits);
         }
         else if (typeof(T) == typeof(Half))
         {
             var halfValue = Unsafe.As<T, Half>(ref value);
             var bits = BitConverter.HalfToUInt16Bits(halfValue);
-            result.HashCode = Chi32.UpdateHashValue(result.HashCode, bits);
+            result.Hash = Chi32.UpdateHashValue(result.Hash, bits);
         }
         else if (typeof(T) == typeof(decimal))
         {
             var decimalValue = Unsafe.As<T, decimal>(ref value);
             Span<int> parts = stackalloc int[4];
             decimal.TryGetBits(decimalValue, parts, out _);
-            for (var i = 0; i < 4; i++) 
-                result.HashCode = Chi32.UpdateHashValue(result.HashCode, parts[i]);
+            for (var i = 0; i < 4; i++)
+                result.Hash = Chi32.UpdateHashValue(result.Hash, parts[i]);
         }
         // Special types
         else if (typeof(T) == typeof(bool))
         {
             var boolValue = Unsafe.As<T, bool>(ref value);
-            result.HashCode = Chi32.UpdateHashValue(result.HashCode, boolValue ? 1 : 0);
+            result.Hash = Chi32.UpdateHashValue(result.Hash, boolValue ? 1 : 0);
         }
         else if (typeof(T).IsEnum)
         {
             var underlyingType = Enum.GetUnderlyingType(typeof(T));
-            
+
             if (underlyingType == typeof(byte))
-                result.HashCode = Chi32.UpdateHashValue(result.HashCode, Unsafe.As<T, byte>(ref value));
+            {
+                result.Hash = Chi32.UpdateHashValue(result.Hash, Unsafe.As<T, byte>(ref value));
+            }
             else if (underlyingType == typeof(sbyte))
-                result.HashCode = Chi32.UpdateHashValue(result.HashCode, Unsafe.As<T, sbyte>(ref value));
+            {
+                result.Hash = Chi32.UpdateHashValue(result.Hash, Unsafe.As<T, sbyte>(ref value));
+            }
             else if (underlyingType == typeof(short))
-                result.HashCode = Chi32.UpdateHashValue(result.HashCode, Unsafe.As<T, short>(ref value));
+            {
+                result.Hash = Chi32.UpdateHashValue(result.Hash, Unsafe.As<T, short>(ref value));
+            }
             else if (underlyingType == typeof(ushort))
-                result.HashCode = Chi32.UpdateHashValue(result.HashCode, Unsafe.As<T, ushort>(ref value));
+            {
+                result.Hash = Chi32.UpdateHashValue(result.Hash, Unsafe.As<T, ushort>(ref value));
+            }
             else if (underlyingType == typeof(int))
-                result.HashCode = Chi32.UpdateHashValue(result.HashCode, Unsafe.As<T, int>(ref value));
+            {
+                result.Hash = Chi32.UpdateHashValue(result.Hash, Unsafe.As<T, int>(ref value));
+            }
             else if (underlyingType == typeof(uint))
-                result.HashCode = Chi32.UpdateHashValue(result.HashCode, (int)Unsafe.As<T, uint>(ref value));
+            {
+                result.Hash = Chi32.UpdateHashValue(result.Hash, (int)Unsafe.As<T, uint>(ref value));
+            }
             else if (underlyingType == typeof(long))
             {
                 var longValue = Unsafe.As<T, ulong>(ref value);
-                result.HashCode = Chi32.UpdateHashValue(result.HashCode, (int)(longValue & 0xFFFFFFFF));
-                result.HashCode = Chi32.UpdateHashValue(result.HashCode, (int)(longValue >> 32));
+                result.Hash = Chi32.UpdateHashValue(result.Hash, (int)(longValue & 0xFFFFFFFF));
+                result.Hash = Chi32.UpdateHashValue(result.Hash, (int)(longValue >> 32));
             }
             else if (underlyingType == typeof(ulong))
             {
                 var longValue = Unsafe.As<T, ulong>(ref value);
-                result.HashCode = Chi32.UpdateHashValue(result.HashCode, (int)(longValue & 0xFFFFFFFF));
-                result.HashCode = Chi32.UpdateHashValue(result.HashCode, (int)(longValue >> 32));
+                result.Hash = Chi32.UpdateHashValue(result.Hash, (int)(longValue & 0xFFFFFFFF));
+                result.Hash = Chi32.UpdateHashValue(result.Hash, (int)(longValue >> 32));
             }
         }
         else if (typeof(T) == typeof(BigInteger))
         {
             var bigInt = Unsafe.As<T, BigInteger>(ref value);
             var bytes = bigInt.ToByteArray();
-            
+
             var intCount = bytes.Length & ~3;
             for (var i = 0; i < intCount; i += 4)
             {
                 var chunk = bytes[i] | (bytes[i + 1] << 8) | (bytes[i + 2] << 16) | (bytes[i + 3] << 24);
-                result.HashCode = Chi32.UpdateHashValue(result.HashCode, chunk);
+                result.Hash = Chi32.UpdateHashValue(result.Hash, chunk);
             }
-            
+
             var orphanCount = bytes.Length & 3;
             if (orphanCount > 0)
             {
                 var lastChunk = 0;
                 for (var i = 0; i < orphanCount; i++)
                     lastChunk |= bytes[intCount + i] << (i * 8);
-                result.HashCode = Chi32.UpdateHashValue(result.HashCode, lastChunk);
+                result.Hash = Chi32.UpdateHashValue(result.Hash, lastChunk);
             }
         }
         else if (typeof(T) == typeof(Guid))
@@ -230,14 +242,14 @@ public ref struct ChiHash
             var guid = Unsafe.As<T, Guid>(ref value);
             Span<byte> bytes = stackalloc byte[16];
             guid.TryWriteBytes(bytes);
-            
+
             var intSpan = MemoryMarshal.Cast<byte, int>(bytes);
             if (!BitConverter.IsLittleEndian)
                 for (var index = 0; index < intSpan.Length; index++)
                     intSpan[index] = BinaryPrimitives.ReverseEndianness(intSpan[index]);
-            
+
             foreach (var chunk in intSpan)
-                result.HashCode = Chi32.UpdateHashValue(result.HashCode, chunk);
+                result.Hash = Chi32.UpdateHashValue(result.Hash, chunk);
         }
         else if (typeof(T) == typeof(Complex))
         {
@@ -325,8 +337,8 @@ public ref struct ChiHash
                 for (var index = 0; index < intSpan.Length; index++)
                     intSpan[index] = BinaryPrimitives.ReverseEndianness(intSpan[index]);
 
-            foreach (var chunk in intSpan) 
-                HashCode = Chi32.UpdateHashValue(HashCode, chunk);
+            foreach (var chunk in intSpan)
+                Hash = Chi32.UpdateHashValue(Hash, chunk);
 
             // Handle remaining bytes (always in little-endian order)
             var orphanCount = byteSpan.Length & 3;
@@ -334,9 +346,9 @@ public ref struct ChiHash
             {
                 var tailBytes = byteSpan[^orphanCount..];
                 var lastChunk = 0;
-                for (var i = 0; i < orphanCount; i++) 
+                for (var i = 0; i < orphanCount; i++)
                     lastChunk |= tailBytes[i] << (i * 8);
-                HashCode = Chi32.UpdateHashValue(HashCode, lastChunk);
+                Hash = Chi32.UpdateHashValue(Hash, lastChunk);
             }
         }
         finally

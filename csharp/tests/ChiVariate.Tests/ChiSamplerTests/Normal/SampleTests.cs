@@ -55,7 +55,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
         // Arrange
         const double expectedMean = 50.0;
         const double expectedStdDev = 1.0;
-        var rng = new ChiRng(ChiHashObsolete.Hash("ShiftedNormal"));
+        var rng = new ChiRng(("ShiftedNormal"));
         var histogram = new Histogram(45.0, 55.0, 100);
 
         // Act
@@ -76,7 +76,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
         // Arrange
         const double expectedMean = 0.0;
         const double expectedStdDev = 15.0;
-        var rng = new ChiRng(ChiHashObsolete.Hash("WiderNormal"));
+        var rng = new ChiRng(("WiderNormal"));
         var histogram = new Histogram(-60.0, 60.0, 100);
 
         // Act
@@ -100,7 +100,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
         var mean = decimal.Parse(meanStr);
         var stdDev = decimal.Parse(stdDevStr);
 
-        var rng = new ChiRng(ChiSeed.Scramble("NormalDecimal", ChiHashObsolete.Hash(mean, stdDev)));
+        var rng = new ChiRng(ChiSeed.Scramble("NormalDecimal", new ChiHash().Add(mean).Add(stdDev).Hash));
 
         var minBound = (double)mean - 4 * (double)stdDev;
         var maxBound = (double)mean + 4 * (double)stdDev;

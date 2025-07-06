@@ -18,7 +18,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     public void Sample_ProducesDistributionWithCorrectShape(double scale, double shape)
     {
         // Arrange
-        var rng = new ChiRng(ChiSeed.Scramble("Pareto", ChiHashObsolete.Hash(scale, shape)));
+        var rng = new ChiRng(ChiSeed.Scramble("Pareto", new ChiHash().Add(scale).Add(shape).Hash));
         var maxBound = scale * 10;
         var histogram = new Histogram(scale, maxBound, 150);
 
@@ -58,7 +58,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
         var scale = decimal.Parse(scaleStr);
         var shape = decimal.Parse(shapeStr);
 
-        var rng = new ChiRng(ChiSeed.Scramble("ParetoDecimal", ChiHashObsolete.Hash(scale, shape)));
+        var rng = new ChiRng(ChiSeed.Scramble("ParetoDecimal", new ChiHash().Add(scale).Add(shape).Hash));
         var maxBound = (double)scale * 10;
         var histogram = new Histogram((double)scale, maxBound, 150);
         var sampler = new DecimalParetoSampler(scale, shape);

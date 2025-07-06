@@ -19,8 +19,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     public void Sample_ProducesDistributionWithCorrectStatistics(int populationSize, int numSuccesses, int sampleSize)
     {
         // Arrange
-        var rng = new ChiRng(ChiSeed.Scramble("Hypergeometric",
-            ChiHashObsolete.Hash(populationSize, numSuccesses, sampleSize)));
+        var rng = new ChiRng(ChiSeed.Scramble("Hypergeometric", (populationSize)));
 
         var minPossible = Math.Max(0, sampleSize - (populationSize - numSuccesses));
         var maxPossible = Math.Min(sampleSize, numSuccesses);

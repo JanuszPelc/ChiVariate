@@ -18,7 +18,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     public void Sample_ProducesDistributionWithCorrectStatistics(int d1, int d2)
     {
         // Arrange
-        var rng = new ChiRng(ChiSeed.Scramble("F-dist", ChiHashObsolete.Hash(d1, d2)));
+        var rng = new ChiRng(ChiSeed.Scramble("F-dist", new ChiHash().Add(d1).Add(d2).Hash));
         var sampler = rng.F(d1, (double)d2);
 
         var expectedMean = (double)d2 / (d2 - 2);
@@ -48,7 +48,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     {
         // Arrange
         const int d1 = 5, d2 = 5;
-        var rng = new ChiRng(ChiSeed.Scramble("F-dist", ChiHashObsolete.Hash(d1, d2)));
+        var rng = new ChiRng(ChiSeed.Scramble("F-dist", new ChiHash().Add(d1).Add(d2).Hash));
         var sampler = rng.F(d1, (double)d2);
 
         var expectedMean = (double)d2 / (d2 - 2);
@@ -89,7 +89,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
         // Arrange
         const decimal d1 = 5.0m;
         const decimal d2 = 10.0m;
-        var rng = new ChiRng(ChiSeed.Scramble("F-dist-decimal", ChiHashObsolete.Hash((double)d1, (double)d2)));
+        var rng = new ChiRng(ChiSeed.Scramble("F-dist-decimal"));
         var sampler = rng.F(d1, d2);
 
         var expectedMean = (double)(d2 / (d2 - 2));

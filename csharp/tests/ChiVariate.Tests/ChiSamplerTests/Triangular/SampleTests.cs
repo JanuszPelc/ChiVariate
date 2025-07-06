@@ -20,7 +20,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     public void Sample_ProducesDistributionWithCorrectProperties(double min, double max, double mode)
     {
         // Arrange
-        var rng = new ChiRng(ChiSeed.Scramble("Triangular", ChiHashObsolete.Hash(min, max, mode)));
+        var rng = new ChiRng(ChiSeed.Scramble("Triangular", mode));
         var histogram = new Histogram(min, max, 100);
 
         // Act
@@ -62,7 +62,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
         var max = decimal.Parse(maxStr);
         var mode = decimal.Parse(modeStr);
 
-        var rng = new ChiRng(ChiSeed.Scramble("TriangularDecimal", ChiHashObsolete.Hash(min, max, mode)));
+        var rng = new ChiRng(ChiSeed.Scramble("TriangularDecimal",  mode));
         var histogram = new Histogram((double)min, (double)max, 100);
         var sampler = new DecimalTriangularSampler(min, max, mode);
 

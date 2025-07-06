@@ -25,7 +25,7 @@ public class ChiHashStatisticalTests(ITestOutputHelper testOutputHelper)
 
         for (var i = 0; i < LargeSampleCount; i++)
         {
-            var hash = new ChiHash().Add(i).HashCode;
+            var hash = new ChiHash().Add(i).Hash;
             histogram.AddSample(hash);
         }
 
@@ -42,7 +42,7 @@ public class ChiHashStatisticalTests(ITestOutputHelper testOutputHelper)
         for (var i = 0; i < LargeSampleCount; i++)
         {
             var randomInt = rng.Chance().Next();
-            var hash = new ChiHash().Add(randomInt).HashCode;
+            var hash = new ChiHash().Add(randomInt).Hash;
             histogram.AddSample(hash);
         }
 
@@ -60,7 +60,7 @@ public class ChiHashStatisticalTests(ITestOutputHelper testOutputHelper)
         for (var i = 0; i < MediumSampleCount; i++)
         {
             var text = rng.LoremIpsum(1f).DolorSit(1, 15); // Short, varied paragraphs
-            var hash = new ChiHash().Add(text).HashCode;
+            var hash = new ChiHash().Add(text).Hash;
             histogram.AddSample(hash);
         }
 
@@ -82,7 +82,7 @@ public class ChiHashStatisticalTests(ITestOutputHelper testOutputHelper)
         for (var i = 0; i < MediumSampleCount; i++)
         {
             var corporateSpeak = rng.LoremIpsum(1f, buzzwords).DolorSit(1, 12);
-            var hash = new ChiHash().Add(corporateSpeak).HashCode;
+            var hash = new ChiHash().Add(corporateSpeak).Hash;
             histogram.AddSample(hash);
         }
 
@@ -105,46 +105,46 @@ public class ChiHashStatisticalTests(ITestOutputHelper testOutputHelper)
                 0 => new ChiHash()
                     .Add(rng.Chance().Next())
                     .Add(i) // Unique sequence component
-                    .HashCode,
+                    .Hash,
 
                 1 => new ChiHash()
                     .Add(rng.LoremIpsum(0.2f).DolorSit(1, 8))
                     .Add(rng.Chance().NextDouble())
-                    .HashCode,
+                    .Hash,
 
                 2 => new ChiHash()
                     .Add(rng.Chance().NextDouble())
                     .Add(rng.Chance().NextBool(0.5))
                     .Add(i % 1000) // Sequence component
-                    .HashCode,
+                    .Hash,
 
                 3 => new ChiHash()
                     .Add(Guid.NewGuid())
                     .Add(rng.Chance().Next(-1000, 1000))
-                    .HashCode,
+                    .Hash,
 
                 4 => new ChiHash()
                     .Add(DateTime.Now.Ticks + i) // Unique timestamp
                     .Add(rng.Chance().NextSingle())
-                    .HashCode,
+                    .Hash,
 
                 5 => new ChiHash()
                     .Add(rng.Chance().Next())
                     .Add(rng.LoremIpsum(0.3f).DolorSit(1, 4))
                     .Add(rng.Chance().NextBool(0.5))
-                    .HashCode,
+                    .Hash,
 
                 6 => new ChiHash()
                     .Add((decimal)rng.Chance().NextDouble() * 1000m)
                     .Add(i) // Sequence for uniqueness
-                    .HashCode,
+                    .Hash,
 
                 _ => new ChiHash()
                     .Add(rng.Chance().Next())
                     .Add(rng.Chance().NextDouble())
                     .Add(rng.LoremIpsum(0.1f).DolorSit(1, 3))
                     .Add(i) // Always include unique component
-                    .HashCode
+                    .Hash
             };
 
             histogram.AddSample(hash);
@@ -162,8 +162,8 @@ public class ChiHashStatisticalTests(ITestOutputHelper testOutputHelper)
 
         for (var i = 0; i < testCount; i++)
         {
-            var hash1 = new ChiHash().Add(i).HashCode;
-            var hash2 = new ChiHash().Add(i ^ 1).HashCode; // Flip one bit
+            var hash1 = new ChiHash().Add(i).Hash;
+            var hash2 = new ChiHash().Add(i ^ 1).Hash; // Flip one bit
 
             var diff = CountBitDifferences(hash1, hash2);
             bitDifferences.Add(diff);
@@ -201,8 +201,8 @@ public class ChiHashStatisticalTests(ITestOutputHelper testOutputHelper)
             var baseString = rng.LoremIpsum(0.1f).DolorSit(1, 10);
             var modifiedString = ModifyStringSlightly(baseString, rng);
 
-            var hash1 = new ChiHash().Add(baseString).HashCode;
-            var hash2 = new ChiHash().Add(modifiedString).HashCode;
+            var hash1 = new ChiHash().Add(baseString).Hash;
+            var hash2 = new ChiHash().Add(modifiedString).Hash;
 
             var diff = CountBitDifferences(hash1, hash2);
             bitDifferences.Add(diff);
@@ -237,8 +237,8 @@ public class ChiHashStatisticalTests(ITestOutputHelper testOutputHelper)
             var c = rng.Chance().NextDouble();
 
             // Same values, different order - use same RNG state for fairness
-            var hash1 = new ChiHash().Add(a).Add(b).Add(c).HashCode;
-            var hash2 = new ChiHash().Add(c).Add(a).Add(b).HashCode;
+            var hash1 = new ChiHash().Add(a).Add(b).Add(c).Hash;
+            var hash2 = new ChiHash().Add(c).Add(a).Add(b).Hash;
 
             histogram1.AddSample(hash1);
             histogram2.AddSample(hash2);
@@ -270,8 +270,8 @@ public class ChiHashStatisticalTests(ITestOutputHelper testOutputHelper)
             var b = rng.LoremIpsum(0.1f).DolorSit(1, 3);
             var c = rng.Chance().NextDouble();
 
-            var hash1 = new ChiHash().Add(a).Add(b).Add(c).HashCode;
-            var hash2 = new ChiHash().Add(c).Add(a).Add(b).HashCode;
+            var hash1 = new ChiHash().Add(a).Add(b).Add(c).Hash;
+            var hash2 = new ChiHash().Add(c).Add(a).Add(b).Hash;
 
             if (hash1 == hash2) sameOrderCount++;
         }
@@ -311,7 +311,7 @@ public class ChiHashStatisticalTests(ITestOutputHelper testOutputHelper)
 
             // Add final unique component to ensure no duplicates
             hash = hash.Add(DateTime.Now.Ticks + i);
-            histogram.AddSample(hash.HashCode);
+            histogram.AddSample(hash.Hash);
         }
 
         histogram.DebugPrint(testOutputHelper, "Chained Hashing Distribution");
@@ -337,7 +337,7 @@ public class ChiHashStatisticalTests(ITestOutputHelper testOutputHelper)
                 .Add(mixingValue) // Ensures good entropy mixing
                 .Add(stringComponent)
                 .Add(i) // Sequence component for uniqueness
-                .HashCode;
+                .Hash;
 
             histogram.AddSample(hash);
         }

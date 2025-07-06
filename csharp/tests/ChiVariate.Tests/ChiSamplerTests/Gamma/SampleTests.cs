@@ -97,7 +97,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
         var expectedMean = (double)(shape * scale);
         var expectedStdDev = Math.Sqrt((double)shape) * (double)scale;
 
-        var rng = new ChiRng(ChiSeed.Scramble("GammaDecimal", ChiHashObsolete.Hash(shape, scale)));
+        var rng = new ChiRng(ChiSeed.Scramble("GammaDecimal", new ChiHash().Add(shape).Add(scale).Hash));
         var maxBound = expectedMean + 6 * expectedStdDev;
         var histogram = new Histogram(0, maxBound, 100);
         var sampler = new DecimalGammaSampler(shape, scale);

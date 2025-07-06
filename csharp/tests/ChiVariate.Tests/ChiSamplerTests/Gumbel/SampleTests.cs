@@ -19,7 +19,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     public void Sample_ProducesDistributionWithCorrectStatistics(double location, double scale)
     {
         // Arrange
-        var rng = new ChiRng(ChiSeed.Scramble("Gumbel", ChiHashObsolete.Hash(location, scale)));
+        var rng = new ChiRng(ChiSeed.Scramble("Gumbel", new ChiHash().Add(location).Add(scale).Hash));
         var sampler = rng.Gumbel(location, scale);
 
         var expectedMean = location + scale * EulerMascheroni;
@@ -51,7 +51,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
         // Arrange
         const decimal location = 5.0m;
         const decimal scale = 2.0m;
-        var rng = new ChiRng(ChiSeed.Scramble("GumbelDecimal", ChiHashObsolete.Hash((double)location, (double)scale)));
+        var rng = new ChiRng(ChiSeed.Scramble("GumbelDecimal"));
         var sampler = rng.Gumbel(location, scale);
 
         var expectedMean = (double)(location + scale * (decimal)EulerMascheroni);
