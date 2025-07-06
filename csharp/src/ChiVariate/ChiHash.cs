@@ -1,6 +1,5 @@
 using System.Buffers;
 using System.Buffers.Binary;
-using System.Diagnostics.Contracts;
 using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
@@ -172,31 +171,30 @@ public ref struct ChiHash
         else if (typeof(T).IsEnum)
         {
             var underlyingType = Enum.GetUnderlyingType(typeof(T));
-
-            if (underlyingType == typeof(byte) || underlyingType == typeof(sbyte))
-            {
-                Hash = Chi32.UpdateHashValue(Hash, Unsafe.As<T, byte>(ref value));
-            }
-            else if (underlyingType == typeof(short) || underlyingType == typeof(ushort))
-            {
-                Hash = Chi32.UpdateHashValue(Hash, Unsafe.As<T, ushort>(ref value));
-            }
-            else if (underlyingType == typeof(int) || underlyingType == typeof(uint))
-            {
-                Hash = Chi32.UpdateHashValue(Hash, (int)Unsafe.As<T, uint>(ref value));
-            }
-            else if (underlyingType == typeof(long) || underlyingType == typeof(ulong))
-            {
-                var longValue = Unsafe.As<T, ulong>(ref value);
-                Hash = Chi32.UpdateHashValue(Hash, (int)(longValue & 0xFFFFFFFF));
-                Hash = Chi32.UpdateHashValue(Hash, (int)(longValue >> 32));
-            }
+            if (underlyingType == typeof(byte))
+                this = Add(Unsafe.As<T, byte>(ref value));
+            else if (underlyingType == typeof(sbyte))
+                this = Add(Unsafe.As<T, sbyte>(ref value));
+            else if (underlyingType == typeof(short))
+                this = Add(Unsafe.As<T, short>(ref value));
+            else if (underlyingType == typeof(ushort))
+                this = Add(Unsafe.As<T, ushort>(ref value));
+            else if (underlyingType == typeof(int))
+                this = Add(Unsafe.As<T, int>(ref value));
+            else if (underlyingType == typeof(uint))
+                this = Add(Unsafe.As<T, uint>(ref value));
+            else if (underlyingType == typeof(long))
+                this = Add(Unsafe.As<T, long>(ref value));
+            else if (underlyingType == typeof(ulong))
+                this = Add(Unsafe.As<T, ulong>(ref value));
+            else if (underlyingType == typeof(Int128))
+                this = Add(Unsafe.As<T, Int128>(ref value));
+            else if (underlyingType == typeof(UInt128))
+                this = Add(Unsafe.As<T, UInt128>(ref value));
             else
-            {
                 throw new NotSupportedException(
                     $"Enum type {typeof(T).Name} is not supported. " +
-                    $"Supported enum types: byte, sbyte, short, ushort, int, uint, long, ulong.");
-            }
+                    $"Supported enum types: byte, sbyte, short, ushort, int, uint, long, ulong, Int128, UInt128.");
         }
         else if (typeof(T) == typeof(Guid))
         {
