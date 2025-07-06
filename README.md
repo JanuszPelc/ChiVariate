@@ -271,46 +271,6 @@ UpdateParticleSystem(explosionParticles, deltaTime, 0.9f);
 
 These performance-focused design principles extend beyond core distributions to specialized sampling tools that handle common real-world tasks.
 
-## Utility samplers
-
-Beyond statistical distributions, ChiVariate provides specialized tools for uniform spatial sampling, quasi-random sequences, and general-purpose randomness tasks.
-
-### Prime number sampling
-
-A specialized sampler for generating provably prime numbers from specified ranges up to 128-bit integers. This sampler uses various optimization techniques and deterministic Miller-Rabin testing to deliver mathematically rigorous primes suitable for cryptographic and security-adjacent research.
-
-```csharp
-// Generate a set of very large primes
-var max = UInt128.MaxValue;
-var primes = rng.Primes(max / 2, max).Sample(100).ToList();
-```
-
-### Quasi-random sequences
-
-Quasi-random sequences, also known as low-discrepancy sequences (LDS), are deterministic tools for generating points that cover a sample space as evenly and uniformly as possible. They provide a powerful alternative to pseudo-random numbers when uniform coverage is the primary goal.
-
-Both canonical (pure deterministic) and randomized variants are supported, with randomization improving statistical properties while preserving uniform coverage. Common applications include quasi-Monte Carlo integration and uniform sampling in computer graphics.
-
-```csharp
-// Create a 4D Sobol sampler that produces vectors of doubles
-var sobolSampler = rng.Sobol(4).OfType<double>();
-var points = sobolSampler.Sample(100);
-```
-
-### Spatial sampling
-
-ChiVariate includes robust support for uniform spatial sampling within or on the surface of common geometric primitives. The `rng.Spatial()` automatically applies the necessary mathematical corrections to avoid common pitfalls, such as central clustering in circles or polar bias on spheres.
-
-```csharp
-// Generate a uniformly distributed point inside the unit square
-var pointInSquare = rng.Spatial().InSquare(0.5f).Sample();
-
-// Sample a uniformly distributed direction vector (unit sphere)
-var randomDirection = rng.Spatial().OnSphere(1.0f).Sample().AsVector3();
-```
-
-While utility samplers handle practical everyday needs, ChiVariate's foundation rests on a comprehensive collection of statistical distributions for modeling complex phenomena.
-
 ## Supported probability distributions
 
 The performance of each distribution is grouped into six tiers, based on its relative cost compared to the `Uniform (Continuous)` sampler for `double` precision (~30 ns per sample on Apple M1 Pro).
@@ -529,9 +489,11 @@ Distributions that produce structured outputs such as vectors or matrices of cor
 >
 >  *Complexity: `O(k³)` per sample, plus `O(k³)` setup, where k is the number of dimensions. Tier 4.*
 
-### Utility samplers
+## Beyond statistical distributions
 
-Utility samplers provide practical, expressive APIs for common randomization tasks in domains like game development, procedural generation, and simulations. They also include specialized tools for quasi-random sequences, low-discrepancy sampling, and geometric primitives.
+ChiVariate provides specialized tools for general-purpose randomness tasks, starting with expressive Chance.
+
+### Utility samplers
 
 #### Chance
 
@@ -539,17 +501,37 @@ Utility samplers provide practical, expressive APIs for common randomization tas
 >
 > *Complexity: Generally `O(1)`, except for collection methods like `Shuffle` (`O(n)`). Tier 1.*
 
+#### Primes
+
+> Generates provably prime numbers from specified integer ranges up to 128-bit using deterministic Miller-Rabin testing and various optimization techniques. Ideal for number theory research, cryptographic experiments, and applications requiring mathematically guaranteed primes with uniform distribution.
+>
+> *Complexity: *`O(r/π(r) × √n)`* expected, where r is range size, π(r) is prime density, and √n is primality test cost. Performance varies significantly with range density. Tier 5.*
+
+A specialized sampler for generating provably prime numbers from specified ranges up to 128-bit integers. This sampler uses various optimization techniques and deterministic Miller-Rabin testing to deliver mathematically rigorous primes suitable for cryptographic and security-adjacent research.
+
+```csharp
+// Generate a set of very large primes
+var max = UInt128.MaxValue;
+var primes = rng.Primes(max / 2, max).Sample(100).ToList();
+```
+
 #### Spatial
 
 > A toolkit for uniform spatial sampling within or on the surface of geometric primitives. Delivers a simple, reliable API for tasks like picking random positions in areas (`InSquare`, `InCube`) or generating random direction vectors (`OnCircle`, `OnSphere`), handling all mathematical corrections internally to prevent common statistical biases.
 >
 > *Complexity: `O(1)`. Tier 2.*
 
-#### Primes
+Robust support for uniform spatial sampling within or on the surface of common geometric primitives. The `rng.Spatial()` automatically applies the necessary mathematical corrections to avoid common pitfalls, such as central clustering in circles or polar bias on spheres.
 
-> Generates provably prime numbers from specified integer ranges up to 128-bit using deterministic Miller-Rabin testing and various optimization techniques. Ideal for number theory research, cryptographic experiments, and applications requiring mathematically guaranteed primes with uniform distribution.
->
-> *Complexity: *`O(r/π(r) × √n)`* expected, where r is range size, π(r) is prime density, and √n is primality test cost. Performance varies significantly with range density. Tier 5.*
+```csharp
+// Generate a uniformly distributed point inside the unit square
+var pointInSquare = rng.Spatial().InSquare(0.5f).Sample();
+
+// Sample a uniformly distributed direction vector (unit sphere)
+var randomDirection = rng.Spatial().OnSphere(1.0f).Sample().AsVector3();
+```
+
+### Quasi-random sequences
 
 #### Halton
 
@@ -562,6 +544,16 @@ Utility samplers provide practical, expressive APIs for common randomization tas
 > A more sophisticated sequence with superior distribution properties, especially in higher dimensions. The preferred choice for demanding numerical integration tasks and applications requiring the highest uniformity across many dimensions.
 >
 > *Complexity: O(d) setup cost and an O(d) per sample, where d is the number of dimensions. Highly optimized for up to 10 dimensions. Tier 1.*
+
+Quasi-random sequences, also known as low-discrepancy sequences (LDS), are deterministic tools for generating points that cover a sample space as evenly and uniformly as possible. They provide a powerful alternative to pseudo-random numbers when uniform coverage is the primary goal.
+
+Both canonical (pure deterministic) and randomized variants are supported, with randomization improving statistical properties while preserving uniform coverage. Common applications include quasi-Monte Carlo integration and uniform sampling in computer graphics.
+
+```csharp
+// Create a 4D Sobol sampler that produces vectors of doubles
+var sobolSampler = rng.Sobol(4).OfType<double>();
+var points = sobolSampler.Sample(100);
+```
 
 Beyond these built-in samplers, ChiVariate's architecture supports seamless integration of custom generators and distributions.
 
