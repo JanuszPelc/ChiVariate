@@ -710,6 +710,14 @@ See `StatefulSamplerTests.cs` in the test suite for a complete implementation of
 
 ChiVariate's fully composable, non-allocating design delivers predictable performance and flexibility, but achieving this required specific architectural choices. This section covers the key tradeoffs and potential gotchas to be aware of when using the library in production.
 
+### Working with ref structs
+
+ChiVariate's `struct`-based design eliminates allocations but requires understanding a key constraint: RNG instances must be stored as fields, not properties. This happens because samplers use `ref` parameters to avoid copying state.
+
+Since C# properties can't be passed by reference, attempting to use an RNG stored as a property will fail to compile when calling sampler methods. For example, declaring an RNG as `public ChiRng Rng { get; set; }` property will cause compilation errors, while `public ChiRng Rng;` field works perfectly. The solution is straightforward: declare RNG instances as fields rather than properties.
+
+This design choice prevents the classic "modifying a copy" bug that plagues mutable structs, ensuring RNG state updates correctly every time.
+
 ### Precision vs performance
 
 ChiVariate provides full support for the `decimal` type across all major distributions, enabling simulations and models that demand exact base-10 precision. This is especially important in financial and actuarial contexts, where even small base-2 rounding errors in `double` can accumulate and undermine accuracy. `decimal` avoids such errors by offering exact decimal representation, making it suitable for calculations involving monetary values, interest rates, or regulatory compliance.
@@ -718,13 +726,20 @@ The performance cost is inherent: `decimal` is a 128-bit, software-emulated type
 
 ChiVariate embraces this trade-off, delivering consistent APIs across numeric types while preserving statistical integrity for precision-critical domains. Use `decimal` only when necessary for compliance or base-10 fidelity. For most general simulations, `double` remains faster and precise enough.
 
-### Working with ref structs
+### Cross-platform determinism
 
-ChiVariate's `struct`-based design eliminates allocations but requires understanding a key constraint: RNG instances must be stored as fields, not properties. This happens because samplers use `ref` parameters to avoid copying state.
+ChiVariate guarantees bit-for-bit reproducibility across platforms and .NET runtimes, but understanding the boundaries of this guarantee is important for mission-critical applications.
 
-Since C# properties can't be passed by reference, attempting to use an RNG stored as a property will fail to compile when calling sampler methods. For example, declaring an RNG as `public ChiRng Rng { get; set; }` property will cause compilation errors, while `public ChiRng Rng;` field works perfectly. The solution is straightforward: declare RNG instances as fields rather than properties.
+**Fully deterministic across all platforms:**
+- All integer distributions of any bit-size (8-bit through 128-bit)
+- All `decimal` distributions - ChiVariate implements its own decimal math library with no dependencies on platform-specific math functions
+- Hashing, seeding, and core RNG state generation
 
-This design choice prevents the classic "modifying a copy" bug that plagues mutable structs, ensuring RNG state updates correctly every time.
+**Platform-dependent precision in last bits:**
+
+These differences are rather academic, as any tiny precision variations are dwarfed by the inherent randomness being modeled. `float` and `double` distributions may have minute precision differences in the least significant bit on exotic platforms, as they rely on the underlying runtime's math library (`System.Math.Log`, `System.Math.Sqrt`, etc.).
+
+**Recommendation:** For applications requiring absolute cross-platform determinism, use `decimal` or `integer` types for critical calculations or validate your specific platform combinations during testing. For most use cases, the potential `float`/`double` variance is insignificant compared to the inherent randomness being modeled.
 
 ### Working with ChiMatrix
 

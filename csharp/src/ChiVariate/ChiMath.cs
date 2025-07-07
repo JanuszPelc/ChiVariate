@@ -269,11 +269,6 @@ public static class ChiMath
         where T : IFloatingPoint<T>
     {
         /// <summary>
-        ///     A smallest positive value, used for convergence checks.
-        /// </summary>
-        public static readonly T Epsilon = GetEpsilon();
-
-        /// <summary>
         ///     The mathematical constant π (pi), approximately 3.14159.
         /// </summary>
         public static readonly T Pi = T.Pi;
@@ -318,7 +313,11 @@ public static class ChiMath
         /// </summary>
         public static readonly T OneThird = One / Three;
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        /// <summary>
+        ///     A smallest positive value, used for convergence checks.
+        /// </summary>
+        public static T Epsilon { get; } = GetEpsilon();
+
         private static T GetEpsilon()
         {
             if (typeof(T) == typeof(double))
