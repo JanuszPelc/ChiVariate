@@ -9,19 +9,18 @@ Apple M1 Pro, 1 CPU, 10 logical and 10 physical cores
 
 | Method             | Mean     | Error    | StdDev   | Ratio | Allocated | Alloc Ratio |
 |------------------- |---------:|---------:|---------:|------:|----------:|------------:|
-| HashCode.Hash32    | 10.70 us | 0.016 us | 0.015 us |  1.00 |         - |          NA |
-| ChiHash.Hash32     | 26.92 us | 0.022 us | 0.018 us |  2.52 |         - |          NA |
-| ChiSeed.Hash64     | 31.08 us | 0.012 us | 0.010 us |  2.90 |         - |          NA |
-| ChiSeed.Unique64   | 55.59 us | 0.049 us | 0.045 us |  5.19 |         - |          NA |
-| CryptoRng.Unique64 | 74.54 us | 0.070 us | 0.065 us |  6.96 |         - |          NA |
+| HashCode.Hash32    | 10.69 us | 0.004 us | 0.004 us |  1.00 |         - |          NA |
+| ChiHash.Hash32     | 26.92 us | 0.028 us | 0.026 us |  2.52 |         - |          NA |
+| ChiSeed.Hash64     | 31.15 us | 0.093 us | 0.083 us |  2.91 |         - |          NA |
+| ChiSeed.Unique64   | 55.73 us | 0.078 us | 0.069 us |  5.21 |         - |          NA |
+| CryptoRng.Unique64 | 74.69 us | 0.166 us | 0.148 us |  6.99 |         - |          NA |
 
 // * Hints *
 Outliers
-  HasherBenchmarks.HashCode.Hash32: Default    -> 1 outlier  was  removed (11.04 us)
-  HasherBenchmarks.ChiHash.Hash32: Default     -> 2 outliers were removed (27.37 us, 28.97 us)
-  HasherBenchmarks.ChiSeed.Hash64: Default     -> 2 outliers were removed (31.12 us, 31.15 us)
-  HasherBenchmarks.ChiSeed.Unique64: Default   -> 1 outlier  was  detected (55.48 us)
-  HasherBenchmarks.CryptoRng.Unique64: Default -> 2 outliers were detected (74.42 us, 74.42 us)
+  HasherBenchmarks.HashCode.Hash32: Default    -> 2 outliers were removed (10.72 us, 10.72 us)
+  HasherBenchmarks.ChiSeed.Hash64: Default     -> 1 outlier  was  removed (31.71 us)
+  HasherBenchmarks.ChiSeed.Unique64: Default   -> 1 outlier  was  removed (56.04 us)
+  HasherBenchmarks.CryptoRng.Unique64: Default -> 1 outlier  was  removed (75.53 us)
 
 // * Legends *
   Mean        : Arithmetic mean of all measurements
@@ -36,9 +35,9 @@ Outliers
 
 
 // ***** BenchmarkRunner: End *****
-Run time: 00:01:37 (97.35 sec), executed benchmarks: 5
+Run time: 00:01:40 (100.29 sec), executed benchmarks: 5
 
-Global total time: 00:01:42 (102.88 sec), executed benchmarks: 5
+Global total time: 00:02:01 (121.92 sec), executed benchmarks: 5
 // * Artifacts cleanup *
 Artifacts cleanup is finished
 

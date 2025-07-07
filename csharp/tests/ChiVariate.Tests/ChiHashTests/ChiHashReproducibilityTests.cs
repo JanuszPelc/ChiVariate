@@ -143,7 +143,6 @@ public class ChiHashReproducibilityTests(ITestOutputHelper testOutputHelper)
         VerifySensitivity('a', 'b');
 
         VerifySensitivity(1.0, 1.000000000000001);
-        VerifySensitivity(0.0, -0.0);
         VerifySensitivity(100.0f, -100.0f);
         VerifySensitivity((Half)1.0f, (Half)1.5f);
         VerifySensitivity(123.456m, 123.457m);
@@ -320,7 +319,7 @@ public class ChiHashReproducibilityTests(ITestOutputHelper testOutputHelper)
     [Fact]
     public void ChiHash_FloatingPointEdgeCases_OutputBitPatterns()
     {
-        // Arrange & Act & Assert
+        // Arrange & Act
         testOutputHelper.WriteLine("=== FLOAT (32-bit) EDGE CASES ===");
 
         OutputFloatBits("float.NaN", float.NaN);
@@ -371,16 +370,18 @@ public class ChiHashReproducibilityTests(ITestOutputHelper testOutputHelper)
 
         var nanHash1 = new ChiHash().Add(float.NaN).Hash;
         var nanHash2 = new ChiHash().Add(0.0f / 0.0f).Hash;
+        var zeroHash1 = new ChiHash().Add(+0.0f).Hash;
+        var zeroHash2 = new ChiHash().Add(-0.0f).Hash;
         var halfNanHash1 = new ChiHash().Add(Half.NaN).Hash;
         var halfNanHash2 = new ChiHash().Add((Half)float.NaN).Hash;
         var doubleNanHash1 = new ChiHash().Add(double.NaN).Hash;
         var doubleNanHash2 = new ChiHash().Add(Math.Sqrt(-1.0)).Hash;
 
-        testOutputHelper.WriteLine($"float.NaN vs 0.0f/0.0f: {nanHash1 == nanHash2} ({nanHash1} vs {nanHash2})");
-        testOutputHelper.WriteLine(
-            $"Half.NaN vs (Half)float.NaN: {halfNanHash1 == halfNanHash2} ({halfNanHash1} vs {halfNanHash2})");
-        testOutputHelper.WriteLine(
-            $"double.NaN vs Math.Sqrt(-1.0): {doubleNanHash1 == doubleNanHash2} ({doubleNanHash1} vs {doubleNanHash2})");
+        // Assert
+        Assert.Equal(nanHash1, nanHash2);
+        Assert.Equal(zeroHash1, zeroHash2);
+        Assert.Equal(halfNanHash1, halfNanHash2);
+        Assert.Equal(doubleNanHash1, doubleNanHash2);
 
         return;
 
@@ -392,7 +393,7 @@ public class ChiHashReproducibilityTests(ITestOutputHelper testOutputHelper)
             var canonicalized = valueHash == canonicalHash ? "Canonical" : "Canonicalized";
 
             testOutputHelper.WriteLine(
-                $"{description,-40} | Bits: 0x{rawBits:X8} | Hash: {valueHash,11} | {canonicalized}");
+                $"{description,-24} | Bits: 0x{rawBits:X8} | Hash: {valueHash,11} | {canonicalized}");
         }
 
         void OutputDoubleBits(string description, double value)
@@ -403,7 +404,7 @@ public class ChiHashReproducibilityTests(ITestOutputHelper testOutputHelper)
             var canonicalized = valueHash == canonicalHash ? "Canonical" : "Canonicalized";
 
             testOutputHelper.WriteLine(
-                $"{description,-40} | Bits: 0x{rawBits:X16} | Hash: {valueHash,11} | {canonicalized}");
+                $"{description,-24} | Bits: 0x{rawBits:X16} | Hash: {valueHash,11} | {canonicalized}");
         }
 
         void OutputHalfBits(string description, Half value)
@@ -414,7 +415,7 @@ public class ChiHashReproducibilityTests(ITestOutputHelper testOutputHelper)
             var canonicalized = valueHash == canonicalHash ? "Canonical" : "Canonicalized";
 
             testOutputHelper.WriteLine(
-                $"{description,-40} | Bits: 0x{rawBits:X4} | Hash: {valueHash,11} | {canonicalized}");
+                $"{description,-24} | Bits: 0x{rawBits:X4} | Hash: {valueHash,11} | {canonicalized}");
         }
     }
 

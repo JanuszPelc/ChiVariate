@@ -245,17 +245,12 @@ public ref struct ChiHash
             var dv = Unsafe.As<T, double>(ref value);
             if (double.IsNaN(dv))
             {
-                const ulong canonicalNaN = 0x7FF8_0000_0000_0000UL;
-                AddPrimitive(canonicalNaN);
-            }
-            else if (dv == 0d)
-            {
-                const ulong canonicalPosZero = 0x0000_0000_0000_0000UL;
-                const ulong canonicalNegZero = 0x8000_0000_0000_0000UL;
-                AddPrimitive(double.IsNegative(dv) ? canonicalNegZero : canonicalPosZero);
+                const ulong canonicalQNaN = 0x7FF8_0000_0000_0000UL;
+                AddPrimitive(canonicalQNaN);
             }
             else
             {
+                if (dv == 0d) dv = +0d;
                 AddPrimitive(BitConverter.DoubleToUInt64Bits(dv));
             }
         }
@@ -264,17 +259,12 @@ public ref struct ChiHash
             var fv = Unsafe.As<T, float>(ref value);
             if (float.IsNaN(fv))
             {
-                const uint canonicalNaN = 0x7FC0_0000U;
-                AddPrimitive(canonicalNaN);
-            }
-            else if (fv == 0f)
-            {
-                const uint canonicalPosZero = 0x0000_0000U;
-                const uint canonicalNegZero = 0x8000_0000U;
-                AddPrimitive(float.IsNegative(fv) ? canonicalNegZero : canonicalPosZero);
+                const uint canonicalQNaN = 0x7FC0_0000U;
+                AddPrimitive(canonicalQNaN);
             }
             else
             {
+                if (fv == 0f) fv = +0f;
                 AddPrimitive(BitConverter.SingleToUInt32Bits(fv));
             }
         }
@@ -283,17 +273,12 @@ public ref struct ChiHash
             var hv = Unsafe.As<T, Half>(ref value);
             if (Half.IsNaN(hv))
             {
-                const ushort canonicalNaN = 0x7E00;
-                AddPrimitive(canonicalNaN);
-            }
-            else if (hv == (Half)0f)
-            {
-                const ushort canonicalPosZero = 0x0000;
-                const ushort canonicalNegZero = 0x8000;
-                AddPrimitive(Half.IsNegative(hv) ? canonicalNegZero : canonicalPosZero);
+                const ushort canonicalQNaN = 0x7E00;
+                AddPrimitive(canonicalQNaN);
             }
             else
             {
+                if (hv == (Half)0f) hv = +(Half)0f;
                 AddPrimitive(BitConverter.HalfToUInt16Bits(hv));
             }
         }
