@@ -46,7 +46,7 @@ public class ChiMathEpsilonTests
         // Arrange
         var method = typeof(ChiMath.Const<>)
             .MakeGenericType(floatingPointType)
-            .GetField("Epsilon");
+            .GetProperty("Epsilon");
         var epsilon = method!.GetValue(null);
 
         // Act & Assert
