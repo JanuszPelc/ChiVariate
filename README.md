@@ -189,28 +189,27 @@ foreach (var sampledCov in wishart.Sample(10_000))
 }
 ```
 
-**Simplified Monte Carlo simulation of terminal asset prices with precise log-normal shocks:**
+**Monte Carlo asset valuation with decimal precision:**
 
 ```csharp
-decimal SimulateAndSumTerminalPrices(
-    ref ChiRng rng, int numPaths, decimal drift, decimal volatility)
+decimal EstimateTerminalValue(
+    ref ChiRng rng, int numPaths, decimal initialPrice, 
+    decimal drift, decimal volatility, decimal timeToMaturity)
 {
-    const decimal timeDelta = 1.0m / 252.0m;
-    var mean = (drift - 0.5m * volatility * volatility) * timeDelta;
-    var sqrtTime = ChiMath.Sqrt(timeDelta); // Generic decimal square root
-    var stdDev = volatility * sqrtTime;
-    var shock = rng.Normal(mean, stdDev);
+    var variance = volatility * volatility;
+    var logReturnMean = (drift - 0.5m * variance) * timeToMaturity;
+    var logReturnStdDev = volatility * ChiMath.Sqrt(timeToMaturity);
+    var shockSampler = rng.LogNormal(logReturnMean, logReturnStdDev);
 
     decimal sumOfFinalPrices = 0;
     for (var i = 0; i < numPaths; i++)
     {
-        var randomShock = shock.Sample();
-        var finalPrice = 150.0m * ChiMath.Exp(randomShock);
-
+        var shock = shockSampler.Sample();
+        var finalPrice = initialPrice * shock;
         sumOfFinalPrices += finalPrice;
     }
 
-    return sumOfFinalPrices;
+    return sumOfFinalPrices / numPaths;
 }
 ```
 

@@ -223,15 +223,28 @@ public class MainReadmeTests(ITestOutputHelper testOutputHelper)
     [Fact]
     public void FinancialSimulation_WithDecimal_ProducesLogNormalDistribution()
     {
+        // Arrange
         var prices = new List<decimal>();
         var testRng = new ChiRng(nameof(FinancialSimulation_WithDecimal_ProducesLogNormalDistribution));
 
-        const decimal testVolatility = 0.80m;
-        const decimal testDrift = 0.05m;
         const int testNumPaths = 50_000;
+        
+        const decimal initialPriceArg = 150.0m;
+        const decimal driftArg = 0.05m;
+        const decimal volatilityArg = 0.80m;
+        const decimal timeToMaturityArg = 1.0m / 252.0m;
 
-        SimulateAndSumTerminalPrices(ref testRng, testNumPaths, testDrift, testVolatility);
+        // Act
+        EstimateTerminalValue(
+            ref testRng,
+            testNumPaths,
+            initialPriceArg,
+            driftArg,
+            volatilityArg,
+            timeToMaturityArg
+        );
 
+        // Assert
         prices.Should().HaveCount(testNumPaths);
 
         var logPrices = prices.Select(ChiMath.Log).ToList();
@@ -240,10 +253,11 @@ public class MainReadmeTests(ITestOutputHelper testOutputHelper)
         foreach (var logPrice in logPrices)
             histogram.AddSample((double)logPrice);
 
-        const decimal dailyProbability = 1.0m / 252.0m;
-        var expectedLogMean = (double)ChiMath.Log(150.0m) +
-                              (double)((testDrift - 0.5m * testVolatility * testVolatility) * dailyProbability);
-        var expectedLogStdDev = (double)(testVolatility * ChiMath.Sqrt(dailyProbability));
+        const decimal logReturnMeanLocal = (driftArg - 0.5m * volatilityArg * volatilityArg) * timeToMaturityArg;
+        var logReturnStdDevLocal = volatilityArg * ChiMath.Sqrt(timeToMaturityArg);
+
+        var expectedLogMean = (double)(ChiMath.Log(initialPriceArg) + logReturnMeanLocal);
+        var expectedLogStdDev = (double)logReturnStdDevLocal;
 
         histogram.DebugPrint(testOutputHelper);
         histogram.AssertIsNormal(expectedLogMean, expectedLogStdDev, 0.06);
@@ -251,33 +265,32 @@ public class MainReadmeTests(ITestOutputHelper testOutputHelper)
         return;
 
         // --- example code begin ---
-        decimal SimulateAndSumTerminalPrices(
-            ref ChiRng rng, int numPaths, decimal drift, decimal volatility)
+        decimal EstimateTerminalValue(
+            ref ChiRng rng, int numPaths, decimal initialPrice, 
+            decimal drift, decimal volatility, decimal timeToMaturity)
         {
-            const decimal timeDelta = 1.0m / 252.0m;
-            var mean = (drift - 0.5m * volatility * volatility) * timeDelta;
-            var sqrtTime = ChiMath.Sqrt(timeDelta); // Generic decimal square root
-            var stdDev = volatility * sqrtTime;
-            var shock = rng.Normal(mean, stdDev);
+            var variance = volatility * volatility;
+            var logReturnMean = (drift - 0.5m * variance) * timeToMaturity;
+            var logReturnStdDev = volatility * ChiMath.Sqrt(timeToMaturity);
+            var shockSampler = rng.LogNormal(logReturnMean, logReturnStdDev);
 
             decimal sumOfFinalPrices = 0;
             for (var i = 0; i < numPaths; i++)
             {
-                var randomShock = shock.Sample();
-                var finalPrice = 150.0m * ChiMath.Exp(randomShock);
-
+                var shock = shockSampler.Sample();
+                var finalPrice = initialPrice * shock;
                 sumOfFinalPrices += finalPrice;
+
                 CollectFinalPrice(finalPrice); // ############## To be removed from example code! ##############
             }
 
-            return sumOfFinalPrices;
+            return sumOfFinalPrices / numPaths;
         }
         // --- example code end ---
 
-        decimal CollectFinalPrice(decimal price)
+        void CollectFinalPrice(decimal price)
         {
             prices.Add(price);
-            return price;
         }
     }
 
