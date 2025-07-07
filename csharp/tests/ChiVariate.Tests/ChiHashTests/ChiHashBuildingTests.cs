@@ -13,10 +13,11 @@ public class ChiHashBuildingTests
     [Fact]
     public void ChiHash_DifferentBuildingStyles_ProduceIdenticalResults()
     {
+        // Arrange
         var value1 = "Hello, world!".AsSpan();
         var value2 = DateTime.Now;
 
-        // Arrange & Act
+        // Act
         var recommendedStyle = new ChiHash().Add(value1).Add(value2);
 
         var correctStyle = new ChiHash();

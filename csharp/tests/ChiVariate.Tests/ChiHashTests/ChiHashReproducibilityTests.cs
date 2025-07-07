@@ -6,8 +6,8 @@ using Xunit;
 namespace ChiVariate.Tests.ChiHashTests;
 
 /// <summary>
-/// Provides a series of tests to validate the reproducibility and consistency
-/// of the ChiHash implementation under various scenarios.
+///     Provides a series of tests to validate the reproducibility and consistency
+///     of the ChiHash implementation under various scenarios.
 /// </summary>
 public class ChiHashReproducibilityTests
 {
@@ -111,7 +111,7 @@ public class ChiHashReproducibilityTests
     [Fact]
     public void ChiHash_NumericTypes_ProducesConsistentResults()
     {
-        // Test determinism across all numeric types
+        // Arrange & Act & Assert
         VerifyDeterminism(12345);
         VerifyDeterminism(54321U);
         VerifyDeterminism(9876543210L);
@@ -133,7 +133,7 @@ public class ChiHashReproducibilityTests
     [Fact]
     public void ChiHash_DifferentNumericValues_ProduceDifferentHashes()
     {
-        // Verify sensitivity to input changes
+        // Arrange & Act & Assert
         VerifySensitivity(1, 2);
         VerifySensitivity(10L, -10L);
         VerifySensitivity(0UL, 1UL);
@@ -141,7 +141,6 @@ public class ChiHashReproducibilityTests
         VerifySensitivity<byte>(254, 255);
         VerifySensitivity('a', 'b');
 
-        // Floating point sensitivity
         VerifySensitivity(1.0, 1.000000000000001);
         VerifySensitivity(0.0, -0.0);
         VerifySensitivity(100.0f, -100.0f);
@@ -155,20 +154,18 @@ public class ChiHashReproducibilityTests
         // Arrange & Act & Assert
         VerifyStringDeterminism("");
         VerifyStringDeterminism("hello");
-        VerifyStringDeterminism("Hello"); // Case sensitivity
+        VerifyStringDeterminism("Hello");
         VerifyStringDeterminism("hello world");
-        VerifyStringDeterminism("🌍"); // Unicode
-        VerifyStringDeterminism("café"); // UTF-8 multi-byte
-        VerifyStringDeterminism("こんにちは"); // Japanese
-        VerifyStringDeterminism(new string('x', 1000)); // Large string
+        VerifyStringDeterminism("🌍");
+        VerifyStringDeterminism("café");
+        VerifyStringDeterminism("こんにちは");
+        VerifyStringDeterminism(new string('x', 1000));
 
-        // Null handling
         string? nullString = null;
         var hashNull1 = new ChiHash().Add(nullString).Hash;
         var hashNull2 = new ChiHash().Add(nullString).Hash;
         Assert.Equal(hashNull1, hashNull2);
 
-        // Null should equal empty string
         var hashEmpty = new ChiHash().Add("").Hash;
         Assert.Equal(hashNull1, hashEmpty);
     }
@@ -176,40 +173,35 @@ public class ChiHashReproducibilityTests
     [Fact]
     public void ChiHash_SpecialTypes_ProducesConsistentResults()
     {
-        // Bool
+        // Arrange & Act & Assert
         VerifyDeterminism(true);
         VerifyDeterminism(false);
         VerifySensitivity(true, false);
 
-        // Guid
         var guid1 = Guid.Parse("12345678-1234-5678-9abc-123456789abc");
         var guid2 = Guid.Parse("87654321-4321-8765-cba9-cba987654321");
         VerifyDeterminism(guid1);
         VerifyDeterminism(guid2);
         VerifySensitivity(guid1, guid2);
 
-        // DateTime
         var date1 = new DateTime(2023, 12, 25, 15, 30, 45, DateTimeKind.Utc);
         var date2 = new DateTime(2023, 12, 25, 15, 30, 46, DateTimeKind.Utc);
         VerifyDeterminism(date1);
         VerifyDeterminism(date2);
         VerifySensitivity(date1, date2);
 
-        // DateTimeOffset
         var dto1 = new DateTimeOffset(2023, 12, 25, 15, 30, 45, TimeSpan.FromHours(5));
         var dto2 = new DateTimeOffset(2023, 12, 25, 15, 30, 45, TimeSpan.FromHours(-5));
         VerifyDeterminism(dto1);
         VerifyDeterminism(dto2);
         VerifySensitivity(dto1, dto2);
 
-        // TimeSpan
         var ts1 = TimeSpan.FromMinutes(123);
         var ts2 = TimeSpan.FromMinutes(124);
         VerifyDeterminism(ts1);
         VerifyDeterminism(ts2);
         VerifySensitivity(ts1, ts2);
 
-        // Complex
         var complex1 = new Complex(1.5, 2.5);
         var complex2 = new Complex(1.5, 2.6);
         VerifyDeterminism(complex1);
@@ -220,7 +212,7 @@ public class ChiHashReproducibilityTests
     [Fact]
     public void ChiHash_Enums_ProducesConsistentResults()
     {
-        // Test enum support
+        // Arrange & Act & Assert
         VerifyDeterminism(TestEnum.Value1);
         VerifyDeterminism(TestEnum.Value2);
         VerifySensitivity(TestEnum.Value1, TestEnum.Value2);
@@ -237,31 +229,32 @@ public class ChiHashReproducibilityTests
     [Fact]
     public void ChiHash_SpanInputs_ProducesConsistentResults()
     {
-        // Numeric spans
+        // Arrange
         var intArray = new[] { 1, 2, 3, 4, 5 };
-        var hash1 = new ChiHash().Add(intArray.AsSpan()).Hash;
-        var hash2 = new ChiHash().Add(intArray.AsSpan()).Hash;
-        Assert.Equal(hash1, hash2);
-
-        // Different spans should produce different hashes
         var intArray2 = new[] { 1, 2, 3, 4, 6 };
-        var hash3 = new ChiHash().Add(intArray2.AsSpan()).Hash;
-        Assert.NotEqual(hash1, hash3);
-
-        // Special type spans
         var guidArray = new[] { Guid.NewGuid(), Guid.NewGuid() };
-        var guidHash1 = new ChiHash().Add(guidArray.AsSpan()).Hash;
+
+        // Act
+        var hash1 = new ChiHash().Add((ReadOnlySpan<int>)intArray.AsSpan()).Hash;
+        var hash2 = new ChiHash().Add(intArray.AsSpan()).Hash;
+        var hash3 = new ChiHash().Add(intArray2.AsSpan()).Hash;
+        var guidHash1 = new ChiHash().Add((ReadOnlySpan<Guid>)guidArray.AsSpan()).Hash;
         var guidHash2 = new ChiHash().Add(guidArray.AsSpan()).Hash;
+
+        // Assert
+        Assert.Equal(hash1, hash2);
+        Assert.NotEqual(hash1, hash3);
         Assert.Equal(guidHash1, guidHash2);
     }
 
     [Fact]
     public void ChiHash_MixedTypes_ProducesConsistentResults()
     {
-        // Complex mixed scenario
+        // Arrange
         var guid = Guid.Parse("12345678-1234-5678-9abc-123456789abc");
         var dateTime = new DateTime(2023, 12, 25, 15, 30, 45, DateTimeKind.Utc);
 
+        // Act
         var hash1 = new ChiHash()
             .Add(ChiHash.Seed)
             .Add(42)
@@ -284,26 +277,31 @@ public class ChiHashReproducibilityTests
             .Add(TestEnum.Value1)
             .Hash;
 
+        // Assert
         Assert.Equal(hash1, hash2);
     }
 
     [Fact]
     public void ChiHash_EmptyState_HasConsistentInitialValue()
     {
+        // Arrange & Act
         var hash1 = new ChiHash().Hash;
         var hash2 = new ChiHash().Hash;
+
+        // Assert
         Assert.Equal(hash1, hash2);
-        Assert.Equal(0, hash1); // Should start at 0
+        Assert.Equal(0, hash1);
     }
 
     [Fact]
-    public void ChiHash_Seed_ChangesAcrossApplicationRuns()
+    public void ChiHash_Seed_StaysTheSameAcrossApplicationRuns()
     {
-        // Note: This test verifies the Seed property exists and is consistent within the same run
+        // Arrange & Act
         var seed1 = ChiHash.Seed;
         var seed2 = ChiHash.Seed;
+
+        // Assert
         Assert.Equal(seed1, seed2);
-        Assert.NotEqual(0L, seed1); // Should not be zero (extremely unlikely)
     }
 
     private static void VerifyDeterminism<T>(T input)
@@ -327,7 +325,6 @@ public class ChiHashReproducibilityTests
         Assert.Equal(hash1, hash2);
     }
 
-    // Test enums for enum testing
     private enum TestEnum
     {
         Value1 = 10,

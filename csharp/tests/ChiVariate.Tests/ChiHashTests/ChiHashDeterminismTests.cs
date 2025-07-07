@@ -14,7 +14,7 @@ public class ChiHashDeterminismTests
     [Fact]
     public void ChiHash_SpecificInputs_ProducesExpectedHashValues()
     {
-        // Numeric types
+        // Arrange & Act & Assert
         Assert.Equal(965500275, new ChiHash().Add((byte)42).Hash);
         Assert.Equal(-115445778, new ChiHash().Add((sbyte)-42).Hash);
         Assert.Equal(-833837988, new ChiHash().Add((short)1234).Hash);
@@ -31,53 +31,45 @@ public class ChiHashDeterminismTests
         Assert.Equal(1353729377, new ChiHash().Add(Int128.MaxValue).Hash);
         Assert.Equal(614782079, new ChiHash().Add(UInt128.MaxValue).Hash);
 
-        // String values
-        Assert.Equal(0, new ChiHash().Add(null!).Hash); // Null
-        Assert.Equal(0, new ChiHash().Add("").Hash); // Empty
+        Assert.Equal(0, new ChiHash().Add(null!).Hash);
+        Assert.Equal(0, new ChiHash().Add("").Hash);
         Assert.Equal(-525174955, new ChiHash().Add("hello").Hash);
-        Assert.Equal(692606700, new ChiHash().Add("Hello").Hash); // Case sensitive
+        Assert.Equal(692606700, new ChiHash().Add("Hello").Hash);
         Assert.Equal(-1668659344, new ChiHash().Add("hello world").Hash);
-        Assert.Equal(1699588458, new ChiHash().Add("🌍").Hash); // Unicode
-        Assert.Equal(1007101452, new ChiHash().Add("café").Hash); // UTF-8 multi-byte
-        Assert.Equal(723002084, new ChiHash().Add("こんにちは").Hash); // Japanese
-        Assert.Equal(-1085445209, new ChiHash().Add("你好世界").Hash); // Chinese
-        Assert.Equal(145577430, new ChiHash().Add("👍").Hash); //Supplementary character (U+1F44D)
+        Assert.Equal(1699588458, new ChiHash().Add("🌍").Hash);
+        Assert.Equal(1007101452, new ChiHash().Add("café").Hash);
+        Assert.Equal(723002084, new ChiHash().Add("こんにちは").Hash);
+        Assert.Equal(-1085445209, new ChiHash().Add("你好世界").Hash);
+        Assert.Equal(145577430, new ChiHash().Add("👍").Hash);
 
-        // Bool values
         Assert.Equal(-747144466, new ChiHash().Add(true).Hash);
         Assert.Equal(150996269, new ChiHash().Add(false).Hash);
 
-        // Guid values
         var guid1 = Guid.Parse("12345678-1234-5678-9abc-123456789abc");
         var guid2 = Guid.Parse("00000000-0000-0000-0000-000000000000");
         Assert.Equal(-2083929397, new ChiHash().Add(guid1).Hash);
         Assert.Equal(44345189, new ChiHash().Add(guid2).Hash);
 
-        // DateTime values
         var date1 = new DateTime(2023, 12, 25, 15, 30, 45, DateTimeKind.Utc);
         var date2 = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
         Assert.Equal(-219477393, new ChiHash().Add(date1).Hash);
         Assert.Equal(2120322267, new ChiHash().Add(date2).Hash);
 
-        // DateTimeOffset values
         var dto1 = new DateTimeOffset(2023, 12, 25, 15, 30, 45, TimeSpan.FromHours(5));
         var dto2 = new DateTimeOffset(2023, 12, 25, 15, 30, 45, TimeSpan.Zero);
         Assert.Equal(1239868323, new ChiHash().Add(dto1).Hash);
         Assert.Equal(-1804676602, new ChiHash().Add(dto2).Hash);
 
-        // TimeSpan values
         var ts1 = TimeSpan.FromMinutes(123);
         var ts2 = TimeSpan.Zero;
         Assert.Equal(-1717822425, new ChiHash().Add(ts1).Hash);
         Assert.Equal(-154722900, new ChiHash().Add(ts2).Hash);
 
-        // Complex values
         var complex1 = new Complex(1.5, 2.5);
         var complex2 = Complex.Zero;
         Assert.Equal(-286954189, new ChiHash().Add(complex1).Hash);
         Assert.Equal(44345189, new ChiHash().Add(complex2).Hash);
 
-        // Enum values
         Assert.Equal(1915432565, new ChiHash().Add(TestEnum.Value1).Hash);
         Assert.Equal(-1080233084, new ChiHash().Add(TestEnum.Value2).Hash);
         Assert.Equal(326026363, new ChiHash().Add(TestByteEnum.A).Hash);
@@ -85,13 +77,11 @@ public class ChiHashDeterminismTests
         Assert.Equal(-947741260, new ChiHash().Add(TestLongEnum.Large).Hash);
         Assert.Equal(-140159068, new ChiHash().Add(TestLongEnum.Larger).Hash);
 
-        // Span values
         var intArray = new[] { 1, 2, 3, 4, 5 };
         var guidArray = new[] { guid1, guid2 };
         Assert.Equal(-2084177982, new ChiHash().Add(intArray.AsSpan()).Hash);
         Assert.Equal(-251003134, new ChiHash().Add(guidArray.AsSpan()).Hash);
 
-        // Complex mixed scenario
         var mixedHash = new ChiHash()
             .Add(42)
             .Add("hello")
@@ -102,29 +92,26 @@ public class ChiHashDeterminismTests
             .Hash;
         Assert.Equal(-574704062, mixedHash);
 
-        // Empty state
         Assert.Equal(0, new ChiHash().Hash);
 
-        // Edge cases - special floating point values
         Assert.Equal(-1822049585, new ChiHash().Add(float.NaN).Hash);
         Assert.Equal(-319676561, new ChiHash().Add(float.PositiveInfinity).Hash);
         Assert.Equal(668732010, new ChiHash().Add(float.NegativeInfinity).Hash);
         Assert.Equal(-747144466, new ChiHash().Add(float.Epsilon).Hash);
         Assert.Equal(-1538840509, new ChiHash().Add(-0.0f).Hash);
         Assert.Equal(150996269, new ChiHash().Add(+0.0f).Hash);
-        
+
         Assert.Equal(1914784418, new ChiHash().Add(double.NaN).Hash);
         Assert.Equal(1542370574, new ChiHash().Add(double.PositiveInfinity).Hash);
         Assert.Equal(1694129150, new ChiHash().Add(double.NegativeInfinity).Hash);
         Assert.Equal(1336914937, new ChiHash().Add(double.Epsilon).Hash);
         Assert.Equal(-1426660308, new ChiHash().Add(-0.0).Hash);
         Assert.Equal(-154722900, new ChiHash().Add(+0.0).Hash);
-        
+
         Assert.Equal(1613653932, new ChiHash().Add((Half)float.PositiveInfinity).Hash);
         Assert.Equal(-1866992690, new ChiHash().Add((Half)float.NegativeInfinity).Hash);
         Assert.Equal(-1737678051, new ChiHash().Add((Half)float.NaN).Hash);
 
-        // Edge cases - boundary values
         Assert.Equal(150996269, new ChiHash().Add(byte.MinValue).Hash);
         Assert.Equal(-42146061, new ChiHash().Add(byte.MaxValue).Hash);
         Assert.Equal(-965512797, new ChiHash().Add(sbyte.MinValue).Hash);
@@ -142,7 +129,6 @@ public class ChiHashDeterminismTests
         Assert.Equal(-154722900, new ChiHash().Add(ulong.MinValue).Hash);
         Assert.Equal(861868037, new ChiHash().Add(ulong.MaxValue).Hash);
 
-        // Edge cases - decimal boundaries
         Assert.Equal(-1541255506, new ChiHash().Add(decimal.MinValue).Hash);
         Assert.Equal(-1284415288, new ChiHash().Add(decimal.MaxValue).Hash);
         Assert.Equal(44345189, new ChiHash().Add(decimal.Zero).Hash);
@@ -150,7 +136,6 @@ public class ChiHashDeterminismTests
         Assert.Equal(1567788007, new ChiHash().Add(decimal.MinusOne).Hash);
     }
 
-    // Test enums for enum testing
     private enum TestEnum
     {
         Value1 = 10,
