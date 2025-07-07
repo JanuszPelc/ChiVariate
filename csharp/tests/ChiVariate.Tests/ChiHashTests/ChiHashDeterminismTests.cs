@@ -111,6 +111,8 @@ public class ChiHashDeterminismTests
         Assert.Equal(1613653932, new ChiHash().Add((Half)float.PositiveInfinity).Hash);
         Assert.Equal(-1866992690, new ChiHash().Add((Half)float.NegativeInfinity).Hash);
         Assert.Equal(-1083467430, new ChiHash().Add((Half)float.NaN).Hash);
+        Assert.Equal(150996269, new ChiHash().Add(-(Half)0.0).Hash);
+        Assert.Equal(150996269, new ChiHash().Add(+(Half)0.0).Hash);
 
         Assert.Equal(150996269, new ChiHash().Add(byte.MinValue).Hash);
         Assert.Equal(-42146061, new ChiHash().Add(byte.MaxValue).Hash);
