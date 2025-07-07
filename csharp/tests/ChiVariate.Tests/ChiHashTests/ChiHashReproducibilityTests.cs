@@ -1,5 +1,6 @@
 using System.Numerics;
 using Xunit;
+using Xunit.Abstractions;
 
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 
@@ -9,7 +10,7 @@ namespace ChiVariate.Tests.ChiHashTests;
 ///     Provides a series of tests to validate the reproducibility and consistency
 ///     of the ChiHash implementation under various scenarios.
 /// </summary>
-public class ChiHashReproducibilityTests
+public class ChiHashReproducibilityTests(ITestOutputHelper testOutputHelper)
 {
     [Fact]
     public void ChiHash_WithSameInputs_ProducesSameOutput()
@@ -279,6 +280,142 @@ public class ChiHashReproducibilityTests
 
         // Assert
         Assert.Equal(hash1, hash2);
+    }
+
+    [Fact]
+    public void ChiHash_DecimalScale_PreservesScaleDifferences()
+    {
+        // Arrange
+        const decimal decimal1 = 1m;
+        const decimal decimal10 = 1.0m;
+        const decimal decimal100 = 1.00m;
+        const decimal decimal1000 = 1.000m;
+
+        // Act
+        var hash1 = new ChiHash().Add(decimal1).Hash;
+        var hash10 = new ChiHash().Add(decimal10).Hash;
+        var hash100 = new ChiHash().Add(decimal100).Hash;
+        var hash1000 = new ChiHash().Add(decimal1000).Hash;
+
+        // Assert
+        Assert.NotEqual(hash1, hash10);
+        Assert.NotEqual(hash1, hash100);
+        Assert.NotEqual(hash1, hash1000);
+        Assert.NotEqual(hash10, hash100);
+        Assert.NotEqual(hash10, hash1000);
+        Assert.NotEqual(hash100, hash1000);
+
+        Assert.True(decimal1 == decimal10);
+        Assert.True(decimal1 == decimal100);
+        Assert.True(decimal1 == decimal1000);
+
+        var bits1 = decimal.GetBits(decimal1);
+        var bits10 = decimal.GetBits(decimal10);
+        var bits100 = decimal.GetBits(decimal100);
+
+        Assert.NotEqual(bits1[3], bits10[3]);
+        Assert.NotEqual(bits1[3], bits100[3]);
+    }
+
+    [Fact]
+    public void ChiHash_FloatingPointEdgeCases_OutputBitPatterns()
+    {
+        // Arrange & Act & Assert
+        testOutputHelper.WriteLine("=== FLOAT (32-bit) EDGE CASES ===");
+
+        OutputFloatBits("float.NaN", float.NaN);
+        OutputFloatBits("float.PositiveInfinity", float.PositiveInfinity);
+        OutputFloatBits("float.NegativeInfinity", float.NegativeInfinity);
+        OutputFloatBits("float.Epsilon", float.Epsilon);
+        OutputFloatBits("+0.0f", +0.0f);
+        OutputFloatBits("-0.0f", -0.0f);
+        OutputFloatBits("0.0f / 0.0f", 0.0f / 0.0f);
+        OutputFloatBits("Math.Sqrt(-1.0f)", (float)Math.Sqrt(-1.0));
+        OutputFloatBits("float.NaN + 1.0f", float.NaN + 1.0f);
+        OutputFloatBits("float.PositiveInfinity - float.PositiveInfinity",
+            float.PositiveInfinity - float.PositiveInfinity);
+
+        testOutputHelper.WriteLine("");
+        testOutputHelper.WriteLine("=== HALF (16-bit) EDGE CASES ===");
+
+        OutputHalfBits("Half.NaN", Half.NaN);
+        OutputHalfBits("Half.PositiveInfinity", Half.PositiveInfinity);
+        OutputHalfBits("Half.NegativeInfinity", Half.NegativeInfinity);
+        OutputHalfBits("Half.Epsilon", Half.Epsilon);
+        OutputHalfBits("(Half)(+0.0f)", (Half)(+0.0f));
+        OutputHalfBits("(Half)(-0.0f)", (Half)(-0.0f));
+        OutputHalfBits("(Half)(0.0f / 0.0f)", (Half)(0.0f / 0.0f));
+        OutputHalfBits("(Half)float.NaN", (Half)float.NaN);
+        OutputHalfBits("Half.NaN + (Half)1.0f", Half.NaN + (Half)1.0f);
+        OutputHalfBits("Half.PositiveInfinity - Half.PositiveInfinity", Half.PositiveInfinity - Half.PositiveInfinity);
+
+        testOutputHelper.WriteLine("");
+        testOutputHelper.WriteLine("=== DOUBLE (64-bit) EDGE CASES ===");
+
+        OutputDoubleBits("double.NaN", double.NaN);
+        OutputDoubleBits("double.PositiveInfinity", double.PositiveInfinity);
+        OutputDoubleBits("double.NegativeInfinity", double.NegativeInfinity);
+        OutputDoubleBits("double.Epsilon", double.Epsilon);
+        OutputDoubleBits("+0.0", +0.0);
+        OutputDoubleBits("-0.0", -0.0);
+        OutputDoubleBits("0.0 / 0.0", 0.0 / 0.0);
+        OutputDoubleBits("Math.Sqrt(-1.0)", Math.Sqrt(-1.0));
+        OutputDoubleBits("double.NaN + 1.0", double.NaN + 1.0);
+        OutputDoubleBits("double.PositiveInfinity - double.PositiveInfinity",
+            double.PositiveInfinity - double.PositiveInfinity);
+        OutputDoubleBits("Math.Acos(2.0)", Math.Acos(2.0));
+        OutputDoubleBits("Math.Log(-1.0)", Math.Log(-1.0));
+
+        testOutputHelper.WriteLine("");
+        testOutputHelper.WriteLine("=== CANONICALIZATION VERIFICATION ===");
+
+        var nanHash1 = new ChiHash().Add(float.NaN).Hash;
+        var nanHash2 = new ChiHash().Add(0.0f / 0.0f).Hash;
+        var halfNanHash1 = new ChiHash().Add(Half.NaN).Hash;
+        var halfNanHash2 = new ChiHash().Add((Half)float.NaN).Hash;
+        var doubleNanHash1 = new ChiHash().Add(double.NaN).Hash;
+        var doubleNanHash2 = new ChiHash().Add(Math.Sqrt(-1.0)).Hash;
+
+        testOutputHelper.WriteLine($"float.NaN vs 0.0f/0.0f: {nanHash1 == nanHash2} ({nanHash1} vs {nanHash2})");
+        testOutputHelper.WriteLine(
+            $"Half.NaN vs (Half)float.NaN: {halfNanHash1 == halfNanHash2} ({halfNanHash1} vs {halfNanHash2})");
+        testOutputHelper.WriteLine(
+            $"double.NaN vs Math.Sqrt(-1.0): {doubleNanHash1 == doubleNanHash2} ({doubleNanHash1} vs {doubleNanHash2})");
+
+        return;
+
+        void OutputFloatBits(string description, float value)
+        {
+            var rawBits = BitConverter.SingleToUInt32Bits(value);
+            var valueHash = new ChiHash().Add(value).Hash;
+            var canonicalHash = new ChiHash().Add(rawBits).Hash;
+            var canonicalized = valueHash == canonicalHash ? "Canonical" : "Canonicalized";
+
+            testOutputHelper.WriteLine(
+                $"{description,-40} | Bits: 0x{rawBits:X8} | Hash: {valueHash,11} | {canonicalized}");
+        }
+
+        void OutputDoubleBits(string description, double value)
+        {
+            var rawBits = BitConverter.DoubleToUInt64Bits(value);
+            var valueHash = new ChiHash().Add(value).Hash;
+            var canonicalHash = new ChiHash().Add(rawBits).Hash;
+            var canonicalized = valueHash == canonicalHash ? "Canonical" : "Canonicalized";
+
+            testOutputHelper.WriteLine(
+                $"{description,-40} | Bits: 0x{rawBits:X16} | Hash: {valueHash,11} | {canonicalized}");
+        }
+
+        void OutputHalfBits(string description, Half value)
+        {
+            var rawBits = BitConverter.HalfToUInt16Bits(value);
+            var valueHash = new ChiHash().Add(value).Hash;
+            var canonicalHash = new ChiHash().Add(rawBits).Hash;
+            var canonicalized = valueHash == canonicalHash ? "Canonical" : "Canonicalized";
+
+            testOutputHelper.WriteLine(
+                $"{description,-40} | Bits: 0x{rawBits:X4} | Hash: {valueHash,11} | {canonicalized}");
+        }
     }
 
     [Fact]

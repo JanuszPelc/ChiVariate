@@ -94,14 +94,14 @@ public class ChiHashDeterminismTests
 
         Assert.Equal(0, new ChiHash().Hash);
 
-        Assert.Equal(-1822049585, new ChiHash().Add(float.NaN).Hash);
+        Assert.Equal(-1606370751, new ChiHash().Add(float.NaN).Hash);
         Assert.Equal(-319676561, new ChiHash().Add(float.PositiveInfinity).Hash);
         Assert.Equal(668732010, new ChiHash().Add(float.NegativeInfinity).Hash);
         Assert.Equal(-747144466, new ChiHash().Add(float.Epsilon).Hash);
         Assert.Equal(-1538840509, new ChiHash().Add(-0.0f).Hash);
         Assert.Equal(150996269, new ChiHash().Add(+0.0f).Hash);
 
-        Assert.Equal(1914784418, new ChiHash().Add(double.NaN).Hash);
+        Assert.Equal(829280496, new ChiHash().Add(double.NaN).Hash);
         Assert.Equal(1542370574, new ChiHash().Add(double.PositiveInfinity).Hash);
         Assert.Equal(1694129150, new ChiHash().Add(double.NegativeInfinity).Hash);
         Assert.Equal(1336914937, new ChiHash().Add(double.Epsilon).Hash);
@@ -110,7 +110,7 @@ public class ChiHashDeterminismTests
 
         Assert.Equal(1613653932, new ChiHash().Add((Half)float.PositiveInfinity).Hash);
         Assert.Equal(-1866992690, new ChiHash().Add((Half)float.NegativeInfinity).Hash);
-        Assert.Equal(-1737678051, new ChiHash().Add((Half)float.NaN).Hash);
+        Assert.Equal(-1083467430, new ChiHash().Add((Half)float.NaN).Hash);
 
         Assert.Equal(150996269, new ChiHash().Add(byte.MinValue).Hash);
         Assert.Equal(-42146061, new ChiHash().Add(byte.MaxValue).Hash);

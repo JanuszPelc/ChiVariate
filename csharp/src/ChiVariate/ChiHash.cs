@@ -242,20 +242,32 @@ public ref struct ChiHash
     {
         if (typeof(T) == typeof(double))
         {
-            var doubleValue = Unsafe.As<T, double>(ref value);
-            var bits = BitConverter.DoubleToUInt64Bits(doubleValue);
+            var dv = Unsafe.As<T, double>(ref value);
+            var bits = double.IsNaN(dv) ? 0x7FF8_0000_0000_0000UL :
+                double.IsPositiveInfinity(dv) ? 0x7FF0_0000_0000_0000UL :
+                double.IsNegativeInfinity(dv) ? 0xFFF0_0000_0000_0000UL :
+                dv == 0d ? double.IsPositive(dv) ? 0x0000_0000_0000_0000UL : 0x8000_0000_0000_0000UL :
+                BitConverter.DoubleToUInt64Bits(dv);
             AddPrimitive(bits);
         }
         else if (typeof(T) == typeof(float))
         {
-            var floatValue = Unsafe.As<T, float>(ref value);
-            var bits = BitConverter.SingleToUInt32Bits(floatValue);
+            var fv = Unsafe.As<T, float>(ref value);
+            var bits = float.IsNaN(fv) ? 0x7FC0_0000U :
+                float.IsPositiveInfinity(fv) ? 0x7F80_0000U :
+                float.IsNegativeInfinity(fv) ? 0xFF80_0000U :
+                fv == 0f ? float.IsPositive(fv) ? 0x0000_0000U : 0x8000_0000U :
+                BitConverter.SingleToUInt32Bits(fv);
             AddPrimitive(bits);
         }
         else if (typeof(T) == typeof(Half))
         {
-            var halfValue = Unsafe.As<T, Half>(ref value);
-            var bits = BitConverter.HalfToUInt16Bits(halfValue);
+            var hv = Unsafe.As<T, Half>(ref value);
+            var bits = Half.IsNaN(hv) ? (ushort)0x7E00 :
+                Half.IsPositiveInfinity(hv) ? (ushort)0x7C00 :
+                Half.IsNegativeInfinity(hv) ? (ushort)0xFC00 :
+                hv == (Half)0f ? Half.IsPositive(hv) ? (ushort)0x0000 : (ushort)0x8000 :
+                BitConverter.HalfToUInt16Bits(hv);
             AddPrimitive(bits);
         }
         else if (typeof(T) == typeof(bool))
