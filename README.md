@@ -144,51 +144,6 @@ ChiVariate emphasizes correctness, reproducibility, and statistical reliability 
 
 These examples illustrate how ChiVariate, supported by helper types like ChiMatrix for linear algebra and ChiMath for generic math functions, supports deterministic, precision-critical simulations in domains like actuarial modeling and financial forecasting.
 
-**Simulate insurance payouts using Gamma sampling for long-tailed risk:**
-
-```csharp
-// Supports float, double, and decimal types via a generic T
-public static T EstimateTotalLiability<T>(T shape, int payoutCount)
-    where T : IFloatingPoint<T>
-{
-    // Using a fixed seed makes the simulation fully deterministic
-    var rng = new ChiRng("actuarial-seed");
-    var scale = T.CreateChecked(1000); // Long-tailed distribution
-
-    return rng
-        .Gamma(shape, scale)
-        .Sample(payoutCount)
-        .Aggregate(T.Zero, (total, payout) => total + payout);
-}
-```
-
-**Simulate correlated noisy sensor readings using multivariate Bayesian sampling:**
-
-```csharp
-var rng = new ChiRng("noisy-sensor-model");
-
-// Prior belief about the covariance of two correlated sensors
-var priorCov = ChiMatrix.With([1.0, 0.5], [0.5, 1.5]);
-
-// One-time setup: create a sampler for the Wishart distribution
-var wishart = rng.Wishart(10, priorCov); // 10 degrees of freedom
-
-// Expected "true" reading of the sensors (e.g., zero drift)
-var meanSensorReading = ChiMatrix.With([0.0, 0.0]);
-
-// Sample plausible covariance matrices from the Wishart prior
-foreach (var sampledCov in wishart.Sample(10_000))
-{
-    // Simulate one noisy reading from the correlated sensors
-    var noisyMeasurement = rng
-        .MultivariateNormal(meanSensorReading, sampledCov)
-        .Sample();
-
-    // Use the result in a larger model, such as a Kalman filter update
-    UpdateFilterWithMeasurement(noisyMeasurement);
-}
-```
-
 **Monte Carlo asset valuation with decimal precision:**
 
 ```csharp
@@ -196,6 +151,7 @@ decimal EstimateTerminalValue(
     ref ChiRng rng, int numPaths, decimal initialPrice, 
     decimal drift, decimal volatility, decimal timeToMaturity)
 {
+    // Model asset price evolution using geometric Brownian motion
     var variance = volatility * volatility;
     var logReturnMean = (drift - 0.5m * variance) * timeToMaturity;
     var logReturnStdDev = volatility * ChiMath.Sqrt(timeToMaturity);
@@ -210,6 +166,43 @@ decimal EstimateTerminalValue(
     }
 
     return sumOfFinalPrices / numPaths;
+}
+```
+
+**Modeling sensor fusion with Bayesian sampling:**
+
+```csharp
+var rng = new ChiRng("noisy-sensor-model");
+var sensorCovariance = ChiMatrix.With([1.0, 0.5], [0.5, 1.5]);
+var expectedReading = ChiMatrix.With([0.0, 0.0]);
+var covarianceSampler = rng.Wishart(10, sensorCovariance);
+
+foreach (var sampledCovariance in covarianceSampler.Sample(10_000))
+{
+    var noisyMeasurement = rng
+        .MultivariateNormal(expectedReading, sampledCovariance)
+        .Sample();
+
+    // Use the result in a larger model, such as a Kalman filter update
+    UpdateFilterWithMeasurement(noisyMeasurement);
+}
+```
+
+**Insurance risk modeling with Gamma distribution:**
+
+```csharp
+// Supports float, double, and decimal types via a generic T
+public static T EstimateTotalLiability<T>(T shape, int payoutCount)
+    where T : IFloatingPoint<T>
+{
+    // Using a fixed seed makes the simulation fully deterministic
+    var rng = new ChiRng("actuarial-seed");
+    var scale = T.CreateChecked(1000); // Long-tailed distribution
+
+    return rng
+        .Gamma(shape, scale)
+        .Sample(payoutCount)
+        .Aggregate(T.Zero, (total, payout) => total + payout);
 }
 ```
 

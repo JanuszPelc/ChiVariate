@@ -145,22 +145,14 @@ public class MainReadmeTests(ITestOutputHelper testOutputHelper)
 
         // --- example code begin ---
         var rng = new ChiRng("noisy-sensor-model");
+        var sensorCovariance = ChiMatrix.With([1.0, 0.5], [0.5, 1.5]);
+        var expectedReading = ChiMatrix.With([0.0, 0.0]);
+        var covarianceSampler = rng.Wishart(10, sensorCovariance);
 
-        // Prior belief about the covariance of two correlated sensors
-        var priorCov = ChiMatrix.With([1.0, 0.5], [0.5, 1.5]);
-
-        // One-time setup: create a sampler for the Wishart distribution
-        var wishart = rng.Wishart(10, priorCov); // 10 degrees of freedom
-
-        // Expected "true" reading of the sensors (e.g., zero drift)
-        var meanSensorReading = ChiMatrix.With([0.0, 0.0]);
-
-        // Sample plausible covariance matrices from the Wishart prior
-        foreach (var sampledCov in wishart.Sample(10_000))
+        foreach (var sampledCovariance in covarianceSampler.Sample(10_000))
         {
-            // Simulate one noisy reading from the correlated sensors
             var noisyMeasurement = rng
-                .MultivariateNormal(meanSensorReading, sampledCov)
+                .MultivariateNormal(expectedReading, sampledCovariance)
                 .Sample();
 
             // Use the result in a larger model, such as a Kalman filter update
@@ -201,9 +193,9 @@ public class MainReadmeTests(ITestOutputHelper testOutputHelper)
         sampleCov[1, 0] /= sampleCount - 1;
         sampleCov[1, 1] /= sampleCount - 1;
 
-        var expectedCovX = degreesOfFreedom * priorCov[0, 0];
-        var expectedCovY = degreesOfFreedom * priorCov[1, 1];
-        var expectedCovXy = degreesOfFreedom * priorCov[0, 1];
+        var expectedCovX = degreesOfFreedom * sensorCovariance[0, 0];
+        var expectedCovY = degreesOfFreedom * sensorCovariance[1, 1];
+        var expectedCovXy = degreesOfFreedom * sensorCovariance[0, 1];
 
         sampleCov[0, 0].Should().BeApproximately(expectedCovX, expectedCovX * 0.15,
             "variance of X should reflect the Wishart mean");
@@ -228,7 +220,7 @@ public class MainReadmeTests(ITestOutputHelper testOutputHelper)
         var testRng = new ChiRng(nameof(FinancialSimulation_WithDecimal_ProducesLogNormalDistribution));
 
         const int testNumPaths = 50_000;
-        
+
         const decimal initialPriceArg = 150.0m;
         const decimal driftArg = 0.05m;
         const decimal volatilityArg = 0.80m;
@@ -266,9 +258,10 @@ public class MainReadmeTests(ITestOutputHelper testOutputHelper)
 
         // --- example code begin ---
         decimal EstimateTerminalValue(
-            ref ChiRng rng, int numPaths, decimal initialPrice, 
+            ref ChiRng rng, int numPaths, decimal initialPrice,
             decimal drift, decimal volatility, decimal timeToMaturity)
         {
+            // Model asset price evolution using geometric Brownian motion
             var variance = volatility * volatility;
             var logReturnMean = (drift - 0.5m * variance) * timeToMaturity;
             var logReturnStdDev = volatility * ChiMath.Sqrt(timeToMaturity);
@@ -280,7 +273,6 @@ public class MainReadmeTests(ITestOutputHelper testOutputHelper)
                 var shock = shockSampler.Sample();
                 var finalPrice = initialPrice * shock;
                 sumOfFinalPrices += finalPrice;
-
                 CollectFinalPrice(finalPrice); // ############## To be removed from example code! ##############
             }
 
