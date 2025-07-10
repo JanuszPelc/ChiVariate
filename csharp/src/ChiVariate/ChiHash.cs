@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: MIT
+// See LICENSE file for full terms
+
 using System.Buffers;
 using System.Buffers.Binary;
 using System.Diagnostics;

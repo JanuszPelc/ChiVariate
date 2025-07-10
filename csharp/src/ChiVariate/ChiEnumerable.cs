@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: MIT
+// See LICENSE file for full terms
+
 using System.Collections;
 using System.Runtime.CompilerServices;
 using ChiVariate.Internal;
