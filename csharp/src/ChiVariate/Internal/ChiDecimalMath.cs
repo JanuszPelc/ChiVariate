@@ -5,10 +5,6 @@ namespace ChiVariate.Internal;
 /// <summary>
 ///     Provides high-precision mathematical functions for the <see cref="decimal" /> type.
 /// </summary>
-/// <remarks>
-///     This class implements common transcendental functions for <c>decimal</c> that are not
-///     available in the standard <see cref="System.Math" /> library.
-/// </remarks>
 internal static class ChiDecimalMath
 {
     private const decimal E = 2.71828182845904523536028747135266249775724709369995957496697m;
@@ -17,22 +13,9 @@ internal static class ChiDecimalMath
     /// <summary>
     ///     Returns a specified decimal number raised to the specified power.
     /// </summary>
-    /// <remarks>
-    ///     Uses exponentiation by squaring for integer exponents and the identity x^y = exp(y * ln(x)) for fractional ones.
-    /// </remarks>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static decimal Pow(decimal baseVal, decimal exponent)
     {
-        // Handle zero base
-        if (baseVal == 0m)
-            return exponent switch
-            {
-                < 0m => throw new DivideByZeroException("Cannot raise zero to a negative power."),
-                0m => 1m,
-                _ => 0m
-            };
-
-        // Handle special exponents
         switch (exponent)
         {
             case 0m:
@@ -41,7 +24,6 @@ internal static class ChiDecimalMath
                 return baseVal;
         }
 
-        // Handle unit base
         if (baseVal == 1m)
             return 1m;
 
@@ -66,7 +48,6 @@ internal static class ChiDecimalMath
             result = Exp(expLn);
         }
 
-        // Handle negative result for integer exponents
         if (isNegativeBase && isIntegerExponent && (long)exponent % 2 != 0)
             result = -result;
 
@@ -103,21 +84,9 @@ internal static class ChiDecimalMath
     /// <summary>
     ///     Returns the natural (base e) logarithm of a specified decimal number.
     /// </summary>
-    /// <remarks>
-    ///     Uses argument reduction to bring the value into a small range around 1,
-    ///     then computes the logarithm using a Taylor series expansion.
-    /// </remarks>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static decimal Ln(decimal x)
     {
-        switch (x)
-        {
-            case <= 0m:
-                throw new ArgumentException("Logarithm undefined for non-positive values.");
-            case 1m:
-                return 0m;
-        }
-
         var scale = 0;
 
         while (x > 1.5m)
@@ -142,15 +111,12 @@ internal static class ChiDecimalMath
             sum += term / n;
         }
 
-        return sum + scale * 1m; // ln(e) = 1, so scale * 1m == scale
+        return sum + scale * 1m;
     }
 
     /// <summary>
     ///     Returns e raised to the specified decimal power.
     /// </summary>
-    /// <remarks>
-    ///     Uses a Taylor series expansion for the exponential function.
-    /// </remarks>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static decimal Exp(decimal x)
     {
@@ -158,8 +124,6 @@ internal static class ChiDecimalMath
 
         switch (x)
         {
-            case 0m:
-                return 1m;
             case > 28m:
                 throw new OverflowException("Exponential result too large for decimal.");
             case < -28m:
@@ -181,9 +145,6 @@ internal static class ChiDecimalMath
     /// <summary>
     ///     Returns the sine of the specified angle.
     /// </summary>
-    /// <remarks>
-    ///     Uses a Taylor series expansion for the sine function after normalizing the angle to the range [-π, π].
-    /// </remarks>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static decimal Sin(decimal x)
     {
@@ -205,9 +166,6 @@ internal static class ChiDecimalMath
     /// <summary>
     ///     Returns the cosine of the specified angle.
     /// </summary>
-    /// <remarks>
-    ///     Uses a Taylor series expansion for the cosine function after normalizing the angle to the range [-π, π].
-    /// </remarks>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static decimal Cos(decimal x)
     {
@@ -229,9 +187,6 @@ internal static class ChiDecimalMath
     /// <summary>
     ///     Returns the tangent of the specified angle.
     /// </summary>
-    /// <remarks>
-    ///     Calculated as Sin(x) / Cos(x).
-    /// </remarks>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static decimal Tan(decimal x)
     {
@@ -241,6 +196,72 @@ internal static class ChiDecimalMath
             throw new ArgumentException("Tangent is undefined at this value (cos = 0).");
 
         return Sin(x) / cos;
+    }
+
+    /// <summary>
+    ///     Returns the cube root of a specified decimal number.
+    /// </summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static decimal Cbrt(decimal x)
+    {
+        if (x == 0m)
+            return 0m;
+
+        if (x == 1m)
+            return 1m;
+
+        if (x == -1m)
+            return -1m;
+
+        var isNegative = x < 0m;
+        if (isNegative)
+            x = -x;
+
+        var current = x / 3m;
+        const decimal tolerance = 1e-28m;
+
+        decimal previous;
+        var iterations = 0;
+        const int maxIterations = 100;
+
+        do
+        {
+            previous = current;
+            var currentSquared = current * current;
+            current = (2m * current + x / currentSquared) / 3m;
+            iterations++;
+        } while (Math.Abs(previous - current) > tolerance && iterations < maxIterations);
+
+        return isNegative ? -current : current;
+    }
+
+    /// <summary>
+    ///     Returns the square root of a specified decimal number.
+    /// </summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static decimal Sqrt(decimal x)
+    {
+        if (x == 0m)
+            return 0m;
+
+        if (x == 1m)
+            return 1m;
+
+        var current = x / 2m;
+        const decimal tolerance = 1e-28m;
+
+        decimal previous;
+        var iterations = 0;
+        const int maxIterations = 100;
+
+        do
+        {
+            previous = current;
+            current = (previous + x / previous) / 2m;
+            iterations++;
+        } while (Math.Abs(previous - current) > tolerance && iterations < maxIterations);
+
+        return current;
     }
 
     /// <summary>

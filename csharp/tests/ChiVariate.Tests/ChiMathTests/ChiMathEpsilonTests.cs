@@ -14,7 +14,7 @@ public class ChiMathEpsilonTests
         var epsilon = ChiMath.Const<double>.Epsilon;
 
         // Assert
-        epsilon.Should().Be(1e-15);
+        epsilon.Should().Be(1e-14);
     }
 
     [Fact]
@@ -24,7 +24,7 @@ public class ChiMathEpsilonTests
         var epsilon = ChiMath.Const<float>.Epsilon;
 
         // Assert
-        epsilon.Should().Be(1e-7f);
+        epsilon.Should().Be(1e-6f);
     }
 
     [Fact]
@@ -34,7 +34,7 @@ public class ChiMathEpsilonTests
         var epsilon = ChiMath.Const<decimal>.Epsilon;
 
         // Assert
-        epsilon.Should().Be(1e-15m);
+        epsilon.Should().Be(1e-27m);
     }
 
     [Theory]

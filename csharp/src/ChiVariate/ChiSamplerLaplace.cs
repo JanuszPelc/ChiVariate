@@ -38,12 +38,15 @@ public readonly ref struct ChiSamplerLaplace<TRng, T>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public T Sample()
     {
-        var u = _rng.Uniform(-PointFive, PointFive).Sample();
+        var uniform = _rng.Uniform(T.Zero, T.One).Sample();
+        var u = uniform - PointFive;
 
         var sign = T.CreateChecked(T.Sign(u));
         var absU = T.Abs(u);
+        var epsilon = ChiMath.Const<T>.Epsilon;
+        var logArg = T.Max(epsilon, T.One - Two * absU);
 
-        return _location - _scale * sign * ChiMath.Log(T.One - Two * absU);
+        return _location - _scale * sign * ChiMath.Log(logArg);
     }
 
     /// <summary>

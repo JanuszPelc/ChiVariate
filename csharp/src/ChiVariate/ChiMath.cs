@@ -21,29 +21,33 @@ public static class ChiMath
     public static T Pow<T>(T x, T exponent)
         where T : IFloatingPoint<T>
     {
-        var x1 = x;
+        if (x == T.Zero)
+            return exponent < T.Zero ? throw new DivideByZeroException("Cannot raise zero to a negative power.")
+                : exponent == T.Zero ? T.One
+                : T.Zero;
+
         var exponent1 = exponent;
         if (typeof(T) == typeof(double))
         {
-            var pow = Math.Pow(Unsafe.As<T, double>(ref x1), Unsafe.As<T, double>(ref exponent1));
+            var pow = Math.Pow(Unsafe.As<T, double>(ref x), Unsafe.As<T, double>(ref exponent1));
             return Unsafe.As<double, T>(ref pow);
         }
 
         if (typeof(T) == typeof(float))
         {
-            var pow = MathF.Pow(Unsafe.As<T, float>(ref x1), Unsafe.As<T, float>(ref exponent1));
+            var pow = MathF.Pow(Unsafe.As<T, float>(ref x), Unsafe.As<T, float>(ref exponent1));
             return Unsafe.As<float, T>(ref pow);
         }
 
         if (typeof(T) == typeof(decimal))
         {
-            var baseVal = Unsafe.As<T, decimal>(ref x1);
+            var baseVal = Unsafe.As<T, decimal>(ref x);
             var exp = Unsafe.As<T, decimal>(ref exponent1);
             var result = ChiDecimalMath.Pow(baseVal, exp);
             return Unsafe.As<decimal, T>(ref result);
         }
 
-        var fallbackDouble = Math.Pow(Unsafe.As<T, double>(ref x1), Unsafe.As<T, double>(ref exponent1));
+        var fallbackDouble = Math.Pow(Unsafe.As<T, double>(ref x), Unsafe.As<T, double>(ref exponent1));
         return Unsafe.As<double, T>(ref fallbackDouble);
     }
 
@@ -60,26 +64,26 @@ public static class ChiMath
         if (x < T.Zero)
             throw new OverflowException("Cannot calculate square root of a negative number.");
 
-        if (x == T.Zero)
-            return T.Zero;
-
-        var current = T.CreateChecked(Math.Sqrt(double.CreateChecked(x)));
-
-        T previous;
-        var iterations = 0;
-        const int maxIterations = 100;
-
-        do
+        if (typeof(T) == typeof(double))
         {
-            previous = current;
-            if (previous == T.Zero)
-                return T.Zero;
+            var sqrt = Math.Sqrt(Unsafe.As<T, double>(ref x));
+            return Unsafe.As<double, T>(ref sqrt);
+        }
 
-            current = (previous + x / previous) * Const<T>.OneHalf;
-            iterations++;
-        } while (T.Abs(previous - current) > Const<T>.Epsilon && iterations < maxIterations);
+        if (typeof(T) == typeof(float))
+        {
+            var sqrt = MathF.Sqrt(Unsafe.As<T, float>(ref x));
+            return Unsafe.As<float, T>(ref sqrt);
+        }
 
-        return current;
+        if (typeof(T) == typeof(decimal))
+        {
+            var sqrt = ChiDecimalMath.Sqrt(Unsafe.As<T, decimal>(ref x));
+            return Unsafe.As<decimal, T>(ref sqrt);
+        }
+
+        var fallbackDouble = Math.Sqrt(double.CreateChecked(x));
+        return T.CreateChecked(fallbackDouble);
     }
 
     /// <summary>
@@ -92,26 +96,28 @@ public static class ChiMath
     public static T Log<T>(T x)
         where T : IFloatingPoint<T>
     {
-        var x1 = x;
+        if (x <= T.Zero)
+            throw new ArgumentException("Logarithm undefined for non-positive values.");
+
         if (typeof(T) == typeof(double))
         {
-            var log = Math.Log(Unsafe.As<T, double>(ref x1));
+            var log = Math.Log(Unsafe.As<T, double>(ref x));
             return Unsafe.As<double, T>(ref log);
         }
 
         if (typeof(T) == typeof(float))
         {
-            var log = MathF.Log(Unsafe.As<T, float>(ref x1));
+            var log = MathF.Log(Unsafe.As<T, float>(ref x));
             return Unsafe.As<float, T>(ref log);
         }
 
         if (typeof(T) == typeof(decimal))
         {
-            var log = ChiDecimalMath.Ln(Unsafe.As<T, decimal>(ref x1));
+            var log = ChiDecimalMath.Ln(Unsafe.As<T, decimal>(ref x));
             return Unsafe.As<decimal, T>(ref log);
         }
 
-        var fallbackDouble = Math.Log(double.CreateChecked(x1));
+        var fallbackDouble = Math.Log(double.CreateChecked(x));
         return T.CreateChecked(fallbackDouble);
     }
 
@@ -125,26 +131,25 @@ public static class ChiMath
     public static T Exp<T>(T x)
         where T : IFloatingPoint<T>
     {
-        var x1 = x;
         if (typeof(T) == typeof(double))
         {
-            var exp = Math.Exp(Unsafe.As<T, double>(ref x1));
+            var exp = Math.Exp(Unsafe.As<T, double>(ref x));
             return Unsafe.As<double, T>(ref exp);
         }
 
         if (typeof(T) == typeof(float))
         {
-            var exp = MathF.Exp(Unsafe.As<T, float>(ref x1));
+            var exp = MathF.Exp(Unsafe.As<T, float>(ref x));
             return Unsafe.As<float, T>(ref exp);
         }
 
         if (typeof(T) == typeof(decimal))
         {
-            var exp = ChiDecimalMath.Exp(Unsafe.As<T, decimal>(ref x1));
+            var exp = ChiDecimalMath.Exp(Unsafe.As<T, decimal>(ref x));
             return Unsafe.As<decimal, T>(ref exp);
         }
 
-        var fallbackDouble = Math.Exp(double.CreateChecked(x1));
+        var fallbackDouble = Math.Exp(double.CreateChecked(x));
         return T.CreateChecked(fallbackDouble);
     }
 
@@ -158,6 +163,24 @@ public static class ChiMath
     public static T Cbrt<T>(T x)
         where T : IFloatingPoint<T>
     {
+        if (typeof(T) == typeof(double))
+        {
+            var cbrt = Math.Cbrt(Unsafe.As<T, double>(ref x));
+            return Unsafe.As<double, T>(ref cbrt);
+        }
+
+        if (typeof(T) == typeof(float))
+        {
+            var cbrt = MathF.Cbrt(Unsafe.As<T, float>(ref x));
+            return Unsafe.As<float, T>(ref cbrt);
+        }
+
+        if (typeof(T) == typeof(decimal))
+        {
+            var cbrt = ChiDecimalMath.Cbrt(Unsafe.As<T, decimal>(ref x));
+            return Unsafe.As<decimal, T>(ref cbrt);
+        }
+
         return x < T.Zero
             ? -Pow(-x, Const<T>.OneThird)
             : Pow(x, Const<T>.OneThird);
@@ -173,26 +196,25 @@ public static class ChiMath
     public static T Tan<T>(T x)
         where T : IFloatingPoint<T>
     {
-        var x1 = x;
         if (typeof(T) == typeof(double))
         {
-            var tan = Math.Tan(Unsafe.As<T, double>(ref x1));
+            var tan = Math.Tan(Unsafe.As<T, double>(ref x));
             return Unsafe.As<double, T>(ref tan);
         }
 
         if (typeof(T) == typeof(float))
         {
-            var tan = MathF.Tan(Unsafe.As<T, float>(ref x1));
+            var tan = MathF.Tan(Unsafe.As<T, float>(ref x));
             return Unsafe.As<float, T>(ref tan);
         }
 
         if (typeof(T) == typeof(decimal))
         {
-            var tan = ChiDecimalMath.Tan(Unsafe.As<T, decimal>(ref x1));
+            var tan = ChiDecimalMath.Tan(Unsafe.As<T, decimal>(ref x));
             return Unsafe.As<decimal, T>(ref tan);
         }
 
-        var fallbackDouble = Math.Tan(double.CreateChecked(x1));
+        var fallbackDouble = Math.Tan(double.CreateChecked(x));
         return T.CreateChecked(fallbackDouble);
     }
 
@@ -206,26 +228,25 @@ public static class ChiMath
     public static T Sin<T>(T x)
         where T : IFloatingPoint<T>
     {
-        var x1 = x;
         if (typeof(T) == typeof(double))
         {
-            var sin = Math.Sin(Unsafe.As<T, double>(ref x1));
+            var sin = Math.Sin(Unsafe.As<T, double>(ref x));
             return Unsafe.As<double, T>(ref sin);
         }
 
         if (typeof(T) == typeof(float))
         {
-            var sin = MathF.Sin(Unsafe.As<T, float>(ref x1));
+            var sin = MathF.Sin(Unsafe.As<T, float>(ref x));
             return Unsafe.As<float, T>(ref sin);
         }
 
         if (typeof(T) == typeof(decimal))
         {
-            var sin = ChiDecimalMath.Sin(Unsafe.As<T, decimal>(ref x1));
+            var sin = ChiDecimalMath.Sin(Unsafe.As<T, decimal>(ref x));
             return Unsafe.As<decimal, T>(ref sin);
         }
 
-        var fallbackDouble = Math.Sin(double.CreateChecked(x1));
+        var fallbackDouble = Math.Sin(double.CreateChecked(x));
         return T.CreateChecked(fallbackDouble);
     }
 
@@ -239,26 +260,25 @@ public static class ChiMath
     public static T Cos<T>(T x)
         where T : IFloatingPoint<T>
     {
-        var x1 = x;
         if (typeof(T) == typeof(double))
         {
-            var cos = Math.Cos(Unsafe.As<T, double>(ref x1));
+            var cos = Math.Cos(Unsafe.As<T, double>(ref x));
             return Unsafe.As<double, T>(ref cos);
         }
 
         if (typeof(T) == typeof(float))
         {
-            var cos = MathF.Cos(Unsafe.As<T, float>(ref x1));
+            var cos = MathF.Cos(Unsafe.As<T, float>(ref x));
             return Unsafe.As<float, T>(ref cos);
         }
 
         if (typeof(T) == typeof(decimal))
         {
-            var cos = ChiDecimalMath.Cos(Unsafe.As<T, decimal>(ref x1));
+            var cos = ChiDecimalMath.Cos(Unsafe.As<T, decimal>(ref x));
             return Unsafe.As<decimal, T>(ref cos);
         }
 
-        var fallbackDouble = Math.Cos(double.CreateChecked(x1));
+        var fallbackDouble = Math.Cos(double.CreateChecked(x));
         return T.CreateChecked(fallbackDouble);
     }
 
@@ -304,6 +324,11 @@ public static class ChiMath
         public static readonly T Three = Two + One;
 
         /// <summary>
+        ///     The value ten for the floating-point type.
+        /// </summary>
+        public static readonly T Ten = T.CreateChecked(10);
+
+        /// <summary>
         ///     The fractional value one-half (0.5) for the floating-point type.
         /// </summary>
         public static readonly T OneHalf = One / Two;
@@ -314,6 +339,51 @@ public static class ChiMath
         public static readonly T OneThird = One / Three;
 
         /// <summary>
+        ///     The natural logarithm of 2, approximately 0.693147.
+        /// </summary>
+        public static readonly T Ln2 = GetLn2();
+
+        /// <summary>
+        ///     The natural logarithm of 10, approximately 2.302585.
+        /// </summary>
+        public static readonly T Ln10 = GetLn10();
+
+        /// <summary>
+        ///     Half of π (π/2), approximately 1.570796.
+        /// </summary>
+        public static readonly T PiHalf = Pi / Two;
+
+        /// <summary>
+        ///     One third of π (π/3), approximately 1.047198.
+        /// </summary>
+        public static readonly T PiThird = Pi / Three;
+
+        /// <summary>
+        ///     One fourth of π (π/4), approximately 0.785398.
+        /// </summary>
+        public static readonly T PiFourth = Pi / (Two * Two);
+
+        /// <summary>
+        ///     One sixth of π (π/6), approximately 0.523599.
+        /// </summary>
+        public static readonly T PiSixth = Pi / (Three * Two);
+
+        /// <summary>
+        ///     √2/2, approximately 0.707107.
+        /// </summary>
+        public static readonly T SqrtTwoHalf = GetSqrtTwoHalf();
+
+        /// <summary>
+        ///     √3/3, approximately 0.577350.
+        /// </summary>
+        public static readonly T SqrtThreeThird = GetSqrtThreeThird();
+
+        /// <summary>
+        ///     √3/2, approximately 0.866025.
+        /// </summary>
+        public static readonly T SqrtThreeHalf = GetSqrtThreeHalf();
+
+        /// <summary>
         ///     A smallest positive value, used for convergence checks.
         /// </summary>
         public static T Epsilon { get; } = GetEpsilon();
@@ -321,15 +391,50 @@ public static class ChiMath
         private static T GetEpsilon()
         {
             if (typeof(T) == typeof(double))
-                return T.CreateChecked(1e-15); // Machine epsilon for double is ~2.2e-16
+                return T.CreateChecked(1e-14);
 
             if (typeof(T) == typeof(float))
-                return T.CreateChecked(1e-7); // Machine epsilon for float is ~1.2e-7
+                return T.CreateChecked(1e-6);
 
             if (typeof(T) == typeof(decimal))
-                return T.CreateChecked(1e-15); // Conservative for decimal
+                return T.CreateChecked(1e-27);
 
-            return T.CreateChecked(1e-10); // Default fallback
+            return T.CreateChecked(1e-10);
+        }
+
+        private static T GetLn2()
+        {
+            if (typeof(T) == typeof(decimal))
+                return T.CreateChecked(0.693147180559945309417232121458176568075500134360255254120680m);
+            return T.CreateChecked(Math.Log(2.0));
+        }
+
+        private static T GetLn10()
+        {
+            if (typeof(T) == typeof(decimal))
+                return T.CreateChecked(2.302585092994045684017991454684364207601101488628772976033m);
+            return T.CreateChecked(Math.Log(10.0));
+        }
+
+        private static T GetSqrtTwoHalf()
+        {
+            if (typeof(T) == typeof(decimal))
+                return T.CreateChecked(0.707106781186547524400844362104849039284835937688474036588m);
+            return T.CreateChecked(Math.Sqrt(2.0) / 2.0);
+        }
+
+        private static T GetSqrtThreeThird()
+        {
+            if (typeof(T) == typeof(decimal))
+                return T.CreateChecked(0.577350269189625764509148780501957455647601751270126876018m);
+            return T.CreateChecked(Math.Sqrt(3.0) / 3.0);
+        }
+
+        private static T GetSqrtThreeHalf()
+        {
+            if (typeof(T) == typeof(decimal))
+                return T.CreateChecked(0.866025403784438646763723170752936183471402626905190314027m);
+            return T.CreateChecked(Math.Sqrt(3.0) / 2.0);
         }
     }
 }

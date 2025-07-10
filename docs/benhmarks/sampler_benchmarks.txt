@@ -11,347 +11,347 @@ WarmupCount=3
 
 | Method                 | Param          | Mean            | Error          | StdDev        | Ratio     | RatioSD | Allocated | Alloc Ratio |
 |----------------------- |--------------- |----------------:|---------------:|--------------:|----------:|--------:|----------:|------------:|
-| Bernoulli              | ForLoop_32Bit  |        15.93 us |       0.083 us |      0.005 us |      1.04 |    0.01 |         - |          NA |
-| Beta                   | ForLoop_32Bit  |       127.90 us |       4.079 us |      0.224 us |      8.32 |    0.06 |         - |          NA |
-| Binomial               | ForLoop_32Bit  |     2,026.47 us |      59.489 us |      3.261 us |    131.85 |    0.98 |       3 B |          NA |
-| Categorical            | ForLoop_32Bit  |        44.33 us |       2.573 us |      0.141 us |      2.88 |    0.02 |         - |          NA |
-| Cauchy                 | ForLoop_32Bit  |        38.61 us |       2.438 us |      0.134 us |      2.51 |    0.02 |         - |          NA |
-| Chance.PickBetween     | ForLoop_32Bit  |        18.38 us |       0.961 us |      0.053 us |      1.20 |    0.01 |         - |          NA |
-| Chi                    | ForLoop_32Bit  |        84.59 us |       0.798 us |      0.044 us |      5.50 |    0.04 |         - |          NA |
-| Chi-Squared            | ForLoop_32Bit  |        68.45 us |       2.413 us |      0.132 us |      4.45 |    0.03 |         - |          NA |
-| Dirichlet              | ForLoop_32Bit  |       510.85 us |      51.703 us |      2.834 us |     33.24 |    0.29 |       1 B |          NA |
-| Exponential            | ForLoop_32Bit  |        18.38 us |       1.052 us |      0.058 us |      1.20 |    0.01 |         - |          NA |
-| F                      | ForLoop_32Bit  |       126.73 us |       8.780 us |      0.481 us |      8.25 |    0.07 |         - |          NA |
-| Gamma                  | ForLoop_32Bit  |        68.26 us |       3.008 us |      0.165 us |      4.44 |    0.03 |         - |          NA |
-| Gumbel                 | ForLoop_32Bit  |        23.21 us |       0.365 us |      0.020 us |      1.51 |    0.01 |         - |          NA |
-| Geometric              | ForLoop_32Bit  |       162.46 us |       3.199 us |      0.175 us |     10.57 |    0.08 |         - |          NA |
-| Halton                 | ForLoop_32Bit  |        71.81 us |       1.786 us |      0.098 us |      4.67 |    0.03 |         - |          NA |
-| Hypergeometric         | ForLoop_32Bit  |     1,036.63 us |      35.787 us |      1.962 us |     67.45 |    0.50 |       1 B |          NA |
-| Inverse-Gamma          | ForLoop_32Bit  |        68.98 us |       9.080 us |      0.498 us |      4.49 |    0.04 |         - |          NA |
-| Laplace                | ForLoop_32Bit  |        40.78 us |       0.375 us |      0.021 us |      2.65 |    0.02 |         - |          NA |
-| Logistic               | ForLoop_32Bit  |        18.50 us |       0.278 us |      0.015 us |      1.20 |    0.01 |         - |          NA |
-| Log-Normal             | ForLoop_32Bit  |        40.90 us |       0.467 us |      0.026 us |      2.66 |    0.02 |         - |          NA |
-| Multinomial            | ForLoop_32Bit  |     3,089.72 us |      20.249 us |      1.110 us |    201.02 |    1.46 |       3 B |          NA |
-| 'Multivariate Normal'  | ForLoop_32Bit  |       296.00 us |       7.693 us |      0.422 us |     19.26 |    0.14 |         - |          NA |
-| 'Negative Binomial'    | ForLoop_32Bit  |       498.14 us |      18.787 us |      1.030 us |     32.41 |    0.24 |       1 B |          NA |
-| Normal                 | ForLoop_32Bit  |        35.81 us |       0.447 us |      0.024 us |      2.33 |    0.02 |         - |          NA |
-| Pareto                 | ForLoop_32Bit  |        22.47 us |       0.077 us |      0.004 us |      1.46 |    0.01 |         - |          NA |
-| Poisson                | ForLoop_32Bit  |       387.39 us |       5.642 us |      0.309 us |     25.20 |    0.18 |         - |          NA |
-| Prime                  | ForLoop_32Bit  |    80,735.33 us |  10,338.804 us |    566.705 us |  5,252.84 |   49.75 |     105 B |          NA |
-| Rayleigh               | ForLoop_32Bit  |        32.50 us |       0.369 us |      0.020 us |      2.11 |    0.02 |         - |          NA |
-| Sobol                  | ForLoop_32Bit  |        55.69 us |       1.525 us |      0.084 us |      3.62 |    0.03 |         - |          NA |
-| Spatial.OnSphere       | ForLoop_32Bit  |        54.04 us |       0.596 us |      0.033 us |      3.52 |    0.03 |         - |          NA |
-| StudentT               | ForLoop_32Bit  |       112.37 us |       5.065 us |      0.278 us |      7.31 |    0.06 |         - |          NA |
-| Triangular             | ForLoop_32Bit  |        37.56 us |       0.817 us |      0.045 us |      2.44 |    0.02 |         - |          NA |
-| 'Uniform (Continuous)' | ForLoop_32Bit  |        15.37 us |       2.360 us |      0.129 us |      1.00 |    0.01 |         - |          NA |
-| 'Uniform (Discrete)'   | ForLoop_32Bit  |        18.59 us |       0.175 us |      0.010 us |      1.21 |    0.01 |         - |          NA |
-| Weibull                | ForLoop_32Bit  |        26.56 us |       1.704 us |      0.093 us |      1.73 |    0.01 |         - |          NA |
-| Wishart                | ForLoop_32Bit  |       928.56 us |      30.562 us |      1.675 us |     60.41 |    0.45 |       1 B |          NA |
-| Zipf                   | ForLoop_32Bit  |       114.43 us |       0.890 us |      0.049 us |      7.45 |    0.05 |         - |          NA |
+| Bernoulli              | ForLoop_32Bit  |        15.99 us |       0.570 us |      0.031 us |      1.04 |    0.00 |         - |          NA |
+| Beta                   | ForLoop_32Bit  |       107.08 us |       0.137 us |      0.007 us |      6.99 |    0.02 |         - |          NA |
+| Binomial               | ForLoop_32Bit  |     2,027.31 us |      88.987 us |      4.878 us |    132.43 |    0.43 |       3 B |          NA |
+| Categorical            | ForLoop_32Bit  |        44.10 us |       1.720 us |      0.094 us |      2.88 |    0.01 |         - |          NA |
+| Cauchy                 | ForLoop_32Bit  |        38.50 us |       1.159 us |      0.064 us |      2.51 |    0.01 |         - |          NA |
+| Chance.PickBetween     | ForLoop_32Bit  |        18.39 us |       0.053 us |      0.003 us |      1.20 |    0.00 |         - |          NA |
+| Chi                    | ForLoop_32Bit  |        58.12 us |       0.374 us |      0.020 us |      3.80 |    0.01 |         - |          NA |
+| Chi-Squared            | ForLoop_32Bit  |        57.97 us |       1.328 us |      0.073 us |      3.79 |    0.01 |         - |          NA |
+| Dirichlet              | ForLoop_32Bit  |       463.67 us |      16.127 us |      0.884 us |     30.29 |    0.09 |         - |          NA |
+| Exponential            | ForLoop_32Bit  |        18.58 us |       0.012 us |      0.001 us |      1.21 |    0.00 |         - |          NA |
+| F                      | ForLoop_32Bit  |       106.66 us |       3.642 us |      0.200 us |      6.97 |    0.02 |         - |          NA |
+| Gamma                  | ForLoop_32Bit  |        57.94 us |       0.525 us |      0.029 us |      3.78 |    0.01 |         - |          NA |
+| Gumbel                 | ForLoop_32Bit  |        23.56 us |       0.376 us |      0.021 us |      1.54 |    0.00 |         - |          NA |
+| Geometric              | ForLoop_32Bit  |       163.15 us |       6.005 us |      0.329 us |     10.66 |    0.03 |         - |          NA |
+| Halton                 | ForLoop_32Bit  |        72.68 us |      10.841 us |      0.594 us |      4.75 |    0.04 |         - |          NA |
+| Hypergeometric         | ForLoop_32Bit  |     1,040.75 us |       4.892 us |      0.268 us |     67.98 |    0.17 |       1 B |          NA |
+| Inverse-Gamma          | ForLoop_32Bit  |        57.84 us |       1.363 us |      0.075 us |      3.78 |    0.01 |         - |          NA |
+| Laplace                | ForLoop_32Bit  |        42.90 us |       0.374 us |      0.020 us |      2.80 |    0.01 |         - |          NA |
+| Logistic               | ForLoop_32Bit  |        18.85 us |       0.295 us |      0.016 us |      1.23 |    0.00 |         - |          NA |
+| Log-Normal             | ForLoop_32Bit  |        32.09 us |       0.868 us |      0.048 us |      2.10 |    0.01 |         - |          NA |
+| Multinomial            | ForLoop_32Bit  |     3,096.50 us |      38.608 us |      2.116 us |    202.27 |    0.52 |       3 B |          NA |
+| 'Multivariate Normal'  | ForLoop_32Bit  |       273.76 us |      23.483 us |      1.287 us |     17.88 |    0.09 |         - |          NA |
+| 'Negative Binomial'    | ForLoop_32Bit  |       499.66 us |      48.343 us |      2.650 us |     32.64 |    0.17 |       1 B |          NA |
+| Normal                 | ForLoop_32Bit  |        27.57 us |       0.465 us |      0.025 us |      1.80 |    0.00 |         - |          NA |
+| Pareto                 | ForLoop_32Bit  |        22.57 us |       0.744 us |      0.041 us |      1.47 |    0.00 |         - |          NA |
+| Poisson                | ForLoop_32Bit  |       390.01 us |       8.342 us |      0.457 us |     25.48 |    0.07 |         - |          NA |
+| Prime                  | ForLoop_32Bit  |    82,530.09 us |   2,677.802 us |    146.779 us |  5,390.92 |   15.87 |     105 B |          NA |
+| Rayleigh               | ForLoop_32Bit  |        18.89 us |       0.209 us |      0.011 us |      1.23 |    0.00 |         - |          NA |
+| Sobol                  | ForLoop_32Bit  |        55.95 us |       0.989 us |      0.054 us |      3.65 |    0.01 |         - |          NA |
+| Spatial.OnSphere       | ForLoop_32Bit  |        52.67 us |       2.324 us |      0.127 us |      3.44 |    0.01 |         - |          NA |
+| StudentT               | ForLoop_32Bit  |        82.96 us |       1.210 us |      0.066 us |      5.42 |    0.01 |         - |          NA |
+| Triangular             | ForLoop_32Bit  |        34.74 us |       0.200 us |      0.011 us |      2.27 |    0.01 |         - |          NA |
+| 'Uniform (Continuous)' | ForLoop_32Bit  |        15.31 us |       0.810 us |      0.044 us |      1.00 |    0.00 |         - |          NA |
+| 'Uniform (Discrete)'   | ForLoop_32Bit  |        19.06 us |       3.286 us |      0.180 us |      1.24 |    0.01 |         - |          NA |
+| Weibull                | ForLoop_32Bit  |        27.14 us |       0.858 us |      0.047 us |      1.77 |    0.01 |         - |          NA |
+| Wishart                | ForLoop_32Bit  |       782.60 us |      17.195 us |      0.943 us |     51.12 |    0.14 |       1 B |          NA |
+| Zipf                   | ForLoop_32Bit  |       115.00 us |       0.322 us |      0.018 us |      7.51 |    0.02 |         - |          NA |
 |                        |                |                 |                |               |           |         |           |             |
-| Bernoulli              | ForLoop_64Bit  |        31.52 us |       0.395 us |      0.022 us |      1.02 |    0.00 |         - |          NA |
-| Beta                   | ForLoop_64Bit  |       190.54 us |       4.210 us |      0.231 us |      6.16 |    0.01 |         - |          NA |
-| Binomial               | ForLoop_64Bit  |     2,016.11 us |      35.078 us |      1.923 us |     65.13 |    0.09 |       3 B |          NA |
-| Categorical            | ForLoop_64Bit  |        58.50 us |       0.816 us |      0.045 us |      1.89 |    0.00 |         - |          NA |
-| Cauchy                 | ForLoop_64Bit  |        52.26 us |       0.842 us |      0.046 us |      1.69 |    0.00 |         - |          NA |
-| Chance.PickBetween     | ForLoop_64Bit  |        34.74 us |       0.062 us |      0.003 us |      1.12 |    0.00 |         - |          NA |
-| Chi                    | ForLoop_64Bit  |        96.60 us |       0.886 us |      0.049 us |      3.12 |    0.00 |         - |          NA |
-| Chi-Squared            | ForLoop_64Bit  |        95.59 us |       1.107 us |      0.061 us |      3.09 |    0.00 |         - |          NA |
-| Dirichlet              | ForLoop_64Bit  |       744.06 us |      24.485 us |      1.342 us |     24.04 |    0.05 |       1 B |          NA |
-| Exponential            | ForLoop_64Bit  |        43.00 us |       0.433 us |      0.024 us |      1.39 |    0.00 |         - |          NA |
-| F                      | ForLoop_64Bit  |       190.25 us |       5.051 us |      0.277 us |      6.15 |    0.01 |         - |          NA |
-| Gamma                  | ForLoop_64Bit  |        95.50 us |       0.319 us |      0.017 us |      3.09 |    0.00 |         - |          NA |
-| Gumbel                 | ForLoop_64Bit  |        58.14 us |       1.574 us |      0.086 us |      1.88 |    0.00 |         - |          NA |
-| Geometric              | ForLoop_64Bit  |       162.27 us |       0.977 us |      0.054 us |      5.24 |    0.01 |         - |          NA |
-| Halton                 | ForLoop_64Bit  |        76.73 us |      28.904 us |      1.584 us |      2.48 |    0.04 |         - |          NA |
-| Hypergeometric         | ForLoop_64Bit  |     1,054.20 us |      10.571 us |      0.579 us |     34.06 |    0.04 |       1 B |          NA |
-| Inverse-Gamma          | ForLoop_64Bit  |        95.24 us |       0.998 us |      0.055 us |      3.08 |    0.00 |         - |          NA |
-| Laplace                | ForLoop_64Bit  |        61.13 us |       1.367 us |      0.075 us |      1.97 |    0.00 |         - |          NA |
-| Logistic               | ForLoop_64Bit  |        41.34 us |       0.611 us |      0.034 us |      1.34 |    0.00 |         - |          NA |
-| Log-Normal             | ForLoop_64Bit  |        80.59 us |       2.215 us |      0.121 us |      2.60 |    0.00 |         - |          NA |
-| Multinomial            | ForLoop_64Bit  |     3,086.60 us |      44.528 us |      2.441 us |     99.72 |    0.13 |       3 B |          NA |
-| 'Multivariate Normal'  | ForLoop_64Bit  |       407.47 us |      20.040 us |      1.098 us |     13.16 |    0.03 |         - |          NA |
-| 'Negative Binomial'    | ForLoop_64Bit  |       496.78 us |       5.404 us |      0.296 us |     16.05 |    0.02 |       1 B |          NA |
-| Normal                 | ForLoop_64Bit  |        54.98 us |       1.268 us |      0.069 us |      1.78 |    0.00 |         - |          NA |
-| Pareto                 | ForLoop_64Bit  |        40.16 us |       0.452 us |      0.025 us |      1.30 |    0.00 |         - |          NA |
-| Poisson                | ForLoop_64Bit  |       387.27 us |       1.384 us |      0.076 us |     12.51 |    0.01 |         - |          NA |
-| Prime                  | ForLoop_64Bit  |   419,177.90 us |  12,334.973 us |    676.122 us | 13,542.38 |   24.03 |     736 B |          NA |
-| Rayleigh               | ForLoop_64Bit  |        45.14 us |      15.617 us |      0.856 us |      1.46 |    0.02 |         - |          NA |
-| Sobol                  | ForLoop_64Bit  |        60.82 us |       4.590 us |      0.252 us |      1.96 |    0.01 |         - |          NA |
-| Spatial.OnSphere       | ForLoop_64Bit  |        94.35 us |       0.300 us |      0.016 us |      3.05 |    0.00 |         - |          NA |
-| StudentT               | ForLoop_64Bit  |       151.13 us |       2.430 us |      0.133 us |      4.88 |    0.01 |         - |          NA |
-| Triangular             | ForLoop_64Bit  |        49.50 us |       0.233 us |      0.013 us |      1.60 |    0.00 |         - |          NA |
-| 'Uniform (Continuous)' | ForLoop_64Bit  |        30.95 us |       0.714 us |      0.039 us |      1.00 |    0.00 |         - |          NA |
-| 'Uniform (Discrete)'   | ForLoop_64Bit  |        34.99 us |       0.891 us |      0.049 us |      1.13 |    0.00 |         - |          NA |
-| Weibull                | ForLoop_64Bit  |        53.75 us |       1.807 us |      0.099 us |      1.74 |    0.00 |         - |          NA |
-| Wishart                | ForLoop_64Bit  |     1,148.32 us |       4.526 us |      0.248 us |     37.10 |    0.04 |       1 B |          NA |
-| Zipf                   | ForLoop_64Bit  |       114.35 us |       1.792 us |      0.098 us |      3.69 |    0.00 |         - |          NA |
+| Bernoulli              | ForLoop_64Bit  |        31.68 us |       0.550 us |      0.030 us |      1.02 |    0.00 |         - |          NA |
+| Beta                   | ForLoop_64Bit  |       185.24 us |      13.287 us |      0.728 us |      5.97 |    0.02 |         - |          NA |
+| Binomial               | ForLoop_64Bit  |     2,026.31 us |      23.425 us |      1.284 us |     65.35 |    0.06 |       3 B |          NA |
+| Categorical            | ForLoop_64Bit  |        58.80 us |       0.181 us |      0.010 us |      1.90 |    0.00 |         - |          NA |
+| Cauchy                 | ForLoop_64Bit  |        52.50 us |       1.189 us |      0.065 us |      1.69 |    0.00 |         - |          NA |
+| Chance.PickBetween     | ForLoop_64Bit  |        34.86 us |       0.545 us |      0.030 us |      1.12 |    0.00 |         - |          NA |
+| Chi                    | ForLoop_64Bit  |        92.96 us |       0.477 us |      0.026 us |      3.00 |    0.00 |         - |          NA |
+| Chi-Squared            | ForLoop_64Bit  |        92.68 us |       5.176 us |      0.284 us |      2.99 |    0.01 |         - |          NA |
+| Dirichlet              | ForLoop_64Bit  |       728.92 us |       2.860 us |      0.157 us |     23.51 |    0.02 |       1 B |          NA |
+| Exponential            | ForLoop_64Bit  |        43.10 us |       1.414 us |      0.078 us |      1.39 |    0.00 |         - |          NA |
+| F                      | ForLoop_64Bit  |       184.66 us |       2.981 us |      0.163 us |      5.96 |    0.01 |         - |          NA |
+| Gamma                  | ForLoop_64Bit  |        92.71 us |       7.185 us |      0.394 us |      2.99 |    0.01 |         - |          NA |
+| Gumbel                 | ForLoop_64Bit  |        59.15 us |       0.437 us |      0.024 us |      1.91 |    0.00 |         - |          NA |
+| Geometric              | ForLoop_64Bit  |       162.96 us |       4.983 us |      0.273 us |      5.26 |    0.01 |         - |          NA |
+| Halton                 | ForLoop_64Bit  |        76.09 us |      27.308 us |      1.497 us |      2.45 |    0.04 |         - |          NA |
+| Hypergeometric         | ForLoop_64Bit  |     1,056.89 us |       7.196 us |      0.394 us |     34.09 |    0.03 |       1 B |          NA |
+| Inverse-Gamma          | ForLoop_64Bit  |        92.03 us |       3.667 us |      0.201 us |      2.97 |    0.01 |         - |          NA |
+| Laplace                | ForLoop_64Bit  |        64.56 us |       4.386 us |      0.240 us |      2.08 |    0.01 |         - |          NA |
+| Logistic               | ForLoop_64Bit  |        41.58 us |       0.695 us |      0.038 us |      1.34 |    0.00 |         - |          NA |
+| Log-Normal             | ForLoop_64Bit  |        77.55 us |       4.762 us |      0.261 us |      2.50 |    0.01 |         - |          NA |
+| Multinomial            | ForLoop_64Bit  |     3,103.79 us |      55.879 us |      3.063 us |    100.11 |    0.12 |       3 B |          NA |
+| 'Multivariate Normal'  | ForLoop_64Bit  |       399.14 us |       7.798 us |      0.427 us |     12.87 |    0.02 |         - |          NA |
+| 'Negative Binomial'    | ForLoop_64Bit  |       498.18 us |       8.298 us |      0.455 us |     16.07 |    0.02 |       1 B |          NA |
+| Normal                 | ForLoop_64Bit  |        53.17 us |       0.292 us |      0.016 us |      1.71 |    0.00 |         - |          NA |
+| Pareto                 | ForLoop_64Bit  |        40.31 us |       0.709 us |      0.039 us |      1.30 |    0.00 |         - |          NA |
+| Poisson                | ForLoop_64Bit  |       388.75 us |      11.484 us |      0.629 us |     12.54 |    0.02 |         - |          NA |
+| Prime                  | ForLoop_64Bit  |   419,953.24 us |  12,209.908 us |    669.266 us | 13,544.76 |   21.61 |     736 B |          NA |
+| Rayleigh               | ForLoop_64Bit  |        44.19 us |       0.240 us |      0.013 us |      1.43 |    0.00 |         - |          NA |
+| Sobol                  | ForLoop_64Bit  |        55.39 us |       0.687 us |      0.038 us |      1.79 |    0.00 |         - |          NA |
+| Spatial.OnSphere       | ForLoop_64Bit  |        93.76 us |       1.309 us |      0.072 us |      3.02 |    0.00 |         - |          NA |
+| StudentT               | ForLoop_64Bit  |       146.59 us |       3.808 us |      0.209 us |      4.73 |    0.01 |         - |          NA |
+| Triangular             | ForLoop_64Bit  |        48.74 us |       1.439 us |      0.079 us |      1.57 |    0.00 |         - |          NA |
+| 'Uniform (Continuous)' | ForLoop_64Bit  |        31.00 us |       0.523 us |      0.029 us |      1.00 |    0.00 |         - |          NA |
+| 'Uniform (Discrete)'   | ForLoop_64Bit  |        35.11 us |       0.504 us |      0.028 us |      1.13 |    0.00 |         - |          NA |
+| Weibull                | ForLoop_64Bit  |        53.78 us |       0.460 us |      0.025 us |      1.73 |    0.00 |         - |          NA |
+| Wishart                | ForLoop_64Bit  |     1,145.48 us |      58.447 us |      3.204 us |     36.95 |    0.09 |       1 B |          NA |
+| Zipf                   | ForLoop_64Bit  |       114.75 us |       2.132 us |      0.117 us |      3.70 |    0.00 |         - |          NA |
 |                        |                |                 |                |               |           |         |           |             |
-| Bernoulli              | ForLoop_128Bit |       148.66 us |       2.458 us |      0.135 us |      0.65 |    0.00 |         - |          NA |
-| Beta                   | ForLoop_128Bit |     6,888.64 us |      44.667 us |      2.448 us |     29.96 |    0.05 |       6 B |          NA |
-| Binomial               | ForLoop_128Bit |     2,050.73 us |      36.619 us |      2.007 us |      8.92 |    0.02 |       3 B |          NA |
-| Categorical            | ForLoop_128Bit |       172.27 us |       3.657 us |      0.200 us |      0.75 |    0.00 |         - |          NA |
-| Cauchy                 | ForLoop_128Bit |     2,154.68 us |      76.410 us |      4.188 us |      9.37 |    0.02 |       3 B |          NA |
-| Chance.PickBetween     | ForLoop_128Bit |       120.40 us |       0.893 us |      0.049 us |      0.52 |    0.00 |         - |          NA |
-| Chi                    | ForLoop_128Bit |     3,740.24 us |      83.532 us |      4.579 us |     16.27 |    0.03 |       3 B |          NA |
-| Chi-Squared            | ForLoop_128Bit |     3,471.83 us |     135.416 us |      7.423 us |     15.10 |    0.04 |       3 B |          NA |
-| Dirichlet              | ForLoop_128Bit |    21,686.65 us |     437.276 us |     23.969 us |     94.32 |    0.19 |      23 B |          NA |
-| Exponential            | ForLoop_128Bit |     2,806.34 us |      82.346 us |      4.514 us |     12.21 |    0.03 |       3 B |          NA |
-| F                      | ForLoop_128Bit |     6,932.15 us |      94.380 us |      5.173 us |     30.15 |    0.06 |       6 B |          NA |
-| Gamma                  | ForLoop_128Bit |     3,479.45 us |      41.067 us |      2.251 us |     15.13 |    0.03 |       3 B |          NA |
-| Gumbel                 | ForLoop_128Bit |     5,630.23 us |     285.622 us |     15.656 us |     24.49 |    0.07 |       6 B |          NA |
-| Geometric              | ForLoop_128Bit |       162.40 us |       3.608 us |      0.198 us |      0.71 |    0.00 |         - |          NA |
-| Halton                 | ForLoop_128Bit |     1,066.29 us |      34.234 us |      1.877 us |      4.64 |    0.01 |       1 B |          NA |
-| Hypergeometric         | ForLoop_128Bit |     1,104.75 us |      23.619 us |      1.295 us |      4.80 |    0.01 |       1 B |          NA |
-| Inverse-Gamma          | ForLoop_128Bit |     3,567.50 us |     106.904 us |      5.860 us |     15.52 |    0.04 |       3 B |          NA |
-| Laplace                | ForLoop_128Bit |     2,912.84 us |      36.455 us |      1.998 us |     12.67 |    0.02 |       3 B |          NA |
-| Logistic               | ForLoop_128Bit |     3,027.64 us |      14.198 us |      0.778 us |     13.17 |    0.02 |       3 B |          NA |
-| Log-Normal             | ForLoop_128Bit |     3,539.45 us |      39.095 us |      2.143 us |     15.39 |    0.03 |       3 B |          NA |
-| Multinomial            | ForLoop_128Bit |     3,104.56 us |      84.596 us |      4.637 us |     13.50 |    0.03 |       3 B |          NA |
-| 'Multivariate Normal'  | ForLoop_128Bit |     6,473.13 us |      52.790 us |      2.894 us |     28.15 |    0.05 |       6 B |          NA |
-| 'Negative Binomial'    | ForLoop_128Bit |       504.76 us |      35.216 us |      1.930 us |      2.20 |    0.01 |       1 B |          NA |
-| Normal                 | ForLoop_128Bit |     1,917.28 us |      26.977 us |      1.479 us |      8.34 |    0.02 |       1 B |          NA |
-| Pareto                 | ForLoop_128Bit |     4,661.12 us |     109.343 us |      5.993 us |     20.27 |    0.04 |       6 B |          NA |
-| Poisson                | ForLoop_128Bit |       387.16 us |       5.233 us |      0.287 us |      1.68 |    0.00 |         - |          NA |
-| Prime                  | ForLoop_128Bit | 3,269,105.15 us | 331,006.391 us | 18,143.577 us | 14,218.60 |   72.99 |     736 B |          NA |
-| Rayleigh               | ForLoop_128Bit |     3,051.20 us |      82.019 us |      4.496 us |     13.27 |    0.03 |       3 B |          NA |
-| Sobol                  | ForLoop_128Bit |        97.02 us |       0.691 us |      0.038 us |      0.42 |    0.00 |         - |          NA |
-| Spatial.OnSphere       | ForLoop_128Bit |     1,046.79 us |      14.803 us |      0.811 us |      4.55 |    0.01 |       1 B |          NA |
-| StudentT               | ForLoop_128Bit |     5,714.14 us |     125.440 us |      6.876 us |     24.85 |    0.05 |       6 B |          NA |
-| Triangular             | ForLoop_128Bit |       382.45 us |      13.603 us |      0.746 us |      1.66 |    0.00 |         - |          NA |
-| 'Uniform (Continuous)' | ForLoop_128Bit |       229.92 us |       8.724 us |      0.478 us |      1.00 |    0.00 |         - |          NA |
-| 'Uniform (Discrete)'   | ForLoop_128Bit |       123.53 us |       6.593 us |      0.361 us |      0.54 |    0.00 |         - |          NA |
-| Weibull                | ForLoop_128Bit |     7,364.48 us |     376.769 us |     20.652 us |     32.03 |    0.10 |       6 B |          NA |
-| Wishart                | ForLoop_128Bit |    25,297.79 us |     531.552 us |     29.136 us |    110.03 |    0.23 |      23 B |          NA |
-| Zipf                   | ForLoop_128Bit |       117.91 us |       0.637 us |      0.035 us |      0.51 |    0.00 |         - |          NA |
+| Bernoulli              | ForLoop_128Bit |       149.13 us |       0.238 us |      0.013 us |      0.64 |    0.00 |         - |          NA |
+| Beta                   | ForLoop_128Bit |    10,856.51 us |     131.228 us |      7.193 us |     46.82 |    0.05 |      12 B |          NA |
+| Binomial               | ForLoop_128Bit |     2,061.49 us |      10.105 us |      0.554 us |      8.89 |    0.01 |       3 B |          NA |
+| Categorical            | ForLoop_128Bit |       172.81 us |       3.062 us |      0.168 us |      0.75 |    0.00 |         - |          NA |
+| Cauchy                 | ForLoop_128Bit |     2,779.08 us |      18.600 us |      1.020 us |     11.99 |    0.01 |       3 B |          NA |
+| Chance.PickBetween     | ForLoop_128Bit |       120.99 us |       0.292 us |      0.016 us |      0.52 |    0.00 |         - |          NA |
+| Chi                    | ForLoop_128Bit |     6,431.64 us |      62.138 us |      3.406 us |     27.74 |    0.03 |       6 B |          NA |
+| Chi-Squared            | ForLoop_128Bit |     5,488.92 us |      98.688 us |      5.409 us |     23.67 |    0.03 |       6 B |          NA |
+| Dirichlet              | ForLoop_128Bit |    32,853.37 us |     943.204 us |     51.700 us |    141.69 |    0.23 |      46 B |          NA |
+| Exponential            | ForLoop_128Bit |     4,217.99 us |     361.958 us |     19.840 us |     18.19 |    0.08 |       6 B |          NA |
+| F                      | ForLoop_128Bit |    11,082.65 us |     387.001 us |     21.213 us |     47.80 |    0.09 |      12 B |          NA |
+| Gamma                  | ForLoop_128Bit |     5,502.37 us |     260.385 us |     14.273 us |     23.73 |    0.06 |       6 B |          NA |
+| Gumbel                 | ForLoop_128Bit |     8,621.32 us |      56.857 us |      3.117 us |     37.18 |    0.04 |      12 B |          NA |
+| Geometric              | ForLoop_128Bit |       162.64 us |       0.936 us |      0.051 us |      0.70 |    0.00 |         - |          NA |
+| Halton                 | ForLoop_128Bit |     1,070.30 us |      10.572 us |      0.580 us |      4.62 |    0.00 |       1 B |          NA |
+| Hypergeometric         | ForLoop_128Bit |     1,112.11 us |       9.341 us |      0.512 us |      4.80 |    0.00 |       1 B |          NA |
+| Inverse-Gamma          | ForLoop_128Bit |     5,569.62 us |      76.709 us |      4.205 us |     24.02 |    0.03 |       6 B |          NA |
+| Laplace                | ForLoop_128Bit |     4,390.29 us |     176.749 us |      9.688 us |     18.93 |    0.04 |       6 B |          NA |
+| Logistic               | ForLoop_128Bit |     4,623.62 us |     204.355 us |     11.201 us |     19.94 |    0.05 |       6 B |          NA |
+| Log-Normal             | ForLoop_128Bit |     5,297.41 us |     109.043 us |      5.977 us |     22.85 |    0.03 |       6 B |          NA |
+| Multinomial            | ForLoop_128Bit |     3,113.56 us |      77.596 us |      4.253 us |     13.43 |    0.02 |       3 B |          NA |
+| 'Multivariate Normal'  | ForLoop_128Bit |     9,983.20 us |     120.285 us |      6.593 us |     43.06 |    0.05 |      12 B |          NA |
+| 'Negative Binomial'    | ForLoop_128Bit |       506.24 us |      30.709 us |      1.683 us |      2.18 |    0.01 |       1 B |          NA |
+| Normal                 | ForLoop_128Bit |     3,092.81 us |     103.142 us |      5.654 us |     13.34 |    0.02 |       3 B |          NA |
+| Pareto                 | ForLoop_128Bit |     6,708.28 us |     184.281 us |     10.101 us |     28.93 |    0.05 |       6 B |          NA |
+| Poisson                | ForLoop_128Bit |       388.33 us |       3.159 us |      0.173 us |      1.67 |    0.00 |         - |          NA |
+| Prime                  | ForLoop_128Bit | 3,291,275.25 us | 319,431.295 us | 17,509.107 us | 14,194.94 |   66.71 |     736 B |          NA |
+| Rayleigh               | ForLoop_128Bit |     5,324.60 us |     153.439 us |      8.411 us |     22.96 |    0.04 |       6 B |          NA |
+| Sobol                  | ForLoop_128Bit |        97.53 us |       1.814 us |      0.099 us |      0.42 |    0.00 |         - |          NA |
+| Spatial.OnSphere       | ForLoop_128Bit |     2,021.49 us |      29.501 us |      1.617 us |      8.72 |    0.01 |       3 B |          NA |
+| StudentT               | ForLoop_128Bit |     9,776.27 us |     244.178 us |     13.384 us |     42.16 |    0.06 |      12 B |          NA |
+| Triangular             | ForLoop_128Bit |     1,332.81 us |      25.040 us |      1.373 us |      5.75 |    0.01 |       1 B |          NA |
+| 'Uniform (Continuous)' | ForLoop_128Bit |       231.86 us |       4.525 us |      0.248 us |      1.00 |    0.00 |         - |          NA |
+| 'Uniform (Discrete)'   | ForLoop_128Bit |       123.79 us |       4.128 us |      0.226 us |      0.53 |    0.00 |         - |          NA |
+| Weibull                | ForLoop_128Bit |    10,796.85 us |     379.819 us |     20.819 us |     46.57 |    0.09 |      12 B |          NA |
+| Wishart                | ForLoop_128Bit |    38,794.28 us |   1,493.906 us |     81.886 us |    167.32 |    0.34 |      57 B |          NA |
+| Zipf                   | ForLoop_128Bit |       118.23 us |       3.546 us |      0.194 us |      0.51 |    0.00 |         - |          NA |
 |                        |                |                 |                |               |           |         |           |             |
-| Bernoulli              | ForEach_32Bit  |        16.20 us |       0.230 us |      0.013 us |      0.87 |    0.00 |         - |          NA |
-| Beta                   | ForEach_32Bit  |       130.68 us |       0.915 us |      0.050 us |      6.98 |    0.00 |         - |          NA |
-| Binomial               | ForEach_32Bit  |     2,015.06 us |      23.852 us |      1.307 us |    107.63 |    0.06 |       3 B |          NA |
-| Categorical            | ForEach_32Bit  |        49.76 us |       1.066 us |      0.058 us |      2.66 |    0.00 |         - |          NA |
-| Cauchy                 | ForEach_32Bit  |        42.39 us |       1.505 us |      0.083 us |      2.26 |    0.00 |         - |          NA |
-| Chance.PickBetween     | ForEach_32Bit  |        18.29 us |       0.131 us |      0.007 us |      0.98 |    0.00 |         - |          NA |
-| Chi                    | ForEach_32Bit  |        89.56 us |       3.968 us |      0.217 us |      4.78 |    0.01 |         - |          NA |
-| Chi-Squared            | ForEach_32Bit  |        72.28 us |       1.340 us |      0.073 us |      3.86 |    0.00 |         - |          NA |
-| Dirichlet              | ForEach_32Bit  |       593.77 us |       0.277 us |      0.015 us |     31.72 |    0.01 |       1 B |          NA |
-| Exponential            | ForEach_32Bit  |        22.43 us |       0.213 us |      0.012 us |      1.20 |    0.00 |         - |          NA |
-| F                      | ForEach_32Bit  |       130.37 us |       1.708 us |      0.094 us |      6.96 |    0.00 |         - |          NA |
-| Gamma                  | ForEach_32Bit  |        72.31 us |       0.564 us |      0.031 us |      3.86 |    0.00 |         - |          NA |
-| Gumbel                 | ForEach_32Bit  |        26.84 us |       0.110 us |      0.006 us |      1.43 |    0.00 |         - |          NA |
-| Geometric              | ForEach_32Bit  |       164.49 us |       2.432 us |      0.133 us |      8.79 |    0.01 |         - |          NA |
-| Halton                 | ForEach_32Bit  |       167.39 us |       9.546 us |      0.523 us |      8.94 |    0.02 |         - |          NA |
-| Hypergeometric         | ForEach_32Bit  |     1,035.06 us |      29.598 us |      1.622 us |     55.29 |    0.08 |       1 B |          NA |
-| Inverse-Gamma          | ForEach_32Bit  |        72.62 us |       1.959 us |      0.107 us |      3.88 |    0.01 |         - |          NA |
-| Laplace                | ForEach_32Bit  |        44.66 us |       0.525 us |      0.029 us |      2.39 |    0.00 |         - |          NA |
-| Logistic               | ForEach_32Bit  |        22.92 us |       0.247 us |      0.014 us |      1.22 |    0.00 |         - |          NA |
-| Log-Normal             | ForEach_32Bit  |        44.55 us |       0.914 us |      0.050 us |      2.38 |    0.00 |         - |          NA |
-| Multinomial            | ForEach_32Bit  |     3,156.11 us |      76.051 us |      4.169 us |    168.58 |    0.19 |       3 B |          NA |
-| 'Multivariate Normal'  | ForEach_32Bit  |       301.00 us |     117.423 us |      6.436 us |     16.08 |    0.30 |         - |          NA |
-| 'Negative Binomial'    | ForEach_32Bit  |       496.90 us |      12.272 us |      0.673 us |     26.54 |    0.03 |       1 B |          NA |
-| Normal                 | ForEach_32Bit  |        41.26 us |       1.179 us |      0.065 us |      2.20 |    0.00 |         - |          NA |
-| Pareto                 | ForEach_32Bit  |        26.52 us |       6.280 us |      0.344 us |      1.42 |    0.02 |         - |          NA |
-| Poisson                | ForEach_32Bit  |       409.04 us |      10.996 us |      0.603 us |     21.85 |    0.03 |         - |          NA |
-| Prime                  | ForEach_32Bit  |    85,496.35 us |  46,463.894 us |  2,546.843 us |  4,566.75 |  117.82 |     123 B |          NA |
-| Rayleigh               | ForEach_32Bit  |        36.64 us |       0.722 us |      0.040 us |      1.96 |    0.00 |         - |          NA |
-| Sobol                  | ForEach_32Bit  |       160.97 us |      20.467 us |      1.122 us |      8.60 |    0.05 |         - |          NA |
-| Spatial.OnSphere       | ForEach_32Bit  |        58.91 us |       2.146 us |      0.118 us |      3.15 |    0.01 |         - |          NA |
-| StudentT               | ForEach_32Bit  |       117.17 us |      13.737 us |      0.753 us |      6.26 |    0.03 |         - |          NA |
-| Triangular             | ForEach_32Bit  |        41.49 us |       1.329 us |      0.073 us |      2.22 |    0.00 |         - |          NA |
-| 'Uniform (Continuous)' | ForEach_32Bit  |        18.72 us |       0.064 us |      0.004 us |      1.00 |    0.00 |         - |          NA |
-| 'Uniform (Discrete)'   | ForEach_32Bit  |        20.06 us |       1.312 us |      0.072 us |      1.07 |    0.00 |         - |          NA |
-| Weibull                | ForEach_32Bit  |        30.25 us |       0.317 us |      0.017 us |      1.62 |    0.00 |         - |          NA |
-| Wishart                | ForEach_32Bit  |       885.01 us |      24.006 us |      1.316 us |     47.27 |    0.06 |       1 B |          NA |
-| Zipf                   | ForEach_32Bit  |       131.49 us |       1.383 us |      0.076 us |      7.02 |    0.00 |         - |          NA |
+| Bernoulli              | ForEach_32Bit  |        16.25 us |       0.335 us |      0.018 us |      0.86 |    0.00 |         - |          NA |
+| Beta                   | ForEach_32Bit  |       110.91 us |       1.628 us |      0.089 us |      5.89 |    0.01 |         - |          NA |
+| Binomial               | ForEach_32Bit  |     2,027.66 us |      38.490 us |      2.110 us |    107.69 |    0.13 |       3 B |          NA |
+| Categorical            | ForEach_32Bit  |        50.07 us |       0.476 us |      0.026 us |      2.66 |    0.00 |         - |          NA |
+| Cauchy                 | ForEach_32Bit  |        42.55 us |       0.980 us |      0.054 us |      2.26 |    0.00 |         - |          NA |
+| Chance.PickBetween     | ForEach_32Bit  |        18.37 us |       0.083 us |      0.005 us |      0.98 |    0.00 |         - |          NA |
+| Chi                    | ForEach_32Bit  |        62.07 us |       1.080 us |      0.059 us |      3.30 |    0.00 |         - |          NA |
+| Chi-Squared            | ForEach_32Bit  |        61.50 us |       0.673 us |      0.037 us |      3.27 |    0.00 |         - |          NA |
+| Dirichlet              | ForEach_32Bit  |       554.08 us |       8.649 us |      0.474 us |     29.43 |    0.03 |       1 B |          NA |
+| Exponential            | ForEach_32Bit  |        22.68 us |       0.604 us |      0.033 us |      1.20 |    0.00 |         - |          NA |
+| F                      | ForEach_32Bit  |       110.56 us |       4.060 us |      0.223 us |      5.87 |    0.01 |         - |          NA |
+| Gamma                  | ForEach_32Bit  |        62.11 us |       0.903 us |      0.049 us |      3.30 |    0.00 |         - |          NA |
+| Gumbel                 | ForEach_32Bit  |        27.35 us |       1.635 us |      0.090 us |      1.45 |    0.00 |         - |          NA |
+| Geometric              | ForEach_32Bit  |       165.00 us |       5.778 us |      0.317 us |      8.76 |    0.02 |         - |          NA |
+| Halton                 | ForEach_32Bit  |       167.31 us |       4.795 us |      0.263 us |      8.89 |    0.01 |         - |          NA |
+| Hypergeometric         | ForEach_32Bit  |     1,041.90 us |      13.592 us |      0.745 us |     55.34 |    0.06 |       1 B |          NA |
+| Inverse-Gamma          | ForEach_32Bit  |        61.55 us |       0.759 us |      0.042 us |      3.27 |    0.00 |         - |          NA |
+| Laplace                | ForEach_32Bit  |        46.85 us |       0.293 us |      0.016 us |      2.49 |    0.00 |         - |          NA |
+| Logistic               | ForEach_32Bit  |        23.21 us |       0.328 us |      0.018 us |      1.23 |    0.00 |         - |          NA |
+| Log-Normal             | ForEach_32Bit  |        36.52 us |       0.727 us |      0.040 us |      1.94 |    0.00 |         - |          NA |
+| Multinomial            | ForEach_32Bit  |     3,185.71 us |     128.128 us |      7.023 us |    169.19 |    0.35 |       3 B |          NA |
+| 'Multivariate Normal'  | ForEach_32Bit  |       280.09 us |      14.378 us |      0.788 us |     14.88 |    0.04 |         - |          NA |
+| 'Negative Binomial'    | ForEach_32Bit  |       502.06 us |      13.676 us |      0.750 us |     26.66 |    0.04 |       1 B |          NA |
+| Normal                 | ForEach_32Bit  |        31.81 us |       1.070 us |      0.059 us |      1.69 |    0.00 |         - |          NA |
+| Pareto                 | ForEach_32Bit  |        26.50 us |       0.078 us |      0.004 us |      1.41 |    0.00 |         - |          NA |
+| Poisson                | ForEach_32Bit  |       411.12 us |       5.676 us |      0.311 us |     21.83 |    0.02 |         - |          NA |
+| Prime                  | ForEach_32Bit  |    82,898.47 us |   3,822.369 us |    209.517 us |  4,402.75 |   10.36 |     105 B |          NA |
+| Rayleigh               | ForEach_32Bit  |        23.33 us |       0.449 us |      0.025 us |      1.24 |    0.00 |         - |          NA |
+| Sobol                  | ForEach_32Bit  |       155.81 us |       1.721 us |      0.094 us |      8.28 |    0.01 |         - |          NA |
+| Spatial.OnSphere       | ForEach_32Bit  |        57.01 us |       0.805 us |      0.044 us |      3.03 |    0.00 |         - |          NA |
+| StudentT               | ForEach_32Bit  |        87.35 us |       3.878 us |      0.213 us |      4.64 |    0.01 |         - |          NA |
+| Triangular             | ForEach_32Bit  |        38.93 us |       0.026 us |      0.001 us |      2.07 |    0.00 |         - |          NA |
+| 'Uniform (Continuous)' | ForEach_32Bit  |        18.83 us |       0.342 us |      0.019 us |      1.00 |    0.00 |         - |          NA |
+| 'Uniform (Discrete)'   | ForEach_32Bit  |        20.03 us |       0.648 us |      0.036 us |      1.06 |    0.00 |         - |          NA |
+| Weibull                | ForEach_32Bit  |        30.78 us |       0.267 us |      0.015 us |      1.63 |    0.00 |         - |          NA |
+| Wishart                | ForEach_32Bit  |       799.79 us |      40.523 us |      2.221 us |     42.48 |    0.11 |       1 B |          NA |
+| Zipf                   | ForEach_32Bit  |       132.42 us |       0.733 us |      0.040 us |      7.03 |    0.01 |         - |          NA |
 |                        |                |                 |                |               |           |         |           |             |
-| Bernoulli              | ForEach_64Bit  |        31.83 us |       0.684 us |      0.037 us |      0.92 |    0.00 |         - |          NA |
-| Beta                   | ForEach_64Bit  |       194.33 us |       0.292 us |      0.016 us |      5.60 |    0.02 |         - |          NA |
-| Binomial               | ForEach_64Bit  |     2,015.69 us |      13.132 us |      0.720 us |     58.13 |    0.18 |       3 B |          NA |
-| Categorical            | ForEach_64Bit  |        66.88 us |       2.145 us |      0.118 us |      1.93 |    0.01 |         - |          NA |
-| Cauchy                 | ForEach_64Bit  |        56.85 us |       1.358 us |      0.074 us |      1.64 |    0.01 |         - |          NA |
-| Chance.PickBetween     | ForEach_64Bit  |        34.83 us |       2.223 us |      0.122 us |      1.00 |    0.00 |         - |          NA |
-| Chi                    | ForEach_64Bit  |       100.03 us |       0.655 us |      0.036 us |      2.88 |    0.01 |         - |          NA |
-| Chi-Squared            | ForEach_64Bit  |       100.09 us |       5.044 us |      0.276 us |      2.89 |    0.01 |         - |          NA |
-| Dirichlet              | ForEach_64Bit  |       828.95 us |      38.516 us |      2.111 us |     23.91 |    0.09 |       1 B |          NA |
-| Exponential            | ForEach_64Bit  |        47.43 us |       3.260 us |      0.179 us |      1.37 |    0.01 |         - |          NA |
-| F                      | ForEach_64Bit  |       194.59 us |       0.394 us |      0.022 us |      5.61 |    0.02 |         - |          NA |
-| Gamma                  | ForEach_64Bit  |       100.42 us |       4.678 us |      0.256 us |      2.90 |    0.01 |         - |          NA |
-| Gumbel                 | ForEach_64Bit  |        62.79 us |       1.374 us |      0.075 us |      1.81 |    0.01 |         - |          NA |
-| Geometric              | ForEach_64Bit  |       164.88 us |       8.857 us |      0.486 us |      4.75 |    0.02 |         - |          NA |
-| Halton                 | ForEach_64Bit  |       165.62 us |       8.802 us |      0.482 us |      4.78 |    0.02 |         - |          NA |
-| Hypergeometric         | ForEach_64Bit  |     1,053.84 us |      15.851 us |      0.869 us |     30.39 |    0.09 |       1 B |          NA |
-| Inverse-Gamma          | ForEach_64Bit  |        99.87 us |       5.064 us |      0.278 us |      2.88 |    0.01 |         - |          NA |
-| Laplace                | ForEach_64Bit  |        65.90 us |       2.581 us |      0.141 us |      1.90 |    0.01 |         - |          NA |
-| Logistic               | ForEach_64Bit  |        44.82 us |       0.692 us |      0.038 us |      1.29 |    0.00 |         - |          NA |
-| Log-Normal             | ForEach_64Bit  |        98.22 us |       2.551 us |      0.140 us |      2.83 |    0.01 |         - |          NA |
-| Multinomial            | ForEach_64Bit  |     3,157.65 us |      95.534 us |      5.237 us |     91.06 |    0.30 |       3 B |          NA |
-| 'Multivariate Normal'  | ForEach_64Bit  |       432.32 us |       2.488 us |      0.136 us |     12.47 |    0.04 |         - |          NA |
-| 'Negative Binomial'    | ForEach_64Bit  |       497.51 us |      11.444 us |      0.627 us |     14.35 |    0.05 |       1 B |          NA |
-| Normal                 | ForEach_64Bit  |        78.04 us |       7.553 us |      0.414 us |      2.25 |    0.01 |         - |          NA |
-| Pareto                 | ForEach_64Bit  |        44.15 us |       1.137 us |      0.062 us |      1.27 |    0.00 |         - |          NA |
-| Poisson                | ForEach_64Bit  |       409.96 us |      20.622 us |      1.130 us |     11.82 |    0.05 |         - |          NA |
-| Prime                  | ForEach_64Bit  |   418,003.93 us |  14,758.552 us |    808.966 us | 12,054.37 |   41.50 |     736 B |          NA |
-| Rayleigh               | ForEach_64Bit  |        48.43 us |       1.290 us |      0.071 us |      1.40 |    0.00 |         - |          NA |
-| Sobol                  | ForEach_64Bit  |       153.99 us |       1.905 us |      0.104 us |      4.44 |    0.01 |         - |          NA |
-| Spatial.OnSphere       | ForEach_64Bit  |        99.36 us |       1.304 us |      0.071 us |      2.87 |    0.01 |         - |          NA |
-| StudentT               | ForEach_64Bit  |       170.13 us |       4.013 us |      0.220 us |      4.91 |    0.02 |         - |          NA |
-| Triangular             | ForEach_64Bit  |        53.25 us |       0.378 us |      0.021 us |      1.54 |    0.00 |         - |          NA |
-| 'Uniform (Continuous)' | ForEach_64Bit  |        34.68 us |       2.200 us |      0.121 us |      1.00 |    0.00 |         - |          NA |
-| 'Uniform (Discrete)'   | ForEach_64Bit  |        36.73 us |       1.770 us |      0.097 us |      1.06 |    0.00 |         - |          NA |
-| Weibull                | ForEach_64Bit  |        59.02 us |       4.036 us |      0.221 us |      1.70 |    0.01 |         - |          NA |
-| Wishart                | ForEach_64Bit  |     1,182.55 us |      20.587 us |      1.128 us |     34.10 |    0.11 |       1 B |          NA |
-| Zipf                   | ForEach_64Bit  |       132.38 us |      10.459 us |      0.573 us |      3.82 |    0.02 |         - |          NA |
+| Bernoulli              | ForEach_64Bit  |        32.02 us |       0.670 us |      0.037 us |      0.92 |    0.00 |         - |          NA |
+| Beta                   | ForEach_64Bit  |       188.62 us |       9.051 us |      0.496 us |      5.44 |    0.01 |         - |          NA |
+| Binomial               | ForEach_64Bit  |     2,026.45 us |       8.001 us |      0.439 us |     58.41 |    0.05 |       3 B |          NA |
+| Categorical            | ForEach_64Bit  |        66.98 us |       0.286 us |      0.016 us |      1.93 |    0.00 |         - |          NA |
+| Cauchy                 | ForEach_64Bit  |        57.14 us |       1.458 us |      0.080 us |      1.65 |    0.00 |         - |          NA |
+| Chance.PickBetween     | ForEach_64Bit  |        34.89 us |       0.059 us |      0.003 us |      1.01 |    0.00 |         - |          NA |
+| Chi                    | ForEach_64Bit  |        96.99 us |       2.111 us |      0.116 us |      2.80 |    0.00 |         - |          NA |
+| Chi-Squared            | ForEach_64Bit  |        97.40 us |       2.903 us |      0.159 us |      2.81 |    0.00 |         - |          NA |
+| Dirichlet              | ForEach_64Bit  |       810.13 us |      13.207 us |      0.724 us |     23.35 |    0.03 |       1 B |          NA |
+| Exponential            | ForEach_64Bit  |        47.62 us |       2.138 us |      0.117 us |      1.37 |    0.00 |         - |          NA |
+| F                      | ForEach_64Bit  |       188.75 us |       8.378 us |      0.459 us |      5.44 |    0.01 |         - |          NA |
+| Gamma                  | ForEach_64Bit  |        97.16 us |       4.077 us |      0.223 us |      2.80 |    0.01 |         - |          NA |
+| Gumbel                 | ForEach_64Bit  |        63.31 us |       3.149 us |      0.173 us |      1.82 |    0.00 |         - |          NA |
+| Geometric              | ForEach_64Bit  |       165.29 us |       5.132 us |      0.281 us |      4.76 |    0.01 |         - |          NA |
+| Halton                 | ForEach_64Bit  |       165.00 us |       9.403 us |      0.515 us |      4.76 |    0.01 |         - |          NA |
+| Hypergeometric         | ForEach_64Bit  |     1,060.54 us |      18.540 us |      1.016 us |     30.57 |    0.04 |       1 B |          NA |
+| Inverse-Gamma          | ForEach_64Bit  |        96.88 us |       1.669 us |      0.092 us |      2.79 |    0.00 |         - |          NA |
+| Laplace                | ForEach_64Bit  |        67.79 us |       2.079 us |      0.114 us |      1.95 |    0.00 |         - |          NA |
+| Logistic               | ForEach_64Bit  |        45.16 us |       0.252 us |      0.014 us |      1.30 |    0.00 |         - |          NA |
+| Log-Normal             | ForEach_64Bit  |        95.21 us |       3.660 us |      0.201 us |      2.74 |    0.01 |         - |          NA |
+| Multinomial            | ForEach_64Bit  |     3,178.29 us |      63.929 us |      3.504 us |     91.61 |    0.12 |       3 B |          NA |
+| 'Multivariate Normal'  | ForEach_64Bit  |       425.19 us |      18.125 us |      0.993 us |     12.26 |    0.03 |         - |          NA |
+| 'Negative Binomial'    | ForEach_64Bit  |       499.28 us |       6.076 us |      0.333 us |     14.39 |    0.01 |       1 B |          NA |
+| Normal                 | ForEach_64Bit  |        76.25 us |       1.885 us |      0.103 us |      2.20 |    0.00 |         - |          NA |
+| Pareto                 | ForEach_64Bit  |        44.24 us |       1.531 us |      0.084 us |      1.28 |    0.00 |         - |          NA |
+| Poisson                | ForEach_64Bit  |       411.20 us |       4.365 us |      0.239 us |     11.85 |    0.01 |         - |          NA |
+| Prime                  | ForEach_64Bit  |   419,955.24 us |  26,394.532 us |  1,446.773 us | 12,104.39 |   37.60 |     736 B |          NA |
+| Rayleigh               | ForEach_64Bit  |        47.55 us |       2.207 us |      0.121 us |      1.37 |    0.00 |         - |          NA |
+| Sobol                  | ForEach_64Bit  |       154.89 us |      10.897 us |      0.597 us |      4.46 |    0.02 |         - |          NA |
+| Spatial.OnSphere       | ForEach_64Bit  |        97.65 us |       0.702 us |      0.038 us |      2.81 |    0.00 |         - |          NA |
+| StudentT               | ForEach_64Bit  |       169.10 us |       3.924 us |      0.215 us |      4.87 |    0.01 |         - |          NA |
+| Triangular             | ForEach_64Bit  |        52.59 us |       1.121 us |      0.061 us |      1.52 |    0.00 |         - |          NA |
+| 'Uniform (Continuous)' | ForEach_64Bit  |        34.69 us |       0.632 us |      0.035 us |      1.00 |    0.00 |         - |          NA |
+| 'Uniform (Discrete)'   | ForEach_64Bit  |        36.76 us |       1.330 us |      0.073 us |      1.06 |    0.00 |         - |          NA |
+| Weibull                | ForEach_64Bit  |        58.68 us |       0.684 us |      0.037 us |      1.69 |    0.00 |         - |          NA |
+| Wishart                | ForEach_64Bit  |     1,156.28 us |      22.589 us |      1.238 us |     33.33 |    0.04 |       1 B |          NA |
+| Zipf                   | ForEach_64Bit  |       132.50 us |       5.445 us |      0.298 us |      3.82 |    0.01 |         - |          NA |
 |                        |                |                 |                |               |           |         |           |             |
-| Bernoulli              | ForEach_128Bit |       154.64 us |       1.736 us |      0.095 us |      0.60 |    0.00 |         - |          NA |
-| Beta                   | ForEach_128Bit |     6,886.19 us |      29.300 us |      1.606 us |     26.91 |    0.01 |       6 B |          NA |
-| Binomial               | ForEach_128Bit |     2,070.02 us |     128.963 us |      7.069 us |      8.09 |    0.02 |       3 B |          NA |
-| Categorical            | ForEach_128Bit |       183.80 us |       3.004 us |      0.165 us |      0.72 |    0.00 |         - |          NA |
-| Cauchy                 | ForEach_128Bit |     2,156.39 us |     125.282 us |      6.867 us |      8.43 |    0.02 |       3 B |          NA |
-| Chance.PickBetween     | ForEach_128Bit |       120.36 us |       0.346 us |      0.019 us |      0.47 |    0.00 |         - |          NA |
-| Chi                    | ForEach_128Bit |     3,751.46 us |     202.127 us |     11.079 us |     14.66 |    0.04 |       3 B |          NA |
-| Chi-Squared            | ForEach_128Bit |     3,460.01 us |      74.361 us |      4.076 us |     13.52 |    0.02 |      51 B |          NA |
-| Dirichlet              | ForEach_128Bit |    21,828.41 us |   1,478.119 us |     81.021 us |     85.29 |    0.28 |      23 B |          NA |
-| Exponential            | ForEach_128Bit |     2,835.28 us |     148.885 us |      8.161 us |     11.08 |    0.03 |       3 B |          NA |
-| F                      | ForEach_128Bit |     6,954.34 us |     167.274 us |      9.169 us |     27.17 |    0.03 |       6 B |          NA |
-| Gamma                  | ForEach_128Bit |     3,479.19 us |     142.509 us |      7.811 us |     13.59 |    0.03 |       3 B |          NA |
-| Gumbel                 | ForEach_128Bit |     5,522.85 us |     209.178 us |     11.466 us |     21.58 |    0.04 |       6 B |          NA |
-| Geometric              | ForEach_128Bit |       164.32 us |       1.213 us |      0.067 us |      0.64 |    0.00 |         - |          NA |
-| Halton                 | ForEach_128Bit |     1,146.61 us |      23.156 us |      1.269 us |      4.48 |    0.00 |       1 B |          NA |
-| Hypergeometric         | ForEach_128Bit |     1,119.31 us |       8.540 us |      0.468 us |      4.37 |    0.00 |       1 B |          NA |
-| Inverse-Gamma          | ForEach_128Bit |     3,567.00 us |      66.375 us |      3.638 us |     13.94 |    0.01 |       3 B |          NA |
-| Laplace                | ForEach_128Bit |     2,913.02 us |      66.696 us |      3.656 us |     11.38 |    0.01 |       3 B |          NA |
-| Logistic               | ForEach_128Bit |     3,027.00 us |      41.720 us |      2.287 us |     11.83 |    0.01 |       3 B |          NA |
-| Log-Normal             | ForEach_128Bit |     3,540.01 us |      53.196 us |      2.916 us |     13.83 |    0.01 |       3 B |          NA |
-| Multinomial            | ForEach_128Bit |     3,188.34 us |      55.916 us |      3.065 us |     12.46 |    0.01 |       3 B |          NA |
-| 'Multivariate Normal'  | ForEach_128Bit |     6,551.92 us |     426.972 us |     23.404 us |     25.60 |    0.08 |       6 B |          NA |
-| 'Negative Binomial'    | ForEach_128Bit |       509.31 us |      19.787 us |      1.085 us |      1.99 |    0.00 |       1 B |          NA |
-| Normal                 | ForEach_128Bit |     1,921.01 us |      70.398 us |      3.859 us |      7.51 |    0.01 |       1 B |          NA |
-| Pareto                 | ForEach_128Bit |     4,657.44 us |     173.820 us |      9.528 us |     18.20 |    0.03 |       6 B |          NA |
-| Poisson                | ForEach_128Bit |       408.55 us |       1.130 us |      0.062 us |      1.60 |    0.00 |         - |          NA |
-| Prime                  | ForEach_128Bit | 3,274,071.69 us | 397,290.347 us | 21,776.825 us | 12,792.24 |   73.94 |     736 B |          NA |
-| Rayleigh               | ForEach_128Bit |     3,092.84 us |     100.093 us |      5.486 us |     12.08 |    0.02 |       3 B |          NA |
-| Sobol                  | ForEach_128Bit |       197.07 us |      19.366 us |      1.062 us |      0.77 |    0.00 |         - |          NA |
-| Spatial.OnSphere       | ForEach_128Bit |     1,047.71 us |      34.771 us |      1.906 us |      4.09 |    0.01 |       1 B |          NA |
-| StudentT               | ForEach_128Bit |     5,695.95 us |     120.254 us |      6.592 us |     22.25 |    0.02 |       6 B |          NA |
-| Triangular             | ForEach_128Bit |       410.44 us |       3.657 us |      0.200 us |      1.60 |    0.00 |         - |          NA |
-| 'Uniform (Continuous)' | ForEach_128Bit |       255.94 us |       2.577 us |      0.141 us |      1.00 |    0.00 |         - |          NA |
-| 'Uniform (Discrete)'   | ForEach_128Bit |       128.18 us |       2.381 us |      0.131 us |      0.50 |    0.00 |         - |          NA |
-| Weibull                | ForEach_128Bit |     7,008.56 us |     377.958 us |     20.717 us |     27.38 |    0.07 |       6 B |          NA |
-| Wishart                | ForEach_128Bit |    25,384.82 us |     186.715 us |     10.234 us |     99.18 |    0.06 |      23 B |          NA |
-| Zipf                   | ForEach_128Bit |       128.33 us |       7.336 us |      0.402 us |      0.50 |    0.00 |         - |          NA |
+| Bernoulli              | ForEach_128Bit |       155.24 us |       0.546 us |      0.030 us |      0.60 |    0.00 |         - |          NA |
+| Beta                   | ForEach_128Bit |    10,845.51 us |     336.206 us |     18.429 us |     41.88 |    0.21 |      12 B |          NA |
+| Binomial               | ForEach_128Bit |     2,064.75 us |      33.541 us |      1.839 us |      7.97 |    0.04 |       3 B |          NA |
+| Categorical            | ForEach_128Bit |       185.22 us |      11.698 us |      0.641 us |      0.72 |    0.00 |         - |          NA |
+| Cauchy                 | ForEach_128Bit |     2,754.81 us |       9.364 us |      0.513 us |     10.64 |    0.05 |       3 B |          NA |
+| Chance.PickBetween     | ForEach_128Bit |       121.57 us |       4.213 us |      0.231 us |      0.47 |    0.00 |         - |          NA |
+| Chi                    | ForEach_128Bit |     6,440.52 us |     122.061 us |      6.691 us |     24.87 |    0.12 |       6 B |          NA |
+| Chi-Squared            | ForEach_128Bit |     5,498.67 us |      63.482 us |      3.480 us |     21.23 |    0.10 |       6 B |          NA |
+| Dirichlet              | ForEach_128Bit |    32,981.03 us |   1,133.703 us |     62.142 us |    127.34 |    0.64 |      46 B |          NA |
+| Exponential            | ForEach_128Bit |     4,273.34 us |     460.096 us |     25.219 us |     16.50 |    0.12 |       6 B |          NA |
+| F                      | ForEach_128Bit |    11,072.15 us |     367.424 us |     20.140 us |     42.75 |    0.22 |      12 B |          NA |
+| Gamma                  | ForEach_128Bit |     5,483.54 us |     205.992 us |     11.291 us |     21.17 |    0.11 |       6 B |          NA |
+| Gumbel                 | ForEach_128Bit |     8,425.80 us |     233.136 us |     12.779 us |     32.53 |    0.16 |      12 B |          NA |
+| Geometric              | ForEach_128Bit |       165.80 us |      11.523 us |      0.632 us |      0.64 |    0.00 |         - |          NA |
+| Halton                 | ForEach_128Bit |     1,151.84 us |      20.132 us |      1.104 us |      4.45 |    0.02 |       1 B |          NA |
+| Hypergeometric         | ForEach_128Bit |     1,122.41 us |      59.764 us |      3.276 us |      4.33 |    0.02 |       1 B |          NA |
+| Inverse-Gamma          | ForEach_128Bit |     5,577.03 us |      94.944 us |      5.204 us |     21.53 |    0.10 |       6 B |          NA |
+| Laplace                | ForEach_128Bit |     4,318.08 us |     106.289 us |      5.826 us |     16.67 |    0.08 |       6 B |          NA |
+| Logistic               | ForEach_128Bit |     4,565.85 us |     317.540 us |     17.405 us |     17.63 |    0.10 |       6 B |          NA |
+| Log-Normal             | ForEach_128Bit |     5,346.10 us |     395.493 us |     21.678 us |     20.64 |    0.12 |       6 B |          NA |
+| Multinomial            | ForEach_128Bit |     3,206.62 us |     146.307 us |      8.020 us |     12.38 |    0.07 |       3 B |          NA |
+| 'Multivariate Normal'  | ForEach_128Bit |    10,032.53 us |     138.241 us |      7.577 us |     38.74 |    0.19 |      12 B |          NA |
+| 'Negative Binomial'    | ForEach_128Bit |       510.41 us |       6.143 us |      0.337 us |      1.97 |    0.01 |       1 B |          NA |
+| Normal                 | ForEach_128Bit |     3,077.74 us |     119.888 us |      6.571 us |     11.88 |    0.06 |       3 B |          NA |
+| Pareto                 | ForEach_128Bit |     6,677.47 us |     205.952 us |     11.289 us |     25.78 |    0.13 |       6 B |          NA |
+| Poisson                | ForEach_128Bit |       410.87 us |       3.032 us |      0.166 us |      1.59 |    0.01 |         - |          NA |
+| Prime                  | ForEach_128Bit | 3,298,314.19 us | 298,064.994 us | 16,337.948 us | 12,735.26 |   81.88 |     736 B |          NA |
+| Rayleigh               | ForEach_128Bit |     5,304.95 us |     211.192 us |     11.576 us |     20.48 |    0.11 |       6 B |          NA |
+| Sobol                  | ForEach_128Bit |       197.96 us |      15.957 us |      0.875 us |      0.76 |    0.00 |         - |          NA |
+| Spatial.OnSphere       | ForEach_128Bit |     2,031.63 us |      30.057 us |      1.648 us |      7.84 |    0.04 |       3 B |          NA |
+| StudentT               | ForEach_128Bit |     9,764.42 us |     125.657 us |      6.888 us |     37.70 |    0.18 |      12 B |          NA |
+| Triangular             | ForEach_128Bit |     1,329.41 us |      36.329 us |      1.991 us |      5.13 |    0.03 |       1 B |          NA |
+| 'Uniform (Continuous)' | ForEach_128Bit |       259.00 us |      26.203 us |      1.436 us |      1.00 |    0.01 |         - |          NA |
+| 'Uniform (Discrete)'   | ForEach_128Bit |       128.14 us |       6.358 us |      0.348 us |      0.49 |    0.00 |         - |          NA |
+| Weibull                | ForEach_128Bit |    10,631.50 us |     727.685 us |     39.887 us |     41.05 |    0.24 |      12 B |          NA |
+| Wishart                | ForEach_128Bit |    38,771.02 us |     855.943 us |     46.917 us |    149.70 |    0.73 |      57 B |          NA |
+| Zipf                   | ForEach_128Bit |       128.73 us |       4.967 us |      0.272 us |      0.50 |    0.00 |         - |          NA |
 |                        |                |                 |                |               |           |         |           |             |
-| Bernoulli              | Linq_32Bit     |        17.78 us |       0.947 us |      0.052 us |      0.95 |    0.00 |         - |          NA |
-| Beta                   | Linq_32Bit     |       135.39 us |       3.843 us |      0.211 us |      7.20 |    0.01 |         - |          NA |
-| Binomial               | Linq_32Bit     |     2,034.89 us |     108.083 us |      5.924 us |    108.18 |    0.28 |       3 B |          NA |
-| Categorical            | Linq_32Bit     |        45.73 us |       1.675 us |      0.092 us |      2.43 |    0.00 |         - |          NA |
-| Cauchy                 | Linq_32Bit     |        42.50 us |       1.376 us |      0.075 us |      2.26 |    0.00 |         - |          NA |
-| Chance.PickBetween     | Linq_32Bit     |        18.36 us |       1.082 us |      0.059 us |      0.98 |    0.00 |         - |          NA |
-| Chi                    | Linq_32Bit     |        89.59 us |       0.569 us |      0.031 us |      4.76 |    0.00 |         - |          NA |
-| Chi-Squared            | Linq_32Bit     |        74.17 us |       0.473 us |      0.026 us |      3.94 |    0.00 |         - |          NA |
-| Dirichlet              | Linq_32Bit     |       634.71 us |      21.372 us |      1.171 us |     33.74 |    0.06 |     121 B |          NA |
-| Exponential            | Linq_32Bit     |        22.67 us |       2.225 us |      0.122 us |      1.21 |    0.01 |         - |          NA |
-| F                      | Linq_32Bit     |       134.88 us |       7.486 us |      0.410 us |      7.17 |    0.02 |         - |          NA |
-| Gamma                  | Linq_32Bit     |        74.45 us |       3.294 us |      0.181 us |      3.96 |    0.01 |         - |          NA |
-| Gumbel                 | Linq_32Bit     |        26.91 us |       0.286 us |      0.016 us |      1.43 |    0.00 |         - |          NA |
-| Geometric              | Linq_32Bit     |       165.78 us |       1.005 us |      0.055 us |      8.81 |    0.00 |         - |          NA |
-| Halton                 | Linq_32Bit     |       169.12 us |       0.917 us |      0.050 us |      8.99 |    0.00 |     120 B |          NA |
-| Hypergeometric         | Linq_32Bit     |     1,141.53 us |      66.523 us |      3.646 us |     60.69 |    0.17 |       1 B |          NA |
-| Inverse-Gamma          | Linq_32Bit     |        74.44 us |       0.671 us |      0.037 us |      3.96 |    0.00 |         - |          NA |
-| Laplace                | Linq_32Bit     |        45.49 us |       0.338 us |      0.019 us |      2.42 |    0.00 |         - |          NA |
-| Logistic               | Linq_32Bit     |        23.03 us |       0.827 us |      0.045 us |      1.22 |    0.00 |         - |          NA |
-| Log-Normal             | Linq_32Bit     |        54.72 us |       1.169 us |      0.064 us |      2.91 |    0.00 |         - |          NA |
-| Multinomial            | Linq_32Bit     |     3,166.01 us |     111.543 us |      6.114 us |    168.32 |    0.29 |     123 B |          NA |
-| 'Multivariate Normal'  | Linq_32Bit     |       296.60 us |       4.119 us |      0.226 us |     15.77 |    0.01 |     120 B |          NA |
-| 'Negative Binomial'    | Linq_32Bit     |       499.76 us |       7.566 us |      0.415 us |     26.57 |    0.02 |       1 B |          NA |
-| Normal                 | Linq_32Bit     |        50.83 us |       0.272 us |      0.015 us |      2.70 |    0.00 |         - |          NA |
-| Pareto                 | Linq_32Bit     |        26.38 us |       0.153 us |      0.008 us |      1.40 |    0.00 |         - |          NA |
-| Poisson                | Linq_32Bit     |       388.20 us |       8.622 us |      0.473 us |     20.64 |    0.02 |         - |          NA |
-| Prime                  | Linq_32Bit     |    82,250.27 us |   4,384.476 us |    240.328 us |  4,372.78 |   11.19 |     225 B |          NA |
-| Rayleigh               | Linq_32Bit     |        36.68 us |       1.184 us |      0.065 us |      1.95 |    0.00 |         - |          NA |
-| Sobol                  | Linq_32Bit     |       156.71 us |       2.381 us |      0.131 us |      8.33 |    0.01 |     120 B |          NA |
-| Spatial.OnSphere       | Linq_32Bit     |        64.55 us |       1.833 us |      0.100 us |      3.43 |    0.00 |     120 B |          NA |
-| StudentT               | Linq_32Bit     |       137.14 us |       0.563 us |      0.031 us |      7.29 |    0.00 |         - |          NA |
-| Triangular             | Linq_32Bit     |        41.32 us |       0.655 us |      0.036 us |      2.20 |    0.00 |         - |          NA |
-| 'Uniform (Continuous)' | Linq_32Bit     |        18.81 us |       0.149 us |      0.008 us |      1.00 |    0.00 |         - |          NA |
-| 'Uniform (Discrete)'   | Linq_32Bit     |        19.54 us |       0.174 us |      0.010 us |      1.04 |    0.00 |         - |          NA |
-| Weibull                | Linq_32Bit     |        30.36 us |       0.686 us |      0.038 us |      1.61 |    0.00 |         - |          NA |
-| Wishart                | Linq_32Bit     |       877.99 us |      36.998 us |      2.028 us |     46.68 |    0.10 |      65 B |          NA |
-| Zipf                   | Linq_32Bit     |       117.72 us |       3.929 us |      0.215 us |      6.26 |    0.01 |         - |          NA |
+| Bernoulli              | Linq_32Bit     |        17.79 us |       0.181 us |      0.010 us |      0.94 |    0.00 |         - |          NA |
+| Beta                   | Linq_32Bit     |       110.91 us |       3.076 us |      0.169 us |      5.88 |    0.01 |         - |          NA |
+| Binomial               | Linq_32Bit     |     2,028.10 us |      39.550 us |      2.168 us |    107.58 |    0.14 |       3 B |          NA |
+| Categorical            | Linq_32Bit     |        45.65 us |       0.382 us |      0.021 us |      2.42 |    0.00 |         - |          NA |
+| Cauchy                 | Linq_32Bit     |        42.68 us |       0.833 us |      0.046 us |      2.26 |    0.00 |         - |          NA |
+| Chance.PickBetween     | Linq_32Bit     |        18.37 us |       0.383 us |      0.021 us |      0.97 |    0.00 |         - |          NA |
+| Chi                    | Linq_32Bit     |        62.02 us |       2.486 us |      0.136 us |      3.29 |    0.01 |         - |          NA |
+| Chi-Squared            | Linq_32Bit     |        61.55 us |       1.489 us |      0.082 us |      3.26 |    0.00 |         - |          NA |
+| Dirichlet              | Linq_32Bit     |       577.65 us |       6.380 us |      0.350 us |     30.64 |    0.03 |     121 B |          NA |
+| Exponential            | Linq_32Bit     |        22.77 us |       0.709 us |      0.039 us |      1.21 |    0.00 |         - |          NA |
+| F                      | Linq_32Bit     |       110.38 us |       2.970 us |      0.163 us |      5.85 |    0.01 |         - |          NA |
+| Gamma                  | Linq_32Bit     |        61.43 us |       0.114 us |      0.006 us |      3.26 |    0.00 |         - |          NA |
+| Gumbel                 | Linq_32Bit     |        27.51 us |       0.233 us |      0.013 us |      1.46 |    0.00 |         - |          NA |
+| Geometric              | Linq_32Bit     |       166.70 us |      13.878 us |      0.761 us |      8.84 |    0.04 |         - |          NA |
+| Halton                 | Linq_32Bit     |       169.12 us |       4.396 us |      0.241 us |      8.97 |    0.01 |     120 B |          NA |
+| Hypergeometric         | Linq_32Bit     |     1,142.60 us |      13.156 us |      0.721 us |     60.61 |    0.07 |       1 B |          NA |
+| Inverse-Gamma          | Linq_32Bit     |        61.65 us |       7.806 us |      0.428 us |      3.27 |    0.02 |         - |          NA |
+| Laplace                | Linq_32Bit     |        47.77 us |       0.368 us |      0.020 us |      2.53 |    0.00 |         - |          NA |
+| Logistic               | Linq_32Bit     |        23.42 us |       0.352 us |      0.019 us |      1.24 |    0.00 |         - |          NA |
+| Log-Normal             | Linq_32Bit     |        48.59 us |       0.767 us |      0.042 us |      2.58 |    0.00 |         - |          NA |
+| Multinomial            | Linq_32Bit     |     3,172.40 us |      27.760 us |      1.522 us |    168.27 |    0.18 |     123 B |          NA |
+| 'Multivariate Normal'  | Linq_32Bit     |       278.99 us |      16.491 us |      0.904 us |     14.80 |    0.04 |     120 B |          NA |
+| 'Negative Binomial'    | Linq_32Bit     |       500.23 us |       2.408 us |      0.132 us |     26.53 |    0.03 |       1 B |          NA |
+| Normal                 | Linq_32Bit     |        45.19 us |       0.412 us |      0.023 us |      2.40 |    0.00 |         - |          NA |
+| Pareto                 | Linq_32Bit     |        26.66 us |       0.220 us |      0.012 us |      1.41 |    0.00 |         - |          NA |
+| Poisson                | Linq_32Bit     |       388.51 us |      15.644 us |      0.857 us |     20.61 |    0.04 |         - |          NA |
+| Prime                  | Linq_32Bit     |    82,920.51 us |   1,932.506 us |    105.927 us |  4,398.30 |    6.45 |     225 B |          NA |
+| Rayleigh               | Linq_32Bit     |        23.37 us |       0.331 us |      0.018 us |      1.24 |    0.00 |         - |          NA |
+| Sobol                  | Linq_32Bit     |       156.82 us |       6.027 us |      0.330 us |      8.32 |    0.02 |     120 B |          NA |
+| Spatial.OnSphere       | Linq_32Bit     |        57.31 us |       2.366 us |      0.130 us |      3.04 |    0.01 |     120 B |          NA |
+| StudentT               | Linq_32Bit     |       101.88 us |       0.878 us |      0.048 us |      5.40 |    0.01 |         - |          NA |
+| Triangular             | Linq_32Bit     |        38.84 us |       0.438 us |      0.024 us |      2.06 |    0.00 |         - |          NA |
+| 'Uniform (Continuous)' | Linq_32Bit     |        18.85 us |       0.383 us |      0.021 us |      1.00 |    0.00 |         - |          NA |
+| 'Uniform (Discrete)'   | Linq_32Bit     |        19.61 us |       0.244 us |      0.013 us |      1.04 |    0.00 |         - |          NA |
+| Weibull                | Linq_32Bit     |        30.78 us |       0.313 us |      0.017 us |      1.63 |    0.00 |         - |          NA |
+| Wishart                | Linq_32Bit     |       804.64 us |      25.534 us |      1.400 us |     42.68 |    0.08 |      65 B |          NA |
+| Zipf                   | Linq_32Bit     |       117.96 us |       4.157 us |      0.228 us |      6.26 |    0.01 |         - |          NA |
 |                        |                |                 |                |               |           |         |           |             |
-| Bernoulli              | Linq_64Bit     |        33.29 us |       0.075 us |      0.004 us |      0.96 |    0.00 |         - |          NA |
-| Beta                   | Linq_64Bit     |       194.71 us |       3.098 us |      0.170 us |      5.62 |    0.01 |         - |          NA |
-| Binomial               | Linq_64Bit     |     2,021.61 us |      12.270 us |      0.673 us |     58.34 |    0.08 |       3 B |          NA |
-| Categorical            | Linq_64Bit     |        61.77 us |       1.749 us |      0.096 us |      1.78 |    0.00 |         - |          NA |
-| Cauchy                 | Linq_64Bit     |        56.66 us |       0.499 us |      0.027 us |      1.64 |    0.00 |         - |          NA |
-| Chance.PickBetween     | Linq_64Bit     |        34.74 us |       0.285 us |      0.016 us |      1.00 |    0.00 |         - |          NA |
-| Chi                    | Linq_64Bit     |       100.40 us |       1.816 us |      0.100 us |      2.90 |    0.00 |         - |          NA |
-| Chi-Squared            | Linq_64Bit     |       100.38 us |       0.945 us |      0.052 us |      2.90 |    0.00 |         - |          NA |
-| Dirichlet              | Linq_64Bit     |       835.36 us |       9.891 us |      0.542 us |     24.11 |    0.04 |     121 B |          NA |
-| Exponential            | Linq_64Bit     |        47.32 us |       0.341 us |      0.019 us |      1.37 |    0.00 |         - |          NA |
-| F                      | Linq_64Bit     |       195.18 us |       3.708 us |      0.203 us |      5.63 |    0.01 |         - |          NA |
-| Gamma                  | Linq_64Bit     |       100.45 us |       0.766 us |      0.042 us |      2.90 |    0.00 |         - |          NA |
-| Gumbel                 | Linq_64Bit     |        62.65 us |       1.878 us |      0.103 us |      1.81 |    0.00 |         - |          NA |
-| Geometric              | Linq_64Bit     |       166.19 us |       0.992 us |      0.054 us |      4.80 |    0.01 |         - |          NA |
-| Halton                 | Linq_64Bit     |       168.18 us |       3.987 us |      0.219 us |      4.85 |    0.01 |     120 B |          NA |
-| Hypergeometric         | Linq_64Bit     |     1,144.39 us |      28.944 us |      1.587 us |     33.02 |    0.06 |       1 B |          NA |
-| Inverse-Gamma          | Linq_64Bit     |        99.84 us |       0.434 us |      0.024 us |      2.88 |    0.00 |         - |          NA |
-| Laplace                | Linq_64Bit     |        74.05 us |       1.659 us |      0.091 us |      2.14 |    0.00 |         - |          NA |
-| Logistic               | Linq_64Bit     |        44.94 us |       0.815 us |      0.045 us |      1.30 |    0.00 |         - |          NA |
-| Log-Normal             | Linq_64Bit     |        84.65 us |       2.090 us |      0.115 us |      2.44 |    0.00 |         - |          NA |
-| Multinomial            | Linq_64Bit     |     3,169.62 us |     221.701 us |     12.152 us |     91.47 |    0.33 |     123 B |          NA |
-| 'Multivariate Normal'  | Linq_64Bit     |       467.31 us |      16.115 us |      0.883 us |     13.49 |    0.03 |     120 B |          NA |
-| 'Negative Binomial'    | Linq_64Bit     |       498.48 us |       4.724 us |      0.259 us |     14.38 |    0.02 |       1 B |          NA |
-| Normal                 | Linq_64Bit     |        58.65 us |       2.388 us |      0.131 us |      1.69 |    0.00 |         - |          NA |
-| Pareto                 | Linq_64Bit     |        44.08 us |       0.643 us |      0.035 us |      1.27 |    0.00 |         - |          NA |
-| Poisson                | Linq_64Bit     |       387.74 us |       3.277 us |      0.180 us |     11.19 |    0.02 |         - |          NA |
-| Prime                  | Linq_64Bit     |   418,989.46 us |  13,201.151 us |    723.600 us | 12,090.88 |   24.88 |     856 B |          NA |
-| Rayleigh               | Linq_64Bit     |        53.37 us |       1.091 us |      0.060 us |      1.54 |    0.00 |         - |          NA |
-| Sobol                  | Linq_64Bit     |       157.05 us |       3.442 us |      0.189 us |      4.53 |    0.01 |     120 B |          NA |
-| Spatial.OnSphere       | Linq_64Bit     |        99.64 us |       0.465 us |      0.026 us |      2.88 |    0.00 |     120 B |          NA |
-| StudentT               | Linq_64Bit     |       156.02 us |       5.735 us |      0.314 us |      4.50 |    0.01 |         - |          NA |
-| Triangular             | Linq_64Bit     |        59.62 us |       0.443 us |      0.024 us |      1.72 |    0.00 |         - |          NA |
-| 'Uniform (Continuous)' | Linq_64Bit     |        34.65 us |       1.033 us |      0.057 us |      1.00 |    0.00 |         - |          NA |
-| 'Uniform (Discrete)'   | Linq_64Bit     |        36.33 us |       0.091 us |      0.005 us |      1.05 |    0.00 |         - |          NA |
-| Weibull                | Linq_64Bit     |        58.95 us |       0.455 us |      0.025 us |      1.70 |    0.00 |         - |          NA |
-| Wishart                | Linq_64Bit     |     1,186.31 us |      20.602 us |      1.129 us |     34.23 |    0.06 |      65 B |          NA |
-| Zipf                   | Linq_64Bit     |       117.36 us |       1.314 us |      0.072 us |      3.39 |    0.01 |         - |          NA |
+| Bernoulli              | Linq_64Bit     |        33.45 us |       0.156 us |      0.009 us |      0.96 |    0.00 |         - |          NA |
+| Beta                   | Linq_64Bit     |       188.95 us |       1.023 us |      0.056 us |      5.42 |    0.01 |         - |          NA |
+| Binomial               | Linq_64Bit     |     2,028.94 us |      31.319 us |      1.717 us |     58.23 |    0.14 |       3 B |          NA |
+| Categorical            | Linq_64Bit     |        62.04 us |       0.567 us |      0.031 us |      1.78 |    0.00 |         - |          NA |
+| Cauchy                 | Linq_64Bit     |        56.88 us |       2.658 us |      0.146 us |      1.63 |    0.01 |         - |          NA |
+| Chance.PickBetween     | Linq_64Bit     |        34.88 us |       0.426 us |      0.023 us |      1.00 |    0.00 |         - |          NA |
+| Chi                    | Linq_64Bit     |        96.80 us |       1.765 us |      0.097 us |      2.78 |    0.01 |         - |          NA |
+| Chi-Squared            | Linq_64Bit     |        97.25 us |       1.580 us |      0.087 us |      2.79 |    0.01 |         - |          NA |
+| Dirichlet              | Linq_64Bit     |       818.55 us |      24.611 us |      1.349 us |     23.49 |    0.06 |     121 B |          NA |
+| Exponential            | Linq_64Bit     |        47.56 us |       0.707 us |      0.039 us |      1.37 |    0.00 |         - |          NA |
+| F                      | Linq_64Bit     |       188.48 us |       2.013 us |      0.110 us |      5.41 |    0.01 |         - |          NA |
+| Gamma                  | Linq_64Bit     |        96.69 us |       0.608 us |      0.033 us |      2.78 |    0.01 |         - |          NA |
+| Gumbel                 | Linq_64Bit     |        63.38 us |       2.413 us |      0.132 us |      1.82 |    0.01 |         - |          NA |
+| Geometric              | Linq_64Bit     |       167.02 us |       3.643 us |      0.200 us |      4.79 |    0.01 |         - |          NA |
+| Halton                 | Linq_64Bit     |       168.10 us |       4.586 us |      0.251 us |      4.82 |    0.01 |     120 B |          NA |
+| Hypergeometric         | Linq_64Bit     |     1,137.89 us |      21.755 us |      1.192 us |     32.66 |    0.08 |       1 B |          NA |
+| Inverse-Gamma          | Linq_64Bit     |        96.75 us |       0.755 us |      0.041 us |      2.78 |    0.01 |         - |          NA |
+| Laplace                | Linq_64Bit     |        76.62 us |       1.554 us |      0.085 us |      2.20 |    0.01 |         - |          NA |
+| Logistic               | Linq_64Bit     |        45.23 us |       0.618 us |      0.034 us |      1.30 |    0.00 |         - |          NA |
+| Log-Normal             | Linq_64Bit     |        82.04 us |       0.374 us |      0.021 us |      2.35 |    0.01 |         - |          NA |
+| Multinomial            | Linq_64Bit     |     3,182.05 us |      54.844 us |      3.006 us |     91.33 |    0.22 |     123 B |          NA |
+| 'Multivariate Normal'  | Linq_64Bit     |       450.55 us |       1.024 us |      0.056 us |     12.93 |    0.03 |     120 B |          NA |
+| 'Negative Binomial'    | Linq_64Bit     |       500.90 us |      21.554 us |      1.181 us |     14.38 |    0.04 |       1 B |          NA |
+| Normal                 | Linq_64Bit     |        57.69 us |       2.348 us |      0.129 us |      1.66 |    0.00 |         - |          NA |
+| Pareto                 | Linq_64Bit     |        44.33 us |       2.012 us |      0.110 us |      1.27 |    0.00 |         - |          NA |
+| Poisson                | Linq_64Bit     |       389.53 us |       3.060 us |      0.168 us |     11.18 |    0.03 |         - |          NA |
+| Prime                  | Linq_64Bit     |   418,310.49 us |  13,581.305 us |    744.437 us | 12,005.69 |   32.45 |     856 B |          NA |
+| Rayleigh               | Linq_64Bit     |        47.58 us |       2.003 us |      0.110 us |      1.37 |    0.00 |         - |          NA |
+| Sobol                  | Linq_64Bit     |       157.10 us |       4.334 us |      0.238 us |      4.51 |    0.01 |     120 B |          NA |
+| Spatial.OnSphere       | Linq_64Bit     |        97.73 us |       0.752 us |      0.041 us |      2.80 |    0.01 |     120 B |          NA |
+| StudentT               | Linq_64Bit     |       150.38 us |       4.135 us |      0.227 us |      4.32 |    0.01 |         - |          NA |
+| Triangular             | Linq_64Bit     |        58.18 us |       0.229 us |      0.013 us |      1.67 |    0.00 |         - |          NA |
+| 'Uniform (Continuous)' | Linq_64Bit     |        34.84 us |       1.632 us |      0.089 us |      1.00 |    0.00 |         - |          NA |
+| 'Uniform (Discrete)'   | Linq_64Bit     |        36.45 us |       0.941 us |      0.052 us |      1.05 |    0.00 |         - |          NA |
+| Weibull                | Linq_64Bit     |        58.79 us |       0.101 us |      0.006 us |      1.69 |    0.00 |         - |          NA |
+| Wishart                | Linq_64Bit     |     1,161.04 us |      11.968 us |      0.656 us |     33.32 |    0.08 |      65 B |          NA |
+| Zipf                   | Linq_64Bit     |       117.79 us |       5.173 us |      0.284 us |      3.38 |    0.01 |         - |          NA |
 |                        |                |                 |                |               |           |         |           |             |
-| Bernoulli              | Linq_128Bit    |       165.51 us |       3.420 us |      0.187 us |      0.66 |    0.00 |         - |          NA |
-| Beta                   | Linq_128Bit    |     6,894.43 us |      79.815 us |      4.375 us |     27.48 |    0.06 |       6 B |          NA |
-| Binomial               | Linq_128Bit    |     2,175.50 us |      63.638 us |      3.488 us |      8.67 |    0.02 |       3 B |          NA |
-| Categorical            | Linq_128Bit    |       174.67 us |       5.329 us |      0.292 us |      0.70 |    0.00 |         - |          NA |
-| Cauchy                 | Linq_128Bit    |     2,334.66 us |      29.333 us |      1.608 us |      9.30 |    0.02 |       3 B |          NA |
-| Chance.PickBetween     | Linq_128Bit    |       120.63 us |       0.436 us |      0.024 us |      0.48 |    0.00 |         - |          NA |
-| Chi                    | Linq_128Bit    |     3,749.78 us |     104.888 us |      5.749 us |     14.94 |    0.04 |       3 B |          NA |
-| Chi-Squared            | Linq_128Bit    |     3,468.69 us |      82.898 us |      4.544 us |     13.82 |    0.03 |       3 B |          NA |
-| Dirichlet              | Linq_128Bit    |    21,825.91 us |     546.203 us |     29.939 us |     86.98 |    0.22 |     151 B |          NA |
-| Exponential            | Linq_128Bit    |     2,833.90 us |      57.536 us |      3.154 us |     11.29 |    0.03 |       3 B |          NA |
-| F                      | Linq_128Bit    |     6,942.57 us |     109.594 us |      6.007 us |     27.67 |    0.07 |       6 B |          NA |
-| Gamma                  | Linq_128Bit    |     3,483.38 us |      83.904 us |      4.599 us |     13.88 |    0.04 |       3 B |          NA |
-| Gumbel                 | Linq_128Bit    |     5,563.68 us |     178.622 us |      9.791 us |     22.17 |    0.06 |       6 B |          NA |
-| Geometric              | Linq_128Bit    |       166.38 us |       9.357 us |      0.513 us |      0.66 |    0.00 |         - |          NA |
-| Halton                 | Linq_128Bit    |     1,163.92 us |      81.936 us |      4.491 us |      4.64 |    0.02 |     129 B |          NA |
-| Hypergeometric         | Linq_128Bit    |     1,274.53 us |      99.998 us |      5.481 us |      5.08 |    0.02 |       1 B |          NA |
-| Inverse-Gamma          | Linq_128Bit    |     3,570.69 us |     104.435 us |      5.724 us |     14.23 |    0.04 |       3 B |          NA |
-| Laplace                | Linq_128Bit    |     2,890.76 us |      26.645 us |      1.460 us |     11.52 |    0.03 |       3 B |          NA |
-| Logistic               | Linq_128Bit    |     3,096.83 us |      45.691 us |      2.504 us |     12.34 |    0.03 |       3 B |          NA |
-| Log-Normal             | Linq_128Bit    |     3,547.99 us |     143.220 us |      7.850 us |     14.14 |    0.04 |       3 B |          NA |
-| Multinomial            | Linq_128Bit    |     3,197.06 us |      12.342 us |      0.677 us |     12.74 |    0.03 |     139 B |          NA |
-| 'Multivariate Normal'  | Linq_128Bit    |     6,552.63 us |      62.673 us |      3.435 us |     26.11 |    0.06 |     134 B |          NA |
-| 'Negative Binomial'    | Linq_128Bit    |       530.31 us |       4.382 us |      0.240 us |      2.11 |    0.00 |       1 B |          NA |
-| Normal                 | Linq_128Bit    |     1,918.58 us |      72.395 us |      3.968 us |      7.65 |    0.02 |       1 B |          NA |
-| Pareto                 | Linq_128Bit    |     4,904.60 us |     100.066 us |      5.485 us |     19.55 |    0.05 |       6 B |          NA |
-| Poisson                | Linq_128Bit    |       388.08 us |       2.323 us |      0.127 us |      1.55 |    0.00 |         - |          NA |
-| Prime                  | Linq_128Bit    | 3,280,964.42 us | 323,228.707 us | 17,717.256 us | 13,075.29 |   67.92 |     872 B |          NA |
-| Rayleigh               | Linq_128Bit    |     3,091.97 us |      63.514 us |      3.481 us |     12.32 |    0.03 |       3 B |          NA |
-| Sobol                  | Linq_128Bit    |       204.73 us |       2.140 us |      0.117 us |      0.82 |    0.00 |     128 B |          NA |
-| Spatial.OnSphere       | Linq_128Bit    |     1,059.71 us |      20.440 us |      1.120 us |      4.22 |    0.01 |     129 B |          NA |
-| StudentT               | Linq_128Bit    |     5,704.37 us |     209.506 us |     11.484 us |     22.73 |    0.06 |       6 B |          NA |
-| Triangular             | Linq_128Bit    |       390.94 us |       0.358 us |      0.020 us |      1.56 |    0.00 |         - |          NA |
-| 'Uniform (Continuous)' | Linq_128Bit    |       250.93 us |      11.942 us |      0.655 us |      1.00 |    0.00 |         - |          NA |
-| 'Uniform (Discrete)'   | Linq_128Bit    |       145.94 us |       5.496 us |      0.301 us |      0.58 |    0.00 |         - |          NA |
-| Weibull                | Linq_128Bit    |     7,009.12 us |     275.030 us |     15.075 us |     27.93 |    0.08 |       6 B |          NA |
-| Wishart                | Linq_128Bit    |    25,408.30 us |     416.217 us |     22.814 us |    101.26 |    0.24 |      87 B |          NA |
-| Zipf                   | Linq_128Bit    |       121.62 us |       4.406 us |      0.242 us |      0.48 |    0.00 |         - |          NA |
+| Bernoulli              | Linq_128Bit    |       166.41 us |      11.832 us |      0.649 us |      0.66 |    0.00 |         - |          NA |
+| Beta                   | Linq_128Bit    |    10,929.73 us |     693.203 us |     37.997 us |     43.28 |    0.13 |      12 B |          NA |
+| Binomial               | Linq_128Bit    |     2,182.77 us |      30.747 us |      1.685 us |      8.64 |    0.01 |       3 B |          NA |
+| Categorical            | Linq_128Bit    |       175.47 us |      12.602 us |      0.691 us |      0.69 |    0.00 |         - |          NA |
+| Cauchy                 | Linq_128Bit    |     2,963.64 us |      41.540 us |      2.277 us |     11.74 |    0.01 |       3 B |          NA |
+| Chance.PickBetween     | Linq_128Bit    |       120.96 us |       1.621 us |      0.089 us |      0.48 |    0.00 |         - |          NA |
+| Chi                    | Linq_128Bit    |     6,446.15 us |      45.926 us |      2.517 us |     25.53 |    0.02 |       6 B |          NA |
+| Chi-Squared            | Linq_128Bit    |     5,501.88 us |      41.702 us |      2.286 us |     21.79 |    0.02 |       6 B |          NA |
+| Dirichlet              | Linq_128Bit    |    33,053.89 us |   1,173.212 us |     64.308 us |    130.90 |    0.24 |     174 B |          NA |
+| Exponential            | Linq_128Bit    |     4,278.95 us |     221.027 us |     12.115 us |     16.95 |    0.04 |       6 B |          NA |
+| F                      | Linq_128Bit    |    11,090.58 us |     216.891 us |     11.889 us |     43.92 |    0.05 |      12 B |          NA |
+| Gamma                  | Linq_128Bit    |     5,504.58 us |     164.049 us |      8.992 us |     21.80 |    0.03 |       6 B |          NA |
+| Gumbel                 | Linq_128Bit    |     8,549.01 us |     366.060 us |     20.065 us |     33.86 |    0.07 |      12 B |          NA |
+| Geometric              | Linq_128Bit    |       167.27 us |       8.552 us |      0.469 us |      0.66 |    0.00 |         - |          NA |
+| Halton                 | Linq_128Bit    |     1,160.78 us |      41.920 us |      2.298 us |      4.60 |    0.01 |     129 B |          NA |
+| Hypergeometric         | Linq_128Bit    |     1,274.76 us |      47.122 us |      2.583 us |      5.05 |    0.01 |       1 B |          NA |
+| Inverse-Gamma          | Linq_128Bit    |     5,574.03 us |      58.360 us |      3.199 us |     22.07 |    0.02 |       6 B |          NA |
+| Laplace                | Linq_128Bit    |     4,397.55 us |      50.681 us |      2.778 us |     17.42 |    0.02 |       6 B |          NA |
+| Logistic               | Linq_128Bit    |     4,635.99 us |     327.839 us |     17.970 us |     18.36 |    0.06 |       6 B |          NA |
+| Log-Normal             | Linq_128Bit    |     5,296.73 us |      53.049 us |      2.908 us |     20.98 |    0.02 |      11 B |          NA |
+| Multinomial            | Linq_128Bit    |     3,210.05 us |     118.402 us |      6.490 us |     12.71 |    0.02 |     139 B |          NA |
+| 'Multivariate Normal'  | Linq_128Bit    |    10,022.89 us |     124.428 us |      6.820 us |     39.69 |    0.04 |     140 B |          NA |
+| 'Negative Binomial'    | Linq_128Bit    |       531.17 us |      15.467 us |      0.848 us |      2.10 |    0.00 |       1 B |          NA |
+| Normal                 | Linq_128Bit    |     3,081.57 us |      36.429 us |      1.997 us |     12.20 |    0.01 |       3 B |          NA |
+| Pareto                 | Linq_128Bit    |     6,818.11 us |     207.214 us |     11.358 us |     27.00 |    0.04 |       6 B |          NA |
+| Poisson                | Linq_128Bit    |       389.50 us |       4.359 us |      0.239 us |      1.54 |    0.00 |         - |          NA |
+| Prime                  | Linq_128Bit    | 3,265,254.17 us | 347,509.908 us | 19,048.191 us | 12,931.31 |   65.96 |     872 B |          NA |
+| Rayleigh               | Linq_128Bit    |     5,538.74 us |     189.969 us |     10.413 us |     21.93 |    0.04 |       6 B |          NA |
+| Sobol                  | Linq_128Bit    |       204.70 us |       5.112 us |      0.280 us |      0.81 |    0.00 |     128 B |          NA |
+| Spatial.OnSphere       | Linq_128Bit    |     2,031.52 us |      35.299 us |      1.935 us |      8.05 |    0.01 |     131 B |          NA |
+| StudentT               | Linq_128Bit    |     9,764.56 us |     173.011 us |      9.483 us |     38.67 |    0.04 |      12 B |          NA |
+| Triangular             | Linq_128Bit    |     1,356.50 us |      27.571 us |      1.511 us |      5.37 |    0.01 |       1 B |          NA |
+| 'Uniform (Continuous)' | Linq_128Bit    |       252.51 us |       3.736 us |      0.205 us |      1.00 |    0.00 |         - |          NA |
+| 'Uniform (Discrete)'   | Linq_128Bit    |       145.36 us |       6.002 us |      0.329 us |      0.58 |    0.00 |         - |          NA |
+| Weibull                | Linq_128Bit    |    10,555.30 us |      52.151 us |      2.859 us |     41.80 |    0.03 |      12 B |          NA |
+| Wishart                | Linq_128Bit    |    38,835.83 us |   1,477.637 us |     80.994 us |    153.80 |    0.30 |    1070 B |          NA |
+| Zipf                   | Linq_128Bit    |       122.13 us |       1.301 us |      0.071 us |      0.48 |    0.00 |         - |          NA |
 
 // * Legends *
   Param       : Value of the 'Param' parameter
@@ -368,9 +368,9 @@ WarmupCount=3
 
 
 // ***** BenchmarkRunner: End *****
-Run time: 00:39:00 (2340.04 sec), executed benchmarks: 333
+Run time: 00:37:51 (2271.96 sec), executed benchmarks: 333
 
-Global total time: 00:39:17 (2357.71 sec), executed benchmarks: 333
+Global total time: 00:38:10 (2290.09 sec), executed benchmarks: 333
 // * Artifacts cleanup *
 Artifacts cleanup is finished
 
