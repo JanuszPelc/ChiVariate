@@ -1,6 +1,6 @@
 using System.Numerics;
 using System.Runtime.CompilerServices;
-using ChiVariate.Generators;
+using ChiVariate.Providers;
 
 namespace ChiVariate;
 
@@ -17,7 +17,7 @@ public ref struct ChiSamplerLogNormal<TRng, T>
     private readonly T _logMean;
     private readonly T _logStandardDeviation;
 
-    private ChiStatefulNormalGenerator<TRng, T> _normalGenerator;
+    private ChiStatefulNormalProvider<TRng, T> _normalProvider;
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     internal ChiSamplerLogNormal(ref TRng rng, T logMean, T logStandardDeviation)
@@ -28,7 +28,7 @@ public ref struct ChiSamplerLogNormal<TRng, T>
 
         _logMean = logMean;
         _logStandardDeviation = logStandardDeviation;
-        _normalGenerator = new ChiStatefulNormalGenerator<TRng, T>(ref rng);
+        _normalProvider = new ChiStatefulNormalProvider<TRng, T>(ref rng);
     }
 
     /// <summary>
@@ -38,7 +38,7 @@ public ref struct ChiSamplerLogNormal<TRng, T>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public T Sample()
     {
-        var normalSample = _logMean + _normalGenerator.Next() * _logStandardDeviation;
+        var normalSample = _logMean + _normalProvider.Next() * _logStandardDeviation;
         return ChiMath.Exp(normalSample);
     }
 

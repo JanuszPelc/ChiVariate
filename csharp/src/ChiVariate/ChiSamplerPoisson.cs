@@ -1,6 +1,6 @@
 using System.Numerics;
 using System.Runtime.CompilerServices;
-using ChiVariate.Generators;
+using ChiVariate.Providers;
 
 namespace ChiVariate;
 
@@ -28,13 +28,13 @@ public readonly ref struct ChiSamplerPoisson<TRng, T>(ref TRng rng, double mean)
     public T Sample()
     {
         var limit = Math.Exp(-_mean);
-        var p = ChiRealGenerator.Next<TRng, double>(ref _rng, ChiIntervalOptions.ExcludeMin);
+        var p = ChiRealProvider.Next<TRng, double>(ref _rng, ChiIntervalOptions.ExcludeMin);
         var k = T.Zero;
 
         while (p > limit)
         {
             k++;
-            p *= ChiRealGenerator.Next<TRng, double>(ref _rng, ChiIntervalOptions.ExcludeMin);
+            p *= ChiRealProvider.Next<TRng, double>(ref _rng, ChiIntervalOptions.ExcludeMin);
         }
 
         return k;

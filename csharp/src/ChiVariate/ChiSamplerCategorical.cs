@@ -1,7 +1,7 @@
 using System.Diagnostics;
 using System.Numerics;
 using System.Runtime.CompilerServices;
-using ChiVariate.Generators;
+using ChiVariate.Providers;
 
 namespace ChiVariate;
 
@@ -83,10 +83,10 @@ public ref struct ChiSamplerCategorical<TRng, T>
     public int Sample()
     {
         if (_isUniform)
-            return ChiIntegerGenerator.Next(ref _rng, 0, Count);
+            return ChiIntegerProvider.Next(ref _rng, 0, Count);
 
-        var i = ChiIntegerGenerator.Next(ref _rng, 0, Count);
-        var u = ChiRealGenerator.Next<TRng, T>(ref _rng);
+        var i = ChiIntegerProvider.Next(ref _rng, 0, Count);
+        var u = ChiRealProvider.Next<TRng, T>(ref _rng);
 
         var probSpan = _probVector.Span;
         var aliasSpan = _aliasVector.Span;

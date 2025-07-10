@@ -1,6 +1,6 @@
 using System.Numerics;
 using System.Runtime.CompilerServices;
-using ChiVariate.Generators;
+using ChiVariate.Providers;
 
 namespace ChiVariate;
 
@@ -18,7 +18,7 @@ public ref struct ChiSamplerGamma<TRng, T>
     private readonly T _shape;
     private readonly T _scale;
 
-    private ChiStatefulNormalGenerator<TRng, T> _normalGenerator;
+    private ChiStatefulNormalProvider<TRng, T> _normalProvider;
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     internal ChiSamplerGamma(ref TRng rng, T shape, T scale)
@@ -31,7 +31,7 @@ public ref struct ChiSamplerGamma<TRng, T>
             : throw new ArgumentOutOfRangeException(nameof(scale), "Scale (theta) must be positive.");
         _rng = ref rng;
 
-        _normalGenerator = new ChiStatefulNormalGenerator<TRng, T>(ref rng);
+        _normalProvider = new ChiStatefulNormalProvider<TRng, T>(ref rng);
     }
 
     /// <summary>
@@ -43,8 +43,8 @@ public ref struct ChiSamplerGamma<TRng, T>
 
         while (true)
         {
-            var p = b * ChiRealGenerator.Next<TRng, T>(ref _rng);
-            var u = ChiRealGenerator.Next<TRng, T>(ref _rng);
+            var p = b * ChiRealProvider.Next<TRng, T>(ref _rng);
+            var u = ChiRealProvider.Next<TRng, T>(ref _rng);
 
             if (p <= T.One)
             {
@@ -69,13 +69,13 @@ public ref struct ChiSamplerGamma<TRng, T>
 
         while (true)
         {
-            var z = _normalGenerator.Next();
+            var z = _normalProvider.Next();
             var xCubed = T.One + c * z;
 
             if (xCubed <= T.Zero) continue;
 
             var x = xCubed * xCubed * xCubed;
-            var v = ChiRealGenerator.Next<TRng, T>(ref _rng, ChiIntervalOptions.ExcludeMin);
+            var v = ChiRealProvider.Next<TRng, T>(ref _rng, ChiIntervalOptions.ExcludeMin);
 
             if (v < T.One - T.CreateChecked(0.0331) * z * z * z * z ||
                 ChiMath.Log(v) < T.CreateChecked(0.5) * z * z + d * (T.One - x + ChiMath.Log(x)))

@@ -1,7 +1,7 @@
 using System.Diagnostics;
 using System.Numerics;
 using System.Runtime.CompilerServices;
-using ChiVariate.Generators;
+using ChiVariate.Providers;
 
 namespace ChiVariate;
 
@@ -22,7 +22,7 @@ public ref struct ChiSamplerWishart<TRng, T>
     private ChiMatrix<T> _choleskyFactorTranspose;
     private ChiVector<(T shape, T scale)> _gammaParamsForChiSq;
 
-    private ChiStatefulNormalGenerator<TRng, T> _normalGenerator;
+    private ChiStatefulNormalProvider<TRng, T> _normalProvider;
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     internal ChiSamplerWishart(ref TRng rng, int degreesOfFreedom, ChiMatrix<T> scaleMatrix)
@@ -36,7 +36,7 @@ public ref struct ChiSamplerWishart<TRng, T>
             throw new ArgumentException("Scale matrix must be square.", nameof(scaleMatrix));
 
         _rng = ref rng;
-        _normalGenerator = new ChiStatefulNormalGenerator<TRng, T>(ref rng);
+        _normalProvider = new ChiStatefulNormalProvider<TRng, T>(ref rng);
 
         _choleskyFactor = scaleMatrix.Peek().Cholesky();
         _choleskyFactorTranspose = _choleskyFactor.Peek().Transpose();
@@ -67,7 +67,7 @@ public ref struct ChiSamplerWishart<TRng, T>
             a[i, i] = ChiMath.Sqrt(chiSquaredSample);
 
             for (var j = 0; j < i; j++)
-                a[i, j] = _normalGenerator.Next();
+                a[i, j] = _normalProvider.Next();
         }
 
         var aTranspose = a.Peek().Transpose();

@@ -1,6 +1,6 @@
 using System.Numerics;
 using System.Runtime.CompilerServices;
-using ChiVariate.Generators;
+using ChiVariate.Providers;
 
 namespace ChiVariate;
 
@@ -36,7 +36,7 @@ public readonly ref struct ChiSamplerRayleigh<TRng, T>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public T Sample()
     {
-        var u = ChiRealGenerator.Next<TRng, T>(ref _rng,
+        var u = ChiRealProvider.Next<TRng, T>(ref _rng,
             ChiIntervalOptions.ExcludeMin);
         var twoSigmaSq = Two * _sigma * _sigma;
 

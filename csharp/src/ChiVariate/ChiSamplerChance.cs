@@ -1,7 +1,7 @@
 using System.Buffers;
 using System.Numerics;
 using System.Runtime.CompilerServices;
-using ChiVariate.Generators;
+using ChiVariate.Providers;
 
 namespace ChiVariate;
 
@@ -25,7 +25,7 @@ public readonly ref struct ChiSamplerChance<TRng>(ref TRng rng)
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public int RollDie(int sides = 6)
     {
-        return ChiIntegerGenerator.Next(ref _rng, 1, sides + 1);
+        return ChiIntegerProvider.Next(ref _rng, 1, sides + 1);
     }
 
     /// <summary>
@@ -43,7 +43,7 @@ public readonly ref struct ChiSamplerChance<TRng>(ref TRng rng)
     {
         if (chances <= 0)
             throw new ArgumentOutOfRangeException(nameof(chances), "Chance must be > 0.");
-        return ChiIntegerGenerator.Next(ref _rng, 0, chances) == 0;
+        return ChiIntegerProvider.Next(ref _rng, 0, chances) == 0;
     }
 
     /// <summary>
@@ -53,7 +53,7 @@ public readonly ref struct ChiSamplerChance<TRng>(ref TRng rng)
     public T PickBetween<T>(T minInclusive, T maxInclusive)
         where T : IBinaryInteger<T>, IMinMaxValue<T>
     {
-        return ChiIntegerGenerator.Next(ref _rng, minInclusive, maxInclusive + T.One);
+        return ChiIntegerProvider.Next(ref _rng, minInclusive, maxInclusive + T.One);
     }
 
     /// <summary>
@@ -99,7 +99,7 @@ public readonly ref struct ChiSamplerChance<TRng>(ref TRng rng)
     {
         for (var i = 0; i < span.Length - 1; i++)
         {
-            var j = ChiIntegerGenerator.Next(ref _rng, i, span.Length);
+            var j = ChiIntegerProvider.Next(ref _rng, i, span.Length);
             if (i != j) (span[i], span[j]) = (span[j], span[i]);
         }
     }
@@ -115,7 +115,7 @@ public readonly ref struct ChiSamplerChance<TRng>(ref TRng rng)
 
         for (var i = 0; i < destination.Length; i++)
         {
-            var index = ChiIntegerGenerator.Next(ref _rng, 0, choices.Length);
+            var index = ChiIntegerProvider.Next(ref _rng, 0, choices.Length);
             destination[i] = choices[index];
         }
     }
@@ -169,7 +169,7 @@ public readonly ref struct ChiSamplerChance<TRng>(ref TRng rng)
         if (choices.IsEmpty)
             throw new ArgumentException("Choices span cannot be empty.", nameof(choices));
 
-        var index = ChiIntegerGenerator.Next(ref _rng, 0, choices.Length);
+        var index = ChiIntegerProvider.Next(ref _rng, 0, choices.Length);
         return choices[index];
     }
 
@@ -200,7 +200,7 @@ public readonly ref struct ChiSamplerChance<TRng>(ref TRng rng)
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public int Next()
     {
-        return ChiIntegerGenerator.Next(ref _rng, 0, int.MaxValue);
+        return ChiIntegerProvider.Next(ref _rng, 0, int.MaxValue);
     }
 
     /// <summary>
@@ -210,7 +210,7 @@ public readonly ref struct ChiSamplerChance<TRng>(ref TRng rng)
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public int Next(int maxExclusive)
     {
-        return ChiIntegerGenerator.Next(ref _rng, 0, maxExclusive);
+        return ChiIntegerProvider.Next(ref _rng, 0, maxExclusive);
     }
 
     /// <summary>
@@ -221,7 +221,7 @@ public readonly ref struct ChiSamplerChance<TRng>(ref TRng rng)
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public int Next(int minInclusive, int maxExclusive)
     {
-        return ChiIntegerGenerator.Next(ref _rng, minInclusive, maxExclusive);
+        return ChiIntegerProvider.Next(ref _rng, minInclusive, maxExclusive);
     }
 
     /// <summary>
@@ -230,7 +230,7 @@ public readonly ref struct ChiSamplerChance<TRng>(ref TRng rng)
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public T Next<T>() where T : IBinaryInteger<T>, IMinMaxValue<T>
     {
-        return ChiIntegerGenerator.Next(ref _rng, T.Zero, T.MaxValue);
+        return ChiIntegerProvider.Next(ref _rng, T.Zero, T.MaxValue);
     }
 
     /// <summary>
@@ -239,7 +239,7 @@ public readonly ref struct ChiSamplerChance<TRng>(ref TRng rng)
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public T Next<T>(T maxExclusive) where T : IBinaryInteger<T>, IMinMaxValue<T>
     {
-        return ChiIntegerGenerator.Next(ref _rng, T.Zero, maxExclusive);
+        return ChiIntegerProvider.Next(ref _rng, T.Zero, maxExclusive);
     }
 
     /// <summary>
@@ -248,7 +248,7 @@ public readonly ref struct ChiSamplerChance<TRng>(ref TRng rng)
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public T Next<T>(T minInclusive, T maxExclusive) where T : IBinaryInteger<T>, IMinMaxValue<T>
     {
-        return ChiIntegerGenerator.Next(ref _rng, minInclusive, maxExclusive);
+        return ChiIntegerProvider.Next(ref _rng, minInclusive, maxExclusive);
     }
 
     /// <summary>
@@ -257,7 +257,7 @@ public readonly ref struct ChiSamplerChance<TRng>(ref TRng rng)
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public float NextSingle(ChiIntervalOptions options = ChiIntervalOptions.None)
     {
-        return ChiRealGenerator.Next<TRng, float>(ref _rng, options);
+        return ChiRealProvider.Next<TRng, float>(ref _rng, options);
     }
 
     /// <summary>
@@ -266,7 +266,7 @@ public readonly ref struct ChiSamplerChance<TRng>(ref TRng rng)
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public double NextDouble(ChiIntervalOptions options = ChiIntervalOptions.None)
     {
-        return ChiRealGenerator.Next<TRng, double>(ref _rng, options);
+        return ChiRealProvider.Next<TRng, double>(ref _rng, options);
     }
 
     /// <summary>

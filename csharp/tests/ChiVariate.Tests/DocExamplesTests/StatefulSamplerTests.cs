@@ -1,7 +1,7 @@
 using System.Numerics;
 using System.Runtime.CompilerServices;
 using AwesomeAssertions;
-using ChiVariate.Generators;
+using ChiVariate.Providers;
 using ChiVariate.Tests.TestInfrastructure;
 using Xunit;
 using Xunit.Abstractions;
@@ -150,7 +150,7 @@ public ref struct ChiSamplerCorrelatedNormals<TRng, T>
     private readonly T _correlation;
     private readonly T _sqrtTerm;
 
-    private ChiStatefulNormalGenerator<TRng, T> _normalGenerator;
+    private ChiStatefulNormalProvider<TRng, T> _normalProvider;
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     internal ChiSamplerCorrelatedNormals(ref TRng rng, T correlation)
@@ -160,7 +160,7 @@ public ref struct ChiSamplerCorrelatedNormals<TRng, T>
 
         _correlation = correlation;
         _sqrtTerm = ChiMath.Sqrt(T.One - correlation * correlation);
-        _normalGenerator = new ChiStatefulNormalGenerator<TRng, T>(ref rng);
+        _normalProvider = new ChiStatefulNormalProvider<TRng, T>(ref rng);
     }
 
     /// <summary>
@@ -170,8 +170,8 @@ public ref struct ChiSamplerCorrelatedNormals<TRng, T>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public (T z1, T z2) Sample()
     {
-        var independentZ1 = _normalGenerator.Next();
-        var independentZ2 = _normalGenerator.Next();
+        var independentZ1 = _normalProvider.Next();
+        var independentZ2 = _normalProvider.Next();
         var correlatedZ2 = _correlation * independentZ1 + _sqrtTerm * independentZ2;
 
         return (independentZ1, correlatedZ2);

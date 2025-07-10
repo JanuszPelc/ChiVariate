@@ -1,6 +1,6 @@
 using System.Numerics;
 using System.Runtime.CompilerServices;
-using ChiVariate.Generators;
+using ChiVariate.Providers;
 
 namespace ChiVariate;
 
@@ -38,7 +38,7 @@ public readonly ref struct ChiSamplerUniformContinuous<TRng, T>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public T Sample()
     {
-        var u = ChiRealGenerator.Next<TRng, T>(ref _rng, _intervalOptions);
+        var u = ChiRealProvider.Next<TRng, T>(ref _rng, _intervalOptions);
         var oneMinusU = T.One - u;
         return _minInclusive * oneMinusU + _maxExclusive * u;
     }
@@ -90,7 +90,7 @@ public readonly ref struct ChiSamplerUniformDiscrete<TRng, T>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public T Sample()
     {
-        return ChiIntegerGenerator.Next(ref _rng, _minInclusive, _maxExclusive);
+        return ChiIntegerProvider.Next(ref _rng, _minInclusive, _maxExclusive);
     }
 
     /// <summary>

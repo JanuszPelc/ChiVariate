@@ -1,6 +1,6 @@
 using System.Numerics;
 using System.Runtime.CompilerServices;
-using ChiVariate.Generators;
+using ChiVariate.Providers;
 
 namespace ChiVariate;
 
@@ -14,7 +14,7 @@ public ref struct ChiSamplerStudentT<TRng, T>
     where TRng : struct, IChiRngSource<TRng>
     where T : IFloatingPoint<T>
 {
-    private ChiStatefulNormalGenerator<TRng, T> _normalGenerator;
+    private ChiStatefulNormalProvider<TRng, T> _normalProvider;
     private ChiSamplerChiSquared<TRng, T> _chiSquaredSampler;
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -23,7 +23,7 @@ public ref struct ChiSamplerStudentT<TRng, T>
         if (!T.IsFinite(degreesOfFreedom) || degreesOfFreedom <= T.Zero)
             throw new ArgumentOutOfRangeException(nameof(degreesOfFreedom), "Degrees of freedom (ν) must be positive.");
 
-        _normalGenerator = new ChiStatefulNormalGenerator<TRng, T>(ref rng);
+        _normalProvider = new ChiStatefulNormalProvider<TRng, T>(ref rng);
         _chiSquaredSampler = new ChiSamplerChiSquared<TRng, T>(ref rng, degreesOfFreedom);
     }
 
@@ -34,7 +34,7 @@ public ref struct ChiSamplerStudentT<TRng, T>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public T Sample()
     {
-        var z = _normalGenerator.Next();
+        var z = _normalProvider.Next();
         var v = _chiSquaredSampler.Sample();
         var dof = _chiSquaredSampler.DegreesOfFreedom;
         return z / ChiMath.Sqrt(v / dof);

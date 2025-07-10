@@ -1,13 +1,13 @@
 using System.Numerics;
 using System.Runtime.CompilerServices;
 
-namespace ChiVariate.Generators;
+namespace ChiVariate.Providers;
 
 /// <summary>
 ///     Provides a stateless method for generating pairs of standard normal variables.
 /// </summary>
 /// <typeparam name="T">The floating-point type of the generated values.</typeparam>
-public static class ChiNormalGenerator<T>
+public static class ChiNormalProvider<T>
     where T : IFloatingPoint<T>
 {
     private static readonly T Two = T.CreateChecked(2.0);
@@ -29,8 +29,8 @@ public static class ChiNormalGenerator<T>
 
         do
         {
-            u1 = ChiRealGenerator.Next<TRng, T>(ref rng);
-            u2 = ChiRealGenerator.Next<TRng, T>(ref rng);
+            u1 = ChiRealProvider.Next<TRng, T>(ref rng);
+            u2 = ChiRealProvider.Next<TRng, T>(ref rng);
 
             u1 = Two * u1 - T.One;
             u2 = Two * u2 - T.One;

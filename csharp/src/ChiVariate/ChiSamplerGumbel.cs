@@ -1,6 +1,6 @@
 using System.Numerics;
 using System.Runtime.CompilerServices;
-using ChiVariate.Generators;
+using ChiVariate.Providers;
 
 namespace ChiVariate;
 
@@ -38,7 +38,7 @@ public readonly ref struct ChiSamplerGumbel<TRng, T>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public T Sample()
     {
-        var u = ChiRealGenerator.Next<TRng, T>(ref _rng, ChiIntervalOptions.ExcludeMin);
+        var u = ChiRealProvider.Next<TRng, T>(ref _rng, ChiIntervalOptions.ExcludeMin);
 
         return _location - _scale * ChiMath.Log(-ChiMath.Log(u));
     }

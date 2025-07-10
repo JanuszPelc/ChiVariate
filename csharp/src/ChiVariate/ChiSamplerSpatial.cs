@@ -1,7 +1,7 @@
 using System.Diagnostics;
 using System.Numerics;
 using System.Runtime.CompilerServices;
-using ChiVariate.Generators;
+using ChiVariate.Providers;
 
 namespace ChiVariate;
 
@@ -44,10 +44,10 @@ public readonly ref struct ChiSamplerSpatialCircle<TRng, T>
 
     private ChiNum2<T> SampleInArea()
     {
-        var uForRadius = ChiRealGenerator.Next<TRng, T>(ref _rng);
+        var uForRadius = ChiRealProvider.Next<TRng, T>(ref _rng);
         var r = _radius * ChiMath.Sqrt(uForRadius);
 
-        var uForAngle = ChiRealGenerator.Next<TRng, T>(ref _rng);
+        var uForAngle = ChiRealProvider.Next<TRng, T>(ref _rng);
         var angle = uForAngle * T.Pi * (T.One + T.One);
         var sin = ChiMath.Sin(angle);
         var cos = ChiMath.Cos(angle);
@@ -57,7 +57,7 @@ public readonly ref struct ChiSamplerSpatialCircle<TRng, T>
 
     private ChiNum2<T> SampleOnPerimeter()
     {
-        var uForAngle = ChiRealGenerator.Next<TRng, T>(ref _rng);
+        var uForAngle = ChiRealProvider.Next<TRng, T>(ref _rng);
         var angle = uForAngle * T.Pi * (T.One + T.One);
         var sin = ChiMath.Sin(angle);
         var cos = ChiMath.Cos(angle);
@@ -215,7 +215,7 @@ public readonly ref struct ChiSamplerSpatialSphere<TRng, T>
     private ChiNum3<T> SampleInVolume()
     {
         var unitDirection = SampleOnUnitSphere();
-        var u = ChiRealGenerator.Next<TRng, T>(ref _rng);
+        var u = ChiRealProvider.Next<TRng, T>(ref _rng);
         var scaledMagnitude = _radius * ChiMath.Cbrt(u);
 
         return new ChiNum3<T>(

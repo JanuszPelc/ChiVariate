@@ -2,7 +2,7 @@ using System.Diagnostics;
 using System.Numerics;
 using System.Runtime.CompilerServices;
 
-namespace ChiVariate.Generators;
+namespace ChiVariate.Providers;
 
 /// <summary>
 ///     Provides centralized methods for generating statistically robust random integers.
@@ -12,7 +12,7 @@ namespace ChiVariate.Generators;
 ///     <see cref="IChiRngSource{TRng}" />
 ///     into bounded integers, using techniques that avoid common statistical biases (e.g., modulo bias).
 /// </remarks>
-public static class ChiIntegerGenerator
+public static class ChiIntegerProvider
 {
     /// <summary>
     ///     Returns a random 32-bit integer that is within a specified range.
@@ -63,7 +63,7 @@ public static class ChiIntegerGenerator
     {
         ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(minInclusive, maxExclusive);
 
-        var bitCount = LocalCache.Number<T>.BitCount;
+        var bitCount = Cache.Number<T>.BitCount;
 
         switch (bitCount)
         {
@@ -161,22 +161,22 @@ public static class ChiIntegerGenerator
                 throw new UnreachableException();
         }
     }
-}
 
-internal static class LocalCache
-{
-    public static class Number<T>
-        where T : IBinaryInteger<T>
+    private static class Cache
     {
-        // ReSharper disable once StaticMemberInGenericType
-        private static readonly Lazy<int> LazyBitCount = new(() =>
-            int.CreateChecked(T.PopCount(T.AllBitsSet))
-        );
-
-        public static int BitCount
+        public static class Number<T>
+            where T : IBinaryInteger<T>
         {
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            get => LazyBitCount.Value;
+            // ReSharper disable once StaticMemberInGenericType
+            private static readonly Lazy<int> LazyBitCount = new(() =>
+                int.CreateChecked(T.PopCount(T.AllBitsSet))
+            );
+
+            public static int BitCount
+            {
+                [MethodImpl(MethodImplOptions.AggressiveInlining)]
+                get => LazyBitCount.Value;
+            }
         }
     }
 }

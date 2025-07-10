@@ -1,6 +1,6 @@
 using System.Numerics;
 using System.Runtime.CompilerServices;
-using ChiVariate.Generators;
+using ChiVariate.Providers;
 
 namespace ChiVariate;
 
@@ -17,7 +17,7 @@ public ref struct ChiSamplerMultivariateNormal<TRng, T>
 {
     private ChiMatrix<T> _meanVector;
     private ChiMatrix<T> _choleskyFactor;
-    private ChiStatefulNormalGenerator<TRng, T> _normalGenerator;
+    private ChiStatefulNormalProvider<TRng, T> _normalProvider;
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     internal ChiSamplerMultivariateNormal(ref TRng rng, ChiMatrix<T> meanVector, ChiMatrix<T> covarianceMatrix)
@@ -32,7 +32,7 @@ public ref struct ChiSamplerMultivariateNormal<TRng, T>
         _choleskyFactor = covarianceMatrix.Peek().Cholesky();
         _meanVector = meanVector;
 
-        _normalGenerator = new ChiStatefulNormalGenerator<TRng, T>(ref rng);
+        _normalProvider = new ChiStatefulNormalProvider<TRng, T>(ref rng);
     }
 
     /// <summary>
@@ -46,7 +46,7 @@ public ref struct ChiSamplerMultivariateNormal<TRng, T>
 
         var zSpan = zVector.Span;
         for (var i = 0; i < k; i++)
-            zSpan[i] = _normalGenerator.Next();
+            zSpan[i] = _normalProvider.Next();
 
         var correlatedSample = _choleskyFactor.Peek() * zVector.Consume();
 

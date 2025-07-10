@@ -1,7 +1,7 @@
 using System.Diagnostics;
 using System.Numerics;
 using System.Runtime.CompilerServices;
-using ChiVariate.Generators;
+using ChiVariate.Providers;
 
 namespace ChiVariate;
 
@@ -51,7 +51,7 @@ public readonly ref struct ChiSamplerPrime<TRng, T>
     {
         var two = T.CreateChecked(2);
         var rangeSize = _maxExclusive - _minInclusive;
-        var startOffset = ChiIntegerGenerator.Next(ref _rng, T.Zero, rangeSize);
+        var startOffset = ChiIntegerProvider.Next(ref _rng, T.Zero, rangeSize);
 
         for (var i = T.Zero; i < rangeSize; i++)
         {

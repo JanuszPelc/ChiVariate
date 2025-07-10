@@ -1,7 +1,7 @@
 using System.Numerics;
 using System.Runtime.CompilerServices;
 
-namespace ChiVariate.Generators;
+namespace ChiVariate.Providers;
 
 /// <summary>
 ///     An efficient sampler for standard normal variables that uses a standby value.
@@ -11,7 +11,7 @@ namespace ChiVariate.Generators;
 ///     this struct uses one immediately and holds the other in "standby" for the next call.
 ///     This amortizes the cost of generation over two calls.
 /// </remarks>
-public ref struct ChiStatefulNormalGenerator<TRng, T>
+public ref struct ChiStatefulNormalProvider<TRng, T>
     where TRng : struct, IChiRngSource<TRng>
     where T : IFloatingPoint<T>
 {
@@ -20,11 +20,11 @@ public ref struct ChiStatefulNormalGenerator<TRng, T>
     private bool _hasValue;
 
     /// <summary>
-    ///     Initializes a new instance of the <see cref="ChiStatefulNormalGenerator{TRng,T}" />.
+    ///     Initializes a new instance of the <see cref="ChiStatefulNormalProvider{TRng,T}" />.
     /// </summary>
     /// <param name="rng">A reference to the random number generator to use.</param>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public ChiStatefulNormalGenerator(ref TRng rng)
+    public ChiStatefulNormalProvider(ref TRng rng)
     {
         _rng = ref rng;
         _standby = default!;
@@ -43,7 +43,7 @@ public ref struct ChiStatefulNormalGenerator<TRng, T>
             return _standby;
         }
 
-        var (z1, z2) = ChiNormalGenerator<T>.NextStandardNormalPair(ref _rng);
+        var (z1, z2) = ChiNormalProvider<T>.NextStandardNormalPair(ref _rng);
 
         _standby = z2;
         _hasValue = true;

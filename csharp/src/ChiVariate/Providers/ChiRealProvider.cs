@@ -1,7 +1,7 @@
 using System.Numerics;
 using System.Runtime.CompilerServices;
 
-namespace ChiVariate.Generators;
+namespace ChiVariate.Providers;
 
 /// <summary>
 ///     Provides methods for generating high-quality floating-point values from an integer-based PRNG source.
@@ -11,7 +11,7 @@ namespace ChiVariate.Generators;
 ///     This avoids the precision loss and potential biases common in simpler conversion methods (like division by
 ///     MaxValue).
 /// </remarks>
-public static class ChiRealGenerator
+public static class ChiRealProvider
 {
     /// <summary>
     ///     Generates a random floating-point number of a generic type <typeparamref name="T" />, dispatching to the

@@ -1,6 +1,6 @@
 using System.Numerics;
 using System.Runtime.CompilerServices;
-using ChiVariate.Generators;
+using ChiVariate.Providers;
 
 namespace ChiVariate;
 
@@ -34,7 +34,7 @@ public readonly ref struct ChiSamplerBernoulli<TRng, T>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public int Sample()
     {
-        return ChiRealGenerator.Next<TRng, T>(ref _rng) < _probability ? 1 : 0;
+        return ChiRealProvider.Next<TRng, T>(ref _rng) < _probability ? 1 : 0;
     }
 
     /// <summary>

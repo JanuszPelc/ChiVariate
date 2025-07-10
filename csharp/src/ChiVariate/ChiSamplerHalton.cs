@@ -1,6 +1,6 @@
 using System.Numerics;
 using System.Runtime.CompilerServices;
-using ChiVariate.Generators;
+using ChiVariate.Providers;
 
 namespace ChiVariate;
 
@@ -41,7 +41,7 @@ public ref struct ChiSamplerHalton<TRng, T>
             _offset = ChiVector.Unsafe.Uninitialized<T>(dimensions);
             var span = _offset.Span;
             for (var i = 0; i < dimensions; i++)
-                span[i] = ChiRealGenerator.Next<TRng, T>(ref rng);
+                span[i] = ChiRealProvider.Next<TRng, T>(ref rng);
         }
         else
         {

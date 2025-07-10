@@ -1,6 +1,6 @@
 using System.Numerics;
 using System.Runtime.CompilerServices;
-using ChiVariate.Generators;
+using ChiVariate.Providers;
 
 namespace ChiVariate;
 
@@ -17,7 +17,7 @@ public ref struct ChiSamplerNormal<TRng, T>
     private readonly T _mean;
     private readonly T _standardDeviation;
 
-    private ChiStatefulNormalGenerator<TRng, T> _normalGenerator;
+    private ChiStatefulNormalProvider<TRng, T> _normalProvider;
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     internal ChiSamplerNormal(ref TRng rng, T mean, T standardDeviation)
@@ -29,7 +29,7 @@ public ref struct ChiSamplerNormal<TRng, T>
 
         _mean = mean;
         _standardDeviation = standardDeviation;
-        _normalGenerator = new ChiStatefulNormalGenerator<TRng, T>(ref rng);
+        _normalProvider = new ChiStatefulNormalProvider<TRng, T>(ref rng);
     }
 
     /// <summary>
@@ -39,7 +39,7 @@ public ref struct ChiSamplerNormal<TRng, T>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public T Sample()
     {
-        var z = _normalGenerator.Next();
+        var z = _normalProvider.Next();
         return _mean + z * _standardDeviation;
     }
 
@@ -72,7 +72,10 @@ public static class ChiSamplerNormalExtensions
     /// <typeparam name="T">The floating-point type of the generated values.</typeparam>
     /// <param name="rng">The random number generator to use for sampling.</param>
     /// <param name="mean">The mean (μ) of the distribution, which is the center of the bell curve.</param>
-    /// <param name="standardDeviation">The standard deviation (σ), which controls the spread of the distribution. Must be positive.</param>
+    /// <param name="standardDeviation">
+    ///     The standard deviation (σ), which controls the spread of the distribution. Must be
+    ///     positive.
+    /// </param>
     /// <returns>A sampler that can be used to generate random values from the specified distribution.</returns>
     /// <remarks>
     ///     <para>
