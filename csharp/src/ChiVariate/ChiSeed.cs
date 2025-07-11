@@ -1,14 +1,11 @@
 // SPDX-License-Identifier: MIT
 // See LICENSE file for full terms
 
-using System.Buffers;
-using System.Buffers.Binary;
 using System.Diagnostics;
 using System.Globalization;
 using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using System.Text;
 using ChiVariate.Internal;
 
 namespace ChiVariate;
@@ -64,9 +61,8 @@ public static class ChiSeed
     {
         unchecked
         {
-            var selector = InitializeCombiner();
-            CombineValue(ref selector, (int)(uint)value);
-            CombineValue(ref selector, (int)(uint)(value >> 32));
+            var selector = ChiMix64.MixValue(ChiMix64.InitialValue, (int)(uint)value);
+            selector = ChiMix64.MixValue(selector, (int)(uint)(value >> 32));
 
             return Chi32.ApplyCascadingHashInterleave(selector, value);
         }
@@ -111,110 +107,12 @@ public static class ChiSeed
         ArgumentNullException.ThrowIfNull(@string);
 
         var selector = long.CreateTruncating(number);
-        var index = Core.Hash64(@string);
+        var index = ChiMix64.MixString(ChiMix64.InitialValue, @string);
 
         return Chi32.ApplyCascadingHashInterleave(selector, index);
     }
 
-    /// <summary>
-    ///     Provides advanced utility methods.
-    /// </summary>
-    public static class Core
-    {
-        /// <summary>
-        ///     Computes a deterministic 64-bit hash value from a string using cross-platform
-        ///     Unicode normalization and endianness handling.
-        /// </summary>
-        /// <param name="string">
-        ///     The string to hash. Can be null or empty.
-        /// </param>
-        /// <returns>
-        ///     A <see cref="long" /> hash value that is deterministic across all platforms
-        ///     and .NET implementations. Returns 0 for null or empty strings.
-        /// </returns>
-        /// <remarks>
-        ///     This method uses UTF-8 encoding and endianness normalization to ensure
-        ///     identical results on little-endian and big-endian systems, making it
-        ///     suitable for scenarios requiring reproducible hashes across different
-        ///     architectures and operating systems.
-        /// </remarks>
-        public static long Hash64(string? @string)
-        {
-            if (string.IsNullOrEmpty(@string))
-                return 0;
-
-            const int maxStackAllocSize = 512;
-
-            var byteCount = Encoding.UTF8.GetByteCount(@string);
-            byte[]? rentedArray = null;
-            var byteSpan = byteCount <= maxStackAllocSize
-                ? stackalloc byte[byteCount]
-                : RentArray(byteCount, out rentedArray);
-
-            var result = InitializeCombiner();
-
-            try
-            {
-                Encoding.UTF8.GetBytes(@string, byteSpan);
-
-                var intCount = byteSpan.Length & ~3;
-                var intSpan = MemoryMarshal.Cast<byte, int>(byteSpan[..intCount]);
-
-                if (!BitConverter.IsLittleEndian)
-                    for (var index = 0; index < intSpan.Length; index++)
-                        intSpan[index] = BinaryPrimitives.ReverseEndianness(intSpan[index]);
-
-                foreach (var int32 in intSpan)
-                    CombineValue(ref result, int32);
-
-                var orphanCount = byteSpan.Length & 3;
-                if (orphanCount > 0)
-                {
-                    var tailBytes = byteSpan[^orphanCount..];
-                    var last = 0;
-                    for (var i = 0; i < orphanCount; i++)
-                        last |= tailBytes[i] << (i * 8);
-
-                    CombineValue(ref result, last);
-                }
-            }
-            finally
-            {
-                if (byteSpan.Length > maxStackAllocSize)
-                    ArrayPool<byte>.Shared.Return(rentedArray!);
-            }
-
-            return result;
-
-            static Span<byte> RentArray(int byteCount, out byte[] rentedArray)
-            {
-                rentedArray = ArrayPool<byte>.Shared.Rent(byteCount);
-                return rentedArray.AsSpan(0, byteCount);
-            }
-        }
-    }
-
     #region Private and boierplate
-
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    private static long InitializeCombiner()
-    {
-        const ulong initialPrime = 0x46A74A57896EA3C9;
-
-        return (long)initialPrime;
-    }
-
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    private static void CombineValue(ref long combinedValue, int value)
-    {
-        const ulong multiplierPrime = 0x8A2AB4D322468F2D;
-        const ulong bitmaskPrime = 0xFC2ED86788EEAD7F;
-
-        var combinedHash = (uint)(combinedValue ^ value) * multiplierPrime;
-        var offset = (int)combinedHash & 63;
-
-        combinedValue ^= (long)BitOperations.RotateRight(combinedHash ^ bitmaskPrime, offset);
-    }
 
     private static class Global
     {
@@ -265,7 +163,9 @@ public static class ChiSeed
 
                 new Random().Shuffle(CollectionsMarshal.AsSpan(components));
 
-                return Core.Hash64(string.Join(CultureInfo.CurrentCulture.TextInfo.ListSeparator, components));
+                return ChiMix64.MixString(
+                    ChiMix64.InitialValue,
+                    string.Join(CultureInfo.CurrentCulture.TextInfo.ListSeparator, components));
             }
         }
     }

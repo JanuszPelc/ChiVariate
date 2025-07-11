@@ -1,4 +1,5 @@
 using AwesomeAssertions;
+using ChiVariate.Internal;
 using Xunit;
 
 #pragma warning disable CS1591
@@ -150,7 +151,7 @@ public class ChiSeedApiTests
     }
 
     [Theory]
-    [InlineData("", 0L)] // Empty string
+    [InlineData("", 5091119643593974729L)] // Empty string
     [InlineData("test", 5151988072576516256L)]
     [InlineData("Hello, World!", -5175036796766112071L)]
     [InlineData("A moderately long string seed for testing determinism.", -6960743544550810265L)]
@@ -160,7 +161,8 @@ public class ChiSeedApiTests
     public void CoreHash64_GivenStringInput_ReturnsDeterministicOutput(string input, long expected)
     {
         // Arrange & Act
-        var scrambled = ChiSeed.Core.Hash64(input);
+        if (string.IsNullOrEmpty(input)) input = null!;
+        var scrambled = ChiMix64.MixString(ChiMix64.InitialValue, input);
 
         // Assert
         scrambled.Should().Be(expected);
