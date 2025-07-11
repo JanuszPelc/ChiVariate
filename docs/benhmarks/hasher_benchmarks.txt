@@ -7,26 +7,27 @@ Apple M1 Pro, 1 CPU, 10 logical and 10 physical cores
   DefaultJob : .NET 9.0.2 (9.0.225.6610), Arm64 RyuJIT AdvSIMD
 
 
-| Method             | Mean     | Error    | StdDev   | Ratio | Allocated | Alloc Ratio |
-|------------------- |---------:|---------:|---------:|------:|----------:|------------:|
-| HashCode.Hash32    | 10.69 us | 0.004 us | 0.004 us |  1.00 |         - |          NA |
-| ChiHash.Hash32     | 26.92 us | 0.028 us | 0.026 us |  2.52 |         - |          NA |
-| ChiSeed.Hash64     | 31.15 us | 0.093 us | 0.083 us |  2.91 |         - |          NA |
-| ChiSeed.Unique64   | 55.73 us | 0.078 us | 0.069 us |  5.21 |         - |          NA |
-| CryptoRng.Unique64 | 74.69 us | 0.166 us | 0.148 us |  6.99 |         - |          NA |
+| Method             | Mean     | Error    | StdDev   | Ratio | RatioSD | Allocated | Alloc Ratio |
+|------------------- |---------:|---------:|---------:|------:|--------:|----------:|------------:|
+| HashCode.Hash32    | 10.73 us | 0.011 us | 0.010 us |  1.00 |    0.00 |         - |          NA |
+| ChiHash.Hash32     | 25.32 us | 0.108 us | 0.096 us |  2.36 |    0.01 |         - |          NA |
+| ChiSeed.Hash64     | 31.12 us | 0.063 us | 0.056 us |  2.90 |    0.01 |         - |          NA |
+| ChiSeed.Unique64   | 55.78 us | 0.069 us | 0.065 us |  5.20 |    0.01 |         - |          NA |
+| CryptoRng.Unique64 | 75.16 us | 0.782 us | 0.693 us |  7.01 |    0.06 |         - |          NA |
 
 // * Hints *
 Outliers
-  HasherBenchmarks.HashCode.Hash32: Default    -> 2 outliers were removed (10.72 us, 10.72 us)
-  HasherBenchmarks.ChiSeed.Hash64: Default     -> 1 outlier  was  removed (31.71 us)
-  HasherBenchmarks.ChiSeed.Unique64: Default   -> 1 outlier  was  removed (56.04 us)
-  HasherBenchmarks.CryptoRng.Unique64: Default -> 1 outlier  was  removed (75.53 us)
+  HasherBenchmarks.HashCode.Hash32: Default    -> 1 outlier  was  removed, 3 outliers were detected (10.71 us, 10.71 us, 10.76 us)
+  HasherBenchmarks.ChiHash.Hash32: Default     -> 1 outlier  was  removed (25.93 us)
+  HasherBenchmarks.ChiSeed.Hash64: Default     -> 1 outlier  was  removed (31.30 us)
+  HasherBenchmarks.CryptoRng.Unique64: Default -> 1 outlier  was  removed (77.59 us)
 
 // * Legends *
   Mean        : Arithmetic mean of all measurements
   Error       : Half of 99.9% confidence interval
   StdDev      : Standard deviation of all measurements
   Ratio       : Mean of the ratio distribution ([Current]/[Baseline])
+  RatioSD     : Standard deviation of the ratio distribution ([Current]/[Baseline])
   Allocated   : Allocated memory per single operation (managed only, inclusive, 1KB = 1024B)
   Alloc Ratio : Allocated memory ratio distribution ([Current]/[Baseline])
   1 us        : 1 Microsecond (0.000001 sec)
@@ -35,9 +36,9 @@ Outliers
 
 
 // ***** BenchmarkRunner: End *****
-Run time: 00:01:40 (100.29 sec), executed benchmarks: 5
+Run time: 00:01:32 (92.15 sec), executed benchmarks: 5
 
-Global total time: 00:02:01 (121.92 sec), executed benchmarks: 5
+Global total time: 00:01:38 (98.3 sec), executed benchmarks: 5
 // * Artifacts cleanup *
 Artifacts cleanup is finished
 
