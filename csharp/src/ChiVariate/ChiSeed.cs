@@ -218,37 +218,33 @@ public static class ChiSeed
 
     private static class Global
     {
-        public static ulong RuntimeSelector { get; } =
-            (ulong)BuildRuntimeFingerprint(TimerTicks);
-
-        public static ulong CurrentIndex { get; set; } =
-            (ulong)BuildRuntimeFingerprint(Math.Sin(TimerTicks));
+        public static ulong RuntimeSelector { get; } = (ulong)GatherRandomness(() => Math.Cbrt(TimerTicks));
+        public static ulong CurrentIndex { get; set; } = (ulong)GatherRandomness(() => Math.Sin(TimerTicks));
 
         public static ulong TimerTicks => (ulong)Stopwatch.GetTimestamp();
         public static object Lock { get; } = new();
 
-        private static long BuildRuntimeFingerprint(double value)
+        private static long GatherRandomness(Func<double> valueFactory)
         {
-            var components = new List<string>();
+            var selectorComponents = new List<string>();
+            AddComponent(selectorComponents, () => $"{valueFactory():C53}");
+            AddComponent(selectorComponents, () => RuntimeInformation.OSDescription);
+            AddComponent(selectorComponents, () => AppContext.BaseDirectory);
+            AddComponent(selectorComponents, () => Environment.Version.ToString());
+            AddComponent(selectorComponents, () => Environment.ProcessId.ToString());
+            var selector = FinalizeComponents(selectorComponents);
 
-            TryAddComponent(() => $"{value:C53}");
-            TryAddComponent(() => AppContext.BaseDirectory);
-            TryAddComponent(() => RuntimeInformation.OSDescription);
-            TryAddComponent(() => Guid.NewGuid().ToString());
-            TryAddComponent(() => DateTime.Now.ToLongDateString());
-            TryAddComponent(() => DateTime.Now.ToLongTimeString());
-            TryAddComponent(() => DateTime.Now.Ticks.ToString());
-            TryAddComponent(() => CultureInfo.CurrentCulture.DisplayName);
-            TryAddComponent(() => Environment.Version.ToString());
-
-            var separator = CultureInfo.CurrentCulture.TextInfo.ListSeparator;
-            new Random().Shuffle(CollectionsMarshal.AsSpan(components));
-            var selector = Core.Hash64(string.Join(separator, components));
-            var index = (long)TimerTicks;
+            var indexComponents = new List<string>();
+            AddComponent(indexComponents, () => $"{valueFactory()}");
+            AddComponent(indexComponents, () => CultureInfo.CurrentCulture.DisplayName);
+            AddComponent(indexComponents, () => DateTime.Now.ToLongDateString());
+            AddComponent(indexComponents, () => DateTime.Now.ToLongTimeString());
+            AddComponent(indexComponents, () => DateTime.Now.Ticks.ToString());
+            var index = FinalizeComponents(indexComponents);
 
             return Chi32.ApplyCascadingHashInterleave(selector, index);
 
-            void TryAddComponent(Func<string> valueFactory)
+            static void AddComponent(List<string> components, Func<string> valueFactory)
             {
                 try
                 {
@@ -260,6 +256,16 @@ public static class ChiSeed
                 {
                     // Silently ignore failed sources
                 }
+            }
+
+            static long FinalizeComponents(List<string> components)
+            {
+                AddComponent(components, () => Guid.NewGuid().ToString());
+                AddComponent(components, () => TimerTicks.ToString());
+
+                new Random().Shuffle(CollectionsMarshal.AsSpan(components));
+
+                return Core.Hash64(string.Join(CultureInfo.CurrentCulture.TextInfo.ListSeparator, components));
             }
         }
     }
