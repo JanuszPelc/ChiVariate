@@ -8,6 +8,7 @@ namespace ChiVariate.Tests.ChiSamplerUtlTests.Chance;
 public class SmokeTests
 {
     private const int Seed = 42;
+    private const long MaxIntSeed = -1836038751;
 
     [Fact]
     public void Next_DefaultOverload_ReturnsExpectedValue()
@@ -36,16 +37,29 @@ public class SmokeTests
     }
 
     [Fact]
-    public void Next_GenericDefaultOverload_ReturnsExpectedValue()
+    public void NextFullRange_WithMaxIntSeed_ReturnsIntMaxValue()
     {
         // Arrange
-        var rng = new ChiRng(Seed);
+        var rng = new ChiRng(MaxIntSeed);
 
         // Act
-        var result = rng.Chance().Next<long>();
+        var result = rng.Chance().NextFullRange<int>();
 
         // Assert
-        result.Should().Be(-3299725539301211654L);
+        result.Should().Be(int.MaxValue);
+    }
+
+    [Fact]
+    public void Next_WithMaxIntSeed_ReturnsZero()
+    {
+        // Arrange
+        var rng = new ChiRng(MaxIntSeed);
+
+        // Act
+        var result = rng.Chance().Next<int>();
+
+        // Assert
+        result.Should().Be(0);
     }
 
     [Fact]
@@ -100,19 +114,6 @@ public class SmokeTests
 
         // Assert
         result.Should().Be(false);
-    }
-
-    [Fact]
-    public void NextSign_Called_ReturnsExpectedValue()
-    {
-        // Arrange
-        var rng = new ChiRng(Seed);
-
-        // Act
-        var result = rng.Chance().NextSign();
-
-        // Assert
-        result.Should().Be(-1);
     }
 
     [Fact]

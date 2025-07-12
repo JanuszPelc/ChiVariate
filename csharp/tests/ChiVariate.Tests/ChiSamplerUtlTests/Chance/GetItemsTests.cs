@@ -9,10 +9,6 @@ public class GetItemsTests
 {
     private readonly string[] _choices = ["A", "B", "C", "D", "E"];
 
-    // ====================================================================
-    // GetItems (With Replacement) Tests
-    // ====================================================================
-
     [Fact]
     public void GetItems_Called_ReturnsCorrectNumberOfItems()
     {
@@ -44,10 +40,6 @@ public class GetItemsTests
             "because all returned items must originate from the choices span.");
     }
 
-    // ====================================================================
-    // GetItemsPreferUnique (Without Replacement) Tests
-    // ====================================================================
-
     [Fact]
     public void GetItemsPreferUnique_WhenCountIsLessThanChoices_ReturnsAllUniqueItems()
     {
@@ -57,7 +49,7 @@ public class GetItemsTests
         var result = new string[count];
 
         // Act
-        rng.Chance().GetItemsPreferUnique(_choices, result.AsSpan());
+        rng.Chance().GetItemsAvoidDuplicates(_choices, result.AsSpan());
 
         // Assert
         result.Should().HaveCount(count);
@@ -66,7 +58,7 @@ public class GetItemsTests
     }
 
     [Fact]
-    public void GetItemsPreferUnique_WhenCountIsEqualToChoices_ReturnsShuffledChoices()
+    public void GetItemsAvoidDuplicates_WhenCountIsEqualToChoices_ReturnsShuffledChoices()
     {
         // Arrange
         var rng = new ChiRng(4);
@@ -74,7 +66,7 @@ public class GetItemsTests
         var result = new string[count];
 
         // Act
-        rng.Chance().GetItemsPreferUnique(_choices, result.AsSpan());
+        rng.Chance().GetItemsAvoidDuplicates(_choices, result.AsSpan());
 
         // Assert
         result.Should().HaveCount(count);
@@ -85,7 +77,7 @@ public class GetItemsTests
     }
 
     [Fact]
-    public void GetItemsPreferUnique_WhenCountIsGreaterThanChoices_ReturnsCorrectNumberOfItems()
+    public void GetItemsAvoidDuplicates_WhenCountIsGreaterThanChoices_ReturnsCorrectNumberOfItems()
     {
         // Arrange
         var rng = new ChiRng(5);
@@ -93,7 +85,7 @@ public class GetItemsTests
         var result = new string[count];
 
         // Act
-        rng.Chance().GetItemsPreferUnique(_choices, result.AsSpan());
+        rng.Chance().GetItemsAvoidDuplicates(_choices, result.AsSpan());
 
         // Assert
         result.Should().HaveCount(count,
@@ -105,10 +97,8 @@ public class GetItemsTests
         result.Should().BeSubsetOf(_choices, "because all items must originate from the choices span.");
     }
 
-    // ... Edge case tests ...
-
     [Fact]
-    public void GetItemsPreferUnique_WithEmptyChoicesAndEmptyCount_ReturnsEmptyArray()
+    public void GetItemsAvoidDuplicates_WithEmptyChoicesAndEmptyCount_ReturnsEmptyArray()
     {
         // Arrange
         var rng = new ChiRng(8);
@@ -116,7 +106,7 @@ public class GetItemsTests
         var result = Array.Empty<string>();
 
         // Act
-        rng.Chance().GetItemsPreferUnique(emptyChoices, result.AsSpan());
+        rng.Chance().GetItemsAvoidDuplicates(emptyChoices, result.AsSpan());
 
         // Assert
         result.Should().BeEmpty();

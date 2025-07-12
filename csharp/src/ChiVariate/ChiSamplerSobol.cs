@@ -3,6 +3,7 @@
 
 using System.Numerics;
 using System.Runtime.CompilerServices;
+using ChiVariate.Providers;
 
 namespace ChiVariate;
 
@@ -65,7 +66,7 @@ public ref struct ChiSamplerSobol<TRng, T>
 
         static void SimplifiedOwenScramble(ref TRng rng, Span<uint> directionNumbers)
         {
-            var randomValue = rng.Chance().Next<uint>();
+            var randomValue = ChiIntegerProvider.Next<TRng, uint>(ref rng);
             for (var j = 0; j < directionNumbers.Length; j++)
                 directionNumbers[j] ^= randomValue;
         }

@@ -124,10 +124,11 @@ public readonly ref struct ChiSamplerChance<TRng>(ref TRng rng)
     }
 
     /// <summary>
-    ///     Fills the destination span with items chosen from the source, preferring unique items first.
+    ///     Fills the destination span with items from the source, trying to avoid duplicates
+    ///     by shuffling through all available items before reusing any.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public void GetItemsPreferUnique<T>(scoped ReadOnlySpan<T> choices, Span<T> destination)
+    public void GetItemsAvoidDuplicates<T>(scoped ReadOnlySpan<T> choices, Span<T> destination)
     {
         if (choices.IsEmpty)
         {
@@ -198,12 +199,12 @@ public readonly ref struct ChiSamplerChance<TRng>(ref TRng rng)
     }
 
     /// <summary>
-    ///     Returns a non-negative random 32-bit integer.
+    ///     Returns a non-negative random 32-bit integer that is less than <see cref="int.MaxValue" />.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public int Next()
     {
-        return ChiIntegerProvider.Next<TRng, int>(ref _rng);
+        return ChiIntegerProvider.Next(ref _rng, 0, int.MaxValue);
     }
 
     /// <summary>
@@ -228,19 +229,36 @@ public readonly ref struct ChiSamplerChance<TRng>(ref TRng rng)
     }
 
     /// <summary>
-    ///     Returns a random integer of the specified type.
+    ///     Returns a random integer of the specified type using the full range
+    ///     from <c>T.MinValue</c> to <c>T.MaxValue</c> (both inclusive).
     /// </summary>
+    /// <typeparam name="T">The integer type of the generated value.</typeparam>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public T Next<T>() where T : unmanaged, IBinaryInteger<T>, IMinMaxValue<T>
+    public T NextFullRange<T>()
+        where T : unmanaged, IBinaryInteger<T>, IMinMaxValue<T>
     {
         return ChiIntegerProvider.Next<TRng, T>(ref _rng);
     }
 
     /// <summary>
-    ///     Returns a random integer of the specified type that is less than the specified maximum.
+    ///     Returns a non-negative random integer of the specified type that is less than <c>T.MaxValue</c>.
     /// </summary>
+    /// <typeparam name="T">The integer type of the generated value.</typeparam>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public T Next<T>(T maxExclusive) where T : IBinaryInteger<T>, IMinMaxValue<T>
+    public T Next<T>()
+        where T : IBinaryInteger<T>, IMinMaxValue<T>
+    {
+        return ChiIntegerProvider.Next(ref _rng, T.Zero, T.MaxValue);
+    }
+
+    /// <summary>
+    ///     Returns a non-negative random integer of the specified type that is less than the specified maximum.
+    /// </summary>
+    /// <param name="maxExclusive">The exclusive upper bound of the random number returned.</param>
+    /// <typeparam name="T">The integer type of the generated value.</typeparam>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public T Next<T>(T maxExclusive)
+        where T : IBinaryInteger<T>, IMinMaxValue<T>
     {
         return ChiIntegerProvider.Next(ref _rng, T.Zero, maxExclusive);
     }
@@ -248,8 +266,12 @@ public readonly ref struct ChiSamplerChance<TRng>(ref TRng rng)
     /// <summary>
     ///     Returns a random integer of the specified type that is within a specified range.
     /// </summary>
+    /// <param name="minInclusive">The inclusive lower bound of the random number returned.</param>
+    /// <param name="maxExclusive">The exclusive upper bound of the random number returned.</param>
+    /// <typeparam name="T">The integer type of the generated value.</typeparam>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public T Next<T>(T minInclusive, T maxExclusive) where T : IBinaryInteger<T>, IMinMaxValue<T>
+    public T Next<T>(T minInclusive, T maxExclusive)
+        where T : IBinaryInteger<T>, IMinMaxValue<T>
     {
         return ChiIntegerProvider.Next(ref _rng, minInclusive, maxExclusive);
     }
@@ -273,6 +295,16 @@ public readonly ref struct ChiSamplerChance<TRng>(ref TRng rng)
     }
 
     /// <summary>
+    ///     Simulates a fair coin flip.
+    /// </summary>
+    /// <returns><c>true</c> for heads, <c>false</c> for tails.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public bool FlipCoin()
+    {
+        return NextBool(0.5);
+    }
+
+    /// <summary>
     ///     Returns a random boolean value.
     /// </summary>
     /// <param name="probability">The probability of returning <c>true</c>.</param>
@@ -281,15 +313,6 @@ public readonly ref struct ChiSamplerChance<TRng>(ref TRng rng)
         where T : IFloatingPoint<T>
     {
         return _rng.Bernoulli(probability).Sample() > 0;
-    }
-
-    /// <summary>
-    ///     Returns a random sign, either 1 or -1.
-    /// </summary>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public int NextSign()
-    {
-        return _rng.Bernoulli(0.5).Sample() > 0 ? 1 : -1;
     }
 
     /// <summary>
@@ -308,16 +331,6 @@ public readonly ref struct ChiSamplerChance<TRng>(ref TRng rng)
     public float NextAngleDegrees()
     {
         return NextSingle() * 360.0f;
-    }
-
-    /// <summary>
-    ///     Simulates a fair coin flip.
-    /// </summary>
-    /// <returns><c>true</c> for heads, <c>false</c> for tails.</returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public bool FlipCoin()
-    {
-        return NextBool(0.5);
     }
 }
 
