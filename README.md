@@ -13,7 +13,7 @@ Whether you're writing a game or a Monte Carlo simulator, ChiVariate gives you e
 If you're building games, real-time systems, or low-overhead libraries and care about:
 
 - Data-oriented, non-allocating randomness for hot paths
-- Expressive APIs like `FlipCoin()`, `RollDie(12)`, or `PickEnum<Rarity>()`
+- Expressive APIs like `FlipCoin()`, `RollDie(20)`, or `PickEnum<Rarity>()`
 - Deterministic procedural generation (textures, meshes, levels)
 - Replay, save/load, and undo/redo via full RNG state snapshot and restore
 
@@ -84,9 +84,8 @@ var chance = rng.Chance();
 
 foreach (var enemy in enemies)
 {
-    // Reusing a 'chance' struct in the hot path
     int damage = chance.RollDie(8) + chance.RollDie(8) + 5; // 2d8 + 5
-    bool criticalHit = chance.OneIn(10);
+    bool criticalHit = chance.OneIn(20); //  5% chance
 
     enemy.ApplyDamage(damage, criticalHit);
 }
