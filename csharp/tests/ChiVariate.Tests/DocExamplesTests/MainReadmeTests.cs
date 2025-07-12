@@ -121,7 +121,7 @@ public class MainReadmeTests(ITestOutputHelper testOutputHelper)
     }
 
     // --- example code begin ---
-    // Supports float, double, and decimal types via a generic T
+    // Supports float, double, and decimal types via generic T
     public static T EstimateTotalLiability<T>(T shape, int payoutCount)
         where T : IFloatingPoint<T>
     {
@@ -261,7 +261,7 @@ public class MainReadmeTests(ITestOutputHelper testOutputHelper)
             ref ChiRng rng, int numPaths, decimal initialPrice,
             decimal drift, decimal volatility, decimal timeToMaturity)
         {
-            // Model asset price evolution using geometric Brownian motion
+            // Models asset price evolution using geometric Brownian motion
             var variance = volatility * volatility;
             var logReturnMean = (drift - 0.5m * variance) * timeToMaturity;
             var logReturnStdDev = volatility * ChiMath.Sqrt(timeToMaturity);

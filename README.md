@@ -13,7 +13,7 @@ Whether you're writing a game or a Monte Carlo simulator, ChiVariate gives you e
 If you're building games, real-time systems, or low-overhead libraries and care about:
 
 - Data-oriented, non-allocating randomness for hot paths
-- Expressive APIs like `FlipCoin()`, `RollDie(12)`, or `PickEnum<Element>()`
+- Expressive APIs like `FlipCoin()`, `RollDie(12)`, or `PickEnum<Rarity>()`
 - Deterministic procedural generation (textures, meshes, levels)
 - Replay, save/load, and undo/redo via full RNG state snapshot and restore
 
@@ -65,7 +65,7 @@ It also provides expressive methods for intention-revealing code:
 
 - `PickEnum<T>()` for selecting a random enum value with zero allocations
 - `PickBetween<T>(min, max)` to pick any integer type in an inclusive range
-- `PickItem(items, weights)` for weighted selection from a list
+- `PickItem(items, weights)` for weighted selection from a collection
 - `RollDie(sides)` and `OneIn(chances)` for dice rolls and chance-based logic
 - `FlipCoin()` and `NextBool(probability)` for coin flips and Bernoulli trials
 
@@ -151,7 +151,7 @@ decimal EstimateTerminalValue(
     ref ChiRng rng, int numPaths, decimal initialPrice, 
     decimal drift, decimal volatility, decimal timeToMaturity)
 {
-    // Model asset price evolution using geometric Brownian motion
+    // Models asset price evolution using geometric Brownian motion
     var variance = volatility * volatility;
     var logReturnMean = (drift - 0.5m * variance) * timeToMaturity;
     var logReturnStdDev = volatility * ChiMath.Sqrt(timeToMaturity);
@@ -191,7 +191,7 @@ foreach (var sampledCovariance in covarianceSampler.Sample(10_000))
 **Insurance risk modeling with Gamma distribution:**
 
 ```csharp
-// Supports float, double, and decimal types via a generic T
+// Supports float, double, and decimal types via generic T
 public static T EstimateTotalLiability<T>(T shape, int payoutCount)
     where T : IFloatingPoint<T>
 {
@@ -308,7 +308,7 @@ Distributions that produce integer-valued outcomes. Useful for modeling countabl
 
 #### Hypergeometric
 
-> The number of successes in a sample drawn *without replacement* from a finite population. A foundational distribution that handles card games (e.g., drawing a 5-card hand), lottery systems, or quality control where items are not returned to the population.
+> The number of successes in a sample drawn without replacement from a finite population. The foundational distribution for card games (e.g., drawing a 5-card hand), lottery systems, or quality control where items are not returned to the population.
 >
 >  *Complexity: `O(n)`, where n is the sample size. Tier 4.*
 
@@ -320,7 +320,7 @@ Distributions that produce integer-valued outcomes. Useful for modeling countabl
 
 #### Negative Binomial
 
-> The number of trials required to achieve a fixed number of successes. Designed for scenarios like customer acquisition (how many contacts to get 10 sales), reliability testing, or game mechanics with accumulating success.
+> The number of trials required to achieve a fixed number of successes. Designed for scenarios like customer acquisition (how many contacts to get 10 sales), reliability testing, or game mechanics with accumulating successes.
 >
 >  *Complexity: `O(r/p)`, where r is the number of successes and p is the success probability. Tier 4.*
 
@@ -426,7 +426,7 @@ Distributions that produce real-valued variates, including `float`, `double`, `H
 
 #### Pareto
 
-> A skewed distribution that models the "80/20" rule, where a small number of events account for a large effect. The quintessential choice for "winner-take-all" phenomena like wealth distribution, city populations, or item popularity.
+> A skewed distribution that models the "80/20" rule, where a small number of events accounts for a large effect. The quintessential choice for "winner-take-all" phenomena like wealth distribution, city populations, or item popularity.
 >
 >  *Complexity: `O(1)`. Tier 1.*
 
@@ -438,7 +438,7 @@ Distributions that produce real-valued variates, including `float`, `double`, `H
 
 #### Student's t
 
-> A bell-shaped curve similar to the Normal but with heavier tails, making it more robust to outliers. The preferred tool for statistical inference, especially when sample sizes are small or the population's variance is unknown.
+> A bell-shaped curve similar to the Normal but with heavier tails, making it more robust to outliers. The preferred tool for statistical inference, especially when sample sizes are small or the population variance is unknown.
 >
 >  *Complexity: Amortized `O(1)`. Tier 2.*
 
@@ -552,13 +552,13 @@ Beyond these built-in samplers, understanding the library's design constraints h
 
 ## Trade-offs and gotchas
 
-ChiVariate's fully composable, non-allocating design delivers predictable performance and flexibility, but achieving this required specific architectural choices. This section covers the key tradeoffs and potential gotchas to be aware of when using the library in production.
+ChiVariate's fully composable, non-allocating design delivers predictable performance and flexibility, but achieving this required specific architectural choices. This section covers the key trade-offs and potential gotchas to be aware of when using the library in production.
 
 ### Working with ref structs
 
 ChiVariate's `struct`-based design eliminates allocations but requires understanding a key constraint: RNG instances must be stored as fields, not properties. This happens because samplers use `ref` parameters to avoid copying state.
 
-Since C# properties can't be passed by reference, attempting to use an RNG stored as a property will fail to compile when calling sampler methods. For example, declaring an RNG as `public ChiRng Rng { get; set; }` property will cause compilation errors, while `public ChiRng Rng;` field works perfectly. The solution is straightforward: declare RNG instances as fields rather than properties.
+Since C# properties can't be passed by reference, attempting to use an RNG stored as a property will fail to compile when calling sampler methods. For example, declaring an RNG as a `public ChiRng Rng { get; set; }` property will cause compilation errors, while a `public ChiRng Rng;` field works perfectly. The solution is straightforward: declare RNG instances as fields rather than properties.
 
 This design choice prevents the classic "modifying a copy" bug that plagues mutable structs, ensuring RNG state updates correctly every time.
 
@@ -566,7 +566,7 @@ This design choice prevents the classic "modifying a copy" bug that plagues muta
 
 ChiVariate provides full support for the `decimal` type across all major distributions, enabling simulations and models that demand exact base-10 precision. This is especially important in financial and actuarial contexts, where even small base-2 rounding errors in `double` can accumulate and undermine accuracy. `decimal` avoids such errors by offering exact decimal representation, making it suitable for calculations involving monetary values, interest rates, or regulatory compliance.
 
-The performance cost is inherent: `decimal` is a 128-bit, software-emulated type without hardware acceleration for mathematical operations like `Log`, `Sqrt`, or `Exp`, which results in significantly slower execution compared to `double`.
+The performance cost is inherent: `decimal` is a 128-bit, software-emulated type without hardware acceleration for mathematical operations like `Log`, `Sqrt`, or `Exp`, resulting in significantly slower execution compared to `double`.
 
 ChiVariate embraces this trade-off, delivering consistent APIs across numeric types while preserving statistical integrity for precision-critical domains. Use `decimal` only when necessary for compliance or base-10 fidelity. For most general simulations, `double` remains faster and precise enough.
 
@@ -581,7 +581,7 @@ ChiVariate guarantees bit-for-bit reproducibility across platforms and .NET runt
 
 **Platform-dependent precision in last bits:**
 
-These differences are rather academic, as any tiny precision variations are dwarfed by the inherent randomness being modeled. `float` and `double` distributions may have minute precision differences in the least significant bit on exotic platforms, as they rely on the underlying runtime's math library (`System.Math.Log`, `System.Math.Sqrt`, etc.).
+These differences are largely academic, as any tiny precision variations are dwarfed by the inherent randomness being modeled. `float` and `double` distributions may have minute precision differences in the least significant bit on exotic platforms, as they rely on the underlying runtime's math library (`System.Math.Log`, `System.Math.Sqrt`, etc.).
 
 **Recommendation:** For applications requiring absolute cross-platform determinism, use `decimal` or `integer` types for critical calculations or validate your specific platform combinations during testing. For most use cases, the potential `float`/`double` variance is insignificant compared to the inherent randomness being modeled.
 
