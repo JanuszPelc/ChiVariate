@@ -490,7 +490,7 @@ ChiVariate provides specialized tools for general-purpose randomness tasks and u
 
 #### Chance
 
-> A toolkit for general-purpose randomness, providing a zero-allocation, statistically robust replacement for `System.Random`. Features expressive methods for common tasks like dice rolls (`RollDie`), coin flips (`FlipCoin`), random selections (`PickItem`), and shuffling (`Shuffle`).
+> A toolkit for common, expressive randomization tasks, offering a non-allocating, statistically robust replacement for `System.Random`. Features expressive methods for common tasks like dice rolls (`RollDie`), coin flips (`FlipCoin`), random selections (`PickItem`), and shuffling (`Shuffle`).
 >
 > *Complexity: Generally `O(1)`, except for collection methods like `Shuffle` (`O(n)`). Tier 1.*
 

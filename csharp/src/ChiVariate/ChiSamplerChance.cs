@@ -13,7 +13,7 @@ namespace ChiVariate;
 /// </summary>
 /// <remarks>
 ///     This struct is constructed by the <see cref="ChiSamplerChanceExtensions.Chance{TRng}" /> method.
-///     It serves as a zero-allocation, statistically robust replacement for <c>System.Random</c>.
+///     It serves as a non-allocating, statistically robust replacement for <c>System.Random</c>.
 /// </remarks>
 public readonly ref struct ChiSamplerChance<TRng>(ref TRng rng)
     where TRng : struct, IChiRngSource<TRng>
