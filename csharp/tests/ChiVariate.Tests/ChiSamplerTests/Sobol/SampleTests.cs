@@ -104,8 +104,8 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
             new[] { 0.5, 0.5 },
             new[] { 0.75, 0.25 },
             new[] { 0.25, 0.75 },
-            new[] { 0.375, 0.375 },
-            new[] { 0.875, 0.875 }
+            new[] { 0.375, 0.625 },
+            new[] { 0.875, 0.125 }
         };
 
         var rng = new ChiRng();
@@ -122,40 +122,44 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
         }
     }
 
-    [Fact]
-    public void SobolSequence_Marginals_ShowExcellentUniformity()
+    [Theory]
+    [InlineData(ChiSequenceMode.Canonical, 0.001)]
+    [InlineData(ChiSequenceMode.Randomized, 0.005)]
+    public void SobolSequence_Marginals_ShowCorrectUniformity(ChiSequenceMode mode, double tolerance)
     {
         // Arrange
         const int dimensions = 1024;
-        const int samples = 100_000;
-        const int bins = 50;
+        const int samples = 25_000;
+        const int bins = 10;
 
         var rng = new ChiRng("SobolUniformity");
-        var sampler = rng.Sobol(dimensions).OfType<double>();
+        var sampler = rng.Sobol(dimensions, mode).OfType<double>();
 
         var histograms = new Histogram[dimensions];
-        for (var i = 0; i < dimensions; i++) histograms[i] = new Histogram(0.0, 1.0, bins);
+        for (var i = 0; i < dimensions; i++)
+            histograms[i] = new Histogram(0.0, 1.0, bins);
 
         // Act
         foreach (var point in sampler.Sample(samples))
             using (point)
             {
-                for (var d = 0; d < dimensions; d++) histograms[d].AddSample(point[d]);
+                for (var d = 0; d < dimensions; d++)
+                    histograms[d].AddSample(point[d]);
             }
 
         // Assert
         const double expectedSamplesPerBin = (double)samples / bins;
-        const double uniformityTolerance = 0.01;
+        var uniformityTolerance = expectedSamplesPerBin * tolerance;
 
         for (var d = 0; d < dimensions; d++)
         {
-            testOutputHelper.WriteLine($"\n--- Sobol Dimension {d + 1} Uniformity ---");
+            testOutputHelper.WriteLine($"\n--- Sobol Dimension {d + 1} Uniformity ({mode}) ---");
             histograms[d].DebugPrint(testOutputHelper);
 
             foreach (var binCount in histograms[d].Bins)
                 ((double)binCount).Should().BeApproximately(expectedSamplesPerBin,
-                    expectedSamplesPerBin * uniformityTolerance,
-                    $"because Sobol sequence should distribute samples extremely uniformly across dimension {d + 1}.");
+                    uniformityTolerance,
+                    $"because Sobol sequence should distribute samples extremely uniformly across dimension {d + 1} in {mode} mode.");
         }
     }
 
@@ -260,22 +264,6 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
         // We should find SOME precision differences in high-dimensional space
         (totalDifference > 0m || dimensionsWithDifferences > 0).Should().BeTrue(
             "because high-dimensional Sobol sequences should eventually reveal precision limits of double vs decimal");
-    }
-
-    [Theory]
-    [InlineData(100)]
-    [InlineData(500)]
-    [InlineData(1000)]
-    public void Sobol_WhenHighDimensional_MaintainsUniformity(int dimensions)
-    {
-        var rng = new ChiRng();
-        var sampler = rng.Sobol(dimensions).OfType<double>();
-
-        using var point = sampler.Sample();
-        point.Length.Should().Be(dimensions);
-
-        for (var i = 0; i < dimensions; i++)
-            point[i].Should().BeInRange(0.0, 1.0);
     }
 
     [Theory]

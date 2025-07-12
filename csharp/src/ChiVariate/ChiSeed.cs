@@ -57,15 +57,13 @@ public static class ChiSeed
     ///     A <see cref="long" /> representing a well-mixed value derived from the input value.
     /// </returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static long Scramble(long value)
+    public static long Scramble<TNumber>(TNumber value)
+        where TNumber : unmanaged, INumberBase<TNumber>
     {
-        unchecked
-        {
-            var selector = ChiMix64.MixValue(ChiMix64.InitialValue, (int)(uint)value);
-            selector = ChiMix64.MixValue(selector, (int)(uint)(value >> 32));
+        var selector = ChiMix64.MixValue(ChiMix64.InitialValue, value);
+        var index = ChiMix64.MixValue(selector, value);
 
-            return Chi32.ApplyCascadingHashInterleave(selector, value);
-        }
+        return Chi32.ApplyCascadingHashInterleave(selector, index);
     }
 
     /// <summary>
@@ -92,7 +90,7 @@ public static class ChiSeed
     ///     Produces a well-mixed 64-bit value by combining a scrambled string and a numeric input.
     /// </summary>
     /// <param name="string">The <see cref="string" /> value to be incorporated into the hash calculation.</param>
-    /// <param name="number">A numeric value of type <typeparamref name="TNumber" /> to contribute to the hash.</param>
+    /// <param name="value">A numeric value of type <typeparamref name="TNumber" /> to contribute to the hash.</param>
     /// <typeparam name="TNumber">The unmanaged numeric type implementing <see cref="System.Numerics.INumberBase{T}" />.</typeparam>
     /// <returns>
     ///     A <see cref="long" /> representing a well-mixed value derived from the input string.
@@ -101,13 +99,13 @@ public static class ChiSeed
     ///     Thrown if <paramref name="string" /> is null.
     /// </exception>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static long Scramble<TNumber>(string @string, TNumber number)
+    public static long Scramble<TNumber>(string @string, TNumber value)
         where TNumber : unmanaged, INumberBase<TNumber>
     {
         ArgumentNullException.ThrowIfNull(@string);
 
-        var selector = long.CreateTruncating(number);
-        var index = ChiMix64.MixString(ChiMix64.InitialValue, @string);
+        var selector = ChiMix64.MixValue(ChiMix64.InitialValue, value);
+        var index = ChiMix64.MixString(selector, @string);
 
         return Chi32.ApplyCascadingHashInterleave(selector, index);
     }

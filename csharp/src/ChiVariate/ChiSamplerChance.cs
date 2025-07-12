@@ -203,7 +203,7 @@ public readonly ref struct ChiSamplerChance<TRng>(ref TRng rng)
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public int Next()
     {
-        return ChiIntegerProvider.Next(ref _rng, 0, int.MaxValue);
+        return ChiIntegerProvider.Next<TRng, int>(ref _rng);
     }
 
     /// <summary>
@@ -231,9 +231,9 @@ public readonly ref struct ChiSamplerChance<TRng>(ref TRng rng)
     ///     Returns a random integer of the specified type.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public T Next<T>() where T : IBinaryInteger<T>, IMinMaxValue<T>
+    public T Next<T>() where T : unmanaged, IBinaryInteger<T>, IMinMaxValue<T>
     {
-        return ChiIntegerProvider.Next(ref _rng, T.Zero, T.MaxValue);
+        return ChiIntegerProvider.Next<TRng, T>(ref _rng);
     }
 
     /// <summary>

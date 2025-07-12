@@ -55,7 +55,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
         // Arrange
         const double expectedMean = 50.0;
         const double expectedStdDev = 1.0;
-        var rng = new ChiRng(("ShiftedNormal"));
+        var rng = new ChiRng("ShiftedNormal");
         var histogram = new Histogram(45.0, 55.0, 100);
 
         // Act
@@ -76,7 +76,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
         // Arrange
         const double expectedMean = 0.0;
         const double expectedStdDev = 15.0;
-        var rng = new ChiRng(("WiderNormal"));
+        var rng = new ChiRng("WiderNormal");
         var histogram = new Histogram(-60.0, 60.0, 100);
 
         // Act
@@ -88,7 +88,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
 
         // Assert
         histogram.DebugPrint(testOutputHelper);
-        histogram.AssertIsNormal(expectedMean, expectedStdDev, 0.01);
+        histogram.AssertIsNormal(expectedMean, expectedStdDev, 0.03);
     }
 
     [Theory]

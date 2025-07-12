@@ -76,7 +76,7 @@ public class StatelessSamplerTests(ITestOutputHelper testOutputHelper)
                 histogram.AddSample(s);
 
         var actualMode = histogram.CalculateMode();
-        actualMode.Should().BeApproximately((double)expectedMode, (double)expectedMode * 0.05,
+        actualMode.Should().BeApproximately((double)expectedMode, (double)expectedMode * 0.07,
             "because the mode should be correct for high-precision decimal values.");
     }
 

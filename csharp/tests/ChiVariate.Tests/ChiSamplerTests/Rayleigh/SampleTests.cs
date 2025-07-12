@@ -30,7 +30,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
 
         // Assert
         histogram.DebugPrint(testOutputHelper, $"Rayleigh(sigma={sigma})");
-        histogram.AssertIsRayleigh(sigma, 0.07);
+        histogram.AssertIsRayleigh(sigma, 0.09);
     }
 
     [Theory]

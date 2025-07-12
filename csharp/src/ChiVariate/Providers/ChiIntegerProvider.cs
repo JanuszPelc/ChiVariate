@@ -57,6 +57,17 @@ public static class ChiIntegerProvider
     }
 
     /// <summary>
+    ///     Returns a random integer of the specified type.
+    /// </summary>
+    public static T Next<TRng, T>(ref TRng rng)
+        where TRng : struct, IChiRngSource<TRng>
+        where T : unmanaged, IBinaryInteger<T>, IMinMaxValue<T>
+    {
+        var bitCount = Cache.Number<T>.BitCount;
+        return NextBits<TRng, T>(ref rng, bitCount);
+    }
+
+    /// <summary>
     ///     Returns a random integer of a specified generic type that is within a specified range.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -140,21 +151,21 @@ public static class ChiIntegerProvider
                 const int availableBits = 32;
                 var sample = TRng.NextUInt32(ref rng);
                 var shift = availableBits - bitCount;
-                return T.CreateChecked(sample >> shift);
+                return T.CreateTruncating(sample >> shift);
             }
             case > 32 and <= 64:
             {
                 const int availableBits = 64;
                 var sample = TRng.NextUInt64(ref rng);
                 var shift = availableBits - bitCount;
-                return T.CreateChecked(sample >> shift);
+                return T.CreateTruncating(sample >> shift);
             }
             case > 64 and <= 128:
             {
                 const int availableBits = 128;
                 var sample = ((UInt128)TRng.NextUInt64(ref rng) << 64) | TRng.NextUInt64(ref rng);
                 var shift = availableBits - bitCount;
-                return T.CreateChecked(sample >> shift);
+                return T.CreateTruncating(sample >> shift);
             }
             case 0:
             {

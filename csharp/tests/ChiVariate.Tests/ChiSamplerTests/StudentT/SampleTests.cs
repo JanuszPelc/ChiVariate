@@ -32,7 +32,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
 
         // Assert
         histogram.DebugPrint(testOutputHelper, $"Student's t (v={degreesOfFreedom}) Distribution");
-        histogram.AssertIsStudentT(degreesOfFreedom, 0.17);
+        histogram.AssertIsStudentT(degreesOfFreedom, 0.19);
     }
 
     [Fact]

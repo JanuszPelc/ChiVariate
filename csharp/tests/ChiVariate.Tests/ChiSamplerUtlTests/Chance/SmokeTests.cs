@@ -45,7 +45,7 @@ public class SmokeTests
         var result = rng.Chance().Next<long>();
 
         // Assert
-        result.Should().Be(5923646497553564155L);
+        result.Should().Be(-3299725539301211654L);
     }
 
     [Fact]
