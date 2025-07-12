@@ -603,8 +603,9 @@ public struct ChiMatrix<T> : IDisposable, IEquatable<ChiMatrix<T>>
         if (!IsValid)
             return;
 
-        ChiArrayPool<T>.Return(HeapData);
         IsValid = false;
+
+        ChiArrayPool<T>.Return(HeapData);
     }
 
     #endregion

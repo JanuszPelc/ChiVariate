@@ -138,8 +138,9 @@ public struct ChiVector<T> : IDisposable, IEquatable<ChiVector<T>>
         if (!IsValid)
             return;
 
-        ChiArrayPool<T>.Return(HeapData);
         IsValid = false;
+
+        ChiArrayPool<T>.Return(HeapData);
     }
 
     #endregion

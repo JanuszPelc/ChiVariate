@@ -274,13 +274,6 @@ internal static class ChiDecimalMath
     private static decimal NormalizeAngle(decimal angle)
     {
         const decimal twoPi = 2 * Pi;
-
-        while (angle > Pi)
-            angle -= twoPi;
-
-        while (angle < -Pi)
-            angle += twoPi;
-
-        return angle;
+        return angle - twoPi * Math.Floor(angle / twoPi + 0.5m);
     }
 }
