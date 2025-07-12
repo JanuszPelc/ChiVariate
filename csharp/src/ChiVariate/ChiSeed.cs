@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: MIT
 // See LICENSE file for full terms
 
+using System.Buffers.Binary;
 using System.Diagnostics;
 using System.Globalization;
 using System.Numerics;
@@ -61,7 +62,7 @@ public static class ChiSeed
         where TNumber : unmanaged, INumberBase<TNumber>
     {
         var selector = ChiMix64.MixValue(ChiMix64.InitialValue, value);
-        var index = ChiMix64.MixValue(selector, value);
+        var index = ChiMix64.MixValue(BinaryPrimitives.ReverseEndianness(selector), value);
 
         return Chi32.ApplyCascadingHashInterleave(selector, index);
     }

@@ -7,20 +7,21 @@ Apple M1 Pro, 1 CPU, 10 logical and 10 physical cores
   DefaultJob : .NET 9.0.2 (9.0.225.6610), Arm64 RyuJIT AdvSIMD
 
 
-| Method             | Mean     | Error    | StdDev   | Ratio | RatioSD | Allocated | Alloc Ratio |
-|------------------- |---------:|---------:|---------:|------:|--------:|----------:|------------:|
-| HashCode.Hash32    | 10.73 us | 0.011 us | 0.010 us |  1.00 |    0.00 |         - |          NA |
-| ChiHash.Hash32     | 25.32 us | 0.108 us | 0.096 us |  2.36 |    0.01 |         - |          NA |
-| ChiSeed.Hash64     | 31.12 us | 0.063 us | 0.056 us |  2.90 |    0.01 |         - |          NA |
-| ChiSeed.Unique64   | 55.78 us | 0.069 us | 0.065 us |  5.20 |    0.01 |         - |          NA |
-| CryptoRng.Unique64 | 75.16 us | 0.782 us | 0.693 us |  7.01 |    0.06 |         - |          NA |
+| Method               | Mean     | Error    | StdDev   | Ratio | RatioSD | Allocated | Alloc Ratio |
+|--------------------- |---------:|---------:|---------:|------:|--------:|----------:|------------:|
+| HashCode.Hash32      | 11.79 us | 0.090 us | 0.084 us |  1.00 |    0.01 |         - |          NA |
+| ChiHash.Hash32       | 32.01 us | 0.160 us | 0.141 us |  2.72 |    0.02 |         - |          NA |
+| ChiSeed.Hash64       | 34.03 us | 0.062 us | 0.052 us |  2.89 |    0.02 |         - |          NA |
+| ChiSeed.Generate64   | 55.63 us | 0.067 us | 0.056 us |  4.72 |    0.03 |         - |          NA |
+| CryptoRng.Generate64 | 74.53 us | 0.067 us | 0.059 us |  6.32 |    0.04 |         - |          NA |
 
 // * Hints *
 Outliers
-  HasherBenchmarks.HashCode.Hash32: Default    -> 1 outlier  was  removed, 3 outliers were detected (10.71 us, 10.71 us, 10.76 us)
-  HasherBenchmarks.ChiHash.Hash32: Default     -> 1 outlier  was  removed (25.93 us)
-  HasherBenchmarks.ChiSeed.Hash64: Default     -> 1 outlier  was  removed (31.30 us)
-  HasherBenchmarks.CryptoRng.Unique64: Default -> 1 outlier  was  removed (77.59 us)
+  HasherBenchmarks.HashCode.Hash32: Default      -> 3 outliers were detected (11.64 us..11.65 us)
+  HasherBenchmarks.ChiHash.Hash32: Default       -> 1 outlier  was  removed (32.49 us)
+  HasherBenchmarks.ChiSeed.Hash64: Default       -> 2 outliers were removed (34.25 us, 34.25 us)
+  HasherBenchmarks.ChiSeed.Generate64: Default   -> 2 outliers were removed (55.87 us, 55.90 us)
+  HasherBenchmarks.CryptoRng.Generate64: Default -> 1 outlier  was  removed (74.74 us)
 
 // * Legends *
   Mean        : Arithmetic mean of all measurements
@@ -36,9 +37,9 @@ Outliers
 
 
 // ***** BenchmarkRunner: End *****
-Run time: 00:01:32 (92.15 sec), executed benchmarks: 5
+Run time: 00:01:34 (94.2 sec), executed benchmarks: 5
 
-Global total time: 00:01:38 (98.3 sec), executed benchmarks: 5
+Global total time: 00:01:40 (100.34 sec), executed benchmarks: 5
 // * Artifacts cleanup *
 Artifacts cleanup is finished
 

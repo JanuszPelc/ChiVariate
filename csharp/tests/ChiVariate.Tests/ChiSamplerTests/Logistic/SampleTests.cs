@@ -8,7 +8,7 @@ namespace ChiVariate.Tests.ChiSamplerTests.Logistic;
 
 public class SampleTests(ITestOutputHelper testOutputHelper)
 {
-    private const int SampleCount = 150_000;
+    private const int SampleCount = 250_000;
 
     [Theory]
     [InlineData(0.0, 1.0)] // Standard Logistic

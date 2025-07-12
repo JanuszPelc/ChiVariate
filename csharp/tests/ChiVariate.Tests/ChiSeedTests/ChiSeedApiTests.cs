@@ -152,13 +152,13 @@ public class ChiSeedApiTests
 
     [Theory]
     [InlineData("", 5091119643593974729L)] // Empty string
-    [InlineData("test", 5151988072576516256L)]
-    [InlineData("Hello, World!", -5175036796766112071L)]
-    [InlineData("A moderately long string seed for testing determinism.", -6960743544550810265L)]
-    [InlineData("\t\n\r ", -7339662360663615370L)] // Whitespace variations
-    [InlineData("你好世界", -1060883054426207415L)] // Non-ASCII BMP
-    [InlineData("👍", -8015312806335124022L)] // Supplementary character
-    public void CoreHash64_GivenStringInput_ReturnsDeterministicOutput(string input, long expected)
+    [InlineData("test", -6718970030811709247L)]
+    [InlineData("Hello, World!", -5048483389635163709L)]
+    [InlineData("A moderately long string seed for testing determinism.", -8572949766761681549L)]
+    [InlineData("\t\n\r ", 6552475925946505334L)] // Whitespace variations
+    [InlineData("你好世界", 3950144026336539582L)] // Non-ASCII BMP
+    [InlineData("👍", -7582485440326701622L)] // Supplementary character
+    public void ChiMix64_GivenStringInput_ReturnsDeterministicOutput(string input, long expected)
     {
         // Arrange & Act
         if (string.IsNullOrEmpty(input)) input = null!;

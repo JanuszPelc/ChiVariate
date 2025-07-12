@@ -19,14 +19,7 @@ internal static class ChiMix64
     /// <summary>
     ///     Gets the initial prime value for starting a new mix operation.
     /// </summary>
-    public static long InitialValue
-    {
-        get
-        {
-            const ulong initialPrime = 0x46A74A57896EA3C9;
-            return (long)initialPrime;
-        }
-    }
+    public const long InitialValue = 0x46A74A57896EA3C9;
 
     /// <summary>
     ///     Mixes a value of any supported type into the current mix state.
@@ -73,23 +66,23 @@ internal static class ChiMix64
         {
             Encoding.UTF8.GetBytes(value, byteSpan);
 
-            var intCount = byteSpan.Length & ~3;
-            var intSpan = MemoryMarshal.Cast<byte, int>(byteSpan[..intCount]);
+            var longCount = byteSpan.Length & ~7;
+            var longSpan = MemoryMarshal.Cast<byte, long>(byteSpan[..longCount]);
 
             if (!BitConverter.IsLittleEndian)
-                for (var index = 0; index < intSpan.Length; index++)
-                    intSpan[index] = BinaryPrimitives.ReverseEndianness(intSpan[index]);
+                for (var index = 0; index < longSpan.Length; index++)
+                    longSpan[index] = BinaryPrimitives.ReverseEndianness(longSpan[index]);
 
-            foreach (var chunk in intSpan)
+            foreach (var chunk in longSpan)
                 currentMix = UpdateMixValue(currentMix, chunk);
 
-            var orphanCount = byteSpan.Length & 3;
+            var orphanCount = byteSpan.Length & 7;
             if (orphanCount > 0)
             {
                 var tailBytes = byteSpan[^orphanCount..];
-                var lastChunk = 0;
+                var lastChunk = 0L;
                 for (var i = 0; i < orphanCount; i++)
-                    lastChunk |= tailBytes[i] << (i * 8);
+                    lastChunk |= (long)tailBytes[i] << (i * 8);
                 currentMix = UpdateMixValue(currentMix, lastChunk);
             }
         }
@@ -109,18 +102,18 @@ internal static class ChiMix64
     }
 
     /// <summary>
-    ///     Updates the mix state with a new 32-bit integer value.
+    ///     Updates the mix state with a new 64-bit integer value.
     /// </summary>
     /// <param name="mix">The current mix state.</param>
-    /// <param name="value">The 32-bit integer value to incorporate.</param>
+    /// <param name="value">The 64-bit integer value to incorporate.</param>
     /// <returns>The updated mix state.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    private static long UpdateMixValue(long mix, int value)
+    private static long UpdateMixValue(long mix, long value)
     {
         const ulong multiplierPrime = 0x8A2AB4D322468F2D;
         const ulong bitmaskPrime = 0xFC2ED86788EEAD7F;
 
-        var combinedHash = (uint)(mix ^ value) * multiplierPrime;
+        var combinedHash = (ulong)(mix ^ value) * multiplierPrime;
         var offset = (int)combinedHash & 63;
 
         return mix ^ (long)BitOperations.RotateRight(combinedHash ^ bitmaskPrime, offset);
@@ -142,21 +135,18 @@ internal static class ChiMix64
         else if (typeof(T) == typeof(int) || typeof(T) == typeof(uint))
         {
             var intValue = Unsafe.As<T, uint>(ref value);
-            mix = UpdateMixValue(mix, (int)intValue);
+            mix = UpdateMixValue(mix, intValue);
         }
         else if (typeof(T) == typeof(long) || typeof(T) == typeof(ulong))
         {
             var longValue = Unsafe.As<T, ulong>(ref value);
-            mix = UpdateMixValue(mix, (int)longValue);
-            mix = UpdateMixValue(mix, (int)(longValue >> 32));
+            mix = UpdateMixValue(mix, (long)longValue);
         }
         else if (typeof(T) == typeof(Int128) || typeof(T) == typeof(UInt128))
         {
             var int128Value = Unsafe.As<T, UInt128>(ref value);
-            mix = UpdateMixValue(mix, (int)int128Value);
-            mix = UpdateMixValue(mix, (int)(int128Value >> 32));
-            mix = UpdateMixValue(mix, (int)(int128Value >> 64));
-            mix = UpdateMixValue(mix, (int)(int128Value >> 96));
+            mix = UpdateMixValue(mix, (long)int128Value);
+            mix = UpdateMixValue(mix, (long)(int128Value >> 64));
         }
         else
         {
@@ -260,12 +250,12 @@ internal static class ChiMix64
             Span<byte> bytes = stackalloc byte[16];
             guid.TryWriteBytes(bytes);
 
-            var intSpan = MemoryMarshal.Cast<byte, int>(bytes);
+            var longSpan = MemoryMarshal.Cast<byte, long>(bytes);
             if (!BitConverter.IsLittleEndian)
-                for (var index = 0; index < intSpan.Length; index++)
-                    intSpan[index] = BinaryPrimitives.ReverseEndianness(intSpan[index]);
+                for (var index = 0; index < longSpan.Length; index++)
+                    longSpan[index] = BinaryPrimitives.ReverseEndianness(longSpan[index]);
 
-            foreach (var chunk in intSpan)
+            foreach (var chunk in longSpan)
                 TryMixPrimitive(chunk, ref mix, true);
         }
         else if (typeof(T) == typeof(Complex))
