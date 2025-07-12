@@ -114,7 +114,7 @@ public class NextTests(ITestOutputHelper testOutputHelper)
         where TSampler : IHistogramSamplerWithRange<T, ChiRng>
     {
         // Arrange
-        var rng = new ChiRng((typeof(T).Name));
+        var rng = new ChiRng(typeof(T).Name);
         var histogram = new Histogram(0.0, 1.0, 10);
 
         // Act
@@ -131,7 +131,7 @@ public class NextTests(ITestOutputHelper testOutputHelper)
         where TSampler : IHistogramSamplerWithRange<T, ChiRng>
     {
         // Arrange
-        var rng = new ChiRng((typeof(T).Name));
+        var rng = new ChiRng(typeof(T).Name);
         var histogram = new Histogram(0.0, 1.0, 10);
         const int sampleCount = 100_000;
 

@@ -62,7 +62,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
         var max = decimal.Parse(maxStr);
         var mode = decimal.Parse(modeStr);
 
-        var rng = new ChiRng(ChiSeed.Scramble("TriangularDecimal",  mode));
+        var rng = new ChiRng(ChiSeed.Scramble("TriangularDecimal", mode));
         var histogram = new Histogram((double)min, (double)max, 100);
         var sampler = new DecimalTriangularSampler(min, max, mode);
 

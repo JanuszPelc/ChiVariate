@@ -95,7 +95,7 @@ public ref struct ChiHash
     /// </summary>
     /// <typeparam name="T">The type of value to add.</typeparam>
     /// <param name="value">
-    ///     The value to add to the hash. Supports standard numeric types, bool, enums, 
+    ///     The value to add to the hash. Supports standard numeric types, bool, enums,
     ///     Guid, Complex, DateTime, DateTimeOffset, and TimeSpan.
     /// </param>
     /// <returns>A new ChiHash instance with the value incorporated into the hash calculation.</returns>

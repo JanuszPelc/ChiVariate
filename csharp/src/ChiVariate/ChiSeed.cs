@@ -161,9 +161,9 @@ public static class ChiSeed
 
                 new Random().Shuffle(CollectionsMarshal.AsSpan(components));
 
-                return ChiMix64.MixString(
-                    ChiMix64.InitialValue,
-                    string.Join(CultureInfo.CurrentCulture.TextInfo.ListSeparator, components));
+                var listSeparator = CultureInfo.CurrentCulture.TextInfo.ListSeparator;
+                var finalizedString = string.Join(listSeparator, components);
+                return ChiMix64.MixString(ChiMix64.InitialValue, finalizedString);
             }
         }
     }
