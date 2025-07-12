@@ -11,8 +11,8 @@ namespace ChiVariate.Benchmarks;
 public class HasherBenchmarks
 {
     private const int IterationCount = 1_000;
-    private const string Text = "Level 42";
-    private const double Value = Math.PI * Math.E;
+    private const string Text = "Apollo 440";
+    private const double Value = Math.PI * Math.E * Math.Tau;
 
     [Benchmark(Description = "HashCode.Hash32", Baseline = true)]
     public bool HashCode_Build()
@@ -47,7 +47,7 @@ public class HasherBenchmarks
         return Consume(sum);
     }
 
-    [Benchmark(Description = "ChiSeed.Unique64")]
+    [Benchmark(Description = "ChiSeed.Generate64")]
     public bool ChiSeed_GenerateUnique()
     {
         var sum = 0L;
@@ -56,7 +56,7 @@ public class HasherBenchmarks
         return Consume(sum);
     }
 
-    [Benchmark(Description = "CryptoRng.Unique64")]
+    [Benchmark(Description = "CryptoRng.Generate64")]
     public bool RandomNumberGenerator_FillBytes()
     {
         var sum = 0L;
