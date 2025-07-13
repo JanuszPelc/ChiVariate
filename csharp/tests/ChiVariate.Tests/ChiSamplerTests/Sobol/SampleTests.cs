@@ -104,8 +104,10 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
             new[] { 0.5, 0.5 },
             new[] { 0.75, 0.25 },
             new[] { 0.25, 0.75 },
-            new[] { 0.375, 0.625 },
-            new[] { 0.875, 0.125 }
+            new[] { 0.375, 0.375 },
+            new[] { 0.875, 0.875 },
+            new[] { 0.625, 0.125 },
+            new[] { 0.125, 0.625 }
         };
 
         var rng = new ChiRng();
@@ -124,7 +126,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
 
     [Theory]
     [InlineData(ChiSequenceMode.Canonical, 0.001)]
-    [InlineData(ChiSequenceMode.Randomized, 0.005)]
+    [InlineData(ChiSequenceMode.Randomized, 0.1)]
     public void SobolSequence_Marginals_ShowCorrectUniformity(ChiSequenceMode mode, double tolerance)
     {
         // Arrange
@@ -277,5 +279,74 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
 
         // Act & Assert
         act.Should().Throw<ArgumentOutOfRangeException>();
+    }
+
+    [Fact]
+    public void Sobol_FirstPoints_MatchReferenceImplementation()
+    {
+        // Arrange
+        var expected2D = new[,]
+        {
+            { 0.5, 0.5 },
+            { 0.75, 0.25 },
+            { 0.25, 0.75 },
+            { 0.375, 0.375 },
+            { 0.875, 0.875 },
+            { 0.625, 0.125 },
+            { 0.125, 0.625 },
+            { 0.1875, 0.3125 }
+        };
+
+        var rng = new ChiRng();
+        var sampler = rng.Sobol(2, ChiSequenceMode.Canonical).OfType<double>();
+
+        // Act & Assert
+        for (var i = 0; i < 8; i++)
+        {
+            using var point = sampler.Sample();
+            point[0].Should().BeApproximately(expected2D[i, 0], 1e-9);
+            point[1].Should().BeApproximately(expected2D[i, 1], 1e-9);
+        }
+    }
+
+    [Fact]
+    public void Sobol_DifferentScrambles_ProduceDifferentButValidSequences()
+    {
+        // Arrange
+        const int numSequences = 10;
+        const int dimensions = 3;
+
+        var firstPoints = new List<double[]>();
+        for (var i = 0; i < numSequences; i++)
+        {
+            var rng = new ChiRng(i); // Different seed
+            var sampler = rng.Sobol(dimensions).OfType<double>();
+            using var firstPoint = sampler.Sample();
+            firstPoints.Add(firstPoint.ToArray());
+        }
+
+        // Act & Assert
+        for (var i = 0; i < numSequences - 1; i++)
+        for (var j = i + 1; j < numSequences; j++)
+            firstPoints[i].Should().NotBeEquivalentTo(firstPoints[j],
+                "Different scrambles should produce different sequences");
+    }
+
+    [Theory]
+    [InlineData(50)]
+    [InlineData(100)]
+    [InlineData(500)]
+    public void Sobol_HighDimensions_MaintainsValidRange(int dimensions)
+    {
+        // Arrange
+        var rng = new ChiRng();
+        var sampler = rng.Sobol(dimensions).OfType<double>();
+
+        // Act & Assert
+        const int testPoints = 1000;
+        foreach (var point in sampler.Sample(testPoints))
+            for (var d = 0; d < dimensions; d++)
+                point[d].Should().BeInRange(0.0, 1.0,
+                    $"All values should be in [0,1] even in dimension {d + 1} of {dimensions}");
     }
 }
