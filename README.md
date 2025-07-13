@@ -349,7 +349,7 @@ Distributions that produce real-valued variates, including `float`, `double`, `H
 
 > A random value between 0 and 1 used to represent an unknown probability or proportion. The natural choice for modeling uncertainty about percentages, such as estimating a player's skill from match history or modeling task completion rates.
 >
->  *Complexity: Amortized `O(1)`. Tier 3.*
+>  *Complexity: Amortized `O(1)`. Tier 2.*
 
 #### Cauchy
 
@@ -379,7 +379,7 @@ Distributions that produce real-valued variates, including `float`, `double`, `H
 
 > The ratio of two scaled chi-squared variables. A cornerstone of hypothesis testing, particularly in Analysis of Variance (ANOVA), it specializes in comparing variances between two or more groups to determine if their means are significantly different.
 >
->  *Complexity: Amortized `O(1)`. Tier 3.*
+>  *Complexity: Amortized `O(1)`. Tier 2.*
 
 #### Gamma
 
