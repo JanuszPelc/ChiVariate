@@ -20,7 +20,8 @@ public ref struct ChiSamplerSobol<TRng, T>
     private const int MaxBits = 32;
     private readonly int _dimensions;
     private readonly T _scaleFactor;
-    private uint _index;
+    private ulong _index;
+    private bool _originPointReturned;
     private ChiVector<uint> _currentPoint;
     private ChiVector<uint> _directionNumbers;
 
@@ -41,6 +42,7 @@ public ref struct ChiSamplerSobol<TRng, T>
 
         _dimensions = dimensions;
         _index = 0;
+        _originPointReturned = false;
         _currentPoint = ChiVector.Zeros<uint>(dimensions);
         _scaleFactor = T.One / T.CreateChecked(1UL << MaxBits);
         _directionNumbers = InitializeDirectionNumbers(ref rng, _dimensions, mode);
@@ -72,7 +74,6 @@ public ref struct ChiSamplerSobol<TRng, T>
         }
     }
 
-
     /// <summary>
     ///     Samples the next multi-dimensional point from the Sobol sequence.
     /// </summary>
@@ -82,14 +83,15 @@ public ref struct ChiSamplerSobol<TRng, T>
     /// </returns>
     public ChiVector<T> Sample()
     {
-        _index++;
-        if (_index == 0)
+        if (!_originPointReturned)
         {
-            _currentPoint.Span.Clear();
-            _index = 1;
+            _originPointReturned = true;
+            return ChiVector.Zeros<T>(_dimensions);
         }
 
-        var c = BitOperations.TrailingZeroCount(_index);
+        _index++;
+
+        var c = BitOperations.TrailingZeroCount((uint)_index);
         var currentPointSpan = _currentPoint.Span;
         var dirNumSpan = _directionNumbers.Span;
 

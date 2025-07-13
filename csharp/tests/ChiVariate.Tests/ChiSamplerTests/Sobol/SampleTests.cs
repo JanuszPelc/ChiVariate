@@ -62,6 +62,11 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
         var sampler1 = rng1.Sobol(2).OfType<double>();
         var sampler2 = rng2.Sobol(2).OfType<double>();
 
+        var originPoint1 = sampler1.Sample();
+        var originPoint2 = sampler2.Sample();
+        _ = originPoint1;
+        _ = originPoint2;
+
         var firstPoint1 = sampler1.Sample().ToArray();
         var firstPoint2 = sampler2.Sample().ToArray();
 
@@ -76,11 +81,12 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
         // Arrange
         var expectedValues = new[]
         {
-            0.5, // 0.1_2
-            0.75, // 0.11_2
-            0.25, // 0.01_2
-            0.375, // 0.011_2
-            0.875 // 0.111_2
+            0.0,
+            0.5,
+            0.75,
+            0.25,
+            0.375,
+            0.875
         };
 
         var rng = new ChiRng();
@@ -101,6 +107,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
         // Arrange
         var expectedPoints = new[]
         {
+            new[] { 0.0, 0.0 },
             new[] { 0.5, 0.5 },
             new[] { 0.75, 0.25 },
             new[] { 0.25, 0.75 },
@@ -178,7 +185,12 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
         var canonicalSampler = canonicalRng.Sobol(dimensions, ChiSequenceMode.Canonical).OfType<double>();
         var randomizedSampler = randomizedRng.Sobol(dimensions).OfType<double>();
 
-        // Act - Test bulk sampling
+        var originPoint1 = canonicalSampler.Sample();
+        var originPoint2 = randomizedSampler.Sample();
+        _ = originPoint1;
+        _ = originPoint2;
+
+        // Act
         using var canonicalPoints = canonicalSampler.Sample(sampleCount);
         using var randomizedPoints = randomizedSampler.Sample(sampleCount);
 
@@ -186,14 +198,12 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
         canonicalPoints.List.Count.Should().Be(sampleCount);
         randomizedPoints.List.Count.Should().Be(sampleCount);
 
-        // Randomized should differ from canonical
         var canonicalFirst = canonicalPoints.List[0].ToArray();
         var randomizedFirst = randomizedPoints.List[0].ToArray();
 
         canonicalFirst.Should().NotBeEquivalentTo(randomizedFirst,
             "because randomized Sobol should differ from canonical Sobol due to digital scrambling");
 
-        // Both maintain valid quasi-random properties  
         ValidateQuasiRandomProperties(canonicalPoints.List, dimensions);
         ValidateQuasiRandomProperties(randomizedPoints.List, dimensions);
 
@@ -287,6 +297,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
         // Arrange
         var expected2D = new[,]
         {
+            { 0.0, 0.0 },
             { 0.5, 0.5 },
             { 0.75, 0.25 },
             { 0.25, 0.75 },
@@ -321,7 +332,10 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
         {
             var rng = new ChiRng(i); // Different seed
             var sampler = rng.Sobol(dimensions).OfType<double>();
-            using var firstPoint = sampler.Sample();
+            var originPoint = sampler.Sample();
+            _ = originPoint;
+
+            var firstPoint = sampler.Sample();
             firstPoints.Add(firstPoint.ToArray());
         }
 
