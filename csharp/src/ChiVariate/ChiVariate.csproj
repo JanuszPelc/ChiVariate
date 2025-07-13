@@ -3,7 +3,7 @@
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 
         <PackageId>ChiVariate</PackageId>
-        <Version>1.0.0-rc2</Version>
+        <Version>1.0.0</Version>
         <Authors>Janusz Pelc</Authors>
         <Description>
             Deterministic, data-oriented random engine seamlessly bridging expressive everyday randomness and statistically rigorous, domain-specific simulations.

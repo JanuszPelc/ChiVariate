@@ -1,7 +1,5 @@
 # ChiVariate
 
-> **⚠️ Pre-release version. Installation may not work properly. Official release coming very soon.**
-
 ChiVariate is a deterministic, data-oriented random engine seamlessly bridging expressive everyday randomness and statistically rigorous, domain-specific simulations.
 
 ## Who is ChiVariate for
