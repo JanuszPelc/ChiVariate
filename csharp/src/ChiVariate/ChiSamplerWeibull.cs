@@ -3,7 +3,7 @@
 
 using System.Numerics;
 using System.Runtime.CompilerServices;
-using ChiVariate.Providers;
+using ChiVariate.Internal.Ziggurat;
 
 namespace ChiVariate;
 
@@ -41,8 +41,10 @@ public readonly ref struct ChiSamplerWeibull<TRng, T>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public T Sample()
     {
-        var u = ChiRealProvider.Next<TRng, T>(ref _rng, ChiIntervalOptions.ExcludeMin);
-        return _scale * ChiMath.Pow(-ChiMath.Log(u), _invShape);
+        // Weibull(k, λ) = λ * Exp(1)^(1/k)
+        // Ziggurat Exponential avoids logarithm ~98% of the time
+        var exp = ZigguratExponential<T>.Next(ref _rng);
+        return _scale * ChiMath.Pow(exp, _invShape);
     }
 
     /// <summary>
