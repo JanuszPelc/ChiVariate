@@ -1,3 +1,4 @@
+using System.Globalization;
 using AwesomeAssertions;
 using ChiVariate.Tests.TestInfrastructure;
 using Xunit;
@@ -58,8 +59,8 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     public void Sample_Decimal_ProducesDistributionWithCorrectMedian(string locationStr, string scaleStr)
     {
         // Arrange
-        var location = decimal.Parse(locationStr);
-        var scale = decimal.Parse(scaleStr);
+        var location = decimal.Parse(locationStr, CultureInfo.InvariantCulture);
+        var scale = decimal.Parse(scaleStr, CultureInfo.InvariantCulture);
 
         var rng = new ChiRng(ChiSeed.Scramble("CauchyDecimal", new ChiHash().Add(location).Add(scale).Hash));
         var histogramRange = (double)(10 * scale);

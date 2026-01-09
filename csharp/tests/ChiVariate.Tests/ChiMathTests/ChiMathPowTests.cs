@@ -1,3 +1,4 @@
+using System.Globalization;
 using AwesomeAssertions;
 using Xunit;
 
@@ -81,9 +82,9 @@ public class ChiMathPowTests
     public void Pow_Decimal_BasicCases_ShouldReturnExpectedResults(string baseStr, string expStr, string expectedStr)
     {
         // Arrange
-        var baseVal = decimal.Parse(baseStr);
-        var exponent = decimal.Parse(expStr);
-        var expected = decimal.Parse(expectedStr);
+        var baseVal = decimal.Parse(baseStr, CultureInfo.InvariantCulture);
+        var exponent = decimal.Parse(expStr, CultureInfo.InvariantCulture);
+        var expected = decimal.Parse(expectedStr, CultureInfo.InvariantCulture);
 
         // Act
         var result = ChiMath.Pow(baseVal, exponent);
@@ -101,9 +102,9 @@ public class ChiMathPowTests
         string expectedStr)
     {
         // Arrange
-        var baseVal = decimal.Parse(baseStr);
-        var exponent = decimal.Parse(expStr);
-        var expected = decimal.Parse(expectedStr);
+        var baseVal = decimal.Parse(baseStr, CultureInfo.InvariantCulture);
+        var exponent = decimal.Parse(expStr, CultureInfo.InvariantCulture);
+        var expected = decimal.Parse(expectedStr, CultureInfo.InvariantCulture);
 
         // Act
         var result = ChiMath.Pow(baseVal, exponent);
@@ -121,9 +122,9 @@ public class ChiMathPowTests
         string expectedStr)
     {
         // Arrange
-        var baseVal = decimal.Parse(baseStr);
-        var exponent = decimal.Parse(expStr);
-        var expected = decimal.Parse(expectedStr);
+        var baseVal = decimal.Parse(baseStr, CultureInfo.InvariantCulture);
+        var exponent = decimal.Parse(expStr, CultureInfo.InvariantCulture);
+        var expected = decimal.Parse(expectedStr, CultureInfo.InvariantCulture);
 
         // Act
         var result = ChiMath.Pow(baseVal, exponent);
@@ -139,8 +140,8 @@ public class ChiMathPowTests
     public void Pow_Decimal_LargeIntegerExponents_ShouldNotOverflow(string baseStr, string expStr)
     {
         // Arrange
-        var baseVal = decimal.Parse(baseStr);
-        var exponent = decimal.Parse(expStr);
+        var baseVal = decimal.Parse(baseStr, CultureInfo.InvariantCulture);
+        var exponent = decimal.Parse(expStr, CultureInfo.InvariantCulture);
 
         // Act & Assert
         var act = () => ChiMath.Pow(baseVal, exponent);
@@ -173,9 +174,9 @@ public class ChiMathPowTests
         string expectedStr)
     {
         // Arrange
-        var baseVal = decimal.Parse(baseStr);
-        var exponent = decimal.Parse(expStr);
-        var expected = decimal.Parse(expectedStr);
+        var baseVal = decimal.Parse(baseStr, CultureInfo.InvariantCulture);
+        var exponent = decimal.Parse(expStr, CultureInfo.InvariantCulture);
+        var expected = decimal.Parse(expectedStr, CultureInfo.InvariantCulture);
 
         // Act
         var result = ChiMath.Pow(baseVal, exponent);
@@ -190,8 +191,8 @@ public class ChiMathPowTests
     public void Pow_Decimal_VeryLargeResults_ShouldThrowOverflowException(string baseStr, string expStr)
     {
         // Arrange
-        var baseVal = decimal.Parse(baseStr);
-        var exponent = decimal.Parse(expStr);
+        var baseVal = decimal.Parse(baseStr, CultureInfo.InvariantCulture);
+        var exponent = decimal.Parse(expStr, CultureInfo.InvariantCulture);
 
         // Act & Assert
         var act = () => ChiMath.Pow(baseVal, exponent);
@@ -212,8 +213,8 @@ public class ChiMathPowTests
     public void Sin_Decimal_KnownValues_ShouldReturnExpectedResults(string angleStr, string expectedStr)
     {
         // Arrange
-        var angle = decimal.Parse(angleStr);
-        var expected = decimal.Parse(expectedStr);
+        var angle = decimal.Parse(angleStr, CultureInfo.InvariantCulture);
+        var expected = decimal.Parse(expectedStr, CultureInfo.InvariantCulture);
 
         // Act
         var result = ChiMath.Sin(angle);
@@ -232,8 +233,8 @@ public class ChiMathPowTests
     public void Cos_Decimal_KnownValues_ShouldReturnExpectedResults(string angleStr, string expectedStr)
     {
         // Arrange
-        var angle = decimal.Parse(angleStr);
-        var expected = decimal.Parse(expectedStr);
+        var angle = decimal.Parse(angleStr, CultureInfo.InvariantCulture);
+        var expected = decimal.Parse(expectedStr, CultureInfo.InvariantCulture);
 
         // Act
         var result = ChiMath.Cos(angle);
@@ -251,8 +252,8 @@ public class ChiMathPowTests
     public void Tan_Decimal_KnownValues_ShouldReturnExpectedResults(string angleStr, string expectedStr)
     {
         // Arrange
-        var angle = decimal.Parse(angleStr);
-        var expected = decimal.Parse(expectedStr);
+        var angle = decimal.Parse(angleStr, CultureInfo.InvariantCulture);
+        var expected = decimal.Parse(expectedStr, CultureInfo.InvariantCulture);
 
         // Act
         var result = ChiMath.Tan(angle);
@@ -268,7 +269,7 @@ public class ChiMathPowTests
     public void Tan_Decimal_UndefinedValues_ShouldThrowArgumentException(string angleStr)
     {
         // Arrange
-        var angle = decimal.Parse(angleStr);
+        var angle = decimal.Parse(angleStr, CultureInfo.InvariantCulture);
 
         // Act & Assert
         var act = () => ChiMath.Tan(angle);
@@ -284,7 +285,7 @@ public class ChiMathPowTests
     public void Sin_Decimal_LargeAngles_ShouldNormalizeCorrectly(string angleStr)
     {
         // Arrange
-        var angle = decimal.Parse(angleStr);
+        var angle = decimal.Parse(angleStr, CultureInfo.InvariantCulture);
 
         // Act
         var result = ChiMath.Sin(angle);
@@ -305,7 +306,7 @@ public class ChiMathPowTests
     public void Cos_Decimal_LargeAngles_ShouldNormalizeCorrectly(string angleStr)
     {
         // Arrange
-        var angle = decimal.Parse(angleStr);
+        var angle = decimal.Parse(angleStr, CultureInfo.InvariantCulture);
 
         // Act
         var result = ChiMath.Cos(angle);
@@ -366,7 +367,7 @@ public class ChiMathPowTests
     public void Sin_Decimal_SmallAngles_ShouldApproximateAngle(string angleStr)
     {
         // For small angles, sin(x) ≈ x
-        var angle = decimal.Parse(angleStr);
+        var angle = decimal.Parse(angleStr, CultureInfo.InvariantCulture);
 
         // Act
         var result = ChiMath.Sin(angle);
@@ -385,7 +386,7 @@ public class ChiMathPowTests
     public void Cos_Decimal_SmallAngles_ShouldApproximateOne(string angleStr)
     {
         // For small angles, cos(x) ≈ 1
-        var angle = decimal.Parse(angleStr);
+        var angle = decimal.Parse(angleStr, CultureInfo.InvariantCulture);
 
         // Act
         var result = ChiMath.Cos(angle);
@@ -418,8 +419,8 @@ public class ChiMathPowTests
     public void Pow_Decimal_ExtremeValues_ShouldNotThrowUnexpectedly(string baseStr, string expStr)
     {
         // Arrange
-        var baseVal = decimal.Parse(baseStr);
-        var exponent = decimal.Parse(expStr);
+        var baseVal = decimal.Parse(baseStr, CultureInfo.InvariantCulture);
+        var exponent = decimal.Parse(expStr, CultureInfo.InvariantCulture);
 
         // Act & Assert
         var act = () => ChiMath.Pow(baseVal, exponent);

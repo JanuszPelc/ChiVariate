@@ -1,3 +1,4 @@
+using System.Globalization;
 using AwesomeAssertions;
 using ChiVariate.Tests.TestInfrastructure;
 using Xunit;
@@ -62,8 +63,8 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     public void Sample_Decimal_ProducesDistributionWithCorrectMean(string alphaStr, string betaStr)
     {
         // Arrange
-        var alpha = decimal.Parse(alphaStr);
-        var beta = decimal.Parse(betaStr);
+        var alpha = decimal.Parse(alphaStr, CultureInfo.InvariantCulture);
+        var beta = decimal.Parse(betaStr, CultureInfo.InvariantCulture);
         var expectedMean = (double)alpha / (double)(alpha + beta);
 
         var rng = new ChiRng(ChiSeed.Scramble("BetaDecimal", new ChiHash().Add(alpha).Add(beta).Hash));

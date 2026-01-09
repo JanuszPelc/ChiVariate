@@ -62,6 +62,40 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
         sophieGermainPrimes.Count.Should().BeGreaterThan(5);
     }
 
+    // [Fact]
+    // public void PrimeSampler_DoublySafePrimes_AreDetected()
+    // {
+    //     var rng = new ChiRng("DoublySafe");
+    //     var sampler = rng.Prime(ulong.MaxValue / 77, ulong.MaxValue / 2);
+    //
+    //     var doublySafePrime = new List<ulong>();
+    //
+    //     while (doublySafePrime.Count < 32)
+    //     {
+    //         var prime64 = sampler.Sample();
+    //         var prime32 = (uint)prime64;
+    //
+    //         if (prime32 >= uint.MaxValue / 2)
+    //             continue;
+    //         if (!sampler.IsPrime(prime32))
+    //             continue;
+    //
+    //         var safePrime64 = 2 * prime64 + 1;
+    //         if (!sampler.IsPrime(safePrime64))
+    //             continue;
+    //
+    //         var safePrime32 = 2 * prime32 + 1;
+    //         if (!sampler.IsPrime(safePrime32))
+    //             continue;
+    //
+    //         doublySafePrime.Add(prime64);
+    //         testOutputHelper.WriteLine($"Doubly-safe prime: 0x{safePrime64:x16}");
+    //     }
+    //
+    //     testOutputHelper.WriteLine($"Found {doublySafePrime.Count} doubly-safe primes");
+    //     doublySafePrime.Count.Should().BeGreaterThan(5);
+    // }
+
     [Fact]
     public void PrimeSampler_DigitalRoot_ShowsCorrectDistribution()
     {

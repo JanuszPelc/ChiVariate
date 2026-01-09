@@ -1,3 +1,4 @@
+using System.Globalization;
 using AwesomeAssertions;
 using ChiVariate.Tests.TestInfrastructure;
 using Xunit;
@@ -92,8 +93,8 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     public void Sample_Decimal_ProducesDistributionWithCorrectStatistics(string shapeStr, string scaleStr)
     {
         // Arrange
-        var shape = decimal.Parse(shapeStr);
-        var scale = decimal.Parse(scaleStr);
+        var shape = decimal.Parse(shapeStr, CultureInfo.InvariantCulture);
+        var scale = decimal.Parse(scaleStr, CultureInfo.InvariantCulture);
         var expectedMean = (double)(shape * scale);
         var expectedStdDev = Math.Sqrt((double)shape) * (double)scale;
 

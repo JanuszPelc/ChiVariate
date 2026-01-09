@@ -1,3 +1,4 @@
+using System.Globalization;
 using ChiVariate.Tests.TestInfrastructure;
 using Xunit;
 using Xunit.Abstractions;
@@ -97,8 +98,8 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     public void Sample_Decimal_ProducesNormalDistribution(string meanStr, string stdDevStr)
     {
         // Arrange
-        var mean = decimal.Parse(meanStr);
-        var stdDev = decimal.Parse(stdDevStr);
+        var mean = decimal.Parse(meanStr, CultureInfo.InvariantCulture);
+        var stdDev = decimal.Parse(stdDevStr, CultureInfo.InvariantCulture);
 
         var rng = new ChiRng(ChiSeed.Scramble("NormalDecimal", new ChiHash().Add(mean).Add(stdDev).Hash));
 

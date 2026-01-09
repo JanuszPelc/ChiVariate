@@ -1,3 +1,4 @@
+using System.Globalization;
 using AwesomeAssertions;
 using ChiVariate.Tests.TestInfrastructure;
 using Xunit;
@@ -82,7 +83,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     public void Sample_Decimal_ProducesDistributionWithCorrectMean(string probabilityStr)
     {
         // Arrange
-        var probability = decimal.Parse(probabilityStr);
+        var probability = decimal.Parse(probabilityStr, CultureInfo.InvariantCulture);
         var rng = new ChiRng(ChiSeed.Scramble("BernoulliDecimal", (double)probability));
         var successCount = 0;
 

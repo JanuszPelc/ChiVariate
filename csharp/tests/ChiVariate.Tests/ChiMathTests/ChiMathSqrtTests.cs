@@ -1,3 +1,4 @@
+using System.Globalization;
 using AwesomeAssertions;
 using Xunit;
 
@@ -89,8 +90,8 @@ public class ChiMathSqrtTests
     public void Sqrt_Decimal_PerfectSquares_ShouldReturnExactResults(string inputStr, string expectedStr)
     {
         // Arrange
-        var input = decimal.Parse(inputStr);
-        var expected = decimal.Parse(expectedStr);
+        var input = decimal.Parse(inputStr, CultureInfo.InvariantCulture);
+        var expected = decimal.Parse(expectedStr, CultureInfo.InvariantCulture);
 
         // Act
         var result = ChiMath.Sqrt(input);
@@ -108,7 +109,7 @@ public class ChiMathSqrtTests
     public void Sqrt_Decimal_IrrationalResults_ShouldConverge(string inputStr)
     {
         // Arrange
-        var input = decimal.Parse(inputStr);
+        var input = decimal.Parse(inputStr, CultureInfo.InvariantCulture);
 
         // Act
         var result = ChiMath.Sqrt(input);
@@ -144,7 +145,7 @@ public class ChiMathSqrtTests
     public void Sqrt_Decimal_ExtremeValues_ShouldNotThrowUnexpectedly(string inputStr)
     {
         // Arrange
-        var input = decimal.Parse(inputStr);
+        var input = decimal.Parse(inputStr, CultureInfo.InvariantCulture);
 
         // Act & Assert
         var act = () => ChiMath.Sqrt(input);

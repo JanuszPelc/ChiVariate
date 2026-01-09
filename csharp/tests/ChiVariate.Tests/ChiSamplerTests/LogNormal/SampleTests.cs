@@ -1,3 +1,4 @@
+using System.Globalization;
 using AwesomeAssertions;
 using ChiVariate.Tests.TestInfrastructure;
 using Xunit;
@@ -61,8 +62,8 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     public void Sample_Decimal_ProducesDistributionWithCorrectStatistics(string muStr, string sigmaStr)
     {
         // Arrange
-        var mu = decimal.Parse(muStr);
-        var sigma = decimal.Parse(sigmaStr);
+        var mu = decimal.Parse(muStr, CultureInfo.InvariantCulture);
+        var sigma = decimal.Parse(sigmaStr, CultureInfo.InvariantCulture);
 
         var rng = new ChiRng(ChiSeed.Scramble("LogNormalDecimal", new ChiHash().Add(mu).Add(sigma).Hash));
 

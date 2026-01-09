@@ -1,3 +1,4 @@
+using System.Globalization;
 using AwesomeAssertions;
 using ChiVariate.Tests.TestInfrastructure;
 using Xunit;
@@ -55,8 +56,8 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     public void Sample_Decimal_ProducesDistributionWithCorrectShape(string scaleStr, string shapeStr)
     {
         // Arrange
-        var scale = decimal.Parse(scaleStr);
-        var shape = decimal.Parse(shapeStr);
+        var scale = decimal.Parse(scaleStr, CultureInfo.InvariantCulture);
+        var shape = decimal.Parse(shapeStr, CultureInfo.InvariantCulture);
 
         var rng = new ChiRng(ChiSeed.Scramble("ParetoDecimal", new ChiHash().Add(scale).Add(shape).Hash));
         var maxBound = (double)scale * 10;

@@ -1,3 +1,4 @@
+using System.Globalization;
 using ChiVariate.Tests.TestInfrastructure;
 using Xunit;
 using Xunit.Abstractions;
@@ -37,8 +38,8 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     public void Sample_Decimal_ProducesDistributionWithCorrectStatistics(string locationStr, string scaleStr)
     {
         // Arrange
-        var location = decimal.Parse(locationStr);
-        var scale = decimal.Parse(scaleStr);
+        var location = decimal.Parse(locationStr, CultureInfo.InvariantCulture);
+        var scale = decimal.Parse(scaleStr, CultureInfo.InvariantCulture);
 
         var rng = new ChiRng(ChiSeed.Scramble("LaplaceDecimal", new ChiHash().Add(location).Add(scale).Hash));
 

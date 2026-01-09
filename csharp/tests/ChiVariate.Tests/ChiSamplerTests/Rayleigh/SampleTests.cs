@@ -1,3 +1,4 @@
+using System.Globalization;
 using AwesomeAssertions;
 using ChiVariate.Tests.TestInfrastructure;
 using Xunit;
@@ -54,7 +55,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     public void Sample_Decimal_WithCorrectProperties_ProducesDistribution(string sigmaStr)
     {
         // Arrange
-        var sigma = decimal.Parse(sigmaStr);
+        var sigma = decimal.Parse(sigmaStr, CultureInfo.InvariantCulture);
         var rng = new ChiRng(ChiSeed.Scramble("RayleighDecimal", (long)(sigma * 10)));
         var histogram = new Histogram(0, (double)sigma * 6, 100);
         var sampler = new DecimalRayleighSampler(sigma);

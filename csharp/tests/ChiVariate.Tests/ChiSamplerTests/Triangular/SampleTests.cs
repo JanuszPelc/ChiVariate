@@ -1,3 +1,4 @@
+using System.Globalization;
 using AwesomeAssertions;
 using ChiVariate.Tests.TestInfrastructure;
 using Xunit;
@@ -58,9 +59,9 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     public void Sample_Decimal_ProducesDistributionWithCorrectProperties(string minStr, string maxStr, string modeStr)
     {
         // Arrange
-        var min = decimal.Parse(minStr);
-        var max = decimal.Parse(maxStr);
-        var mode = decimal.Parse(modeStr);
+        var min = decimal.Parse(minStr, CultureInfo.InvariantCulture);
+        var max = decimal.Parse(maxStr, CultureInfo.InvariantCulture);
+        var mode = decimal.Parse(modeStr, CultureInfo.InvariantCulture);
 
         var rng = new ChiRng(ChiSeed.Scramble("TriangularDecimal", mode));
         var histogram = new Histogram((double)min, (double)max, 100);

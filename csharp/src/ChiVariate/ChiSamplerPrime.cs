@@ -89,11 +89,17 @@ public readonly ref struct ChiSamplerPrime<TRng, T>
         return enumerable;
     }
 
-    private static bool IsPrime(T n)
+    /// <summary>
+    ///     Determines whether a given number is a prime number.
+    /// </summary>
+    /// <param name="n">The number to test for primality.</param>
+    /// <returns>True if the number is a prime number; otherwise, false.</returns>
+    internal bool IsPrime<TInt>(TInt n)
+        where TInt : unmanaged, IBinaryInteger<TInt>, IBitwiseOperators<TInt, TInt, TInt>, IMinMaxValue<TInt>
     {
-        if (n <= T.One) return false;
-        if (n <= T.CreateChecked(3)) return true;
-        if (n % T.CreateChecked(2) == T.Zero || n % T.CreateChecked(3) == T.Zero) return false;
+        if (n <= TInt.One) return false;
+        if (n <= TInt.CreateChecked(3)) return true;
+        if (n % TInt.CreateChecked(2) == TInt.Zero || n % TInt.CreateChecked(3) == TInt.Zero) return false;
 
         // Trial division against precomputed small primes using Sieve of Eratosthenes
         var smallPrimesSpan = PrimeCounting.PrimesBelowLimit;
@@ -101,13 +107,13 @@ public readonly ref struct ChiSamplerPrime<TRng, T>
         {
             if (pInt <= 3) continue;
 
-            var p = T.CreateChecked(pInt);
+            var p = TInt.CreateChecked(pInt);
             if (p * p > n) break;
-            if (n % p == T.Zero) return false;
+            if (n % p == TInt.Zero) return false;
         }
 
         // Deterministic Miller-Rabin primality test
-        return MillerRabin<T>.IsProvablyPrime(n);
+        return MillerRabin<TInt>.IsProvablyPrime(n);
     }
 }
 
@@ -236,7 +242,7 @@ file static class MillerRabin<T>
     ///     Based on Jaeschke (1993) and verified computational results.
     /// </summary>
     private static readonly T[] Bases64 =
-        ((long[]) [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37]).Select(T.CreateChecked).ToArray();
+        ((long[])[2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37]).Select(T.CreateChecked).ToArray();
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     internal static bool IsProvablyPrime(T n)

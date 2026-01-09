@@ -1,3 +1,4 @@
+using System.Globalization;
 using AwesomeAssertions;
 using ChiVariate.Tests.TestInfrastructure;
 using Xunit;
@@ -56,8 +57,8 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     public void Sample_Decimal_ProducesDistributionWithCorrectShape(string shapeStr, string scaleStr)
     {
         // Arrange
-        var shape = decimal.Parse(shapeStr);
-        var scale = decimal.Parse(scaleStr);
+        var shape = decimal.Parse(shapeStr, CultureInfo.InvariantCulture);
+        var scale = decimal.Parse(scaleStr, CultureInfo.InvariantCulture);
 
         var rng = new ChiRng(ChiSeed.Scramble("WeibullDecimal", new ChiHash().Add(shape).Add(scale).Hash));
         var maxBound = (double)scale * 4; // Weibull can have a long tail

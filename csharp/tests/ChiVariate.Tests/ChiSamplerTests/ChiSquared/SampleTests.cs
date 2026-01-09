@@ -1,3 +1,4 @@
+using System.Globalization;
 using AwesomeAssertions;
 using ChiVariate.Tests.TestInfrastructure;
 using Xunit;
@@ -62,7 +63,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     public void Sample_Decimal_ProducesDistributionWithCorrectStatistics(string degreesOfFreedomStr)
     {
         // Arrange
-        var degreesOfFreedom = decimal.Parse(degreesOfFreedomStr);
+        var degreesOfFreedom = decimal.Parse(degreesOfFreedomStr, CultureInfo.InvariantCulture);
         var intDof = (int)degreesOfFreedom;
         var rng = new ChiRng(ChiSeed.Scramble("ChiSquaredDecimal", (long)degreesOfFreedom));
 

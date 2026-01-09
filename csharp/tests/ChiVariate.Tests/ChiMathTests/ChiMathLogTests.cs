@@ -1,3 +1,4 @@
+using System.Globalization;
 using AwesomeAssertions;
 using Xunit;
 
@@ -127,8 +128,8 @@ public class ChiMathLogTests
     public void Log_Decimal_BasicCases_ShouldReturnExpectedResults(string inputStr, string expectedStr)
     {
         // Arrange
-        var input = decimal.Parse(inputStr);
-        var expected = decimal.Parse(expectedStr);
+        var input = decimal.Parse(inputStr, CultureInfo.InvariantCulture);
+        var expected = decimal.Parse(expectedStr, CultureInfo.InvariantCulture);
 
         // Act
         var result = ChiMath.Log(input);
@@ -145,7 +146,7 @@ public class ChiMathLogTests
     public void Log_Decimal_NonPositiveValues_ShouldThrowArgumentException(string inputStr)
     {
         // Arrange
-        var input = decimal.Parse(inputStr);
+        var input = decimal.Parse(inputStr, CultureInfo.InvariantCulture);
 
         // Act & Assert
         var act = () => ChiMath.Log(input);
@@ -166,7 +167,7 @@ public class ChiMathLogTests
     public void Log_Decimal_ArbitraryValues_ShouldHaveCorrectProperties(string inputStr)
     {
         // Arrange
-        var input = decimal.Parse(inputStr);
+        var input = decimal.Parse(inputStr, CultureInfo.InvariantCulture);
 
         // Act
         var result = ChiMath.Log(input);
@@ -188,7 +189,7 @@ public class ChiMathLogTests
     public void Log_Decimal_ExtremeValues_ShouldNotThrowUnexpectedly(string inputStr)
     {
         // Arrange
-        var input = decimal.Parse(inputStr);
+        var input = decimal.Parse(inputStr, CultureInfo.InvariantCulture);
 
         // Act & Assert
         var act = () => ChiMath.Log(input);
@@ -206,8 +207,8 @@ public class ChiMathLogTests
     public void Log_ProductRule_ShouldSatisfyLogProperty(string aStr, string bStr)
     {
         // Arrange
-        var a = decimal.Parse(aStr);
-        var b = decimal.Parse(bStr);
+        var a = decimal.Parse(aStr, CultureInfo.InvariantCulture);
+        var b = decimal.Parse(bStr, CultureInfo.InvariantCulture);
         var product = a * b;
 
         // Act
@@ -228,8 +229,8 @@ public class ChiMathLogTests
     public void Log_QuotientRule_ShouldSatisfyLogProperty(string aStr, string bStr)
     {
         // Arrange
-        var a = decimal.Parse(aStr);
-        var b = decimal.Parse(bStr);
+        var a = decimal.Parse(aStr, CultureInfo.InvariantCulture);
+        var b = decimal.Parse(bStr, CultureInfo.InvariantCulture);
         var quotient = a / b;
 
         // Act
@@ -250,8 +251,8 @@ public class ChiMathLogTests
     public void Log_PowerRule_ShouldSatisfyLogProperty(string baseStr, string exponentStr)
     {
         // Arrange
-        var baseVal = decimal.Parse(baseStr);
-        var exponent = decimal.Parse(exponentStr);
+        var baseVal = decimal.Parse(baseStr, CultureInfo.InvariantCulture);
+        var exponent = decimal.Parse(exponentStr, CultureInfo.InvariantCulture);
         var power = ChiMath.Pow(baseVal, exponent);
 
         // Act
