@@ -586,10 +586,9 @@ var (sin, cos) = ChiFixed.SinCos(angle);
 ```
 
 Limitations:
-- Overflow wraps silently, like native integer types
+- Arithmetic overflow wraps silently, like native integer types
 - Transcendental functions (sin, cos, exp, log) have ~0.1% error compared to double
 - NaN and Infinity are sentinel bit patterns, not IEEE 754 encodings
-- Division by zero returns Infinity (IEEE floating-point semantics)
 
 For applications where `decimal`'s 96-bit precision is needed or values exceed ±2 million, use `decimal` instead. For maximum floating-point performance without cross-platform determinism requirements, use `double`.
 
