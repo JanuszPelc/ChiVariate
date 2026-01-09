@@ -1,4 +1,5 @@
 using System.Globalization;
+using AwesomeAssertions;
 using Xunit;
 
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
@@ -13,7 +14,7 @@ public class NumericTests
     public void Abs_PositiveValue_ReturnsSameValue()
     {
         var value = (ChiFixed)123.45m;
-        Assert.Equal(value, ChiFixed.Abs(value));
+        ChiFixed.Abs(value).Should().Be(value);
     }
 
     [Fact]
@@ -21,19 +22,20 @@ public class NumericTests
     {
         var value = (ChiFixed)(-123.45m);
         var expected = (ChiFixed)123.45m;
-        Assert.Equal(expected, ChiFixed.Abs(value));
+        ChiFixed.Abs(value).Should().Be(expected);
     }
 
     [Fact]
     public void Abs_Zero_ReturnsZero()
     {
-        Assert.Equal(ChiFixed.Zero, ChiFixed.Abs(ChiFixed.Zero));
+        ChiFixed.Abs(ChiFixed.Zero).Should().Be(ChiFixed.Zero);
     }
 
     [Fact]
     public void Round_NegativeDigits_ThrowsException()
     {
-        Assert.Throws<ArgumentOutOfRangeException>(() => ChiFixed.Round((ChiFixed)1.23m, -1, MidpointRounding.ToEven));
+        var act = () => ChiFixed.Round((ChiFixed)1.23m, -1, MidpointRounding.ToEven);
+        act.Should().Throw<ArgumentOutOfRangeException>();
     }
 
     [Theory]
@@ -139,7 +141,7 @@ public class NumericTests
         var value = (ChiFixed)3.141592653589m;
         var result = ChiFixed.Round(value, 12, MidpointRounding.ToEven);
         var difference = Math.Abs(ToDecimal(value) - ToDecimal(result));
-        Assert.True(difference < Tolerance, $"Difference {difference} was not less than tolerance {Tolerance}");
+        (difference < Tolerance).Should().BeTrue($"Difference {difference} was not less than tolerance {Tolerance}");
     }
 
     [Theory]
@@ -314,7 +316,7 @@ public class NumericTests
         var result = ChiFixed.Round(input, digits, mode);
         var resultDecimal = ToDecimal(result);
         var difference = Math.Abs(expectedDecimal - resultDecimal);
-        Assert.True(difference < Tolerance,
+        (difference < Tolerance).Should().BeTrue(
             $"Input: {ToDecimal(input)}, Mode: {mode} | Expected: {expectedDecimal}, Got: {resultDecimal}, Diff: {difference}");
     }
 
@@ -333,7 +335,7 @@ public class NumericTests
         var result = ChiFixed.Round((ChiFixed)inputDecimal, digits, mode);
         var resultDecimal = ToDecimal(result);
         var difference = Math.Abs(expectedDecimal - resultDecimal);
-        Assert.True(difference < Tolerance,
+        (difference < Tolerance).Should().BeTrue(
             $"Input: {input}, Mode: {mode} | Expected: {expectedDecimal}, Got: {resultDecimal}, Diff: {difference}");
     }
 
@@ -356,7 +358,7 @@ public class NumericTests
         var inputChiFixed = (ChiFixed)decimal.Parse(input, CultureInfo.InvariantCulture);
         var expectedChiFixed = (ChiFixed)decimal.Parse(expected, CultureInfo.InvariantCulture);
         var result = ChiFixed.Round(inputChiFixed);
-        Assert.Equal(expectedChiFixed, result);
+        result.Should().Be(expectedChiFixed);
     }
 
     #endregion
@@ -378,7 +380,7 @@ public class NumericTests
         var inputChiFixed = (ChiFixed)decimal.Parse(input, CultureInfo.InvariantCulture);
         var expectedChiFixed = (ChiFixed)decimal.Parse(expected, CultureInfo.InvariantCulture);
         var result = ChiFixed.Floor(inputChiFixed);
-        Assert.Equal(expectedChiFixed, result);
+        result.Should().Be(expectedChiFixed);
     }
 
     #endregion
@@ -400,7 +402,7 @@ public class NumericTests
         var inputChiFixed = (ChiFixed)decimal.Parse(input, CultureInfo.InvariantCulture);
         var expectedChiFixed = (ChiFixed)decimal.Parse(expected, CultureInfo.InvariantCulture);
         var result = ChiFixed.Ceiling(inputChiFixed);
-        Assert.Equal(expectedChiFixed, result);
+        result.Should().Be(expectedChiFixed);
     }
 
     #endregion
@@ -422,7 +424,7 @@ public class NumericTests
         var inputChiFixed = (ChiFixed)decimal.Parse(input, CultureInfo.InvariantCulture);
         var expectedChiFixed = (ChiFixed)decimal.Parse(expected, CultureInfo.InvariantCulture);
         var result = ChiFixed.Truncate(inputChiFixed);
-        Assert.Equal(expectedChiFixed, result);
+        result.Should().Be(expectedChiFixed);
     }
 
     #endregion
@@ -433,21 +435,21 @@ public class NumericTests
     public void Lerp_AmountZero_ReturnsFirstValue()
     {
         var result = ChiFixed.Lerp((ChiFixed)10m, (ChiFixed)20m, ChiFixed.Zero);
-        Assert.Equal((ChiFixed)10m, result);
+        result.Should().Be((ChiFixed)10m);
     }
 
     [Fact]
     public void Lerp_AmountOne_ReturnsSecondValue()
     {
         var result = ChiFixed.Lerp((ChiFixed)10m, (ChiFixed)20m, ChiFixed.One);
-        Assert.Equal((ChiFixed)20m, result);
+        result.Should().Be((ChiFixed)20m);
     }
 
     [Fact]
     public void Lerp_AmountHalf_ReturnsMidpoint()
     {
         var result = ChiFixed.Lerp((ChiFixed)0m, (ChiFixed)100m, (ChiFixed)0.5m);
-        Assert.Equal((ChiFixed)50m, result);
+        result.Should().Be((ChiFixed)50m);
     }
 
     [Theory]
@@ -463,21 +465,21 @@ public class NumericTests
         var expectedChiFixed = (ChiFixed)decimal.Parse(expected, CultureInfo.InvariantCulture);
         var result = ChiFixed.Lerp(value1, value2, amountChiFixed);
         var difference = Math.Abs(ToDecimal(result) - ToDecimal(expectedChiFixed));
-        Assert.True(difference < Tolerance, $"Expected: {expected}, Got: {ToDecimal(result)}");
+        (difference < Tolerance).Should().BeTrue($"Expected: {expected}, Got: {ToDecimal(result)}");
     }
 
     [Fact]
     public void Lerp_NegativeAmount_Extrapolates()
     {
         var result = ChiFixed.Lerp((ChiFixed)10m, (ChiFixed)20m, (ChiFixed)(-0.5m));
-        Assert.Equal((ChiFixed)5m, result);
+        result.Should().Be((ChiFixed)5m);
     }
 
     [Fact]
     public void Lerp_AmountGreaterThanOne_Extrapolates()
     {
         var result = ChiFixed.Lerp((ChiFixed)10m, (ChiFixed)20m, (ChiFixed)1.5m);
-        Assert.Equal((ChiFixed)25m, result);
+        result.Should().Be((ChiFixed)25m);
     }
 
     #endregion
@@ -488,28 +490,28 @@ public class NumericTests
     public void FusedMultiplyAdd_SimpleValues_ReturnsCorrectResult()
     {
         var result = ChiFixed.FusedMultiplyAdd((ChiFixed)2m, (ChiFixed)3m, (ChiFixed)4m);
-        Assert.Equal((ChiFixed)10m, result);
+        result.Should().Be((ChiFixed)10m);
     }
 
     [Fact]
     public void FusedMultiplyAdd_WithZeroAddend_ReturnsProduct()
     {
         var result = ChiFixed.FusedMultiplyAdd((ChiFixed)5m, (ChiFixed)7m, ChiFixed.Zero);
-        Assert.Equal((ChiFixed)35m, result);
+        result.Should().Be((ChiFixed)35m);
     }
 
     [Fact]
     public void FusedMultiplyAdd_WithZeroMultiplier_ReturnsAddend()
     {
         var result = ChiFixed.FusedMultiplyAdd(ChiFixed.Zero, (ChiFixed)100m, (ChiFixed)42m);
-        Assert.Equal((ChiFixed)42m, result);
+        result.Should().Be((ChiFixed)42m);
     }
 
     [Fact]
     public void FusedMultiplyAdd_NegativeValues_ReturnsCorrectResult()
     {
         var result = ChiFixed.FusedMultiplyAdd((ChiFixed)(-2m), (ChiFixed)3m, (ChiFixed)10m);
-        Assert.Equal((ChiFixed)4m, result);
+        result.Should().Be((ChiFixed)4m);
     }
 
     [Theory]
@@ -524,7 +526,7 @@ public class NumericTests
         var expectedChiFixed = (ChiFixed)decimal.Parse(expected, CultureInfo.InvariantCulture);
         var result = ChiFixed.FusedMultiplyAdd(leftChiFixed, rightChiFixed, addendChiFixed);
         var difference = Math.Abs(ToDecimal(result) - ToDecimal(expectedChiFixed));
-        Assert.True(difference < Tolerance, $"Expected: {expected}, Got: {ToDecimal(result)}");
+        (difference < Tolerance).Should().BeTrue($"Expected: {expected}, Got: {ToDecimal(result)}");
     }
 
     #endregion
@@ -535,13 +537,14 @@ public class NumericTests
     public void Ieee754Remainder_ExactDivision_ReturnsZero()
     {
         var result = ChiFixed.Ieee754Remainder((ChiFixed)10m, (ChiFixed)5m);
-        Assert.Equal(ChiFixed.Zero, result);
+        result.Should().Be(ChiFixed.Zero);
     }
 
     [Fact]
     public void Ieee754Remainder_DivisorZero_ThrowsDivideByZeroException()
     {
-        Assert.Throws<DivideByZeroException>(() => ChiFixed.Ieee754Remainder((ChiFixed)10m, ChiFixed.Zero));
+        var act = () => ChiFixed.Ieee754Remainder((ChiFixed)10m, ChiFixed.Zero);
+        act.Should().Throw<DivideByZeroException>();
     }
 
     [Theory]
@@ -556,7 +559,7 @@ public class NumericTests
         var expectedChiFixed = (ChiFixed)decimal.Parse(expected, CultureInfo.InvariantCulture);
         var result = ChiFixed.Ieee754Remainder(leftChiFixed, rightChiFixed);
         var difference = Math.Abs(ToDecimal(result) - ToDecimal(expectedChiFixed));
-        Assert.True(difference < Tolerance, $"Expected: {expected}, Got: {ToDecimal(result)}");
+        (difference < Tolerance).Should().BeTrue($"Expected: {expected}, Got: {ToDecimal(result)}");
     }
 
     [Fact]
@@ -564,7 +567,7 @@ public class NumericTests
     {
         var result = ChiFixed.Ieee754Remainder((ChiFixed)(-7m), (ChiFixed)3m);
         var difference = Math.Abs(ToDecimal(result) - -1m);
-        Assert.True(difference < Tolerance, $"Expected: -1, Got: {ToDecimal(result)}");
+        (difference < Tolerance).Should().BeTrue($"Expected: -1, Got: {ToDecimal(result)}");
     }
 
     [Fact]
@@ -572,7 +575,7 @@ public class NumericTests
     {
         var result = ChiFixed.Ieee754Remainder((ChiFixed)4.5m, (ChiFixed)3m);
         var difference = Math.Abs(ToDecimal(result) - -1.5m);
-        Assert.True(difference < Tolerance, $"Expected: -1.5, Got: {ToDecimal(result)}");
+        (difference < Tolerance).Should().BeTrue($"Expected: -1.5, Got: {ToDecimal(result)}");
     }
 
     #endregion

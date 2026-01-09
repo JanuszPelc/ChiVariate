@@ -1,4 +1,5 @@
 using System.Globalization;
+using AwesomeAssertions;
 using Xunit;
 
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
@@ -16,7 +17,7 @@ public class ExponentialTests
         var actualDecimal = (decimal)actual;
         var difference = Math.Abs(expectedDecimal - actualDecimal);
         var tolerance = Math.Max(MinAbsoluteTolerance, Math.Abs(expectedDecimal) * RelativeTolerance);
-        Assert.True(difference < tolerance,
+        (difference < tolerance).Should().BeTrue(
             $"Expected: {expectedDecimal}, Got: {actualDecimal}, Diff: {difference}, RelErr: {(expectedDecimal != 0 ? difference / Math.Abs(expectedDecimal) : difference):P4}");
     }
 
@@ -73,7 +74,7 @@ public class ExponentialTests
     {
         var input = (ChiFixed)decimal.Parse(inputStr, CultureInfo.InvariantCulture);
         var result = ChiFixed.Exp(input);
-        Assert.True(result == ChiFixed.PositiveInfinity || (decimal)result > 1000000m);
+        (result == ChiFixed.PositiveInfinity || (decimal)result > 1000000m).Should().BeTrue();
     }
 
     [Theory]
@@ -84,8 +85,8 @@ public class ExponentialTests
     {
         var input = (ChiFixed)decimal.Parse(inputStr, CultureInfo.InvariantCulture);
         var result = ChiFixed.Exp(input);
-        Assert.True((decimal)result >= 0m);
-        Assert.True((decimal)result < 0.000001m);
+        ((decimal)result >= 0m).Should().BeTrue();
+        ((decimal)result < 0.000001m).Should().BeTrue();
     }
 
     #endregion

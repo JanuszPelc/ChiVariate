@@ -1,3 +1,4 @@
+using AwesomeAssertions;
 using Xunit;
 
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
@@ -11,8 +12,8 @@ public class EdgeCaseTests
     {
         var result = ChiFixed.MaxValue + ChiFixed.One;
 
-        Assert.True(result.Raw < 0);
-        Assert.True(result < ChiFixed.Zero);
+        (result.Raw < 0).Should().BeTrue();
+        (result < ChiFixed.Zero).Should().BeTrue();
     }
 
     [Fact]
@@ -20,7 +21,7 @@ public class EdgeCaseTests
     {
         var result = ChiFixed.MaxValue + ChiFixed.Epsilon;
 
-        Assert.True(result.Raw < ChiFixed.MaxValue.Raw);
+        (result.Raw < ChiFixed.MaxValue.Raw).Should().BeTrue();
     }
 
     [Fact]
@@ -28,8 +29,8 @@ public class EdgeCaseTests
     {
         var result = ChiFixed.MinValue - ChiFixed.One;
 
-        Assert.True(result.Raw > 0);
-        Assert.True(result > ChiFixed.Zero);
+        (result.Raw > 0).Should().BeTrue();
+        (result > ChiFixed.Zero).Should().BeTrue();
     }
 
     [Fact]
@@ -37,7 +38,7 @@ public class EdgeCaseTests
     {
         var result = ChiFixed.MinValue - ChiFixed.Epsilon;
 
-        Assert.True(result.Raw > ChiFixed.MinValue.Raw);
+        (result.Raw > ChiFixed.MinValue.Raw).Should().BeTrue();
     }
 
     [Fact]
@@ -46,7 +47,7 @@ public class EdgeCaseTests
         var two = (ChiFixed)2m;
         var result = ChiFixed.MaxValue * two;
 
-        Assert.True(result.Raw < ChiFixed.MaxValue.Raw);
+        (result.Raw < ChiFixed.MaxValue.Raw).Should().BeTrue();
     }
 
     [Fact]
@@ -56,7 +57,7 @@ public class EdgeCaseTests
         var large2 = (ChiFixed)1000000m;
         var result = large1 * large2;
 
-        Assert.NotEqual(ChiFixed.Zero, result);
+        result.Should().NotBe(ChiFixed.Zero);
     }
 
     [Fact]
@@ -64,7 +65,7 @@ public class EdgeCaseTests
     {
         var result = -ChiFixed.MinValue;
 
-        Assert.Equal(ChiFixed.MinValue, result);
+        result.Should().Be(ChiFixed.MinValue);
     }
 
     [Fact]
@@ -72,7 +73,7 @@ public class EdgeCaseTests
     {
         var result = ChiFixed.Abs(ChiFixed.MinValue);
 
-        Assert.Equal(ChiFixed.MinValue, result);
+        result.Should().Be(ChiFixed.MinValue);
     }
 
     [Fact]
@@ -80,7 +81,7 @@ public class EdgeCaseTests
     {
         var result = ChiFixed.Abs(ChiFixed.NegativeOne);
 
-        Assert.Equal(ChiFixed.One, result);
+        result.Should().Be(ChiFixed.One);
     }
 
     [Fact]
@@ -88,7 +89,7 @@ public class EdgeCaseTests
     {
         var result = ChiFixed.MinValue / ChiFixed.NegativeOne;
 
-        Assert.Equal(ChiFixed.MinValue, result);
+        result.Should().Be(ChiFixed.MinValue);
     }
 
     [Fact]
@@ -97,8 +98,8 @@ public class EdgeCaseTests
         var value = ChiFixed.MaxValue;
         value++;
 
-        Assert.True(value.Raw < 0);
-        Assert.True(value < ChiFixed.Zero);
+        (value.Raw < 0).Should().BeTrue();
+        (value < ChiFixed.Zero).Should().BeTrue();
     }
 
     [Fact]
@@ -107,8 +108,8 @@ public class EdgeCaseTests
         var value = ChiFixed.MinValue;
         value--;
 
-        Assert.True(value.Raw > 0);
-        Assert.True(value > ChiFixed.Zero);
+        (value.Raw > 0).Should().BeTrue();
+        (value > ChiFixed.Zero).Should().BeTrue();
     }
 
     [Fact]
@@ -116,8 +117,8 @@ public class EdgeCaseTests
     {
         var result = ChiFixed.Zero + ChiFixed.Epsilon;
 
-        Assert.Equal(1L, result.Raw);
-        Assert.Equal(ChiFixed.Epsilon, result);
+        result.Raw.Should().Be(1L);
+        result.Should().Be(ChiFixed.Epsilon);
     }
 
     [Fact]
@@ -125,8 +126,8 @@ public class EdgeCaseTests
     {
         var result = ChiFixed.Zero - ChiFixed.Epsilon;
 
-        Assert.Equal(-1L, result.Raw);
-        Assert.Equal(-ChiFixed.Epsilon, result);
+        result.Raw.Should().Be(-1L);
+        result.Should().Be(-ChiFixed.Epsilon);
     }
 
     [Fact]
@@ -135,13 +136,13 @@ public class EdgeCaseTests
         var half = (ChiFixed)0.5m;
         var result = ChiFixed.Epsilon * half;
 
-        Assert.Equal(ChiFixed.Zero, result);
+        result.Should().Be(ChiFixed.Zero);
     }
 
     [Fact]
     public void MaxValue_Compared_IsSymmetricWithMinValue()
     {
-        Assert.Equal(-ChiFixed.MinValue.Raw - 1, ChiFixed.MaxValue.Raw);
+        ChiFixed.MaxValue.Raw.Should().Be(-ChiFixed.MinValue.Raw - 1);
     }
 
     [Fact]
@@ -149,8 +150,8 @@ public class EdgeCaseTests
     {
         var result = ChiFixed.MinValue + ChiFixed.MaxValue;
 
-        Assert.Equal(-1L, result.Raw);
-        Assert.Equal(-ChiFixed.Epsilon, result);
+        result.Raw.Should().Be(-1L);
+        result.Should().Be(-ChiFixed.Epsilon);
     }
 
     [Fact]
@@ -159,7 +160,7 @@ public class EdgeCaseTests
         var two = (ChiFixed)2m;
         var result = ChiFixed.Epsilon / two;
 
-        Assert.Equal(ChiFixed.Zero, result);
+        result.Should().Be(ChiFixed.Zero);
     }
 
     [Fact]
@@ -167,7 +168,7 @@ public class EdgeCaseTests
     {
         var result = ChiFixed.MaxValue * ChiFixed.Epsilon;
 
-        Assert.True(result.Raw > 0);
+        (result.Raw > 0).Should().BeTrue();
     }
 
     [Fact]
@@ -177,7 +178,7 @@ public class EdgeCaseTests
         var large = (ChiFixed)1000m;
         var result = nearMax + large;
 
-        Assert.True(result.Raw < nearMax.Raw);
+        (result.Raw < nearMax.Raw).Should().BeTrue();
     }
 
     [Fact]
@@ -187,7 +188,7 @@ public class EdgeCaseTests
         var large = (ChiFixed)1000m;
         var result = nearMin - large;
 
-        Assert.True(result.Raw > nearMin.Raw);
+        (result.Raw > nearMin.Raw).Should().BeTrue();
     }
 
     [Fact]
@@ -195,7 +196,7 @@ public class EdgeCaseTests
     {
         var result = ChiFixed.MinValue % ChiFixed.NegativeOne;
 
-        Assert.Equal(ChiFixed.Zero, result);
+        result.Should().Be(ChiFixed.Zero);
     }
 
     [Fact]
@@ -204,7 +205,7 @@ public class EdgeCaseTests
         var two = (ChiFixed)2m;
         var result = ChiFixed.MinValue % two;
 
-        Assert.Equal(ChiFixed.Zero, result);
+        result.Should().Be(ChiFixed.Zero);
     }
 
     [Fact]
@@ -212,7 +213,7 @@ public class EdgeCaseTests
     {
         var result = ChiFixed.MaxValue % ChiFixed.Epsilon;
 
-        Assert.Equal(ChiFixed.Zero, result);
+        result.Should().Be(ChiFixed.Zero);
     }
 
     [Fact]
@@ -220,7 +221,7 @@ public class EdgeCaseTests
     {
         var result = ChiFixed.Round(ChiFixed.MaxValue, 0, MidpointRounding.ToEven);
 
-        Assert.Equal(ChiFixed.MaxValue, result);
+        result.Should().Be(ChiFixed.MaxValue);
     }
 
     [Fact]
@@ -228,7 +229,7 @@ public class EdgeCaseTests
     {
         var result = ChiFixed.Round(ChiFixed.MinValue, 0, MidpointRounding.ToEven);
 
-        Assert.Equal(ChiFixed.MinValue, result);
+        result.Should().Be(ChiFixed.MinValue);
     }
 
     [Fact]
@@ -236,7 +237,7 @@ public class EdgeCaseTests
     {
         var result = ChiFixed.Round(ChiFixed.Epsilon, 0, MidpointRounding.ToEven);
 
-        Assert.Equal(ChiFixed.Zero, result);
+        result.Should().Be(ChiFixed.Zero);
     }
 
     [Fact]
@@ -245,7 +246,7 @@ public class EdgeCaseTests
         var nearHalf = (ChiFixed)1.5m;
         var result = ChiFixed.Round(nearHalf, 0, MidpointRounding.ToEven);
 
-        Assert.Equal((ChiFixed)2m, result);
+        result.Should().Be((ChiFixed)2m);
     }
 
     #region Large Decimal Conversion Tests
@@ -259,7 +260,7 @@ public class EdgeCaseTests
         var largeDecimal = decimal.Parse(decimalStr);
         var result = (ChiFixed)largeDecimal;
 
-        Assert.True(result == ChiFixed.PositiveInfinity || result.Raw > 0 || result.Raw < 0);
+        (result == ChiFixed.PositiveInfinity || result.Raw > 0 || result.Raw < 0).Should().BeTrue();
     }
 
     [Theory]
@@ -271,21 +272,21 @@ public class EdgeCaseTests
         var largeDecimal = decimal.Parse(decimalStr);
         var result = (ChiFixed)largeDecimal;
 
-        Assert.True(result == ChiFixed.NegativeInfinity || result.Raw > 0 || result.Raw < 0);
+        (result == ChiFixed.NegativeInfinity || result.Raw > 0 || result.Raw < 0).Should().BeTrue();
     }
 
     [Fact]
     public void DecimalCast_DecimalMaxValue_DoesNotThrow()
     {
-        var exception = Record.Exception(() => (ChiFixed)decimal.MaxValue);
-        Assert.Null(exception);
+        var act = () => (ChiFixed)decimal.MaxValue;
+        act.Should().NotThrow();
     }
 
     [Fact]
     public void DecimalCast_DecimalMinValue_DoesNotThrow()
     {
-        var exception = Record.Exception(() => (ChiFixed)decimal.MinValue);
-        Assert.Null(exception);
+        var act = () => (ChiFixed)decimal.MinValue;
+        act.Should().NotThrow();
     }
 
     [Fact]
@@ -295,7 +296,7 @@ public class EdgeCaseTests
         var result1 = (ChiFixed)largeDecimal;
         var result2 = (ChiFixed)largeDecimal;
 
-        Assert.Equal(result1, result2);
+        result1.Should().Be(result2);
     }
 
     [Fact]
@@ -304,10 +305,8 @@ public class EdgeCaseTests
         var beyondMax = (decimal)ChiFixed.MaxValue * 10m;
         var result = (ChiFixed)beyondMax;
 
-        Assert.True(
-            result == ChiFixed.PositiveInfinity ||
-            result.Raw != ChiFixed.Zero.Raw,
-            "Large value conversion should produce deterministic result");
+        (result == ChiFixed.PositiveInfinity ||
+         result.Raw != ChiFixed.Zero.Raw).Should().BeTrue("Large value conversion should produce deterministic result");
     }
 
     [Fact]
@@ -316,10 +315,9 @@ public class EdgeCaseTests
         var beyondMin = (decimal)ChiFixed.MinValue * 10m;
         var result = (ChiFixed)beyondMin;
 
-        Assert.True(
-            result == ChiFixed.NegativeInfinity ||
-            result.Raw != ChiFixed.Zero.Raw,
-            "Large negative value conversion should produce deterministic result");
+        (result == ChiFixed.NegativeInfinity ||
+         result.Raw != ChiFixed.Zero.Raw).Should()
+            .BeTrue("Large negative value conversion should produce deterministic result");
     }
 
     [Theory]
@@ -331,7 +329,7 @@ public class EdgeCaseTests
         var decimalValue = (decimal)value;
         var result = (ChiFixed)decimalValue;
 
-        Assert.True(result.Raw > 0 || result == ChiFixed.PositiveInfinity);
+        (result.Raw > 0 || result == ChiFixed.PositiveInfinity).Should().BeTrue();
     }
 
     [Theory]
@@ -343,7 +341,7 @@ public class EdgeCaseTests
         var decimalValue = (decimal)value;
         var result = (ChiFixed)decimalValue;
 
-        Assert.True(result.Raw < 0 || result == ChiFixed.NegativeInfinity);
+        (result.Raw < 0 || result == ChiFixed.NegativeInfinity).Should().BeTrue();
     }
 
     #endregion
@@ -359,11 +357,9 @@ public class EdgeCaseTests
         var success = ChiFixed.TryConvertFromChecked(value, out var result);
 
         if (success)
-            Assert.True(
-                result == ChiFixed.PositiveInfinity ||
-                result.Raw > 0 ||
-                result.Raw < 0,
-                "CreateChecked should produce deterministic result");
+            (result == ChiFixed.PositiveInfinity ||
+             result.Raw > 0 ||
+             result.Raw < 0).Should().BeTrue("CreateChecked should produce deterministic result");
     }
 
     [Theory]
@@ -375,11 +371,9 @@ public class EdgeCaseTests
         var success = ChiFixed.TryConvertFromChecked(value, out var result);
 
         if (success)
-            Assert.True(
-                result == ChiFixed.NegativeInfinity ||
-                result.Raw > 0 ||
-                result.Raw < 0,
-                "CreateChecked should produce deterministic result");
+            (result == ChiFixed.NegativeInfinity ||
+             result.Raw > 0 ||
+             result.Raw < 0).Should().BeTrue("CreateChecked should produce deterministic result");
     }
 
     [Theory]
@@ -390,12 +384,10 @@ public class EdgeCaseTests
         var value = decimal.Parse(decimalStr);
         var success = ChiFixed.TryConvertFromSaturating(value, out var result);
 
-        Assert.True(success);
-        Assert.True(
-            result == ChiFixed.PositiveInfinity ||
-            result == ChiFixed.MaxValue ||
-            result.Raw > 0,
-            "CreateSaturating should saturate or truncate to valid positive value");
+        success.Should().BeTrue();
+        (result == ChiFixed.PositiveInfinity ||
+         result == ChiFixed.MaxValue ||
+         result.Raw > 0).Should().BeTrue("CreateSaturating should saturate or truncate to valid positive value");
     }
 
     [Theory]
@@ -406,12 +398,10 @@ public class EdgeCaseTests
         var value = decimal.Parse(decimalStr);
         var success = ChiFixed.TryConvertFromSaturating(value, out var result);
 
-        Assert.True(success);
-        Assert.True(
-            result == ChiFixed.NegativeInfinity ||
-            result == ChiFixed.MinValue ||
-            result.Raw < 0,
-            "CreateSaturating should saturate or truncate to valid negative value");
+        success.Should().BeTrue();
+        (result == ChiFixed.NegativeInfinity ||
+         result == ChiFixed.MinValue ||
+         result.Raw < 0).Should().BeTrue("CreateSaturating should saturate or truncate to valid negative value");
     }
 
     [Theory]
@@ -422,7 +412,7 @@ public class EdgeCaseTests
         var value = decimal.Parse(decimalStr);
         var success = ChiFixed.TryConvertFromTruncating(value, out _);
 
-        Assert.True(success);
+        success.Should().BeTrue();
     }
 
     [Theory]
@@ -433,16 +423,14 @@ public class EdgeCaseTests
         var value = decimal.Parse(decimalStr);
         var success = ChiFixed.TryConvertFromTruncating(value, out _);
 
-        Assert.True(success);
+        success.Should().BeTrue();
     }
 
     [Fact]
     public void CreateChecked_DecimalMaxValue_DoesNotThrowOrProducesResult()
     {
-        var exception = Record.Exception(() =>
-            ChiFixed.TryConvertFromChecked(decimal.MaxValue, out _));
-
-        Assert.Null(exception);
+        var act = () => ChiFixed.TryConvertFromChecked(decimal.MaxValue, out _);
+        act.Should().NotThrow();
     }
 
     [Fact]
@@ -450,7 +438,7 @@ public class EdgeCaseTests
     {
         var success = ChiFixed.TryConvertFromSaturating(decimal.MaxValue, out _);
 
-        Assert.True(success);
+        success.Should().BeTrue();
     }
 
     [Fact]
@@ -458,7 +446,7 @@ public class EdgeCaseTests
     {
         var success = ChiFixed.TryConvertFromTruncating(decimal.MaxValue, out _);
 
-        Assert.True(success);
+        success.Should().BeTrue();
     }
 
     [Fact]
@@ -471,9 +459,9 @@ public class EdgeCaseTests
         ChiFixed.TryConvertFromSaturating(testValue, out var fromSaturating);
         ChiFixed.TryConvertFromTruncating(testValue, out var fromTruncating);
 
-        Assert.Equal(directCast, fromChecked);
-        Assert.Equal(directCast, fromSaturating);
-        Assert.Equal(directCast, fromTruncating);
+        fromChecked.Should().Be(directCast);
+        fromSaturating.Should().Be(directCast);
+        fromTruncating.Should().Be(directCast);
     }
 
     #endregion

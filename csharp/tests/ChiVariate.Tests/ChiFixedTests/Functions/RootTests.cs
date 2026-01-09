@@ -1,4 +1,5 @@
 using System.Globalization;
+using AwesomeAssertions;
 using Xunit;
 
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
@@ -16,7 +17,7 @@ public class RootTests
         var actualDecimal = (decimal)actual;
         var difference = Math.Abs(expectedDecimal - actualDecimal);
         var tolerance = Math.Max(MinAbsoluteTolerance, Math.Abs(expectedDecimal) * RelativeTolerance);
-        Assert.True(difference < tolerance,
+        (difference < tolerance).Should().BeTrue(
             $"Expected: {expectedDecimal}, Got: {actualDecimal}, Diff: {difference}, RelErr: {(expectedDecimal != 0 ? difference / Math.Abs(expectedDecimal) : difference):P4}");
     }
 
@@ -92,7 +93,8 @@ public class RootTests
     public void Sqrt_NegativeValue_ThrowsException()
     {
         var value = (ChiFixed)(-4.0m);
-        Assert.Throws<ArgumentException>(() => ChiFixed.Sqrt(value));
+        var act = () => ChiFixed.Sqrt(value);
+        act.Should().Throw<ArgumentException>();
     }
 
     #endregion
@@ -262,7 +264,7 @@ public class RootTests
         var result = ChiFixed.Hypot(x, y);
 
         var ulpDiff = Math.Abs(expected.Raw - result.Raw);
-        Assert.True(ulpDiff <= maxUlps, $"Expected <= {maxUlps} ULPs, got {ulpDiff}");
+        (ulpDiff <= maxUlps).Should().BeTrue($"Expected <= {maxUlps} ULPs, got {ulpDiff}");
     }
 
     [Theory]
@@ -274,7 +276,7 @@ public class RootTests
         var y = (ChiFixed)decimal.Parse(yStr, CultureInfo.InvariantCulture);
         var result = ChiFixed.Hypot(x, y);
 
-        Assert.True(result.Raw < 0, $"Expected overflow to negative, got {(decimal)result}");
+        (result.Raw < 0).Should().BeTrue($"Expected overflow to negative, got {(decimal)result}");
     }
 
     #endregion
@@ -285,7 +287,8 @@ public class RootTests
     public void RootN_N0_ThrowsException()
     {
         var value = (ChiFixed)16.0m;
-        Assert.Throws<ArgumentException>(() => ChiFixed.RootN(value, 0));
+        var act = () => ChiFixed.RootN(value, 0);
+        act.Should().Throw<ArgumentException>();
     }
 
     [Theory]
@@ -378,7 +381,8 @@ public class RootTests
     public void RootN_NegativeValueEvenRoot_ThrowsException()
     {
         var value = (ChiFixed)(-16.0m);
-        Assert.Throws<ArgumentException>(() => ChiFixed.RootN(value, 4));
+        var act = () => ChiFixed.RootN(value, 4);
+        act.Should().Throw<ArgumentException>();
     }
 
     #endregion
@@ -417,7 +421,8 @@ public class RootTests
     [Fact]
     public void ReciprocalEstimate_Zero_ThrowsDivideByZeroException()
     {
-        Assert.Throws<DivideByZeroException>(() => ChiFixed.ReciprocalEstimate(ChiFixed.Zero));
+        var act = () => ChiFixed.ReciprocalEstimate(ChiFixed.Zero);
+        act.Should().Throw<DivideByZeroException>();
     }
 
     #endregion

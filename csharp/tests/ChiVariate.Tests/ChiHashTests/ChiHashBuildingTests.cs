@@ -1,3 +1,4 @@
+using AwesomeAssertions;
 using Xunit;
 
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
@@ -29,7 +30,7 @@ public class ChiHashBuildingTests
         discouragedStyle.Add(value2);
 
         // Assert
-        Assert.Equal(recommendedStyle.Hash, correctStyle.Hash);
-        Assert.Equal(correctStyle.Hash, discouragedStyle.Hash);
+        correctStyle.Hash.Should().Be(recommendedStyle.Hash);
+        discouragedStyle.Hash.Should().Be(correctStyle.Hash);
     }
 }

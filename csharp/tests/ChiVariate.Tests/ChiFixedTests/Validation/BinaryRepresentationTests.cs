@@ -1,5 +1,6 @@
 using System.Buffers.Binary;
 using System.Globalization;
+using AwesomeAssertions;
 using Xunit;
 
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
@@ -12,28 +13,28 @@ public class BinaryRepresentationTests
     public void GetExponentByteCount_Called_ReturnsZero()
     {
         var value = ChiFixed.One;
-        Assert.Equal(0, value.GetExponentByteCount());
+        value.GetExponentByteCount().Should().Be(0);
     }
 
     [Fact]
     public void GetExponentShortestBitLength_Called_ReturnsZero()
     {
         var value = ChiFixed.One;
-        Assert.Equal(0, value.GetExponentShortestBitLength());
+        value.GetExponentShortestBitLength().Should().Be(0);
     }
 
     [Fact]
     public void GetSignificandBitLength_Called_Returns63()
     {
         var value = ChiFixed.One;
-        Assert.Equal(63, value.GetSignificandBitLength());
+        value.GetSignificandBitLength().Should().Be(63);
     }
 
     [Fact]
     public void GetSignificandByteCount_Called_Returns8()
     {
         var value = ChiFixed.One;
-        Assert.Equal(8, value.GetSignificandByteCount());
+        value.GetSignificandByteCount().Should().Be(8);
     }
 
     [Fact]
@@ -43,12 +44,12 @@ public class BinaryRepresentationTests
         Span<byte> destination = stackalloc byte[8];
 
         var bigEndianResult = value.TryWriteExponentBigEndian(destination, out var bigEndianBytes);
-        Assert.False(bigEndianResult);
-        Assert.Equal(0, bigEndianBytes);
+        bigEndianResult.Should().BeFalse();
+        bigEndianBytes.Should().Be(0);
 
         var littleEndianResult = value.TryWriteExponentLittleEndian(destination, out var littleEndianBytes);
-        Assert.False(littleEndianResult);
-        Assert.Equal(0, littleEndianBytes);
+        littleEndianResult.Should().BeFalse();
+        littleEndianBytes.Should().Be(0);
     }
 
     [Fact]
@@ -59,9 +60,9 @@ public class BinaryRepresentationTests
 
         var result = value.TryWriteSignificandBigEndian(destination, out var bytesWritten);
 
-        Assert.True(result);
-        Assert.Equal(8, bytesWritten);
-        Assert.Equal(value.Raw, BinaryPrimitives.ReadInt64BigEndian(destination));
+        result.Should().BeTrue();
+        bytesWritten.Should().Be(8);
+        BinaryPrimitives.ReadInt64BigEndian(destination).Should().Be(value.Raw);
     }
 
     [Fact]
@@ -72,8 +73,8 @@ public class BinaryRepresentationTests
 
         var result = value.TryWriteSignificandBigEndian(destination, out var bytesWritten);
 
-        Assert.False(result);
-        Assert.Equal(0, bytesWritten);
+        result.Should().BeFalse();
+        bytesWritten.Should().Be(0);
     }
 
     [Fact]
@@ -84,9 +85,9 @@ public class BinaryRepresentationTests
 
         var result = value.TryWriteSignificandLittleEndian(destination, out var bytesWritten);
 
-        Assert.True(result);
-        Assert.Equal(8, bytesWritten);
-        Assert.Equal(value.Raw, BinaryPrimitives.ReadInt64LittleEndian(destination));
+        result.Should().BeTrue();
+        bytesWritten.Should().Be(8);
+        BinaryPrimitives.ReadInt64LittleEndian(destination).Should().Be(value.Raw);
     }
 
     [Fact]
@@ -97,8 +98,8 @@ public class BinaryRepresentationTests
 
         var result = value.TryWriteSignificandLittleEndian(destination, out var bytesWritten);
 
-        Assert.False(result);
-        Assert.Equal(0, bytesWritten);
+        result.Should().BeFalse();
+        bytesWritten.Should().Be(0);
     }
 
     [Fact]
@@ -106,21 +107,21 @@ public class BinaryRepresentationTests
     {
         var value = (ChiFixed)1.5m;
         var result = ChiFixed.BitIncrement(value);
-        Assert.Equal(value.Raw + 1, result.Raw);
+        result.Raw.Should().Be(value.Raw + 1);
     }
 
     [Fact]
     public void BitIncrement_MaxValue_ReturnsPositiveInfinity()
     {
         var result = ChiFixed.BitIncrement(ChiFixed.MaxValue);
-        Assert.Equal(ChiFixed.PositiveInfinity, result);
+        result.Should().Be(ChiFixed.PositiveInfinity);
     }
 
     [Fact]
     public void BitIncrement_Zero_ReturnsEpsilon()
     {
         var result = ChiFixed.BitIncrement(ChiFixed.Zero);
-        Assert.Equal(ChiFixed.Epsilon, result);
+        result.Should().Be(ChiFixed.Epsilon);
     }
 
     [Fact]
@@ -128,28 +129,28 @@ public class BinaryRepresentationTests
     {
         var value = (ChiFixed)1.5m;
         var result = ChiFixed.BitDecrement(value);
-        Assert.Equal(value.Raw - 1, result.Raw);
+        result.Raw.Should().Be(value.Raw - 1);
     }
 
     [Fact]
     public void BitDecrement_MinValue_ReturnsNegativeInfinity()
     {
         var result = ChiFixed.BitDecrement(ChiFixed.MinValue);
-        Assert.Equal(ChiFixed.NegativeInfinity, result);
+        result.Should().Be(ChiFixed.NegativeInfinity);
     }
 
     [Fact]
     public void BitDecrement_Zero_ReturnsNegativeEpsilon()
     {
         var result = ChiFixed.BitDecrement(ChiFixed.Zero);
-        Assert.Equal(new ChiFixed(-1), result);
+        result.Should().Be(new ChiFixed(-1));
     }
 
     [Fact]
     public void BitDecrement_Epsilon_ReturnsZero()
     {
         var result = ChiFixed.BitDecrement(ChiFixed.Epsilon);
-        Assert.Equal(ChiFixed.Zero, result);
+        result.Should().Be(ChiFixed.Zero);
     }
 
     [Fact]
@@ -157,7 +158,7 @@ public class BinaryRepresentationTests
     {
         var value = ChiFixed.One;
         var result = ChiFixed.ScaleB(value, 3);
-        Assert.Equal((ChiFixed)8m, result);
+        result.Should().Be((ChiFixed)8m);
     }
 
     [Fact]
@@ -165,7 +166,7 @@ public class BinaryRepresentationTests
     {
         var value = (ChiFixed)8m;
         var result = ChiFixed.ScaleB(value, -3);
-        Assert.Equal(ChiFixed.One, result);
+        result.Should().Be(ChiFixed.One);
     }
 
     [Fact]
@@ -173,7 +174,7 @@ public class BinaryRepresentationTests
     {
         var value = (ChiFixed)42m;
         var result = ChiFixed.ScaleB(value, 0);
-        Assert.Equal(value, result);
+        result.Should().Be(value);
     }
 
     [Fact]
@@ -181,7 +182,7 @@ public class BinaryRepresentationTests
     {
         var value = ChiFixed.One;
         var result = ChiFixed.ScaleB(value, 64);
-        Assert.Equal(ChiFixed.PositiveInfinity, result);
+        result.Should().Be(ChiFixed.PositiveInfinity);
     }
 
     [Fact]
@@ -189,7 +190,7 @@ public class BinaryRepresentationTests
     {
         var value = ChiFixed.One;
         var result = ChiFixed.ScaleB(value, -64);
-        Assert.Equal(ChiFixed.Zero, result);
+        result.Should().Be(ChiFixed.Zero);
     }
 
     [Fact]
@@ -197,7 +198,7 @@ public class BinaryRepresentationTests
     {
         var value = ChiFixed.NegativeOne;
         var result = ChiFixed.ScaleB(value, 64);
-        Assert.Equal(ChiFixed.NegativeInfinity, result);
+        result.Should().Be(ChiFixed.NegativeInfinity);
     }
 
     [Fact]
@@ -205,7 +206,7 @@ public class BinaryRepresentationTests
     {
         var value = ChiFixed.MaxValue;
         var result = ChiFixed.ScaleB(value, 1);
-        Assert.Equal(ChiFixed.PositiveInfinity, result);
+        result.Should().Be(ChiFixed.PositiveInfinity);
     }
 
     [Theory]
@@ -219,6 +220,6 @@ public class BinaryRepresentationTests
         var input = (ChiFixed)decimal.Parse(inputStr, CultureInfo.InvariantCulture);
         var expected = (ChiFixed)decimal.Parse(expectedStr, CultureInfo.InvariantCulture);
         var result = ChiFixed.ScaleB(input, n);
-        Assert.Equal(expected, result);
+        result.Should().Be(expected);
     }
 }

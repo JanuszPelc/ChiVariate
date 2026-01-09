@@ -1,4 +1,5 @@
 using System.Globalization;
+using AwesomeAssertions;
 using Xunit;
 
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
@@ -32,7 +33,7 @@ public class TrigonometricTests
         var actualDecimal = (decimal)actual;
         var difference = Math.Abs(expectedDecimal - actualDecimal);
         var tolerance = Math.Max(MinAbsoluteTolerance, Math.Abs(expectedDecimal) * RelativeTolerance);
-        Assert.True(difference < tolerance,
+        (difference < tolerance).Should().BeTrue(
             $"Expected: {expectedDecimal}, Got: {actualDecimal}, Diff: {difference}, RelErr: {(expectedDecimal != 0 ? difference / Math.Abs(expectedDecimal) : difference):P4}");
     }
 
@@ -191,7 +192,8 @@ public class TrigonometricTests
     public void Asin_OutOfRange_ThrowsException(string inputStr)
     {
         var value = (ChiFixed)decimal.Parse(inputStr, CultureInfo.InvariantCulture);
-        Assert.Throws<ArgumentException>(() => ChiFixed.Asin(value));
+        var act = () => ChiFixed.Asin(value);
+        act.Should().Throw<ArgumentException>();
     }
 
     #endregion
@@ -219,7 +221,8 @@ public class TrigonometricTests
     public void Acos_OutOfRange_ThrowsException(string inputStr)
     {
         var value = (ChiFixed)decimal.Parse(inputStr, CultureInfo.InvariantCulture);
-        Assert.Throws<ArgumentException>(() => ChiFixed.Acos(value));
+        var act = () => ChiFixed.Acos(value);
+        act.Should().Throw<ArgumentException>();
     }
 
     #endregion
@@ -458,24 +461,24 @@ public class TrigonometricTests
     public void Sin_VeryLargeArbitraryAngle_DoesNotThrow()
     {
         var veryLarge = (ChiFixed)10000m;
-        var exception = Record.Exception(() => ChiFixed.Sin(veryLarge));
-        Assert.Null(exception);
+        var act = () => ChiFixed.Sin(veryLarge);
+        act.Should().NotThrow();
     }
 
     [Fact]
     public void Sin_ExtremelyLargeAngle_ComputesCorrectly()
     {
         var extremelyLarge = (ChiFixed)1000000m;
-        var exception = Record.Exception(() => ChiFixed.Sin(extremelyLarge));
-        Assert.Null(exception);
+        var act = () => ChiFixed.Sin(extremelyLarge);
+        act.Should().NotThrow();
     }
 
     [Fact]
     public void Cos_ExtremelyLargeAngle_ComputesCorrectly()
     {
         var extremelyLarge = (ChiFixed)1000000m;
-        var exception = Record.Exception(() => ChiFixed.Cos(extremelyLarge));
-        Assert.Null(exception);
+        var act = () => ChiFixed.Cos(extremelyLarge);
+        act.Should().NotThrow();
     }
 
     #endregion

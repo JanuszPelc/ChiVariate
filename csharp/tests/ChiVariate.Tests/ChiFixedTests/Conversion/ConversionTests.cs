@@ -1,3 +1,4 @@
+using AwesomeAssertions;
 using Xunit;
 
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
@@ -11,8 +12,8 @@ public class ConversionTests
     {
         var success = ChiFixed.TryConvertFromChecked<byte>(42, out var result);
 
-        Assert.True(success);
-        Assert.Equal((ChiFixed)42m, result);
+        success.Should().BeTrue();
+        result.Should().Be((ChiFixed)42m);
     }
 
     [Fact]
@@ -20,8 +21,8 @@ public class ConversionTests
     {
         var success = ChiFixed.TryConvertFromChecked<sbyte>(-42, out var result);
 
-        Assert.True(success);
-        Assert.Equal((ChiFixed)(-42m), result);
+        success.Should().BeTrue();
+        result.Should().Be((ChiFixed)(-42m));
     }
 
     [Fact]
@@ -29,8 +30,8 @@ public class ConversionTests
     {
         var success = ChiFixed.TryConvertFromChecked<short>(1000, out var result);
 
-        Assert.True(success);
-        Assert.Equal((ChiFixed)1000m, result);
+        success.Should().BeTrue();
+        result.Should().Be((ChiFixed)1000m);
     }
 
     [Fact]
@@ -38,8 +39,8 @@ public class ConversionTests
     {
         var success = ChiFixed.TryConvertFromChecked<ushort>(1000, out var result);
 
-        Assert.True(success);
-        Assert.Equal((ChiFixed)1000m, result);
+        success.Should().BeTrue();
+        result.Should().Be((ChiFixed)1000m);
     }
 
     [Fact]
@@ -47,8 +48,8 @@ public class ConversionTests
     {
         var success = ChiFixed.TryConvertFromChecked(12345, out var result);
 
-        Assert.True(success);
-        Assert.Equal((ChiFixed)12345m, result);
+        success.Should().BeTrue();
+        result.Should().Be((ChiFixed)12345m);
     }
 
     [Fact]
@@ -56,8 +57,8 @@ public class ConversionTests
     {
         var success = ChiFixed.TryConvertFromChecked(12345u, out var result);
 
-        Assert.True(success);
-        Assert.Equal((ChiFixed)12345m, result);
+        success.Should().BeTrue();
+        result.Should().Be((ChiFixed)12345m);
     }
 
     [Fact]
@@ -65,8 +66,8 @@ public class ConversionTests
     {
         var success = ChiFixed.TryConvertFromChecked(1000L, out var result);
 
-        Assert.True(success);
-        Assert.Equal((ChiFixed)1000m, result);
+        success.Should().BeTrue();
+        result.Should().Be((ChiFixed)1000m);
     }
 
     [Fact]
@@ -74,7 +75,7 @@ public class ConversionTests
     {
         var success = ChiFixed.TryConvertFromChecked(long.MaxValue, out _);
 
-        Assert.False(success);
+        success.Should().BeFalse();
     }
 
     [Fact]
@@ -82,7 +83,7 @@ public class ConversionTests
     {
         var success = ChiFixed.TryConvertFromChecked(long.MinValue, out _);
 
-        Assert.False(success);
+        success.Should().BeFalse();
     }
 
     [Fact]
@@ -90,8 +91,8 @@ public class ConversionTests
     {
         var success = ChiFixed.TryConvertFromChecked(1000UL, out var result);
 
-        Assert.True(success);
-        Assert.Equal((ChiFixed)1000m, result);
+        success.Should().BeTrue();
+        result.Should().Be((ChiFixed)1000m);
     }
 
     [Fact]
@@ -99,7 +100,7 @@ public class ConversionTests
     {
         var success = ChiFixed.TryConvertFromChecked(ulong.MaxValue, out _);
 
-        Assert.False(success);
+        success.Should().BeFalse();
     }
 
     [Fact]
@@ -107,8 +108,8 @@ public class ConversionTests
     {
         var success = ChiFixed.TryConvertFromChecked(42.5f, out var result);
 
-        Assert.True(success);
-        Assert.Equal((ChiFixed)42.5m, result);
+        success.Should().BeTrue();
+        result.Should().Be((ChiFixed)42.5m);
     }
 
     [Fact]
@@ -116,8 +117,8 @@ public class ConversionTests
     {
         var success = ChiFixed.TryConvertFromChecked(42.5, out var result);
 
-        Assert.True(success);
-        Assert.Equal((ChiFixed)42.5m, result);
+        success.Should().BeTrue();
+        result.Should().Be((ChiFixed)42.5m);
     }
 
     [Fact]
@@ -125,8 +126,8 @@ public class ConversionTests
     {
         var success = ChiFixed.TryConvertFromChecked(123.456m, out var result);
 
-        Assert.True(success);
-        Assert.Equal((ChiFixed)123.456m, result);
+        success.Should().BeTrue();
+        result.Should().Be((ChiFixed)123.456m);
     }
 
     [Fact]
@@ -134,8 +135,8 @@ public class ConversionTests
     {
         var success = ChiFixed.TryConvertFromChecked((Half)42.5, out var result);
 
-        Assert.True(success);
-        Assert.Equal((ChiFixed)42.5m, result);
+        success.Should().BeTrue();
+        result.Should().Be((ChiFixed)42.5m);
     }
 
     [Fact]
@@ -144,8 +145,8 @@ public class ConversionTests
         var original = (ChiFixed)42.5m;
         var success = ChiFixed.TryConvertFromChecked(original, out var result);
 
-        Assert.True(success);
-        Assert.Equal(original, result);
+        success.Should().BeTrue();
+        result.Should().Be(original);
     }
 
     [Fact]
@@ -153,8 +154,8 @@ public class ConversionTests
     {
         var success = ChiFixed.TryConvertFromSaturating(long.MaxValue, out var result);
 
-        Assert.True(success);
-        Assert.Equal(ChiFixed.MaxValue, result);
+        success.Should().BeTrue();
+        result.Should().Be(ChiFixed.MaxValue);
     }
 
     [Fact]
@@ -162,8 +163,8 @@ public class ConversionTests
     {
         var success = ChiFixed.TryConvertFromSaturating(long.MinValue, out var result);
 
-        Assert.True(success);
-        Assert.Equal(ChiFixed.MinValue, result);
+        success.Should().BeTrue();
+        result.Should().Be(ChiFixed.MinValue);
     }
 
     [Fact]
@@ -171,8 +172,8 @@ public class ConversionTests
     {
         var success = ChiFixed.TryConvertFromSaturating(ulong.MaxValue, out var result);
 
-        Assert.True(success);
-        Assert.Equal(ChiFixed.MaxValue, result);
+        success.Should().BeTrue();
+        result.Should().Be(ChiFixed.MaxValue);
     }
 
     [Fact]
@@ -180,7 +181,7 @@ public class ConversionTests
     {
         var success = ChiFixed.TryConvertFromTruncating(long.MaxValue, out _);
 
-        Assert.True(success);
+        success.Should().BeTrue();
     }
 
     [Fact]
@@ -189,8 +190,8 @@ public class ConversionTests
         var value = (ChiFixed)42m;
         var success = ChiFixed.TryConvertToChecked(value, out byte result);
 
-        Assert.True(success);
-        Assert.Equal(42, result);
+        success.Should().BeTrue();
+        result.Should().Be(42);
     }
 
     [Fact]
@@ -199,7 +200,7 @@ public class ConversionTests
         var value = (ChiFixed)(-1m);
         var success = ChiFixed.TryConvertToChecked(value, out byte _);
 
-        Assert.False(success);
+        success.Should().BeFalse();
     }
 
     [Fact]
@@ -208,7 +209,7 @@ public class ConversionTests
         var value = (ChiFixed)300m;
         var success = ChiFixed.TryConvertToChecked(value, out byte _);
 
-        Assert.False(success);
+        success.Should().BeFalse();
     }
 
     [Fact]
@@ -217,8 +218,8 @@ public class ConversionTests
         var value = (ChiFixed)(-42m);
         var success = ChiFixed.TryConvertToChecked(value, out sbyte result);
 
-        Assert.True(success);
-        Assert.Equal(-42, result);
+        success.Should().BeTrue();
+        result.Should().Be(-42);
     }
 
     [Fact]
@@ -227,7 +228,7 @@ public class ConversionTests
         var value = (ChiFixed)200m;
         var success = ChiFixed.TryConvertToChecked(value, out sbyte _);
 
-        Assert.False(success);
+        success.Should().BeFalse();
     }
 
     [Fact]
@@ -236,7 +237,7 @@ public class ConversionTests
         var value = (ChiFixed)(-200m);
         var success = ChiFixed.TryConvertToChecked(value, out sbyte _);
 
-        Assert.False(success);
+        success.Should().BeFalse();
     }
 
     [Fact]
@@ -245,8 +246,8 @@ public class ConversionTests
         var value = (ChiFixed)12345m;
         var success = ChiFixed.TryConvertToChecked(value, out int result);
 
-        Assert.True(success);
-        Assert.Equal(12345, result);
+        success.Should().BeTrue();
+        result.Should().Be(12345);
     }
 
     [Fact]
@@ -255,8 +256,8 @@ public class ConversionTests
         var value = (ChiFixed)12.7m;
         var success = ChiFixed.TryConvertToChecked(value, out int result);
 
-        Assert.True(success);
-        Assert.Equal(13, result);
+        success.Should().BeTrue();
+        result.Should().Be(13);
     }
 
     [Fact]
@@ -265,8 +266,8 @@ public class ConversionTests
         var value = (ChiFixed)12345m;
         var success = ChiFixed.TryConvertToChecked(value, out long result);
 
-        Assert.True(success);
-        Assert.Equal(12345L, result);
+        success.Should().BeTrue();
+        result.Should().Be(12345L);
     }
 
     [Fact]
@@ -275,8 +276,8 @@ public class ConversionTests
         var value = (ChiFixed)12345m;
         var success = ChiFixed.TryConvertToChecked(value, out ulong result);
 
-        Assert.True(success);
-        Assert.Equal(12345UL, result);
+        success.Should().BeTrue();
+        result.Should().Be(12345UL);
     }
 
     [Fact]
@@ -285,7 +286,7 @@ public class ConversionTests
         var value = (ChiFixed)(-1m);
         var success = ChiFixed.TryConvertToChecked(value, out ulong _);
 
-        Assert.False(success);
+        success.Should().BeFalse();
     }
 
     [Fact]
@@ -294,8 +295,8 @@ public class ConversionTests
         var value = (ChiFixed)42.5m;
         var success = ChiFixed.TryConvertToChecked(value, out float result);
 
-        Assert.True(success);
-        Assert.Equal(42.5f, result);
+        success.Should().BeTrue();
+        result.Should().Be(42.5f);
     }
 
     [Fact]
@@ -304,8 +305,8 @@ public class ConversionTests
         var value = (ChiFixed)42.5m;
         var success = ChiFixed.TryConvertToChecked(value, out double result);
 
-        Assert.True(success);
-        Assert.Equal(42.5, result);
+        success.Should().BeTrue();
+        result.Should().Be(42.5);
     }
 
     [Fact]
@@ -314,8 +315,8 @@ public class ConversionTests
         var value = (ChiFixed)42.5m;
         var success = ChiFixed.TryConvertToChecked(value, out decimal result);
 
-        Assert.True(success);
-        Assert.Equal(42.5m, result);
+        success.Should().BeTrue();
+        result.Should().Be(42.5m);
     }
 
     [Fact]
@@ -324,8 +325,8 @@ public class ConversionTests
         var value = (ChiFixed)42.5m;
         var success = ChiFixed.TryConvertToChecked(value, out Half result);
 
-        Assert.True(success);
-        Assert.Equal((Half)42.5, result);
+        success.Should().BeTrue();
+        result.Should().Be((Half)42.5);
     }
 
     [Fact]
@@ -334,8 +335,8 @@ public class ConversionTests
         var value = (ChiFixed)42.5m;
         var success = ChiFixed.TryConvertToChecked(value, out ChiFixed result);
 
-        Assert.True(success);
-        Assert.Equal(value, result);
+        success.Should().BeTrue();
+        result.Should().Be(value);
     }
 
     [Fact]
@@ -344,8 +345,8 @@ public class ConversionTests
         var value = (ChiFixed)(-10m);
         var success = ChiFixed.TryConvertToSaturating(value, out byte result);
 
-        Assert.True(success);
-        Assert.Equal(0, result);
+        success.Should().BeTrue();
+        result.Should().Be(0);
     }
 
     [Fact]
@@ -354,8 +355,8 @@ public class ConversionTests
         var value = (ChiFixed)300m;
         var success = ChiFixed.TryConvertToSaturating(value, out byte result);
 
-        Assert.True(success);
-        Assert.Equal(byte.MaxValue, result);
+        success.Should().BeTrue();
+        result.Should().Be(byte.MaxValue);
     }
 
     [Fact]
@@ -364,8 +365,8 @@ public class ConversionTests
         var value = (ChiFixed)200m;
         var success = ChiFixed.TryConvertToSaturating(value, out sbyte result);
 
-        Assert.True(success);
-        Assert.Equal(sbyte.MaxValue, result);
+        success.Should().BeTrue();
+        result.Should().Be(sbyte.MaxValue);
     }
 
     [Fact]
@@ -374,8 +375,8 @@ public class ConversionTests
         var value = (ChiFixed)(-200m);
         var success = ChiFixed.TryConvertToSaturating(value, out sbyte result);
 
-        Assert.True(success);
-        Assert.Equal(sbyte.MinValue, result);
+        success.Should().BeTrue();
+        result.Should().Be(sbyte.MinValue);
     }
 
     [Fact]
@@ -384,8 +385,8 @@ public class ConversionTests
         var value = (ChiFixed)(-10m);
         var success = ChiFixed.TryConvertToSaturating(value, out ulong result);
 
-        Assert.True(success);
-        Assert.Equal(0UL, result);
+        success.Should().BeTrue();
+        result.Should().Be(0UL);
     }
 
     [Fact]
@@ -394,8 +395,8 @@ public class ConversionTests
         var value = (ChiFixed)(-1m);
         var success = ChiFixed.TryConvertToTruncating(value, out byte result);
 
-        Assert.True(success);
-        Assert.Equal(255, result);
+        success.Should().BeTrue();
+        result.Should().Be(255);
     }
 
     [Fact]
@@ -404,8 +405,8 @@ public class ConversionTests
         var value = (ChiFixed)256m;
         var success = ChiFixed.TryConvertToTruncating(value, out byte result);
 
-        Assert.True(success);
-        Assert.Equal(0, result);
+        success.Should().BeTrue();
+        result.Should().Be(0);
     }
 
     [Fact]
@@ -414,8 +415,8 @@ public class ConversionTests
         var value = (ChiFixed)128m;
         var success = ChiFixed.TryConvertToTruncating(value, out sbyte result);
 
-        Assert.True(success);
-        Assert.Equal(-128, result);
+        success.Should().BeTrue();
+        result.Should().Be(-128);
     }
 
     [Fact]
@@ -423,7 +424,7 @@ public class ConversionTests
     {
         var success = ChiFixed.TryConvertToTruncating(ChiFixed.NaN, out int result);
 
-        Assert.True(success);
-        Assert.Equal(0, result);
+        success.Should().BeTrue();
+        result.Should().Be(0);
     }
 }

@@ -1,3 +1,4 @@
+using AwesomeAssertions;
 using Xunit;
 
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
@@ -11,7 +12,7 @@ public class MagnitudeTests
     {
         var result = ChiFixed.MaxMagnitude((ChiFixed)3m, (ChiFixed)5m);
 
-        Assert.Equal((ChiFixed)5m, result);
+        result.Should().Be((ChiFixed)5m);
     }
 
     [Fact]
@@ -19,7 +20,7 @@ public class MagnitudeTests
     {
         var result = ChiFixed.MaxMagnitude((ChiFixed)(-3m), (ChiFixed)(-5m));
 
-        Assert.Equal((ChiFixed)(-5m), result);
+        result.Should().Be((ChiFixed)(-5m));
     }
 
     [Fact]
@@ -27,7 +28,7 @@ public class MagnitudeTests
     {
         var result = ChiFixed.MaxMagnitude((ChiFixed)3m, (ChiFixed)(-5m));
 
-        Assert.Equal((ChiFixed)(-5m), result);
+        result.Should().Be((ChiFixed)(-5m));
     }
 
     [Fact]
@@ -35,7 +36,7 @@ public class MagnitudeTests
     {
         var result = ChiFixed.MaxMagnitude((ChiFixed)5m, (ChiFixed)(-5m));
 
-        Assert.Equal((ChiFixed)5m, result);
+        result.Should().Be((ChiFixed)5m);
     }
 
     [Fact]
@@ -43,7 +44,7 @@ public class MagnitudeTests
     {
         var result = ChiFixed.MaxMagnitude(ChiFixed.Zero, ChiFixed.Zero);
 
-        Assert.Equal(ChiFixed.Zero, result);
+        result.Should().Be(ChiFixed.Zero);
     }
 
     [Fact]
@@ -51,7 +52,7 @@ public class MagnitudeTests
     {
         var result = ChiFixed.MaxMagnitudeNumber((ChiFixed)3m, (ChiFixed)5m);
 
-        Assert.Equal((ChiFixed)5m, result);
+        result.Should().Be((ChiFixed)5m);
     }
 
     [Fact]
@@ -59,7 +60,7 @@ public class MagnitudeTests
     {
         var result = ChiFixed.MaxMagnitudeNumber((ChiFixed)5m, (ChiFixed)(-5m));
 
-        Assert.Equal((ChiFixed)5m, result);
+        result.Should().Be((ChiFixed)5m);
     }
 
     [Fact]
@@ -67,7 +68,7 @@ public class MagnitudeTests
     {
         var result = ChiFixed.MinMagnitude((ChiFixed)3m, (ChiFixed)5m);
 
-        Assert.Equal((ChiFixed)3m, result);
+        result.Should().Be((ChiFixed)3m);
     }
 
     [Fact]
@@ -75,7 +76,7 @@ public class MagnitudeTests
     {
         var result = ChiFixed.MinMagnitude((ChiFixed)(-3m), (ChiFixed)(-5m));
 
-        Assert.Equal((ChiFixed)(-3m), result);
+        result.Should().Be((ChiFixed)(-3m));
     }
 
     [Fact]
@@ -83,7 +84,7 @@ public class MagnitudeTests
     {
         var result = ChiFixed.MinMagnitude((ChiFixed)3m, (ChiFixed)(-5m));
 
-        Assert.Equal((ChiFixed)3m, result);
+        result.Should().Be((ChiFixed)3m);
     }
 
     [Fact]
@@ -91,7 +92,7 @@ public class MagnitudeTests
     {
         var result = ChiFixed.MinMagnitude((ChiFixed)5m, (ChiFixed)(-5m));
 
-        Assert.Equal((ChiFixed)(-5m), result);
+        result.Should().Be((ChiFixed)(-5m));
     }
 
     [Fact]
@@ -99,7 +100,7 @@ public class MagnitudeTests
     {
         var result = ChiFixed.MinMagnitude((ChiFixed)100m, ChiFixed.PositiveInfinity);
 
-        Assert.Equal((ChiFixed)100m, result);
+        result.Should().Be((ChiFixed)100m);
     }
 
     [Fact]
@@ -107,7 +108,7 @@ public class MagnitudeTests
     {
         var result = ChiFixed.MinMagnitude(ChiFixed.Zero, ChiFixed.Zero);
 
-        Assert.Equal(ChiFixed.Zero, result);
+        result.Should().Be(ChiFixed.Zero);
     }
 
     [Fact]
@@ -115,7 +116,7 @@ public class MagnitudeTests
     {
         var result = ChiFixed.MinMagnitudeNumber((ChiFixed)3m, (ChiFixed)5m);
 
-        Assert.Equal((ChiFixed)3m, result);
+        result.Should().Be((ChiFixed)3m);
     }
 
     [Fact]
@@ -123,7 +124,7 @@ public class MagnitudeTests
     {
         var result = ChiFixed.MinMagnitudeNumber((ChiFixed)5m, (ChiFixed)(-5m));
 
-        Assert.Equal((ChiFixed)(-5m), result);
+        result.Should().Be((ChiFixed)(-5m));
     }
 
     [Fact]
@@ -131,6 +132,6 @@ public class MagnitudeTests
     {
         var result = ChiFixed.MinMagnitudeNumber((ChiFixed)100m, ChiFixed.PositiveInfinity);
 
-        Assert.Equal((ChiFixed)100m, result);
+        result.Should().Be((ChiFixed)100m);
     }
 }

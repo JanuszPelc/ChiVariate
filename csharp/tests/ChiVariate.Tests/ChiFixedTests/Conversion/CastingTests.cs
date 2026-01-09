@@ -1,3 +1,4 @@
+using AwesomeAssertions;
 using Xunit;
 
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
@@ -15,9 +16,9 @@ public class CastingTests
         var fromRational = (ChiFixed)(1, 3);
         var fromString = ChiFixed.Parse("0.33333333333333");
 
-        Assert.Equal(fromDecimal, fromRational);
-        Assert.Equal(fromRational, fromString);
-        Assert.Equal(fromString, fromDecimal);
+        fromRational.Should().Be(fromDecimal);
+        fromString.Should().Be(fromRational);
+        fromDecimal.Should().Be(fromString);
     }
 
     #endregion
@@ -29,7 +30,7 @@ public class CastingTests
     {
         var result = (ChiFixed)0.0m;
 
-        Assert.Equal(ChiFixed.Zero, result);
+        result.Should().Be(ChiFixed.Zero);
     }
 
     [Fact]
@@ -37,7 +38,7 @@ public class CastingTests
     {
         var result = (ChiFixed)1.0m;
 
-        Assert.Equal(ChiFixed.One, result);
+        result.Should().Be(ChiFixed.One);
     }
 
     [Theory]
@@ -51,7 +52,7 @@ public class CastingTests
         var result = (ChiFixed)input;
         var backToDecimal = (decimal)result;
 
-        Assert.Equal(input, backToDecimal, 6);
+        backToDecimal.Should().BeApproximately(input, 0.000001m);
     }
 
     #endregion
@@ -63,7 +64,7 @@ public class CastingTests
     {
         var result = (decimal)ChiFixed.Zero;
 
-        Assert.Equal(0.0m, result);
+        result.Should().Be(0.0m);
     }
 
     [Fact]
@@ -71,7 +72,7 @@ public class CastingTests
     {
         var result = (decimal)ChiFixed.One;
 
-        Assert.Equal(1.0m, result);
+        result.Should().Be(1.0m);
     }
 
     [Fact]
@@ -79,7 +80,7 @@ public class CastingTests
     {
         var result = (decimal)ChiFixed.NegativeOne;
 
-        Assert.Equal(-1.0m, result);
+        result.Should().Be(-1.0m);
     }
 
     [Theory]
@@ -93,7 +94,7 @@ public class CastingTests
         var fixedValue = (ChiFixed)expected;
         var result = (decimal)fixedValue;
 
-        Assert.Equal(expected, result, 6);
+        result.Should().BeApproximately(expected, 0.000001m);
     }
 
     [Fact]
@@ -101,8 +102,8 @@ public class CastingTests
     {
         var result = (decimal)ChiFixed.MaxValue;
 
-        Assert.True(result > 2000000m);
-        Assert.True(result < 3000000m);
+        (result > 2000000m).Should().BeTrue();
+        (result < 3000000m).Should().BeTrue();
     }
 
     [Fact]
@@ -110,8 +111,8 @@ public class CastingTests
     {
         var result = (decimal)ChiFixed.MinValue;
 
-        Assert.True(result < -2000000m);
-        Assert.True(result > -3000000m);
+        (result < -2000000m).Should().BeTrue();
+        (result > -3000000m).Should().BeTrue();
     }
 
     [Fact]
@@ -121,7 +122,7 @@ public class CastingTests
         var fixedValue = (ChiFixed)original;
         var roundTrip = (decimal)fixedValue;
 
-        Assert.Equal(original, roundTrip, 6);
+        roundTrip.Should().BeApproximately(original, 0.000001m);
     }
 
     #endregion
@@ -134,7 +135,7 @@ public class CastingTests
         var result = (ChiFixed)(1, 3);
 
         var resultStr = result.ToString();
-        Assert.StartsWith("0.3333333333", resultStr);
+        resultStr.Should().StartWith("0.3333333333");
     }
 
     [Fact]
@@ -142,13 +143,14 @@ public class CastingTests
     {
         var result = (ChiFixed)(1, 2);
 
-        Assert.Equal((ChiFixed)0.5m, result);
+        result.Should().Be((ChiFixed)0.5m);
     }
 
     [Fact]
     public void RationalToChiFixed_ZeroDenominator_ThrowsDivideByZero()
     {
-        Assert.Throws<DivideByZeroException>(() => (ChiFixed)(1, 0));
+        var act = () => (ChiFixed)(1, 0);
+        act.Should().Throw<DivideByZeroException>();
     }
 
     [Theory]
@@ -164,7 +166,7 @@ public class CastingTests
         var result = (ChiFixed)(numerator, denominator);
         var expectedChiFixed = (ChiFixed)expected;
 
-        Assert.Equal(expectedChiFixed, result);
+        result.Should().Be(expectedChiFixed);
     }
 
     [Fact]
@@ -173,7 +175,7 @@ public class CastingTests
         var result = (ChiFixed)(8000000, 1);
         var expected = (ChiFixed)8000000m;
 
-        Assert.Equal(expected, result);
+        result.Should().Be(expected);
     }
 
     [Fact]
@@ -181,8 +183,8 @@ public class CastingTests
     {
         var result = (ChiFixed)(1, 1000000000);
 
-        Assert.True(result > ChiFixed.Zero);
-        Assert.True(result < (ChiFixed)0.001m);
+        (result > ChiFixed.Zero).Should().BeTrue();
+        (result < (ChiFixed)0.001m).Should().BeTrue();
     }
 
     [Fact]
@@ -196,7 +198,7 @@ public class CastingTests
         var result = (ChiFixed)(numerator, denominator);
         var expected = (ChiFixed)0.5m;
 
-        Assert.Equal(expected, result);
+        result.Should().Be(expected);
     }
 
     [Fact]
@@ -205,7 +207,7 @@ public class CastingTests
         const int value = 5000000;
         var result = (ChiFixed)(value, value);
 
-        Assert.Equal(ChiFixed.One, result);
+        result.Should().Be(ChiFixed.One);
     }
 
     [Fact]
@@ -214,7 +216,7 @@ public class CastingTests
         const int value = 5000000;
         var result = (ChiFixed)(-value, value);
 
-        Assert.Equal(-ChiFixed.One, result);
+        result.Should().Be(-ChiFixed.One);
     }
 
     [Fact]
@@ -239,7 +241,7 @@ public class CastingTests
 
             var diff = Math.Abs(resultDecimal - expectedDecimal);
 
-            Assert.True(diff < tolerance,
+            (diff < tolerance).Should().BeTrue(
                 $"Case ({numerator}/{denominator}): Expected {expectedDecimal}, got {resultDecimal}, diff {diff}");
         }
     }

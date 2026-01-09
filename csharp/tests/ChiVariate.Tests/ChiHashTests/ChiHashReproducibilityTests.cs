@@ -1,4 +1,5 @@
 using System.Numerics;
+using AwesomeAssertions;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -34,7 +35,7 @@ public class ChiHashReproducibilityTests(ITestOutputHelper testOutputHelper)
             .Hash;
 
         // Assert
-        Assert.Equal(hash1, hash2);
+        hash2.Should().Be(hash1);
     }
 
     [Fact]
@@ -56,7 +57,7 @@ public class ChiHashReproducibilityTests(ITestOutputHelper testOutputHelper)
             .Hash;
 
         // Assert
-        Assert.NotEqual(hashOrderAb, hashOrderBa);
+        hashOrderBa.Should().NotBe(hashOrderAb);
     }
 
     [Fact]
@@ -82,7 +83,7 @@ public class ChiHashReproducibilityTests(ITestOutputHelper testOutputHelper)
             .Hash;
 
         // Assert
-        Assert.NotEqual(hashA, hashB);
+        hashB.Should().NotBe(hashA);
     }
 
     [Fact]
@@ -106,7 +107,7 @@ public class ChiHashReproducibilityTests(ITestOutputHelper testOutputHelper)
             .Hash;
 
         // Assert
-        Assert.NotEqual(hash2Inputs, hash3Inputs);
+        hash3Inputs.Should().NotBe(hash2Inputs);
     }
 
     [Fact]
@@ -164,10 +165,10 @@ public class ChiHashReproducibilityTests(ITestOutputHelper testOutputHelper)
         string? nullString = null;
         var hashNull1 = new ChiHash().Add(nullString).Hash;
         var hashNull2 = new ChiHash().Add(nullString).Hash;
-        Assert.Equal(hashNull1, hashNull2);
+        hashNull2.Should().Be(hashNull1);
 
         var hashEmpty = new ChiHash().Add("").Hash;
-        Assert.Equal(hashNull1, hashEmpty);
+        hashEmpty.Should().Be(hashNull1);
     }
 
     [Fact]
@@ -242,9 +243,9 @@ public class ChiHashReproducibilityTests(ITestOutputHelper testOutputHelper)
         var guidHash2 = new ChiHash().Add(guidArray.AsSpan()).Hash;
 
         // Assert
-        Assert.Equal(hash1, hash2);
-        Assert.NotEqual(hash1, hash3);
-        Assert.Equal(guidHash1, guidHash2);
+        hash2.Should().Be(hash1);
+        hash3.Should().NotBe(hash1);
+        guidHash2.Should().Be(guidHash1);
     }
 
     [Fact]
@@ -278,7 +279,7 @@ public class ChiHashReproducibilityTests(ITestOutputHelper testOutputHelper)
             .Hash;
 
         // Assert
-        Assert.Equal(hash1, hash2);
+        hash2.Should().Be(hash1);
     }
 
     [Fact]
@@ -297,23 +298,23 @@ public class ChiHashReproducibilityTests(ITestOutputHelper testOutputHelper)
         var hash1000 = new ChiHash().Add(decimal1000).Hash;
 
         // Assert
-        Assert.NotEqual(hash1, hash10);
-        Assert.NotEqual(hash1, hash100);
-        Assert.NotEqual(hash1, hash1000);
-        Assert.NotEqual(hash10, hash100);
-        Assert.NotEqual(hash10, hash1000);
-        Assert.NotEqual(hash100, hash1000);
+        hash10.Should().NotBe(hash1);
+        hash100.Should().NotBe(hash1);
+        hash1000.Should().NotBe(hash1);
+        hash100.Should().NotBe(hash10);
+        hash1000.Should().NotBe(hash10);
+        hash1000.Should().NotBe(hash100);
 
-        Assert.True(decimal1 == decimal10);
-        Assert.True(decimal1 == decimal100);
-        Assert.True(decimal1 == decimal1000);
+        (decimal1 == decimal10).Should().BeTrue();
+        (decimal1 == decimal100).Should().BeTrue();
+        (decimal1 == decimal1000).Should().BeTrue();
 
         var bits1 = decimal.GetBits(decimal1);
         var bits10 = decimal.GetBits(decimal10);
         var bits100 = decimal.GetBits(decimal100);
 
-        Assert.NotEqual(bits1[3], bits10[3]);
-        Assert.NotEqual(bits1[3], bits100[3]);
+        bits10[3].Should().NotBe(bits1[3]);
+        bits100[3].Should().NotBe(bits1[3]);
     }
 
     [Fact]
@@ -378,10 +379,10 @@ public class ChiHashReproducibilityTests(ITestOutputHelper testOutputHelper)
         var doubleNanHash2 = new ChiHash().Add(Math.Sqrt(-1.0)).Hash;
 
         // Assert
-        Assert.Equal(nanHash1, nanHash2);
-        Assert.Equal(zeroHash1, zeroHash2);
-        Assert.Equal(halfNanHash1, halfNanHash2);
-        Assert.Equal(doubleNanHash1, doubleNanHash2);
+        nanHash2.Should().Be(nanHash1);
+        zeroHash2.Should().Be(zeroHash1);
+        halfNanHash2.Should().Be(halfNanHash1);
+        doubleNanHash2.Should().Be(doubleNanHash1);
 
         return;
 
@@ -427,8 +428,8 @@ public class ChiHashReproducibilityTests(ITestOutputHelper testOutputHelper)
         var hash2 = new ChiHash().Hash;
 
         // Assert
-        Assert.Equal(hash1, hash2);
-        Assert.Equal(0, hash1);
+        hash2.Should().Be(hash1);
+        hash1.Should().Be(0);
     }
 
     [Fact]
@@ -439,28 +440,28 @@ public class ChiHashReproducibilityTests(ITestOutputHelper testOutputHelper)
         var seed2 = ChiHash.Seed;
 
         // Assert
-        Assert.Equal(seed1, seed2);
+        seed2.Should().Be(seed1);
     }
 
     private static void VerifyDeterminism<T>(T input)
     {
         var hash1 = new ChiHash().Add(input).Hash;
         var hash2 = new ChiHash().Add(input).Hash;
-        Assert.Equal(hash1, hash2);
+        hash2.Should().Be(hash1);
     }
 
     private static void VerifySensitivity<T>(T input1, T input2)
     {
         var hash1 = new ChiHash().Add(input1).Hash;
         var hash2 = new ChiHash().Add(input2).Hash;
-        Assert.NotEqual(hash1, hash2);
+        hash2.Should().NotBe(hash1);
     }
 
     private static void VerifyStringDeterminism(string input)
     {
         var hash1 = new ChiHash().Add(input).Hash;
         var hash2 = new ChiHash().Add(input).Hash;
-        Assert.Equal(hash1, hash2);
+        hash2.Should().Be(hash1);
     }
 
     private enum TestEnum

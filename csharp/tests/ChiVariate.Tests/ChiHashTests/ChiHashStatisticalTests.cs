@@ -1,4 +1,5 @@
 using System.Numerics;
+using AwesomeAssertions;
 using ChiVariate.Tests.TestInfrastructure;
 using Xunit;
 using Xunit.Abstractions;
@@ -196,10 +197,10 @@ public class ChiHashStatisticalTests(ITestOutputHelper testOutputHelper)
         testOutputHelper.WriteLine($"Average bit differences: {avgDifference:F2}");
         testOutputHelper.WriteLine($"Standard deviation: {stdDev:F2}");
 
-        Assert.True(avgDifference is > 12 and < 20,
+        (avgDifference is > 12 and < 20).Should().BeTrue(
             $"Average bit difference should be ~16, but was {avgDifference:F2}");
 
-        Assert.True(stdDev < 5.0,
+        (stdDev < 5.0).Should().BeTrue(
             $"Standard deviation should be < 5.0, but was {stdDev:F2}");
     }
 
@@ -233,7 +234,7 @@ public class ChiHashStatisticalTests(ITestOutputHelper testOutputHelper)
         var avgDifference = bitDifferences.Average();
         testOutputHelper.WriteLine($"Average string avalanche: {avgDifference:F2} bits");
 
-        Assert.True(avgDifference is > 10 and < 22,
+        (avgDifference is > 10 and < 22).Should().BeTrue(
             $"String avalanche should be ~16 bits, but was {avgDifference:F2}");
     }
 
@@ -271,7 +272,7 @@ public class ChiHashStatisticalTests(ITestOutputHelper testOutputHelper)
         var correlation = CalculateCorrelation(histogram1.Bins, histogram2.Bins);
         testOutputHelper.WriteLine($"Order correlation: {correlation:F3}");
 
-        Assert.True(Math.Abs(correlation) < 0.5,
+        (Math.Abs(correlation) < 0.5).Should().BeTrue(
             $"Different orders should not be highly correlated, correlation was {correlation:F3}");
 
         var sameOrderCount = 0;
@@ -292,7 +293,7 @@ public class ChiHashStatisticalTests(ITestOutputHelper testOutputHelper)
         var collisionRate = sameOrderCount / 10_000.0;
         testOutputHelper.WriteLine($"Hash collision rate between different orders: {collisionRate:F4}");
 
-        Assert.True(collisionRate < 0.01,
+        (collisionRate < 0.01).Should().BeTrue(
             $"Hash collision rate between different orders should be <1%, but was {collisionRate:P2}");
     }
 

@@ -1,4 +1,5 @@
 using System.Globalization;
+using AwesomeAssertions;
 using Xunit;
 
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
@@ -16,7 +17,7 @@ public class LogarithmicTests
         var actualDecimal = (decimal)actual;
         var difference = Math.Abs(expectedDecimal - actualDecimal);
         var tolerance = Math.Max(MinAbsoluteTolerance, Math.Abs(expectedDecimal) * RelativeTolerance);
-        Assert.True(difference < tolerance,
+        (difference < tolerance).Should().BeTrue(
             $"Expected: {expectedDecimal}, Got: {actualDecimal}, Diff: {difference}, RelErr: {(expectedDecimal != 0 ? difference / Math.Abs(expectedDecimal) : difference):P4}");
     }
 
@@ -90,7 +91,8 @@ public class LogarithmicTests
     public void Log_NonPositiveValue_ThrowsException(string inputStr)
     {
         var value = (ChiFixed)decimal.Parse(inputStr, CultureInfo.InvariantCulture);
-        Assert.Throws<ArgumentException>(() => ChiFixed.Log(value));
+        var act = () => ChiFixed.Log(value);
+        act.Should().Throw<ArgumentException>();
     }
 
     #endregion
@@ -162,7 +164,8 @@ public class LogarithmicTests
     public void Log2_NonPositiveValue_ThrowsException(string inputStr)
     {
         var value = (ChiFixed)decimal.Parse(inputStr, CultureInfo.InvariantCulture);
-        Assert.Throws<ArgumentException>(() => ChiFixed.Log2(value));
+        var act = () => ChiFixed.Log2(value);
+        act.Should().Throw<ArgumentException>();
     }
 
     #endregion
@@ -232,7 +235,8 @@ public class LogarithmicTests
     public void Log10_NonPositiveValue_ThrowsException(string inputStr)
     {
         var value = (ChiFixed)decimal.Parse(inputStr, CultureInfo.InvariantCulture);
-        Assert.Throws<ArgumentException>(() => ChiFixed.Log10(value));
+        var act = () => ChiFixed.Log10(value);
+        act.Should().Throw<ArgumentException>();
     }
 
     #endregion
@@ -283,7 +287,8 @@ public class LogarithmicTests
     {
         var input = (ChiFixed)10m;
         var baseValue = (ChiFixed)decimal.Parse(baseStr, CultureInfo.InvariantCulture);
-        Assert.Throws<ArgumentException>(() => ChiFixed.Log(input, baseValue));
+        var act = () => ChiFixed.Log(input, baseValue);
+        act.Should().Throw<ArgumentException>();
     }
 
     [Fact]
@@ -291,7 +296,8 @@ public class LogarithmicTests
     {
         var input = (ChiFixed)10m;
         var baseValue = ChiFixed.One;
-        Assert.Throws<ArgumentException>(() => ChiFixed.Log(input, baseValue));
+        var act = () => ChiFixed.Log(input, baseValue);
+        act.Should().Throw<ArgumentException>();
     }
 
     [Theory]
@@ -302,7 +308,8 @@ public class LogarithmicTests
     {
         var input = (ChiFixed)decimal.Parse(inputStr, CultureInfo.InvariantCulture);
         var baseValue = (ChiFixed)decimal.Parse(baseStr, CultureInfo.InvariantCulture);
-        Assert.Throws<ArgumentException>(() => ChiFixed.Log(input, baseValue));
+        var act = () => ChiFixed.Log(input, baseValue);
+        act.Should().Throw<ArgumentException>();
     }
 
     [Theory]
@@ -388,14 +395,14 @@ public class LogarithmicTests
     public void ILogB_Zero_ReturnsIntMinValue()
     {
         var result = ChiFixed.ILogB(ChiFixed.Zero);
-        Assert.Equal(int.MinValue, result);
+        result.Should().Be(int.MinValue);
     }
 
     [Fact]
     public void ILogB_One_ReturnsZero()
     {
         var result = ChiFixed.ILogB(ChiFixed.One);
-        Assert.Equal(0, result);
+        result.Should().Be(0);
     }
 
     [Theory]
@@ -408,7 +415,7 @@ public class LogarithmicTests
     {
         var input = (ChiFixed)decimal.Parse(inputStr, CultureInfo.InvariantCulture);
         var result = ChiFixed.ILogB(input);
-        Assert.Equal(expected, result);
+        result.Should().Be(expected);
     }
 
     [Theory]
@@ -419,7 +426,7 @@ public class LogarithmicTests
     {
         var input = (ChiFixed)decimal.Parse(inputStr, CultureInfo.InvariantCulture);
         var result = ChiFixed.ILogB(input);
-        Assert.Equal(expected, result);
+        result.Should().Be(expected);
     }
 
     [Theory]
@@ -431,7 +438,7 @@ public class LogarithmicTests
     {
         var input = (ChiFixed)decimal.Parse(inputStr, CultureInfo.InvariantCulture);
         var result = ChiFixed.ILogB(input);
-        Assert.Equal(expected, result);
+        result.Should().Be(expected);
     }
 
     [Theory]
@@ -443,7 +450,7 @@ public class LogarithmicTests
     {
         var input = (ChiFixed)decimal.Parse(inputStr, CultureInfo.InvariantCulture);
         var result = ChiFixed.ILogB(input);
-        Assert.Equal(expected, result);
+        result.Should().Be(expected);
     }
 
     #endregion

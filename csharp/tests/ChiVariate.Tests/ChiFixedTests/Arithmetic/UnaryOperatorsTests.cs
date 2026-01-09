@@ -1,4 +1,5 @@
 using System.Numerics;
+using AwesomeAssertions;
 using Xunit;
 
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
@@ -22,7 +23,7 @@ public class UnaryOperatorsTests
     {
         var result = -ChiFixed.Zero;
 
-        Assert.Equal(ChiFixed.Zero, result);
+        result.Should().Be(ChiFixed.Zero);
     }
 
     [Fact]
@@ -32,7 +33,7 @@ public class UnaryOperatorsTests
 
         var result = -positive;
 
-        Assert.Equal((ChiFixed)(-42m), result);
+        result.Should().Be((ChiFixed)(-42m));
     }
 
     [Fact]
@@ -42,7 +43,7 @@ public class UnaryOperatorsTests
 
         var result = -negative;
 
-        Assert.Equal((ChiFixed)42m, result);
+        result.Should().Be((ChiFixed)42m);
     }
 
     [Fact]
@@ -52,7 +53,7 @@ public class UnaryOperatorsTests
 
         var result = - -value;
 
-        Assert.Equal(value, result);
+        result.Should().Be(value);
     }
 
     [Fact]
@@ -62,14 +63,14 @@ public class UnaryOperatorsTests
 
         var result = +value;
 
-        Assert.Equal(value, result);
+        result.Should().Be(value);
     }
 
     [Fact]
     public void Increment_FromZero_ReturnsOne()
     {
         var result = Increment(ChiFixed.Zero);
-        Assert.Equal(ChiFixed.One, result);
+        result.Should().Be(ChiFixed.One);
     }
 
     [Theory]
@@ -81,14 +82,14 @@ public class UnaryOperatorsTests
         var value = ChiFixed.Parse(input);
         var expectedValue = ChiFixed.Parse(expected);
         var result = Increment(value);
-        Assert.Equal(expectedValue, result);
+        result.Should().Be(expectedValue);
     }
 
     [Fact]
     public void Decrement_FromOne_ReturnsZero()
     {
         var result = Decrement(ChiFixed.One);
-        Assert.Equal(ChiFixed.Zero, result);
+        result.Should().Be(ChiFixed.Zero);
     }
 
     [Theory]
@@ -100,6 +101,6 @@ public class UnaryOperatorsTests
         var value = ChiFixed.Parse(input);
         var expectedValue = ChiFixed.Parse(expected);
         var result = Decrement(value);
-        Assert.Equal(expectedValue, result);
+        result.Should().Be(expectedValue);
     }
 }

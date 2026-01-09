@@ -1,3 +1,4 @@
+using AwesomeAssertions;
 using ChiVariate.Providers;
 using Xunit;
 
@@ -14,8 +15,8 @@ public class BasicIntegrationTests
 
         var sample = ChiRealProvider.Next<ChiRng, ChiFixed>(ref rng);
 
-        Assert.True(sample >= ChiFixed.Zero);
-        Assert.True(sample < ChiFixed.One);
+        (sample >= ChiFixed.Zero).Should().BeTrue();
+        (sample < ChiFixed.One).Should().BeTrue();
     }
 
     [Fact]
@@ -27,9 +28,9 @@ public class BasicIntegrationTests
         var sample2 = ChiRealProvider.Next<ChiRng, ChiFixed>(ref rng);
         var sample3 = ChiRealProvider.Next<ChiRng, ChiFixed>(ref rng);
 
-        Assert.NotEqual(sample1, sample2);
-        Assert.NotEqual(sample2, sample3);
-        Assert.NotEqual(sample1, sample3);
+        sample2.Should().NotBe(sample1);
+        sample3.Should().NotBe(sample2);
+        sample3.Should().NotBe(sample1);
     }
 
     [Fact]
@@ -43,7 +44,7 @@ public class BasicIntegrationTests
             var sample1 = ChiRealProvider.Next<ChiRng, ChiFixed>(ref rng1);
             var sample2 = ChiRealProvider.Next<ChiRng, ChiFixed>(ref rng2);
 
-            Assert.Equal(sample1, sample2);
+            sample2.Should().Be(sample1);
         }
     }
 
@@ -56,8 +57,8 @@ public class BasicIntegrationTests
         {
             var sample = ChiRealProvider.Next<ChiRng, ChiFixed>(ref rng, ChiIntervalOptions.ExcludeMin);
 
-            Assert.True(sample > ChiFixed.Zero);
-            Assert.True(sample < ChiFixed.One);
+            (sample > ChiFixed.Zero).Should().BeTrue();
+            (sample < ChiFixed.One).Should().BeTrue();
         }
     }
 
@@ -75,6 +76,6 @@ public class BasicIntegrationTests
                 foundSmallFractional = true;
         }
 
-        Assert.True(foundSmallFractional);
+        foundSmallFractional.Should().BeTrue();
     }
 }

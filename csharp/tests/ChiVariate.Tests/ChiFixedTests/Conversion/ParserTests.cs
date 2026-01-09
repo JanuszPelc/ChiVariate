@@ -1,4 +1,5 @@
 using System.Globalization;
+using AwesomeAssertions;
 using Xunit;
 
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
@@ -12,7 +13,7 @@ public class ParserTests
     {
         var result = ChiFixed.Parse("0");
 
-        Assert.Equal(ChiFixed.Zero, result);
+        result.Should().Be(ChiFixed.Zero);
     }
 
     [Fact]
@@ -20,7 +21,7 @@ public class ParserTests
     {
         var result = ChiFixed.Parse("1");
 
-        Assert.Equal(ChiFixed.One, result);
+        result.Should().Be(ChiFixed.One);
     }
 
     [Theory]
@@ -35,7 +36,7 @@ public class ParserTests
 
         var result = ChiFixed.Parse(input);
 
-        Assert.Equal(expected, result);
+        result.Should().Be(expected);
     }
 
     [Fact]
@@ -43,8 +44,8 @@ public class ParserTests
     {
         var result = ChiFixed.Parse("-10.5");
 
-        Assert.True(result < ChiFixed.Zero);
-        Assert.Equal((ChiFixed)(-10.5m), result);
+        (result < ChiFixed.Zero).Should().BeTrue();
+        result.Should().Be((ChiFixed)(-10.5m));
     }
 
     [Fact]
@@ -55,7 +56,7 @@ public class ParserTests
         var fromParse = ChiFixed.Parse(input);
         var fromDecimal = (ChiFixed)decimal.Parse(input, CultureInfo.InvariantCulture);
 
-        Assert.Equal(fromDecimal, fromParse);
+        fromParse.Should().Be(fromDecimal);
     }
 
     [Fact]
@@ -63,7 +64,8 @@ public class ParserTests
     {
         const string emptyString = "";
 
-        Assert.Throws<FormatException>(() => ChiFixed.Parse(emptyString));
+        var act = () => ChiFixed.Parse(emptyString);
+        act.Should().Throw<FormatException>();
     }
 
     [Fact]
@@ -71,7 +73,8 @@ public class ParserTests
     {
         const string onlyDecimalPoint = ".";
 
-        Assert.Throws<FormatException>(() => ChiFixed.Parse(onlyDecimalPoint));
+        var act = () => ChiFixed.Parse(onlyDecimalPoint);
+        act.Should().Throw<FormatException>();
     }
 
     [Fact]
@@ -79,7 +82,8 @@ public class ParserTests
     {
         const string multipleDecimals = "1.5.3";
 
-        Assert.Throws<FormatException>(() => ChiFixed.Parse(multipleDecimals));
+        var act = () => ChiFixed.Parse(multipleDecimals);
+        act.Should().Throw<FormatException>();
     }
 
     [Fact]
@@ -88,8 +92,10 @@ public class ParserTests
         const string onlyMinus = "-";
         const string onlyPlus = "+";
 
-        Assert.Throws<FormatException>(() => ChiFixed.Parse(onlyMinus));
-        Assert.Throws<FormatException>(() => ChiFixed.Parse(onlyPlus));
+        var actMinus = () => ChiFixed.Parse(onlyMinus);
+        actMinus.Should().Throw<FormatException>();
+        var actPlus = () => ChiFixed.Parse(onlyPlus);
+        actPlus.Should().Throw<FormatException>();
     }
 
     [Fact]
@@ -99,9 +105,12 @@ public class ParserTests
         const string withSpaces = "12 .5";
         const string withSymbols = "12@34";
 
-        Assert.Throws<FormatException>(() => ChiFixed.Parse(withLetters));
-        Assert.Throws<FormatException>(() => ChiFixed.Parse(withSpaces));
-        Assert.Throws<FormatException>(() => ChiFixed.Parse(withSymbols));
+        var actLetters = () => ChiFixed.Parse(withLetters);
+        actLetters.Should().Throw<FormatException>();
+        var actSpaces = () => ChiFixed.Parse(withSpaces);
+        actSpaces.Should().Throw<FormatException>();
+        var actSymbols = () => ChiFixed.Parse(withSymbols);
+        actSymbols.Should().Throw<FormatException>();
     }
 
     [Fact]
@@ -111,7 +120,7 @@ public class ParserTests
 
         var result = ChiFixed.Parse(noIntegerPart);
 
-        Assert.Equal(ChiFixed.Parse("0.5"), result);
+        result.Should().Be(ChiFixed.Parse("0.5"));
     }
 
     [Fact]
@@ -121,7 +130,7 @@ public class ParserTests
 
         var result = ChiFixed.Parse(noFractionalPart);
 
-        Assert.Equal(ChiFixed.Parse("42"), result);
+        result.Should().Be(ChiFixed.Parse("42"));
     }
 
     [Fact]
@@ -129,7 +138,7 @@ public class ParserTests
     {
         var result = ChiFixed.Parse("123.456", CultureInfo.InvariantCulture);
 
-        Assert.Equal((ChiFixed)123.456m, result);
+        result.Should().Be((ChiFixed)123.456m);
     }
 
     [Fact]
@@ -138,7 +147,7 @@ public class ParserTests
         var result = ChiFixed.Parse("  42.5", NumberStyles.AllowLeadingWhite | NumberStyles.AllowDecimalPoint,
             CultureInfo.InvariantCulture);
 
-        Assert.Equal((ChiFixed)42.5m, result);
+        result.Should().Be((ChiFixed)42.5m);
     }
 
     [Fact]
@@ -147,7 +156,7 @@ public class ParserTests
         var result = ChiFixed.Parse("42.5  ", NumberStyles.AllowTrailingWhite | NumberStyles.AllowDecimalPoint,
             CultureInfo.InvariantCulture);
 
-        Assert.Equal((ChiFixed)42.5m, result);
+        result.Should().Be((ChiFixed)42.5m);
     }
 
     [Fact]
@@ -156,7 +165,7 @@ public class ParserTests
         var result = ChiFixed.Parse("-123.456", NumberStyles.AllowLeadingSign | NumberStyles.AllowDecimalPoint,
             CultureInfo.InvariantCulture);
 
-        Assert.Equal((ChiFixed)(-123.456m), result);
+        result.Should().Be((ChiFixed)(-123.456m));
     }
 
     [Fact]
@@ -164,8 +173,8 @@ public class ParserTests
     {
         var success = ChiFixed.TryParse("42.5", CultureInfo.InvariantCulture, out var result);
 
-        Assert.True(success);
-        Assert.Equal((ChiFixed)42.5m, result);
+        success.Should().BeTrue();
+        result.Should().Be((ChiFixed)42.5m);
     }
 
     [Fact]
@@ -173,8 +182,8 @@ public class ParserTests
     {
         var success = ChiFixed.TryParse("not a number", CultureInfo.InvariantCulture, out var result);
 
-        Assert.False(success);
-        Assert.Equal(ChiFixed.Zero, result);
+        success.Should().BeFalse();
+        result.Should().Be(ChiFixed.Zero);
     }
 
     [Fact]
@@ -182,8 +191,8 @@ public class ParserTests
     {
         var success = ChiFixed.TryParse(null, CultureInfo.InvariantCulture, out var result);
 
-        Assert.False(success);
-        Assert.Equal(ChiFixed.Zero, result);
+        success.Should().BeFalse();
+        result.Should().Be(ChiFixed.Zero);
     }
 
     [Fact]
@@ -191,7 +200,7 @@ public class ParserTests
     {
         var success = ChiFixed.TryParse("", CultureInfo.InvariantCulture, out _);
 
-        Assert.False(success);
+        success.Should().BeFalse();
     }
 
     [Fact]
@@ -202,8 +211,8 @@ public class ParserTests
             NumberStyles.AllowLeadingSign | NumberStyles.AllowDecimalPoint,
             CultureInfo.InvariantCulture, out var result);
 
-        Assert.True(success);
-        Assert.Equal((ChiFixed)(-42.5m), result);
+        success.Should().BeTrue();
+        result.Should().Be((ChiFixed)(-42.5m));
     }
 
     [Fact]
@@ -212,8 +221,8 @@ public class ParserTests
         ReadOnlySpan<char> input = "123.456";
         var success = ChiFixed.TryParse(input, CultureInfo.InvariantCulture, out var result);
 
-        Assert.True(success);
-        Assert.Equal((ChiFixed)123.456m, result);
+        success.Should().BeTrue();
+        result.Should().Be((ChiFixed)123.456m);
     }
 
     [Fact]
@@ -222,21 +231,23 @@ public class ParserTests
         ReadOnlySpan<char> input = "invalid";
         var success = ChiFixed.TryParse(input, CultureInfo.InvariantCulture, out var result);
 
-        Assert.False(success);
-        Assert.Equal(ChiFixed.Zero, result);
+        success.Should().BeFalse();
+        result.Should().Be(ChiFixed.Zero);
     }
 
     [Fact]
     public void Parse_InvalidInput_ThrowsFormatException()
     {
-        Assert.Throws<FormatException>(() => ChiFixed.Parse("not a number", CultureInfo.InvariantCulture));
+        var act = () => ChiFixed.Parse("not a number", CultureInfo.InvariantCulture);
+        act.Should().Throw<FormatException>();
     }
 
     [Fact]
     public void Parse_InvalidInputWithStyles_ThrowsFormatException()
     {
-        Assert.Throws<FormatException>(() =>
-            ChiFixed.Parse("invalid", NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture));
+        var act = () =>
+            ChiFixed.Parse("invalid", NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture);
+        act.Should().Throw<FormatException>();
     }
 
     [Theory]
@@ -250,7 +261,7 @@ public class ParserTests
     {
         var result = ChiFixed.Parse(input, CultureInfo.InvariantCulture);
 
-        Assert.Equal((ChiFixed)expected, result);
+        result.Should().Be((ChiFixed)expected);
     }
 
     [Fact]
@@ -259,7 +270,7 @@ public class ParserTests
         var germanCulture = new CultureInfo("de-DE");
         var result = ChiFixed.Parse("123,456", germanCulture);
 
-        Assert.Equal((ChiFixed)123.456m, result);
+        result.Should().Be((ChiFixed)123.456m);
     }
 
     [Fact]
@@ -268,7 +279,7 @@ public class ParserTests
         var frenchCulture = new CultureInfo("fr-FR");
         var result = ChiFixed.Parse("42,5", frenchCulture);
 
-        Assert.Equal((ChiFixed)42.5m, result);
+        result.Should().Be((ChiFixed)42.5m);
     }
 
     [Fact]
@@ -277,7 +288,7 @@ public class ParserTests
         var usCulture = new CultureInfo("en-US");
         var result = ChiFixed.Parse("123.456", usCulture);
 
-        Assert.Equal((ChiFixed)123.456m, result);
+        result.Should().Be((ChiFixed)123.456m);
     }
 
     [Fact]
@@ -286,8 +297,8 @@ public class ParserTests
         var germanCulture = new CultureInfo("de-DE");
         var success = ChiFixed.TryParse("3,14", germanCulture, out var result);
 
-        Assert.True(success);
-        Assert.Equal((ChiFixed)3.14m, result);
+        success.Should().BeTrue();
+        result.Should().Be((ChiFixed)3.14m);
     }
 
     [Fact]
@@ -296,7 +307,7 @@ public class ParserTests
         var germanCulture = new CultureInfo("de-DE");
         var success = ChiFixed.TryParse("3.14", NumberStyles.AllowDecimalPoint, germanCulture, out _);
 
-        Assert.False(success);
+        success.Should().BeFalse();
     }
 
     [Fact]
@@ -305,7 +316,7 @@ public class ParserTests
         var germanCulture = new CultureInfo("de-DE");
         var result = ChiFixed.Parse("-123,456", germanCulture);
 
-        Assert.Equal((ChiFixed)(-123.456m), result);
+        result.Should().Be((ChiFixed)(-123.456m));
     }
 
     [Fact]
@@ -315,7 +326,7 @@ public class ParserTests
         var formatted = original.ToString();
         var parsed = ChiFixed.Parse(formatted, CultureInfo.InvariantCulture);
 
-        Assert.Equal(original, parsed);
+        parsed.Should().Be(original);
     }
 
     [Fact]
@@ -324,7 +335,7 @@ public class ParserTests
         ReadOnlySpan<char> input = "123.456";
         var result = ChiFixed.Parse(input, CultureInfo.InvariantCulture);
 
-        Assert.Equal((ChiFixed)123.456m, result);
+        result.Should().Be((ChiFixed)123.456m);
     }
 
     [Fact]
@@ -336,7 +347,7 @@ public class ParserTests
             NumberStyles.AllowLeadingSign | NumberStyles.AllowDecimalPoint,
             CultureInfo.InvariantCulture);
 
-        Assert.Equal((ChiFixed)(-42.5m), result);
+        result.Should().Be((ChiFixed)(-42.5m));
     }
 
     [Fact]
@@ -347,8 +358,8 @@ public class ParserTests
             NumberStyles.AllowLeadingWhite | NumberStyles.AllowTrailingWhite | NumberStyles.AllowDecimalPoint,
             CultureInfo.InvariantCulture, out var result);
 
-        Assert.True(success);
-        Assert.Equal((ChiFixed)3.14m, result);
+        success.Should().BeTrue();
+        result.Should().Be((ChiFixed)3.14m);
     }
 
     [Fact]
@@ -359,7 +370,7 @@ public class ParserTests
             NumberStyles.AllowDecimalPoint,
             CultureInfo.InvariantCulture, out var result);
 
-        Assert.False(success);
-        Assert.Equal(ChiFixed.Zero, result);
+        success.Should().BeFalse();
+        result.Should().Be(ChiFixed.Zero);
     }
 }

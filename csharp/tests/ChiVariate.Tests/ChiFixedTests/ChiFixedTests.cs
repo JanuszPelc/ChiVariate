@@ -1,3 +1,4 @@
+using AwesomeAssertions;
 using Xunit;
 
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
@@ -9,37 +10,37 @@ public class ChiFixedTests
     [Fact]
     public void Constants_Zero_HasValueZero()
     {
-        Assert.Equal(0L, ChiFixed.Zero.Raw);
+        ChiFixed.Zero.Raw.Should().Be(0L);
     }
 
     [Fact]
     public void Constants_One_HasCorrectValue()
     {
-        Assert.Equal(ChiFixed.ScaleFactor, ChiFixed.One.Raw);
+        ChiFixed.One.Raw.Should().Be(ChiFixed.ScaleFactor);
     }
 
     [Fact]
     public void Constants_NegativeOne_HasCorrectValue()
     {
-        Assert.Equal(-(ChiFixed)1m, ChiFixed.NegativeOne);
+        ChiFixed.NegativeOne.Should().Be(-(ChiFixed)1m);
     }
 
     [Fact]
     public void Constants_Epsilon_HasValueOne()
     {
-        Assert.Equal(1L, ChiFixed.Epsilon.Raw);
+        ChiFixed.Epsilon.Raw.Should().Be(1L);
     }
 
     [Fact]
     public void Constants_PositiveInfinity_IsMaxValue()
     {
-        Assert.Equal(ChiFixed.MaxValue.Raw, ChiFixed.PositiveInfinity.Raw);
+        ChiFixed.PositiveInfinity.Raw.Should().Be(ChiFixed.MaxValue.Raw);
     }
 
     [Fact]
     public void Constants_NegativeInfinity_IsMinValue()
     {
-        Assert.Equal(ChiFixed.MinValue.Raw, ChiFixed.NegativeInfinity.Raw);
+        ChiFixed.NegativeInfinity.Raw.Should().Be(ChiFixed.MinValue.Raw);
     }
 
     [Fact]
@@ -47,7 +48,7 @@ public class ChiFixedTests
     {
         var result = ChiFixed.Zero.ToString();
 
-        Assert.Equal("0", result);
+        result.Should().Be("0");
     }
 
     [Fact]
@@ -55,7 +56,7 @@ public class ChiFixedTests
     {
         var result = ChiFixed.One.ToString();
 
-        Assert.Equal("1", result);
+        result.Should().Be("1");
     }
 
     [Fact]
@@ -65,7 +66,7 @@ public class ChiFixedTests
 
         var result = value.ToString();
 
-        Assert.Equal("42", result);
+        result.Should().Be("42");
     }
 
     [Fact]
@@ -75,7 +76,7 @@ public class ChiFixedTests
 
         var result = value.ToString();
 
-        Assert.StartsWith("3.1415926535898", result);
+        result.Should().StartWith("3.1415926535898");
     }
 
     [Fact]
@@ -85,7 +86,7 @@ public class ChiFixedTests
 
         var result = value.ToString();
 
-        Assert.Equal("-42.5", result);
+        result.Should().Be("-42.5");
     }
 
     [Fact]
@@ -95,7 +96,7 @@ public class ChiFixedTests
 
         var result = value.ToString();
 
-        Assert.Equal("0.123046875", result);
+        result.Should().Be("0.123046875");
     }
 
     [Fact]
@@ -106,7 +107,7 @@ public class ChiFixedTests
         var str = original.ToString();
         var parsed = ChiFixed.Parse(str);
 
-        Assert.Equal(original, parsed);
+        parsed.Should().Be(original);
     }
 
     [Fact]
@@ -116,8 +117,8 @@ public class ChiFixedTests
         var b = new ChiFixed(12345);
         var c = new ChiFixed(54321);
 
-        Assert.True(a.Equals(b));
-        Assert.False(a.Equals(c));
+        a.Equals(b).Should().BeTrue();
+        a.Equals(c).Should().BeFalse();
     }
 
     [Fact]
@@ -126,7 +127,7 @@ public class ChiFixedTests
         var a = (ChiFixed)42m;
         var b = (ChiFixed)42m;
 
-        Assert.Equal(a.GetHashCode(), b.GetHashCode());
+        b.GetHashCode().Should().Be(a.GetHashCode());
     }
 
     [Fact]
@@ -135,7 +136,7 @@ public class ChiFixedTests
         var a = (ChiFixed)42m;
         var b = (ChiFixed)43m;
 
-        Assert.NotEqual(a.GetHashCode(), b.GetHashCode());
+        b.GetHashCode().Should().NotBe(a.GetHashCode());
     }
 
     [Fact]
@@ -144,7 +145,7 @@ public class ChiFixedTests
         const long rawValue = 12345678L;
         var value = new ChiFixed(rawValue);
 
-        Assert.Equal(rawValue, value.Raw);
+        value.Raw.Should().Be(rawValue);
     }
 
     [Fact]
@@ -153,7 +154,7 @@ public class ChiFixedTests
         const long rawValue = ChiFixed.ScaleFactor * 10;
         var value = new ChiFixed(rawValue);
 
-        Assert.Equal((ChiFixed)10m, value);
+        value.Should().Be((ChiFixed)10m);
     }
 
     [Fact]
@@ -162,8 +163,8 @@ public class ChiFixedTests
         var epsilon = ChiFixed.Epsilon;
         var zero = ChiFixed.Zero;
 
-        Assert.True(epsilon > zero);
-        Assert.NotEqual(epsilon, zero);
+        (epsilon > zero).Should().BeTrue();
+        epsilon.Should().NotBe(zero);
     }
 
     [Fact]
@@ -172,8 +173,8 @@ public class ChiFixedTests
         var value = (ChiFixed)1m;
         var incremented = new ChiFixed(value.Raw + 1);
 
-        Assert.True(incremented > value);
-        Assert.Equal(1L, incremented.Raw - value.Raw);
+        (incremented > value).Should().BeTrue();
+        (incremented.Raw - value.Raw).Should().Be(1L);
     }
 
     [Fact]
@@ -185,7 +186,7 @@ public class ChiFixedTests
         var output = parsed.ToString();
         var reparsed = ChiFixed.Parse(output);
 
-        Assert.Equal(parsed, reparsed);
+        reparsed.Should().Be(parsed);
     }
 
     [Fact]
@@ -193,7 +194,7 @@ public class ChiFixedTests
     {
         var result = ChiFixed.One + ChiFixed.One;
 
-        Assert.Equal((ChiFixed)2m, result);
+        result.Should().Be((ChiFixed)2m);
     }
 
     [Fact]
@@ -205,7 +206,7 @@ public class ChiFixedTests
 
         var result = (a - b) * c + ChiFixed.One;
 
-        Assert.Equal((ChiFixed)25m, result);
+        result.Should().Be((ChiFixed)25m);
     }
 
     [Fact]
@@ -215,9 +216,9 @@ public class ChiFixedTests
         var fromRational = (ChiFixed)(1, 2);
         var fromString = ChiFixed.Parse("0.5");
 
-        Assert.Equal(fromDecimal, fromRational);
-        Assert.Equal(fromRational, fromString);
-        Assert.Equal(fromString, fromDecimal);
+        fromRational.Should().Be(fromDecimal);
+        fromString.Should().Be(fromRational);
+        fromDecimal.Should().Be(fromString);
     }
 
     [Fact]
@@ -227,7 +228,7 @@ public class ChiFixedTests
 
         var result = oneSeventh.ToString();
 
-        Assert.Equal("0.1428571428571", result);
+        result.Should().Be("0.1428571428571");
     }
 
     [Fact]
@@ -255,9 +256,9 @@ public class ChiFixedTests
 
         var averageError = (double)totalError / count;
 
-        Assert.True(maxError <= maxAcceptableError,
+        (maxError <= maxAcceptableError).Should().BeTrue(
             $"Max error {maxError} exceeds acceptable {maxAcceptableError}. Average: {averageError:F2}");
-        Assert.True(averageError <= maxAcceptableError / 2.0,
+        (averageError <= maxAcceptableError / 2.0).Should().BeTrue(
             $"Average error {averageError:F2} exceeds acceptable {maxAcceptableError / 2.0:F2}");
     }
 
@@ -275,7 +276,7 @@ public class ChiFixedTests
             var s = x.ToString();
             var y = ChiFixed.Parse(s);
 
-            Assert.Equal(x.Raw, y.Raw);
+            y.Raw.Should().Be(x.Raw);
         }
     }
 }

@@ -1,4 +1,5 @@
 using System.Globalization;
+using AwesomeAssertions;
 using Xunit;
 
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
@@ -102,7 +103,8 @@ public class PowerTests
     {
         var baseVal = (ChiFixed)(-4.0m);
         var exponent = (ChiFixed)0.5m;
-        Assert.Throws<ArgumentException>(() => ChiFixed.Pow(baseVal, exponent));
+        var act = () => ChiFixed.Pow(baseVal, exponent);
+        act.Should().Throw<ArgumentException>();
     }
 
     [Theory]
@@ -160,7 +162,7 @@ public class PowerTests
         var actualDecimal = (decimal)actual;
         var difference = Math.Abs(expectedDecimal - actualDecimal);
         var tolerance = Math.Max(MinAbsoluteTolerance, Math.Abs(expectedDecimal) * RelativeTolerance);
-        Assert.True(difference < tolerance,
+        (difference < tolerance).Should().BeTrue(
             $"Expected: {expectedDecimal}, Got: {actualDecimal}, Diff: {difference}, RelErr: {(expectedDecimal != 0 ? difference / Math.Abs(expectedDecimal) : difference):P4}");
     }
 }

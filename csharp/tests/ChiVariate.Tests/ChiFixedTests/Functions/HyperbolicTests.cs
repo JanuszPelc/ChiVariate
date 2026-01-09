@@ -1,4 +1,5 @@
 using System.Globalization;
+using AwesomeAssertions;
 using Xunit;
 
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
@@ -16,7 +17,7 @@ public class HyperbolicTests
         var actualDecimal = (decimal)actual;
         var difference = Math.Abs(expectedDecimal - actualDecimal);
         var tolerance = Math.Max(MinAbsoluteTolerance, Math.Abs(expectedDecimal) * RelativeTolerance);
-        Assert.True(difference < tolerance,
+        (difference < tolerance).Should().BeTrue(
             $"Expected: {expectedDecimal}, Got: {actualDecimal}, Diff: {difference}, RelErr: {(expectedDecimal != 0 ? difference / Math.Abs(expectedDecimal) : difference):P4}");
     }
 
@@ -247,7 +248,8 @@ public class HyperbolicTests
     public void Acosh_ValueLessThanOne_ThrowsException(string inputStr)
     {
         var value = (ChiFixed)decimal.Parse(inputStr, CultureInfo.InvariantCulture);
-        Assert.Throws<ArgumentException>(() => ChiFixed.Acosh(value));
+        var act = () => ChiFixed.Acosh(value);
+        act.Should().Throw<ArgumentException>();
     }
 
     #endregion
@@ -295,7 +297,8 @@ public class HyperbolicTests
     public void Atanh_OutOfRange_ThrowsException(string inputStr)
     {
         var value = (ChiFixed)decimal.Parse(inputStr, CultureInfo.InvariantCulture);
-        Assert.Throws<ArgumentException>(() => ChiFixed.Atanh(value));
+        var act = () => ChiFixed.Atanh(value);
+        act.Should().Throw<ArgumentException>();
     }
 
     #endregion

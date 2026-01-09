@@ -1,4 +1,5 @@
 using System.Globalization;
+using AwesomeAssertions;
 using Xunit;
 
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
@@ -14,7 +15,7 @@ public class FormattingTests
 
         var result = value.ToString("G", CultureInfo.InvariantCulture);
 
-        Assert.Equal("42.5", result);
+        result.Should().Be("42.5");
     }
 
     [Fact]
@@ -24,7 +25,7 @@ public class FormattingTests
 
         var result = value.ToString("F", CultureInfo.InvariantCulture);
 
-        Assert.StartsWith("42.5", result);
+        result.Should().StartWith("42.5");
     }
 
     [Fact]
@@ -34,7 +35,7 @@ public class FormattingTests
 
         var result = value.ToString("F2", CultureInfo.InvariantCulture);
 
-        Assert.Equal("42.50", result);
+        result.Should().Be("42.50");
     }
 
     [Fact]
@@ -44,7 +45,7 @@ public class FormattingTests
 
         var result = value.ToString("F5", CultureInfo.InvariantCulture);
 
-        Assert.Equal("3.14000", result);
+        result.Should().Be("3.14000");
     }
 
     [Fact]
@@ -54,7 +55,7 @@ public class FormattingTests
 
         var result = value.ToString("F0", CultureInfo.InvariantCulture);
 
-        Assert.Equal("43", result);
+        result.Should().Be("43");
     }
 
     [Fact]
@@ -64,7 +65,7 @@ public class FormattingTests
 
         var result = value.ToString(null, CultureInfo.InvariantCulture);
 
-        Assert.Equal("42.5", result);
+        result.Should().Be("42.5");
     }
 
     [Fact]
@@ -74,7 +75,7 @@ public class FormattingTests
 
         var result = value.ToString("", CultureInfo.InvariantCulture);
 
-        Assert.Equal("42.5", result);
+        result.Should().Be("42.5");
     }
 
     [Fact]
@@ -85,7 +86,7 @@ public class FormattingTests
 
         var result = value.ToString("F3", germanCulture);
 
-        Assert.Equal("123,456", result);
+        result.Should().Be("123,456");
     }
 
     [Fact]
@@ -96,7 +97,7 @@ public class FormattingTests
 
         var result = value.ToString("F1", frenchCulture);
 
-        Assert.Equal("42,5", result);
+        result.Should().Be("42,5");
     }
 
     [Fact]
@@ -104,7 +105,8 @@ public class FormattingTests
     {
         var value = (ChiFixed)42m;
 
-        Assert.Throws<FormatException>(() => value.ToString("X", CultureInfo.InvariantCulture));
+        var act = () => value.ToString("X", CultureInfo.InvariantCulture);
+        act.Should().Throw<FormatException>();
     }
 
     [Fact]
@@ -115,8 +117,8 @@ public class FormattingTests
 
         var success = value.TryFormat(buffer, out var charsWritten, "G", CultureInfo.InvariantCulture);
 
-        Assert.True(success);
-        Assert.Equal("42.5", buffer[..charsWritten].ToString());
+        success.Should().BeTrue();
+        buffer[..charsWritten].ToString().Should().Be("42.5");
     }
 
     [Fact]
@@ -127,8 +129,8 @@ public class FormattingTests
 
         var success = value.TryFormat(buffer, out var charsWritten, "G", CultureInfo.InvariantCulture);
 
-        Assert.False(success);
-        Assert.Equal(0, charsWritten);
+        success.Should().BeFalse();
+        charsWritten.Should().Be(0);
     }
 
     [Fact]
@@ -139,8 +141,8 @@ public class FormattingTests
 
         var success = value.TryFormat(buffer, out var charsWritten, "F3", CultureInfo.InvariantCulture);
 
-        Assert.True(success);
-        Assert.Equal("3.140", buffer[..charsWritten].ToString());
+        success.Should().BeTrue();
+        buffer[..charsWritten].ToString().Should().Be("3.140");
     }
 
     [Fact]
@@ -152,8 +154,8 @@ public class FormattingTests
 
         var success = value.TryFormat(buffer, out var charsWritten, "F2", germanCulture);
 
-        Assert.True(success);
-        Assert.Equal("123,45", buffer[..charsWritten].ToString());
+        success.Should().BeTrue();
+        buffer[..charsWritten].ToString().Should().Be("123,45");
     }
 
     [Theory]
@@ -169,7 +171,7 @@ public class FormattingTests
 
         var result = fixedValue.ToString(format, CultureInfo.InvariantCulture);
 
-        Assert.Equal(expected, result);
+        result.Should().Be(expected);
     }
 
     [Fact]
@@ -180,7 +182,7 @@ public class FormattingTests
         var withFormat = value.ToString("G", CultureInfo.InvariantCulture);
         var withoutFormat = value.ToString();
 
-        Assert.Equal(withoutFormat, withFormat);
+        withFormat.Should().Be(withoutFormat);
     }
 
     [Fact]
@@ -196,8 +198,8 @@ public class FormattingTests
             var success = value.TryFormat(buffer, out var charsWritten, "G", CultureInfo.InvariantCulture);
             var result = buffer[..charsWritten].ToString();
 
-            Assert.True(success);
-            Assert.Equal("123.45", result);
+            success.Should().BeTrue();
+            result.Should().Be("123.45");
         }
         finally
         {

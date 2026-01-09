@@ -36,31 +36,30 @@ public class SmokeTests
     }
 
     [Fact]
-    public void Normal_WithInvalidStdDev_ThrowsArgumentOutOfRangeException()
+    public void Normal_WithZeroStdDev_ThrowsArgumentOutOfRangeException()
     {
-        // Arrange
         var rng = new ChiRng(Seed);
 
-        // Act & Assert
         try
         {
-            rng.Normal(0.0, 0.0);
-
-            Assert.Fail(
-                "Expected an ArgumentOutOfRangeException for zero standard deviation, but no exception was thrown.");
+            _ = rng.Normal(0.0, 0.0);
+            throw new Exception("Expected ArgumentOutOfRangeException was not thrown");
         }
         catch (ArgumentOutOfRangeException ex)
         {
             ex.ParamName.Should().Be("standardDeviation");
         }
+    }
 
-        // Act & Assert
+    [Fact]
+    public void Normal_WithNegativeStdDev_ThrowsArgumentOutOfRangeException()
+    {
+        var rng = new ChiRng(Seed);
+
         try
         {
-            rng.Normal(0.0, -1.0);
-
-            Assert.Fail(
-                "Expected an ArgumentOutOfRangeException for negative standard deviation, but no exception was thrown.");
+            _ = rng.Normal(0.0, -1.0);
+            throw new Exception("Expected ArgumentOutOfRangeException was not thrown");
         }
         catch (ArgumentOutOfRangeException ex)
         {

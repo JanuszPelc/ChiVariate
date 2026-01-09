@@ -1,3 +1,4 @@
+using AwesomeAssertions;
 using Xunit;
 
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
@@ -11,7 +12,7 @@ public class ArithmeticOpsTests
     {
         var result = ChiFixed.Zero + ChiFixed.Zero;
 
-        Assert.Equal(ChiFixed.Zero, result);
+        result.Should().Be(ChiFixed.Zero);
     }
 
     [Fact]
@@ -19,7 +20,7 @@ public class ArithmeticOpsTests
     {
         var result = ChiFixed.One + ChiFixed.One;
 
-        Assert.Equal((ChiFixed)2m, result);
+        result.Should().Be((ChiFixed)2m);
     }
 
     [Theory]
@@ -32,7 +33,7 @@ public class ArithmeticOpsTests
     {
         var result = (ChiFixed)a + (ChiFixed)b;
 
-        Assert.Equal((ChiFixed)expected, result);
+        result.Should().Be((ChiFixed)expected);
     }
 
     [Fact]
@@ -41,7 +42,7 @@ public class ArithmeticOpsTests
         var a = (ChiFixed)3.14m;
         var b = (ChiFixed)2.71m;
 
-        Assert.Equal(a + b, b + a);
+        (b + a).Should().Be(a + b);
     }
 
     [Fact]
@@ -49,7 +50,7 @@ public class ArithmeticOpsTests
     {
         var result = ChiFixed.Zero - ChiFixed.Zero;
 
-        Assert.Equal(ChiFixed.Zero, result);
+        result.Should().Be(ChiFixed.Zero);
     }
 
     [Fact]
@@ -57,7 +58,7 @@ public class ArithmeticOpsTests
     {
         var result = ChiFixed.One - ChiFixed.One;
 
-        Assert.Equal(ChiFixed.Zero, result);
+        result.Should().Be(ChiFixed.Zero);
     }
 
     [Theory]
@@ -69,7 +70,7 @@ public class ArithmeticOpsTests
     {
         var result = (ChiFixed)a - (ChiFixed)b;
 
-        Assert.Equal((ChiFixed)expected, result);
+        result.Should().Be((ChiFixed)expected);
     }
 
     [Fact]
@@ -79,7 +80,7 @@ public class ArithmeticOpsTests
 
         var result = ChiFixed.Zero * value;
 
-        Assert.Equal(ChiFixed.Zero, result);
+        result.Should().Be(ChiFixed.Zero);
     }
 
     [Fact]
@@ -89,7 +90,7 @@ public class ArithmeticOpsTests
 
         var result = ChiFixed.One * value;
 
-        Assert.Equal(value, result);
+        result.Should().Be(value);
     }
 
     [Theory]
@@ -103,7 +104,7 @@ public class ArithmeticOpsTests
     {
         var result = (ChiFixed)a * (ChiFixed)b;
 
-        Assert.Equal((ChiFixed)expected, result);
+        result.Should().Be((ChiFixed)expected);
     }
 
     [Fact]
@@ -112,7 +113,7 @@ public class ArithmeticOpsTests
         var a = (ChiFixed)3.5m;
         var b = (ChiFixed)2.5m;
 
-        Assert.Equal(a * b, b * a);
+        (b * a).Should().Be(a * b);
     }
 
     [Fact]
@@ -122,7 +123,7 @@ public class ArithmeticOpsTests
 
         var result = value / ChiFixed.One;
 
-        Assert.Equal(value, result);
+        result.Should().Be(value);
     }
 
     [Theory]
@@ -136,13 +137,15 @@ public class ArithmeticOpsTests
     {
         var result = (ChiFixed)a / (ChiFixed)b;
 
-        Assert.Equal((ChiFixed)expected, result);
+        result.Should().Be((ChiFixed)expected);
     }
 
     [Fact]
     public void Division_ByZero_ThrowsDivideByZeroException()
     {
-        Assert.Throws<DivideByZeroException>(() => ChiFixed.One / ChiFixed.Zero);
+        var act = () => ChiFixed.One / ChiFixed.Zero;
+
+        act.Should().Throw<DivideByZeroException>();
     }
 
     [Fact]
@@ -154,7 +157,7 @@ public class ArithmeticOpsTests
 
         var result = (a + b) * c - (ChiFixed)5m;
 
-        Assert.Equal((ChiFixed)25m, result);
+        result.Should().Be((ChiFixed)25m);
     }
 
     [Fact]
@@ -167,7 +170,7 @@ public class ArithmeticOpsTests
         var left = a * (b + c);
         var right = a * b + a * c;
 
-        Assert.Equal(left, right);
+        right.Should().Be(left);
     }
 
     [Fact]
@@ -177,13 +180,15 @@ public class ArithmeticOpsTests
 
         var result = ChiFixed.Zero % divisor;
 
-        Assert.Equal(ChiFixed.Zero, result);
+        result.Should().Be(ChiFixed.Zero);
     }
 
     [Fact]
     public void Modulo_ByZero_ThrowsDivideByZeroException()
     {
-        Assert.Throws<DivideByZeroException>(() => ChiFixed.One % ChiFixed.Zero);
+        var act = () => ChiFixed.One % ChiFixed.Zero;
+
+        act.Should().Throw<DivideByZeroException>();
     }
 
     [Theory]
@@ -195,7 +200,7 @@ public class ArithmeticOpsTests
     {
         var result = (ChiFixed)a % (ChiFixed)b;
 
-        Assert.Equal((ChiFixed)expected, result);
+        result.Should().Be((ChiFixed)expected);
     }
 
     [Theory]
@@ -207,7 +212,7 @@ public class ArithmeticOpsTests
     {
         var result = (ChiFixed)a % (ChiFixed)b;
 
-        Assert.Equal((ChiFixed)expected, result);
+        result.Should().Be((ChiFixed)expected);
     }
 
     [Theory]
@@ -219,7 +224,7 @@ public class ArithmeticOpsTests
     {
         var result = (ChiFixed)a % (ChiFixed)b;
 
-        Assert.Equal((ChiFixed)expected, result);
+        result.Should().Be((ChiFixed)expected);
     }
 
     [Fact]
@@ -230,8 +235,8 @@ public class ArithmeticOpsTests
 
         var result = a % b;
 
-        Assert.True(result >= ChiFixed.Zero);
-        Assert.True(result < b);
+        (result >= ChiFixed.Zero).Should().BeTrue();
+        (result < b).Should().BeTrue();
     }
 
     [Fact]
@@ -250,7 +255,7 @@ public class ArithmeticOpsTests
             var fixedResult = (ChiFixed)a % (ChiFixed)b;
             var expectedResult = a % b;
 
-            Assert.Equal((ChiFixed)expectedResult, fixedResult);
+            fixedResult.Should().Be((ChiFixed)expectedResult);
         }
     }
 
@@ -266,6 +271,6 @@ public class ArithmeticOpsTests
 
         var reconstructed = quotientTruncated * b + remainder;
 
-        Assert.Equal(a, reconstructed);
+        reconstructed.Should().Be(a);
     }
 }

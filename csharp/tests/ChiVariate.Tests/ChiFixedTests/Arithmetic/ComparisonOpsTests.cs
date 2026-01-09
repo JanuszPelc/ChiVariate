@@ -1,3 +1,4 @@
+using AwesomeAssertions;
 using Xunit;
 
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
@@ -12,8 +13,8 @@ public class ComparisonOpsTests
         var a = (ChiFixed)42m;
         var b = (ChiFixed)42m;
 
-        Assert.True(a == b);
-        Assert.False(a != b);
+        (a == b).Should().BeTrue();
+        (a != b).Should().BeFalse();
     }
 
     [Fact]
@@ -22,15 +23,15 @@ public class ComparisonOpsTests
         var a = (ChiFixed)42m;
         var b = (ChiFixed)43m;
 
-        Assert.False(a == b);
-        Assert.True(a != b);
+        (a == b).Should().BeFalse();
+        (a != b).Should().BeTrue();
     }
 
     [Fact]
     public void Equality_ZeroAndZero_ReturnsTrue()
     {
-        Assert.True(ChiFixed.Zero == (ChiFixed)0m);
-        Assert.False(ChiFixed.Zero != (ChiFixed)0m);
+        (ChiFixed.Zero == (ChiFixed)0m).Should().BeTrue();
+        (ChiFixed.Zero != (ChiFixed)0m).Should().BeFalse();
     }
 
     [Fact]
@@ -38,7 +39,7 @@ public class ComparisonOpsTests
     {
         var value = (ChiFixed)3.14m;
 
-        Assert.True(value == (ChiFixed)3.14m);
+        (value == (ChiFixed)3.14m).Should().BeTrue();
     }
 
     [Fact]
@@ -47,7 +48,7 @@ public class ComparisonOpsTests
         var a = (ChiFixed)2.5m;
         var b = (ChiFixed)2.5m;
 
-        Assert.Equal(a == b, b == a);
+        (b == a).Should().Be(a == b);
     }
 
     [Fact]
@@ -57,9 +58,9 @@ public class ComparisonOpsTests
         var b = (ChiFixed)5m;
         var c = (ChiFixed)5m;
 
-        Assert.True(a == b);
-        Assert.True(b == c);
-        Assert.True(a == c);
+        (a == b).Should().BeTrue();
+        (b == c).Should().BeTrue();
+        (a == c).Should().BeTrue();
     }
 
     [Fact]
@@ -68,8 +69,8 @@ public class ComparisonOpsTests
         var larger = (ChiFixed)10m;
         var smaller = (ChiFixed)5m;
 
-        Assert.True(larger > smaller);
-        Assert.False(smaller > larger);
+        (larger > smaller).Should().BeTrue();
+        (smaller > larger).Should().BeFalse();
     }
 
     [Fact]
@@ -78,7 +79,7 @@ public class ComparisonOpsTests
         var a = (ChiFixed)42m;
         var b = (ChiFixed)42m;
 
-        Assert.False(a > b);
+        (a > b).Should().BeFalse();
     }
 
     [Theory]
@@ -88,7 +89,7 @@ public class ComparisonOpsTests
     [InlineData(100, 99.99)]
     public void GreaterThan_VariousValues_ReturnsTrue(decimal larger, decimal smaller)
     {
-        Assert.True((ChiFixed)larger > (ChiFixed)smaller);
+        ((ChiFixed)larger > (ChiFixed)smaller).Should().BeTrue();
     }
 
     [Fact]
@@ -97,8 +98,8 @@ public class ComparisonOpsTests
         var smaller = (ChiFixed)5m;
         var larger = (ChiFixed)10m;
 
-        Assert.True(smaller < larger);
-        Assert.False(larger < smaller);
+        (smaller < larger).Should().BeTrue();
+        (larger < smaller).Should().BeFalse();
     }
 
     [Fact]
@@ -107,7 +108,7 @@ public class ComparisonOpsTests
         var a = (ChiFixed)42m;
         var b = (ChiFixed)42m;
 
-        Assert.False(a < b);
+        (a < b).Should().BeFalse();
     }
 
     [Theory]
@@ -117,7 +118,7 @@ public class ComparisonOpsTests
     [InlineData(99.99, 100)]
     public void LessThan_VariousValues_ReturnsTrue(decimal smaller, decimal larger)
     {
-        Assert.True((ChiFixed)smaller < (ChiFixed)larger);
+        ((ChiFixed)smaller < (ChiFixed)larger).Should().BeTrue();
     }
 
     [Fact]
@@ -126,7 +127,7 @@ public class ComparisonOpsTests
         var larger = (ChiFixed)10m;
         var smaller = (ChiFixed)5m;
 
-        Assert.True(larger >= smaller);
+        (larger >= smaller).Should().BeTrue();
     }
 
     [Fact]
@@ -135,7 +136,7 @@ public class ComparisonOpsTests
         var a = (ChiFixed)42m;
         var b = (ChiFixed)42m;
 
-        Assert.True(a >= b);
+        (a >= b).Should().BeTrue();
     }
 
     [Fact]
@@ -144,7 +145,7 @@ public class ComparisonOpsTests
         var smaller = (ChiFixed)5m;
         var larger = (ChiFixed)10m;
 
-        Assert.False(smaller >= larger);
+        (smaller >= larger).Should().BeFalse();
     }
 
     [Fact]
@@ -153,7 +154,7 @@ public class ComparisonOpsTests
         var smaller = (ChiFixed)5m;
         var larger = (ChiFixed)10m;
 
-        Assert.True(smaller <= larger);
+        (smaller <= larger).Should().BeTrue();
     }
 
     [Fact]
@@ -162,7 +163,7 @@ public class ComparisonOpsTests
         var a = (ChiFixed)42m;
         var b = (ChiFixed)42m;
 
-        Assert.True(a <= b);
+        (a <= b).Should().BeTrue();
     }
 
     [Fact]
@@ -171,7 +172,7 @@ public class ComparisonOpsTests
         var larger = (ChiFixed)10m;
         var smaller = (ChiFixed)5m;
 
-        Assert.False(larger <= smaller);
+        (larger <= smaller).Should().BeFalse();
     }
 
     [Fact]
@@ -180,7 +181,7 @@ public class ComparisonOpsTests
         var smaller = (ChiFixed)5m;
         var larger = (ChiFixed)10m;
 
-        Assert.True(smaller.CompareTo(larger) < 0);
+        (smaller.CompareTo(larger) < 0).Should().BeTrue();
     }
 
     [Fact]
@@ -189,7 +190,7 @@ public class ComparisonOpsTests
         var larger = (ChiFixed)10m;
         var smaller = (ChiFixed)5m;
 
-        Assert.True(larger.CompareTo(smaller) > 0);
+        (larger.CompareTo(smaller) > 0).Should().BeTrue();
     }
 
     [Fact]
@@ -198,7 +199,7 @@ public class ComparisonOpsTests
         var a = (ChiFixed)42m;
         var b = (ChiFixed)42m;
 
-        Assert.Equal(0, a.CompareTo(b));
+        a.CompareTo(b).Should().Be(0);
     }
 
     [Fact]
@@ -207,10 +208,10 @@ public class ComparisonOpsTests
         var negative = (ChiFixed)(-5m);
         var positive = (ChiFixed)5m;
 
-        Assert.True(negative < positive);
-        Assert.True(positive > negative);
-        Assert.False(negative >= positive);
-        Assert.False(positive <= negative);
+        (negative < positive).Should().BeTrue();
+        (positive > negative).Should().BeTrue();
+        (negative >= positive).Should().BeFalse();
+        (positive <= negative).Should().BeFalse();
     }
 
     [Fact]
@@ -219,8 +220,8 @@ public class ComparisonOpsTests
         var moreNegative = (ChiFixed)(-10m);
         var lessNegative = (ChiFixed)(-5m);
 
-        Assert.True(moreNegative < lessNegative);
-        Assert.True(lessNegative > moreNegative);
+        (moreNegative < lessNegative).Should().BeTrue();
+        (lessNegative > moreNegative).Should().BeTrue();
     }
 
     [Fact]
@@ -229,10 +230,10 @@ public class ComparisonOpsTests
         var negative = (ChiFixed)(-1m);
         var positive = (ChiFixed)1m;
 
-        Assert.True(negative < ChiFixed.Zero);
-        Assert.True(ChiFixed.Zero > negative);
-        Assert.True(positive > ChiFixed.Zero);
-        Assert.True(ChiFixed.Zero < positive);
+        (negative < ChiFixed.Zero).Should().BeTrue();
+        (ChiFixed.Zero > negative).Should().BeTrue();
+        (positive > ChiFixed.Zero).Should().BeTrue();
+        (ChiFixed.Zero < positive).Should().BeTrue();
     }
 
     [Fact]
@@ -242,9 +243,9 @@ public class ComparisonOpsTests
         var b = (ChiFixed)2m;
         var c = (ChiFixed)3m;
 
-        Assert.True(a < b);
-        Assert.True(b < c);
-        Assert.True(a < c);
+        (a < b).Should().BeTrue();
+        (b < c).Should().BeTrue();
+        (a < c).Should().BeTrue();
     }
 
     [Fact]
@@ -254,8 +255,8 @@ public class ComparisonOpsTests
         var b = (ChiFixed)5m;
         var c = (ChiFixed)10m;
 
-        Assert.True(a <= b && b <= a);
-        Assert.True(a == b);
-        Assert.False(a <= c && c <= a);
+        (a <= b && b <= a).Should().BeTrue();
+        (a == b).Should().BeTrue();
+        (a <= c && c <= a).Should().BeFalse();
     }
 }

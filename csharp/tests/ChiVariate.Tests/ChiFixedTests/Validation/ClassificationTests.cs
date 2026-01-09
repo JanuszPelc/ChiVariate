@@ -1,3 +1,4 @@
+using AwesomeAssertions;
 using Xunit;
 
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
@@ -9,20 +10,20 @@ public class ClassificationTests
     [Fact]
     public void IsCanonical_VariousValues_ReturnsTrue()
     {
-        Assert.True(ChiFixed.IsCanonical(ChiFixed.Zero));
-        Assert.True(ChiFixed.IsCanonical(ChiFixed.One));
-        Assert.True(ChiFixed.IsCanonical(ChiFixed.NegativeOne));
-        Assert.True(ChiFixed.IsCanonical(ChiFixed.NaN));
-        Assert.True(ChiFixed.IsCanonical(ChiFixed.PositiveInfinity));
+        ChiFixed.IsCanonical(ChiFixed.Zero).Should().BeTrue();
+        ChiFixed.IsCanonical(ChiFixed.One).Should().BeTrue();
+        ChiFixed.IsCanonical(ChiFixed.NegativeOne).Should().BeTrue();
+        ChiFixed.IsCanonical(ChiFixed.NaN).Should().BeTrue();
+        ChiFixed.IsCanonical(ChiFixed.PositiveInfinity).Should().BeTrue();
     }
 
     [Fact]
     public void IsComplexNumber_VariousValues_ReturnsFalse()
     {
-        Assert.False(ChiFixed.IsComplexNumber(ChiFixed.Zero));
-        Assert.False(ChiFixed.IsComplexNumber(ChiFixed.One));
-        Assert.False(ChiFixed.IsComplexNumber(ChiFixed.NaN));
-        Assert.False(ChiFixed.IsComplexNumber(ChiFixed.PositiveInfinity));
+        ChiFixed.IsComplexNumber(ChiFixed.Zero).Should().BeFalse();
+        ChiFixed.IsComplexNumber(ChiFixed.One).Should().BeFalse();
+        ChiFixed.IsComplexNumber(ChiFixed.NaN).Should().BeFalse();
+        ChiFixed.IsComplexNumber(ChiFixed.PositiveInfinity).Should().BeFalse();
     }
 
     [Theory]
@@ -32,7 +33,7 @@ public class ClassificationTests
     [InlineData("100")]
     public void IsEvenInteger_EvenIntegers_ReturnsTrue(string value)
     {
-        Assert.True(ChiFixed.IsEvenInteger(ChiFixed.Parse(value)));
+        ChiFixed.IsEvenInteger(ChiFixed.Parse(value)).Should().BeTrue();
     }
 
     [Theory]
@@ -42,33 +43,33 @@ public class ClassificationTests
     [InlineData("2.5")]
     public void IsEvenInteger_OddOrFractions_ReturnsFalse(string value)
     {
-        Assert.False(ChiFixed.IsEvenInteger(ChiFixed.Parse(value)));
+        ChiFixed.IsEvenInteger(ChiFixed.Parse(value)).Should().BeFalse();
     }
 
     [Fact]
     public void IsFinite_FiniteValues_ReturnsTrue()
     {
-        Assert.True(ChiFixed.IsFinite(ChiFixed.Zero));
-        Assert.True(ChiFixed.IsFinite(ChiFixed.One));
-        Assert.True(ChiFixed.IsFinite((ChiFixed)123.456m));
-        Assert.True(ChiFixed.IsFinite(ChiFixed.MaxValue));
-        Assert.True(ChiFixed.IsFinite(ChiFixed.MinValue));
+        ChiFixed.IsFinite(ChiFixed.Zero).Should().BeTrue();
+        ChiFixed.IsFinite(ChiFixed.One).Should().BeTrue();
+        ChiFixed.IsFinite((ChiFixed)123.456m).Should().BeTrue();
+        ChiFixed.IsFinite(ChiFixed.MaxValue).Should().BeTrue();
+        ChiFixed.IsFinite(ChiFixed.MinValue).Should().BeTrue();
     }
 
     [Fact]
     public void IsImaginaryNumber_VariousValues_ReturnsFalse()
     {
-        Assert.False(ChiFixed.IsImaginaryNumber(ChiFixed.Zero));
-        Assert.False(ChiFixed.IsImaginaryNumber(ChiFixed.One));
-        Assert.False(ChiFixed.IsImaginaryNumber(ChiFixed.NaN));
+        ChiFixed.IsImaginaryNumber(ChiFixed.Zero).Should().BeFalse();
+        ChiFixed.IsImaginaryNumber(ChiFixed.One).Should().BeFalse();
+        ChiFixed.IsImaginaryNumber(ChiFixed.NaN).Should().BeFalse();
     }
 
     [Fact]
     public void IsInfinity_NonInfinityValues_ReturnsFalse()
     {
-        Assert.False(ChiFixed.IsInfinity(ChiFixed.Zero));
-        Assert.False(ChiFixed.IsInfinity(ChiFixed.One));
-        Assert.False(ChiFixed.IsInfinity(ChiFixed.NaN));
+        ChiFixed.IsInfinity(ChiFixed.Zero).Should().BeFalse();
+        ChiFixed.IsInfinity(ChiFixed.One).Should().BeFalse();
+        ChiFixed.IsInfinity(ChiFixed.NaN).Should().BeFalse();
     }
 
     [Theory]
@@ -78,7 +79,7 @@ public class ClassificationTests
     [InlineData("100")]
     public void IsInteger_IntegerValues_ReturnsTrue(string value)
     {
-        Assert.True(ChiFixed.IsInteger(ChiFixed.Parse(value)));
+        ChiFixed.IsInteger(ChiFixed.Parse(value)).Should().BeTrue();
     }
 
     [Theory]
@@ -87,50 +88,50 @@ public class ClassificationTests
     [InlineData("0.000000000001")]
     public void IsInteger_FractionalValues_ReturnsFalse(string value)
     {
-        Assert.False(ChiFixed.IsInteger(ChiFixed.Parse(value)));
+        ChiFixed.IsInteger(ChiFixed.Parse(value)).Should().BeFalse();
     }
 
     [Fact]
     public void IsNaN_NonNaN_ReturnsFalse()
     {
-        Assert.False(ChiFixed.IsNaN(ChiFixed.Zero));
-        Assert.False(ChiFixed.IsNaN(ChiFixed.PositiveInfinity));
+        ChiFixed.IsNaN(ChiFixed.Zero).Should().BeFalse();
+        ChiFixed.IsNaN(ChiFixed.PositiveInfinity).Should().BeFalse();
     }
 
     [Fact]
     public void IsNegative_NegativeValues_ReturnsTrue()
     {
-        Assert.True(ChiFixed.IsNegative(ChiFixed.NegativeOne));
-        Assert.True(ChiFixed.IsNegative((ChiFixed)(-0.5m)));
-        Assert.True(ChiFixed.IsNegative(ChiFixed.NegativeInfinity));
+        ChiFixed.IsNegative(ChiFixed.NegativeOne).Should().BeTrue();
+        ChiFixed.IsNegative((ChiFixed)(-0.5m)).Should().BeTrue();
+        ChiFixed.IsNegative(ChiFixed.NegativeInfinity).Should().BeTrue();
     }
 
     [Fact]
     public void IsNegative_NonNegativeValues_ReturnsFalse()
     {
-        Assert.False(ChiFixed.IsNegative(ChiFixed.Zero));
-        Assert.False(ChiFixed.IsNegative(ChiFixed.One));
-        Assert.False(ChiFixed.IsNegative(ChiFixed.PositiveInfinity));
-        Assert.False(ChiFixed.IsNegative(ChiFixed.NaN));
+        ChiFixed.IsNegative(ChiFixed.Zero).Should().BeFalse();
+        ChiFixed.IsNegative(ChiFixed.One).Should().BeFalse();
+        ChiFixed.IsNegative(ChiFixed.PositiveInfinity).Should().BeFalse();
+        ChiFixed.IsNegative(ChiFixed.NaN).Should().BeFalse();
     }
 
     [Fact]
     public void IsNegativeInfinity_OtherValues_ReturnsFalse()
     {
-        Assert.False(ChiFixed.IsNegativeInfinity(ChiFixed.PositiveInfinity));
-        Assert.False(ChiFixed.IsNegativeInfinity(ChiFixed.Zero));
-        Assert.False(ChiFixed.IsNegativeInfinity(ChiFixed.NaN));
+        ChiFixed.IsNegativeInfinity(ChiFixed.PositiveInfinity).Should().BeFalse();
+        ChiFixed.IsNegativeInfinity(ChiFixed.Zero).Should().BeFalse();
+        ChiFixed.IsNegativeInfinity(ChiFixed.NaN).Should().BeFalse();
     }
 
     [Fact]
     public void IsNormal_NormalValues_ReturnsTrue()
     {
-        Assert.True(ChiFixed.IsNormal(ChiFixed.One));
-        Assert.True(ChiFixed.IsNormal(ChiFixed.NegativeOne));
-        Assert.True(ChiFixed.IsNormal((ChiFixed)123.456m));
-        Assert.True(ChiFixed.IsNormal(ChiFixed.MaxValue));
-        Assert.True(ChiFixed.IsNormal(ChiFixed.MinValue));
-        Assert.True(ChiFixed.IsNormal(ChiFixed.Epsilon));
+        ChiFixed.IsNormal(ChiFixed.One).Should().BeTrue();
+        ChiFixed.IsNormal(ChiFixed.NegativeOne).Should().BeTrue();
+        ChiFixed.IsNormal((ChiFixed)123.456m).Should().BeTrue();
+        ChiFixed.IsNormal(ChiFixed.MaxValue).Should().BeTrue();
+        ChiFixed.IsNormal(ChiFixed.MinValue).Should().BeTrue();
+        ChiFixed.IsNormal(ChiFixed.Epsilon).Should().BeTrue();
     }
 
     [Theory]
@@ -139,7 +140,7 @@ public class ClassificationTests
     [InlineData("99")]
     public void IsOddInteger_OddIntegers_ReturnsTrue(string value)
     {
-        Assert.True(ChiFixed.IsOddInteger(ChiFixed.Parse(value)));
+        ChiFixed.IsOddInteger(ChiFixed.Parse(value)).Should().BeTrue();
     }
 
     [Theory]
@@ -149,75 +150,75 @@ public class ClassificationTests
     [InlineData("1.5")]
     public void IsOddInteger_EvenOrFractions_ReturnsFalse(string value)
     {
-        Assert.False(ChiFixed.IsOddInteger(ChiFixed.Parse(value)));
+        ChiFixed.IsOddInteger(ChiFixed.Parse(value)).Should().BeFalse();
     }
 
     [Fact]
     public void IsPositive_PositiveValues_ReturnsTrue()
     {
-        Assert.True(ChiFixed.IsPositive(ChiFixed.One));
-        Assert.True(ChiFixed.IsPositive((ChiFixed)0.5m));
-        Assert.True(ChiFixed.IsPositive(ChiFixed.PositiveInfinity));
+        ChiFixed.IsPositive(ChiFixed.One).Should().BeTrue();
+        ChiFixed.IsPositive((ChiFixed)0.5m).Should().BeTrue();
+        ChiFixed.IsPositive(ChiFixed.PositiveInfinity).Should().BeTrue();
     }
 
     [Fact]
     public void IsPositive_NonPositiveValues_ReturnsFalse()
     {
-        Assert.False(ChiFixed.IsPositive(ChiFixed.Zero));
-        Assert.False(ChiFixed.IsPositive(ChiFixed.NegativeOne));
-        Assert.False(ChiFixed.IsPositive(ChiFixed.NegativeInfinity));
-        Assert.False(ChiFixed.IsPositive(ChiFixed.NaN));
+        ChiFixed.IsPositive(ChiFixed.Zero).Should().BeFalse();
+        ChiFixed.IsPositive(ChiFixed.NegativeOne).Should().BeFalse();
+        ChiFixed.IsPositive(ChiFixed.NegativeInfinity).Should().BeFalse();
+        ChiFixed.IsPositive(ChiFixed.NaN).Should().BeFalse();
     }
 
     [Fact]
     public void IsPositiveInfinity_OtherValues_ReturnsFalse()
     {
-        Assert.False(ChiFixed.IsPositiveInfinity(ChiFixed.NegativeInfinity));
-        Assert.False(ChiFixed.IsPositiveInfinity(ChiFixed.Zero));
-        Assert.False(ChiFixed.IsPositiveInfinity(ChiFixed.NaN));
+        ChiFixed.IsPositiveInfinity(ChiFixed.NegativeInfinity).Should().BeFalse();
+        ChiFixed.IsPositiveInfinity(ChiFixed.Zero).Should().BeFalse();
+        ChiFixed.IsPositiveInfinity(ChiFixed.NaN).Should().BeFalse();
     }
 
     [Fact]
     public void IsRealNumber_RealNumbers_ReturnsTrue()
     {
-        Assert.True(ChiFixed.IsRealNumber(ChiFixed.Zero));
-        Assert.True(ChiFixed.IsRealNumber(ChiFixed.One));
-        Assert.True(ChiFixed.IsRealNumber((ChiFixed)123.456m));
-        Assert.True(ChiFixed.IsRealNumber(ChiFixed.PositiveInfinity));
-        Assert.True(ChiFixed.IsRealNumber(ChiFixed.NegativeInfinity));
+        ChiFixed.IsRealNumber(ChiFixed.Zero).Should().BeTrue();
+        ChiFixed.IsRealNumber(ChiFixed.One).Should().BeTrue();
+        ChiFixed.IsRealNumber((ChiFixed)123.456m).Should().BeTrue();
+        ChiFixed.IsRealNumber(ChiFixed.PositiveInfinity).Should().BeTrue();
+        ChiFixed.IsRealNumber(ChiFixed.NegativeInfinity).Should().BeTrue();
     }
 
     [Fact]
     public void IsSubnormal_VariousValues_ReturnsFalse()
     {
-        Assert.False(ChiFixed.IsSubnormal(ChiFixed.Zero));
-        Assert.False(ChiFixed.IsSubnormal(ChiFixed.One));
-        Assert.False(ChiFixed.IsSubnormal(ChiFixed.Epsilon));
-        Assert.False(ChiFixed.IsSubnormal(ChiFixed.NaN));
-        Assert.False(ChiFixed.IsSubnormal(ChiFixed.PositiveInfinity));
+        ChiFixed.IsSubnormal(ChiFixed.Zero).Should().BeFalse();
+        ChiFixed.IsSubnormal(ChiFixed.One).Should().BeFalse();
+        ChiFixed.IsSubnormal(ChiFixed.Epsilon).Should().BeFalse();
+        ChiFixed.IsSubnormal(ChiFixed.NaN).Should().BeFalse();
+        ChiFixed.IsSubnormal(ChiFixed.PositiveInfinity).Should().BeFalse();
     }
 
     [Fact]
     public void IsZero_Zero_ReturnsTrue()
     {
-        Assert.True(ChiFixed.IsZero(ChiFixed.Zero));
+        ChiFixed.IsZero(ChiFixed.Zero).Should().BeTrue();
     }
 
     [Fact]
     public void NegativeZero_Compared_EqualsZero()
     {
-        Assert.Equal(ChiFixed.Zero, ChiFixed.NegativeZero);
+        ChiFixed.NegativeZero.Should().Be(ChiFixed.Zero);
     }
 
     [Fact]
     public void NegativeZero_IsZero_ReturnsTrue()
     {
-        Assert.True(ChiFixed.IsZero(ChiFixed.NegativeZero));
+        ChiFixed.IsZero(ChiFixed.NegativeZero).Should().BeTrue();
     }
 
     [Fact]
     public void NegativeZero_IsNegative_ReturnsFalse()
     {
-        Assert.False(ChiFixed.IsNegative(ChiFixed.NegativeZero));
+        ChiFixed.IsNegative(ChiFixed.NegativeZero).Should().BeFalse();
     }
 }
