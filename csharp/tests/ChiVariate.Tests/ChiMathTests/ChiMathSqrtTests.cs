@@ -71,8 +71,8 @@ public class ChiMathSqrtTests
     public void Sqrt_Double_NegativeNumber_ShouldThrowOverflowException()
     {
         // Act & Assert
-        var act = () => ChiMath.Sqrt(-1.0);
-        act.Should().Throw<OverflowException>()
+        var sqrtOperation = () => ChiMath.Sqrt(-1.0);
+        sqrtOperation.Should().Throw<OverflowException>()
             .WithMessage("Cannot calculate square root of a negative number.");
     }
 

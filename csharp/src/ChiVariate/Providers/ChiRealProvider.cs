@@ -48,6 +48,12 @@ public static class ChiRealProvider
             return Unsafe.As<decimal, T>(ref sample);
         }
 
+        if (typeof(T) == typeof(ChiFixed))
+        {
+            var sample = NextChiFixed(ref rng, options);
+            return Unsafe.As<ChiFixed, T>(ref sample);
+        }
+
         // Fallback for other IFloatingPoint types (e.g., custom number types)
         return Unsafe.SizeOf<T>() <= 4
             ? T.CreateChecked(NextSingle(ref rng, options))
@@ -180,5 +186,38 @@ public static class ChiRealProvider
 
             return randomDecimal / maxDecimalWithScale28;
         }
+    }
+
+    /// <summary>
+    ///     Generates a random <see cref="ChiFixed" /> using the upper 42 bits of a 64-bit random integer.
+    /// </summary>
+    /// <remarks>
+    ///     ChiFixed uses Q21.42 format (42 fractional bits). This method directly injects random bits
+    ///     into the fractional part, providing full precision without any division or multiplication.
+    /// </remarks>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private static ChiFixed NextChiFixed<TRng>(ref TRng rng, ChiIntervalOptions options = ChiIntervalOptions.None)
+        where TRng : struct, IChiRngSource<TRng>
+    {
+        const int fractionalBits = ChiFixed.FractionalBits;
+        const int shiftAmount = 64 - fractionalBits;
+        const long maxSample = 1L << fractionalBits;
+
+        var raw = (long)(TRng.NextUInt64(ref rng) >> shiftAmount);
+
+        if (options.HasFlag(ChiIntervalOptions.ExcludeMin))
+            while (raw == 0)
+                raw = (long)(TRng.NextUInt64(ref rng) >> shiftAmount);
+
+        if (options.HasFlag(ChiIntervalOptions.IncludeMax))
+            // For IncludeMax, we need to scale so maxSample maps to exactly 1.0
+            // Use rejection sampling: if we get maxSample, that's exactly 1.0
+            if (raw == maxSample - 1)
+                // Small chance to bump to exactly 1.0
+                if ((TRng.NextUInt32(ref rng) & 1) == 0)
+                    return ChiFixed.One;
+
+        // raw ∈ [0, 2^42) which is [0, 1) in ChiFixed representation
+        return new ChiFixed(raw);
     }
 }
