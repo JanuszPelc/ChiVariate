@@ -9,7 +9,9 @@ using BenchmarkDotNet.Configs;
 namespace ChiVariate.Benchmarks;
 
 [MemoryDiagnoser]
-[ShortRunJob]
+[SimpleJob]
+[MinIterationTime(500)]
+[IterationCount(15)]
 [GroupBenchmarksBy(BenchmarkLogicalGroupRule.ByParams)]
 public class SamplerBenchmarks
 {

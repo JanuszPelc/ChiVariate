@@ -8,6 +8,9 @@ using BenchmarkDotNet.Attributes;
 namespace ChiVariate.Benchmarks;
 
 [MemoryDiagnoser]
+[SimpleJob]
+[MinIterationTime(500)]
+[IterationCount(15)]
 public class HasherBenchmarks
 {
     private const int IterationCount = 1_000;
