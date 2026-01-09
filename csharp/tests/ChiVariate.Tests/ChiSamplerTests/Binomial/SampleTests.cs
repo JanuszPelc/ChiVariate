@@ -16,20 +16,17 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     [InlineData(100, 0.2)]
     public void Sample_ProducesDistributionWithCorrectStatistics(int numTrials, double probability)
     {
-        // Arrange
         var rng = new ChiRng(ChiSeed.Scramble("Binomial", numTrials * 100 + probability));
         var expectedMean = numTrials * probability;
         var expectedStdDev = Math.Sqrt(numTrials * probability * (1 - probability));
         var histogram = new Histogram(0, numTrials + 1, numTrials + 1, true);
 
-        // Act
         for (var i = 0; i < SampleCount; i++)
         {
             var sample = (double)rng.Binomial(numTrials, probability).Sample();
             histogram.AddSample(sample);
         }
 
-        // Assert
         histogram.DebugPrint(testOutputHelper, $"Binomial(n={numTrials}, p={probability})");
         histogram.AssertIsBinomial(expectedMean, expectedStdDev, 0.05);
     }
@@ -48,13 +45,10 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     [InlineData(10, 1.1)]
     public void Binomial_WithInvalidParameters_ThrowsArgumentOutOfRangeException(int numTrials, double probability)
     {
-        // Arrange
         var rng = new ChiRng(0);
 
-        // Act
         Action act = () => rng.Binomial(numTrials, probability).Sample();
 
-        // Assert
         act.Should().Throw<ArgumentOutOfRangeException>();
     }
 }

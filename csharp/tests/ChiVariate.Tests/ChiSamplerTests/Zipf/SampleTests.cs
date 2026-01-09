@@ -18,18 +18,15 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     [InlineData(50, 0.8)] // Less skewed
     public void Sample_ProducesDistributionWithCorrectShape(int numElements, double exponent)
     {
-        // Arrange
         var rng = new ChiRng(ChiSeed.Scramble("Zipf", new ChiHash().Add(numElements).Add(exponent).Hash));
         var histogram = new Histogram(1, numElements + 1, numElements, true);
 
-        // Act
         for (var i = 0; i < SampleCount; i++)
         {
             var sample = rng.Zipf(numElements, exponent).Sample();
             histogram.AddSample(sample);
         }
 
-        // Assert
         histogram.DebugPrint(testOutputHelper, $"Zipf(N={numElements}, s={exponent})");
         histogram.AssertIsZipf(numElements);
     }
@@ -41,13 +38,10 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     [InlineData(10, -1.0)]
     public void Zipf_WithInvalidParameters_ThrowsArgumentOutOfRangeException(int numElements, double exponent)
     {
-        // Arrange
         var rng = new ChiRng(0);
 
-        // Act
         Action act = () => rng.Zipf(numElements, exponent).Sample();
 
-        // Assert
         act.Should().Throw<ArgumentOutOfRangeException>();
     }
 }

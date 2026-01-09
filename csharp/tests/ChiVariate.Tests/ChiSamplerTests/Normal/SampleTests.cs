@@ -14,19 +14,16 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     [Fact]
     public void Sample_UsingPreconstructedSampler_ProducesNormalDistribution()
     {
-        // Arrange
         var rng = new ChiRng(42);
         var sampler = rng.Normal(0.0, 1.0);
         var histogram = new Histogram(-4.0, 4.0, 100);
 
-        // Act
         for (var i = 0; i < SampleCount; i++)
         {
             var sample = sampler.Sample();
             histogram.AddSample(sample);
         }
 
-        // Assert
         histogram.DebugPrint(testOutputHelper);
         histogram.AssertIsNormal(0.0, 1.0, 0.005);
     }
@@ -34,18 +31,15 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     [Fact]
     public void Sample_UsingFluentInterface_ProducesNormalDistribution()
     {
-        // Arrange
         var rng = new ChiRng(42);
         var histogram = new Histogram(-4.0, 4.0, 100);
 
-        // Act
         for (var i = 0; i < SampleCount; i++)
         {
             var sample = rng.Normal(0.0, 1.0).Sample();
             histogram.AddSample(sample);
         }
 
-        // Assert
         histogram.DebugPrint(testOutputHelper);
         histogram.AssertIsNormal(0.0, 1.0, 0.02);
     }
@@ -53,20 +47,17 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     [Fact]
     public void Sample_ShiftedDistribution_IsCorrectlyCentered()
     {
-        // Arrange
         const double expectedMean = 50.0;
         const double expectedStdDev = 1.0;
         var rng = new ChiRng("ShiftedNormal");
         var histogram = new Histogram(45.0, 55.0, 100);
 
-        // Act
         for (var i = 0; i < SampleCount; i++)
         {
             var sample = rng.Normal(expectedMean, expectedStdDev).Sample();
             histogram.AddSample(sample);
         }
 
-        // Assert
         histogram.DebugPrint(testOutputHelper);
         histogram.AssertIsNormal(expectedMean, expectedStdDev, 0.01);
     }
@@ -74,20 +65,17 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     [Fact]
     public void Sample_WiderDistribution_HasCorrectSpread()
     {
-        // Arrange
         const double expectedMean = 0.0;
         const double expectedStdDev = 15.0;
         var rng = new ChiRng("WiderNormal");
         var histogram = new Histogram(-60.0, 60.0, 100);
 
-        // Act
         for (var i = 0; i < SampleCount; i++)
         {
             var sample = rng.Normal(expectedMean, expectedStdDev).Sample();
             histogram.AddSample(sample);
         }
 
-        // Assert
         histogram.DebugPrint(testOutputHelper);
         histogram.AssertIsNormal(expectedMean, expectedStdDev, 0.03);
     }
@@ -97,7 +85,6 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     [InlineData("0.0", "15.0")] // Wider
     public void Sample_Decimal_ProducesNormalDistribution(string meanStr, string stdDevStr)
     {
-        // Arrange
         var mean = decimal.Parse(meanStr, CultureInfo.InvariantCulture);
         var stdDev = decimal.Parse(stdDevStr, CultureInfo.InvariantCulture);
 
@@ -108,10 +95,8 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
         var histogram = new Histogram(minBound, maxBound, 100);
         var sampler = new DecimalNormalSampler(mean, stdDev);
 
-        // Act
         histogram.Generate<decimal, ChiRng, DecimalNormalSampler>(ref rng, 200_000, sampler);
 
-        // Assert
         histogram.DebugPrint(testOutputHelper, $"Normal(μ={mean}, σ={stdDev})");
         histogram.AssertIsNormal((double)mean, (double)stdDev, 0.02);
     }

@@ -17,7 +17,6 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     [InlineData(20, 30)]
     public void Sample_ProducesDistributionWithCorrectStatistics(int d1, int d2)
     {
-        // Arrange
         var rng = new ChiRng(ChiSeed.Scramble("F-dist", new ChiHash().Add(d1).Add(d2).Hash));
         var sampler = rng.F(d1, (double)d2);
 
@@ -28,10 +27,8 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
         var maxBound = expectedMean + 8 * expectedStdDev;
         var histogram = new Histogram(0, maxBound, 200);
 
-        // Act
         foreach (var sample in sampler.Sample(SampleCount)) histogram.AddSample(sample);
 
-        // Assert
         histogram.DebugPrint(testOutputHelper, $"F-Distribution (d1={d1}, d2={d2})");
 
         var actualMean = histogram.CalculateMean();
@@ -46,7 +43,6 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     [Fact]
     public void Sample_WithSmallDof_ProducesCorrectMean()
     {
-        // Arrange
         const int d1 = 5, d2 = 5;
         var rng = new ChiRng(ChiSeed.Scramble("F-dist", new ChiHash().Add(d1).Add(d2).Hash));
         var sampler = rng.F(d1, (double)d2);
@@ -54,11 +50,9 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
         var expectedMean = (double)d2 / (d2 - 2);
         var histogram = new Histogram(0, 25, 100);
 
-        // Act
         foreach (var sample in sampler.Sample(200_000)) // Increase samples for stability
             histogram.AddSample(sample);
 
-        // Assert
         histogram.DebugPrint(testOutputHelper, $"F-Distribution (d1={d1}, d2={d2})");
         var actualMean = histogram.CalculateMean();
         actualMean.Should().BeApproximately(expectedMean, expectedMean * 0.15,
@@ -68,15 +62,12 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     [Fact]
     public void Sample_WithLargeDof_ApproachesOne()
     {
-        // Arrange
         var rng = new ChiRng(ChiSeed.Scramble("F-dist-large-dof"));
         var sampler = rng.F(100.0, 100.0);
         var histogram = new Histogram(0, 3, 100);
 
-        // Act
         foreach (var sample in sampler.Sample(SampleCount)) histogram.AddSample(sample);
 
-        // Assert
         histogram.DebugPrint(testOutputHelper, $"F-Distribution (d1=100, d2={100})");
         var actualMean = histogram.CalculateMean();
         actualMean.Should().BeApproximately(1.0, 0.05,
@@ -86,7 +77,6 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     [Fact]
     public void Sample_Decimal_ProducesCorrectStatistics()
     {
-        // Arrange
         const decimal d1 = 5.0m;
         const decimal d2 = 10.0m;
         var rng = new ChiRng(ChiSeed.Scramble("F-dist-decimal"));
@@ -99,7 +89,6 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
         double sum = 0;
         double sumOfSquares = 0;
 
-        // Act
         foreach (var sample in sampler.Sample(SampleCount))
         {
             var s = (double)sample;
@@ -107,7 +96,6 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
             sumOfSquares += s * s;
         }
 
-        // Assert
         var actualMean = sum / SampleCount;
         var actualVariance = sumOfSquares / SampleCount - actualMean * actualMean;
 
@@ -118,13 +106,10 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     [Fact]
     public void Sample_WithFixedSeed_IsDeterministic()
     {
-        // Arrange
         var rng = new ChiRng(1337);
 
-        // Act
         var result = rng.F(5.0, 10.0).Sample();
 
-        // Assert
         result.Should().BeApproximately(0.540679, 0.00001);
     }
 
@@ -135,11 +120,9 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     [InlineData(5, -1)]
     public void F_WithInvalidDegreesOfFreedom_ThrowsArgumentOutOfRangeException(int d1, int d2)
     {
-        // Arrange
         var rng = new ChiRng();
         var act = () => { rng.F(d1, (double)d2); };
 
-        // Act & Assert
         act.Should().Throw<ArgumentOutOfRangeException>();
     }
 }

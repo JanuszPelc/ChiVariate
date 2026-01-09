@@ -11,16 +11,13 @@ public class DolorSitTests(ITestOutputHelper testOutputHelper)
     [Fact]
     public void DolorSit_WithFixedSeedAndZeroChaos_IsDeterministicAndCanonical()
     {
-        // Arrange
         var rng1 = new ChiRng(42);
         var rng2 = new ChiRng(42);
 
-        // Act
         var result1 = rng1.LoremIpsum(0.0f).DolorSit();
         var result2 = rng2.LoremIpsum(0.0f).DolorSit();
         testOutputHelper.WriteLine(result1);
 
-        // Assert
         result1.Should().Be(result2, "because with the same seed, the output must be identical.");
         result1.Should().StartWith("Lorem ipsum dolor sit amet. Consectetur adipiscing elit sed do eiusmod tempor,",
             "because with zero chaos, it should follow the canonical sequence with each sentence starting from the beginning.");
@@ -35,7 +32,6 @@ public class DolorSitTests(ITestOutputHelper testOutputHelper)
     [Fact]
     public void DolorSit_WithCorporateBuzzwordIpsum_UsesProvidedVocabulary()
     {
-        // Arrange
         var rng = new ChiRng("Corporate Buzzword Ipsum");
 
         const string corporateBuzzwords2025 =
@@ -60,11 +56,9 @@ public class DolorSitTests(ITestOutputHelper testOutputHelper)
             seamless system integration, robust infrastructure platforms, enterprise-grade solutions,
             """;
 
-        // Act
         var result = rng.LoremIpsum(vocabulary: corporateBuzzwords2025).DolorSit(7, 27);
         testOutputHelper.WriteLine(result);
 
-        // Assert
         var buzzwordList =
             corporateBuzzwords2025.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
 
@@ -86,30 +80,24 @@ public class DolorSitTests(ITestOutputHelper testOutputHelper)
     [Fact]
     public void DolorSit_WithFixedSeedAndNonZeroChaos_IsDeterministic()
     {
-        // Arrange
         var rng1 = new ChiRng(1337);
         var rng2 = new ChiRng(1337);
 
-        // Act
         var result1 = rng1.LoremIpsum(0.25f).DolorSit(2);
         var result2 = rng2.LoremIpsum(0.25f).DolorSit(2);
 
-        // Assert
         result1.Should().Be(result2, "because even with chaos, the same seed must produce the same 'random' text.");
     }
 
     [Fact]
     public void DolorSit_WithDifferentSeeds_ProducesDifferentText()
     {
-        // Arrange
         var rng1 = new ChiRng(1);
         var rng2 = new ChiRng(2);
 
-        // Act
         var result1 = rng1.LoremIpsum(0.1f).DolorSit();
         var result2 = rng2.LoremIpsum(0.1f).DolorSit();
 
-        // Assert
         result1.Should().NotBe(result2, "because different seeds should produce different sequences of text.");
     }
 
@@ -119,13 +107,10 @@ public class DolorSitTests(ITestOutputHelper testOutputHelper)
     [InlineData(5)]
     public void DolorSit_ReturnsCorrectNumberOfParagraphs(int paragraphCount)
     {
-        // Arrange
         var rng = new ChiRng(paragraphCount);
 
-        // Act
         var result = rng.LoremIpsum().DolorSit(paragraphCount);
 
-        // Assert
         var paragraphs = result.Split(["\r\n\r\n", "\n\n"], StringSplitOptions.None);
         paragraphs.Should().HaveCount(paragraphCount);
     }
@@ -133,28 +118,22 @@ public class DolorSitTests(ITestOutputHelper testOutputHelper)
     [Fact]
     public void DolorSit_WithLowChaos_DiffersFromCanonical()
     {
-        // Arrange
         var rng = new ChiRng("LowChaos");
 
-        // Act
         var canonical = rng.LoremIpsum(0.0f).DolorSit();
         var chaotic = rng.LoremIpsum(0.1f).DolorSit();
 
-        // Assert
         chaotic.Should().NotBe(canonical, "because even a small amount of chaos should alter the text.");
     }
 
     [Fact]
     public void DolorSit_WithHighChaos_ContainsScrambledWords()
     {
-        // Arrange
         var rng = new ChiRng("HighChaos");
 
-        // Act
         var result = rng.LoremIpsum(0.9f).DolorSit();
         var words = result.Split([' ', '.', '\r', '\n'], StringSplitOptions.RemoveEmptyEntries);
 
-        // Assert
         words.Should().Contain(w => w.Length > 2 && w.Any(char.IsLower),
             "because high chaos should produce scrambled, non-canonical words.");
     }
@@ -172,14 +151,11 @@ public class DolorSitTests(ITestOutputHelper testOutputHelper)
     [Fact]
     public void DolorSit_WithSingleCustomWord_StillProducesOutput()
     {
-        // Arrange
         var rng = new ChiRng(999);
 
-        // Act
         var result = rng.LoremIpsum(1.0f, "Pika").DolorSit();
         testOutputHelper.WriteLine(result);
 
-        // Assert
         result.Should().NotBeNullOrWhiteSpace();
         result.Should().Contain("pika");
         result.Should().Contain("pkia");

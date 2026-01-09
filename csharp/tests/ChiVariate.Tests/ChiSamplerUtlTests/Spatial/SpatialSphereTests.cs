@@ -14,12 +14,10 @@ public class SpatialSphereTests(ITestOutputHelper testOutputHelper)
     [Fact]
     public void PointOnSphere_SamplesAreCorrectlyNormalized()
     {
-        // Arrange
         const float radius = 5.0f;
         var rng = new ChiRng(ChiSeed.Scramble("PointOnSphereNormalization"));
         var sampler = rng.Spatial().OnSphere(radius);
 
-        // Act & Assert
         for (var i = 0; i < 1000; i++)
         {
             var p = sampler.Sample();
@@ -40,7 +38,6 @@ public class SpatialSphereTests(ITestOutputHelper testOutputHelper)
         var histY = new Histogram(-1, 1, 50);
         var histZ = new Histogram(-1, 1, 50);
 
-        // Act
         foreach (var p in sampler.Sample(SampleCount))
         {
             sumX += p.X;
@@ -51,7 +48,6 @@ public class SpatialSphereTests(ITestOutputHelper testOutputHelper)
             histZ.AddSample(p.Z);
         }
 
-        // Assert
         (sumX / SampleCount).Should().BeApproximately(0.0, 0.01);
         (sumY / SampleCount).Should().BeApproximately(0.0, 0.01);
         (sumZ / SampleCount).Should().BeApproximately(0.0, 0.01);
@@ -70,13 +66,11 @@ public class SpatialSphereTests(ITestOutputHelper testOutputHelper)
     [Fact]
     public void PointInSphere_SamplesAreWithinBounds()
     {
-        // Arrange
         const float radius = 10.0f;
         var rng = new ChiRng(ChiSeed.Scramble("PointInSphereBounds"));
         var sampler = rng.Spatial().InSphere(radius);
         var rSquared = radius * radius;
 
-        // Act & Assert
         for (var i = 0; i < 1000; i++)
         {
             var p = sampler.Sample();
@@ -96,14 +90,12 @@ public class SpatialSphereTests(ITestOutputHelper testOutputHelper)
 
         var radiusHistogram = new Histogram(0, 1, 50);
 
-        // Act
         foreach (var p in sampler.Sample(SampleCount))
         {
             var r = MathF.Sqrt(p.X * p.X + p.Y * p.Y + p.Z * p.Z);
             radiusHistogram.AddSample(r);
         }
 
-        // Assert
         radiusHistogram.DebugPrint(testOutputHelper, "Radii of " + "Points In Sphere");
 
         var firstBinCount = radiusHistogram.Bins[0];

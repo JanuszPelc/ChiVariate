@@ -16,7 +16,6 @@ public class ChiHashReproducibilityTests(ITestOutputHelper testOutputHelper)
     [Fact]
     public void ChiHash_WithSameInputs_ProducesSameOutput()
     {
-        // Arrange
         const int input1 = 123;
         const double input2 = 456.789;
         const long input3 = -987654321L;
@@ -27,21 +26,18 @@ public class ChiHashReproducibilityTests(ITestOutputHelper testOutputHelper)
             .Add(input3)
             .Hash;
 
-        // Act
         var hash2 = new ChiHash()
             .Add(input1)
             .Add(input2)
             .Add(input3)
             .Hash;
 
-        // Assert
         hash2.Should().Be(hash1);
     }
 
     [Fact]
     public void ChiHash_WithInputsInDifferentOrder_ProducesDifferentOutputs()
     {
-        // Arrange
         var inputA = 1.23f;
         var inputB = 456;
 
@@ -50,20 +46,17 @@ public class ChiHashReproducibilityTests(ITestOutputHelper testOutputHelper)
             .Add(inputB)
             .Hash;
 
-        // Act
         var hashOrderBa = new ChiHash()
             .Add(inputB)
             .Add(inputA)
             .Hash;
 
-        // Assert
         hashOrderBa.Should().NotBe(hashOrderAb);
     }
 
     [Fact]
     public void ChiHash_WithOneDifferentInput_ProducesDifferentOutput()
     {
-        // Arrange
         const int input1 = 123;
         const double input2 = 456.789;
         const long input3A = -987654321L;
@@ -75,21 +68,18 @@ public class ChiHashReproducibilityTests(ITestOutputHelper testOutputHelper)
             .Add(input3A)
             .Hash;
 
-        // Act
         var hashB = new ChiHash()
             .Add(input1)
             .Add(input2)
             .Add(input3B)
             .Hash;
 
-        // Assert
         hashB.Should().NotBe(hashA);
     }
 
     [Fact]
     public void ChiHash_WithDifferentNumberOfInputs_ProducesDifferentOutputs()
     {
-        // Arrange
         const int input1 = 10;
         const long input2 = 20L;
         const double input3 = 30.0;
@@ -99,21 +89,18 @@ public class ChiHashReproducibilityTests(ITestOutputHelper testOutputHelper)
             .Add(input2)
             .Hash;
 
-        // Act
         var hash3Inputs = new ChiHash()
             .Add(input1)
             .Add(input2)
             .Add(input3)
             .Hash;
 
-        // Assert
         hash3Inputs.Should().NotBe(hash2Inputs);
     }
 
     [Fact]
     public void ChiHash_NumericTypes_ProducesConsistentResults()
     {
-        // Arrange & Act & Assert
         VerifyDeterminism(12345);
         VerifyDeterminism(54321U);
         VerifyDeterminism(9876543210L);
@@ -135,7 +122,6 @@ public class ChiHashReproducibilityTests(ITestOutputHelper testOutputHelper)
     [Fact]
     public void ChiHash_DifferentNumericValues_ProduceDifferentHashes()
     {
-        // Arrange & Act & Assert
         VerifySensitivity(1, 2);
         VerifySensitivity(10L, -10L);
         VerifySensitivity(0UL, 1UL);
@@ -152,7 +138,6 @@ public class ChiHashReproducibilityTests(ITestOutputHelper testOutputHelper)
     [Fact]
     public void ChiHash_StringInputs_ProducesConsistentResults()
     {
-        // Arrange & Act & Assert
         VerifyStringDeterminism("");
         VerifyStringDeterminism("hello");
         VerifyStringDeterminism("Hello");
@@ -174,7 +159,6 @@ public class ChiHashReproducibilityTests(ITestOutputHelper testOutputHelper)
     [Fact]
     public void ChiHash_SpecialTypes_ProducesConsistentResults()
     {
-        // Arrange & Act & Assert
         VerifyDeterminism(true);
         VerifyDeterminism(false);
         VerifySensitivity(true, false);
@@ -213,7 +197,6 @@ public class ChiHashReproducibilityTests(ITestOutputHelper testOutputHelper)
     [Fact]
     public void ChiHash_Enums_ProducesConsistentResults()
     {
-        // Arrange & Act & Assert
         VerifyDeterminism(TestEnum.Value1);
         VerifyDeterminism(TestEnum.Value2);
         VerifySensitivity(TestEnum.Value1, TestEnum.Value2);
@@ -230,19 +213,16 @@ public class ChiHashReproducibilityTests(ITestOutputHelper testOutputHelper)
     [Fact]
     public void ChiHash_SpanInputs_ProducesConsistentResults()
     {
-        // Arrange
         var intArray = new[] { 1, 2, 3, 4, 5 };
         var intArray2 = new[] { 1, 2, 3, 4, 6 };
         var guidArray = new[] { Guid.NewGuid(), Guid.NewGuid() };
 
-        // Act
         var hash1 = new ChiHash().Add((ReadOnlySpan<int>)intArray.AsSpan()).Hash;
         var hash2 = new ChiHash().Add(intArray.AsSpan()).Hash;
         var hash3 = new ChiHash().Add(intArray2.AsSpan()).Hash;
         var guidHash1 = new ChiHash().Add((ReadOnlySpan<Guid>)guidArray.AsSpan()).Hash;
         var guidHash2 = new ChiHash().Add(guidArray.AsSpan()).Hash;
 
-        // Assert
         hash2.Should().Be(hash1);
         hash3.Should().NotBe(hash1);
         guidHash2.Should().Be(guidHash1);
@@ -251,11 +231,9 @@ public class ChiHashReproducibilityTests(ITestOutputHelper testOutputHelper)
     [Fact]
     public void ChiHash_MixedTypes_ProducesConsistentResults()
     {
-        // Arrange
         var guid = Guid.Parse("12345678-1234-5678-9abc-123456789abc");
         var dateTime = new DateTime(2023, 12, 25, 15, 30, 45, DateTimeKind.Utc);
 
-        // Act
         var hash1 = new ChiHash()
             .Add(ChiHash.Seed)
             .Add(42)
@@ -278,26 +256,22 @@ public class ChiHashReproducibilityTests(ITestOutputHelper testOutputHelper)
             .Add(TestEnum.Value1)
             .Hash;
 
-        // Assert
         hash2.Should().Be(hash1);
     }
 
     [Fact]
     public void ChiHash_DecimalScale_PreservesScaleDifferences()
     {
-        // Arrange
         const decimal decimal1 = 1m;
         const decimal decimal10 = 1.0m;
         const decimal decimal100 = 1.00m;
         const decimal decimal1000 = 1.000m;
 
-        // Act
         var hash1 = new ChiHash().Add(decimal1).Hash;
         var hash10 = new ChiHash().Add(decimal10).Hash;
         var hash100 = new ChiHash().Add(decimal100).Hash;
         var hash1000 = new ChiHash().Add(decimal1000).Hash;
 
-        // Assert
         hash10.Should().NotBe(hash1);
         hash100.Should().NotBe(hash1);
         hash1000.Should().NotBe(hash1);
@@ -320,7 +294,6 @@ public class ChiHashReproducibilityTests(ITestOutputHelper testOutputHelper)
     [Fact]
     public void ChiHash_FloatingPointEdgeCases_OutputBitPatterns()
     {
-        // Arrange & Act
         testOutputHelper.WriteLine("=== FLOAT (32-bit) EDGE CASES ===");
 
         OutputFloatBits("float.NaN", float.NaN);
@@ -378,7 +351,6 @@ public class ChiHashReproducibilityTests(ITestOutputHelper testOutputHelper)
         var doubleNanHash1 = new ChiHash().Add(double.NaN).Hash;
         var doubleNanHash2 = new ChiHash().Add(Math.Sqrt(-1.0)).Hash;
 
-        // Assert
         nanHash2.Should().Be(nanHash1);
         zeroHash2.Should().Be(zeroHash1);
         halfNanHash2.Should().Be(halfNanHash1);
@@ -423,11 +395,9 @@ public class ChiHashReproducibilityTests(ITestOutputHelper testOutputHelper)
     [Fact]
     public void ChiHash_EmptyState_HasConsistentInitialValue()
     {
-        // Arrange & Act
         var hash1 = new ChiHash().Hash;
         var hash2 = new ChiHash().Hash;
 
-        // Assert
         hash2.Should().Be(hash1);
         hash1.Should().Be(0);
     }
@@ -435,11 +405,9 @@ public class ChiHashReproducibilityTests(ITestOutputHelper testOutputHelper)
     [Fact]
     public void ChiHash_Seed_StaysTheSameAcrossApplicationRuns()
     {
-        // Arrange & Act
         var seed1 = ChiHash.Seed;
         var seed2 = ChiHash.Seed;
 
-        // Assert
         seed2.Should().Be(seed1);
     }
 

@@ -17,17 +17,14 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     [InlineData(-5.0, 0.5)] // Shifted and narrow
     public void Sample_ProducesDistributionWithCorrectStatistics(double location, double scale)
     {
-        // Arrange
         var rng = new ChiRng($"Laplace_loc={location}_scale={scale}");
 
         var maxBound = location + 10 * scale;
         var minBound = location - 10 * scale;
         var histogram = new Histogram(minBound, maxBound, 100);
 
-        // Act
         for (var i = 0; i < SampleCount; i++) histogram.AddSample(rng.Laplace(location, scale).Sample());
 
-        // Assert
         histogram.DebugPrint(testOutputHelper, $"Laplace(μ={location}, b={scale}) Distribution");
         histogram.AssertIsLaplace(location, scale, 0.1);
     }
@@ -37,7 +34,6 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     [InlineData("-5.0", "0.5")] // Shifted and narrow
     public void Sample_Decimal_ProducesDistributionWithCorrectStatistics(string locationStr, string scaleStr)
     {
-        // Arrange
         var location = decimal.Parse(locationStr, CultureInfo.InvariantCulture);
         var scale = decimal.Parse(scaleStr, CultureInfo.InvariantCulture);
 
@@ -49,10 +45,8 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
         var histogram = new Histogram(minBound, maxBound, 100);
         var sampler = new DecimalLaplaceSampler(location, scale);
 
-        // Act
         histogram.Generate<decimal, ChiRng, DecimalLaplaceSampler>(ref rng, 50_000, sampler);
 
-        // Assert
         histogram.DebugPrint(testOutputHelper, $"Laplace(μ={location}, b={scale}) Distribution");
         histogram.AssertIsLaplace(location, scale, 0.15);
     }

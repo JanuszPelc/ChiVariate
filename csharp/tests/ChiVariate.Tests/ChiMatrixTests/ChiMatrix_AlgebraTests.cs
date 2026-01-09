@@ -44,12 +44,10 @@ public class ChiMatrix_AlgebraTests
     [InlineData(50, 50, 50)] // Large square matrices
     public void DistributiveProperty_HoldsForLargeMatrices_Double(int m, int n, int p)
     {
-        // Arrange: A*(B+C) = A*B + A*C
         var a = CreateAndFill<double>(m, n);
         var b = CreateAndFill<double>(n, p);
         var c = CreateAndFill<double>(n, p);
 
-        // Act
         // --- Left Side: A * (B + C) ---
         var bPlusC = b.Peek() + c.Peek();
         var leftSideResult = a.Peek() * bPlusC.Peek();
@@ -59,7 +57,6 @@ public class ChiMatrix_AlgebraTests
         var aTimesC = a.Peek() * c.Peek();
         var rightSideResult = aTimesB.Peek() + aTimesC.Peek();
 
-        // Assert
         AssertMatricesApproximatelyEqual(leftSideResult, rightSideResult, 1e-9);
     }
 
@@ -67,12 +64,10 @@ public class ChiMatrix_AlgebraTests
     [InlineData(8, 12, 10)]
     public void DistributiveProperty_HoldsForLargeMatrices_Decimal(int m, int n, int p)
     {
-        // Arrange: A*(B+C) = A*B + A*C
         var a = CreateAndFill<decimal>(m, n);
         var b = CreateAndFill<decimal>(n, p);
         var c = CreateAndFill<decimal>(n, p);
 
-        // Act
         // --- Left Side: A * (B + C) ---
         var bPlusC = b.Peek() + c.Peek();
         var leftSideResult = a.Peek() * bPlusC.Peek();
@@ -82,14 +77,12 @@ public class ChiMatrix_AlgebraTests
         var aTimesC = a.Peek() * c.Peek();
         var rightSideResult = aTimesB.Peek() + aTimesC.Peek();
 
-        // Assert
         AssertMatricesApproximatelyEqual(leftSideResult, rightSideResult, 1e-12m);
     }
 
     [Fact]
     public void ToArray_OnLargeHeapMatrix_AllowsCorrectLinqAggregation()
     {
-        // Arrange
         const int rows = 100;
         const int cols = 100;
 
@@ -104,10 +97,8 @@ public class ChiMatrix_AlgebraTests
         var expectedSum = n * (0 + (n - 1)) / 2.0;
         var expectedAverage = expectedSum / n;
 
-        // Act
         var array = matrix.ToArray();
 
-        // Assert
         // Check array properties before disposing the source matrix
         array.Length.Should().Be(rows * cols);
         array.Cast<double>().Sum().Should().Be(expectedSum);

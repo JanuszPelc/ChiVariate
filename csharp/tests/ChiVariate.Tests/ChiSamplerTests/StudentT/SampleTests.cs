@@ -18,7 +18,6 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     [InlineData(30.0)] // Should look very similar to Normal(0,1)
     public void Sample_ProducesDistributionWithCorrectStatistics(double degreesOfFreedom)
     {
-        // Arrange
         var rng = new ChiRng($"StudentT_v={degreesOfFreedom}");
 
         var variance = degreesOfFreedom / (degreesOfFreedom - 2.0);
@@ -27,11 +26,9 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
         var maxBound = 8 * stdDev;
         var histogram = new Histogram(minBound, maxBound, 100);
 
-        // Act
         for (var i = 0; i < SampleCount; i++)
             histogram.AddSample(rng.StudentT(degreesOfFreedom).Sample());
 
-        // Assert
         histogram.DebugPrint(testOutputHelper, $"Student's t (v={degreesOfFreedom}) Distribution");
         histogram.AssertIsStudentT(degreesOfFreedom, 0.19);
     }
@@ -39,21 +36,18 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     [Fact]
     public void Sample_With1DoF_MatchesCauchyDistribution()
     {
-        // Arrange
         var tRng = new ChiRng("StudentT_vs_Cauchy");
         var cauchyRng = new ChiRng("StudentT_vs_Cauchy");
 
         var tHistogram = new Histogram(-20, 20, 200);
         var cauchyHistogram = new Histogram(-20, 20, 200);
 
-        // Act
         for (var i = 0; i < SampleCount; i++)
         {
             tHistogram.AddSample(tRng.StudentT(1.0).Sample());
             cauchyHistogram.AddSample(cauchyRng.Cauchy(0.0, 1.0).Sample());
         }
 
-        // Assert
         var tMedian = tHistogram.CalculateMedian();
         var cauchyMedian = cauchyHistogram.CalculateMedian();
         tMedian.Should().BeApproximately(cauchyMedian, 0.2,
@@ -65,7 +59,6 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     [InlineData("5.0")]
     public void Sample_Decimal_ProducesDistributionWithCorrectStatistics(string degreesOfFreedomStr)
     {
-        // Arrange
         var degreesOfFreedom = decimal.Parse(degreesOfFreedomStr, CultureInfo.InvariantCulture);
         var rng = new ChiRng(ChiSeed.Scramble("StudentTDecimal", (long)degreesOfFreedom));
 
@@ -81,10 +74,8 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
         var histogram = new Histogram(minBound, maxBound, 100);
         var sampler = new DecimalStudentTSampler(degreesOfFreedom);
 
-        // Act
         histogram.Generate<decimal, ChiRng, DecimalStudentTSampler>(ref rng, 20_000, sampler);
 
-        // Assert
         histogram.DebugPrint(testOutputHelper, $"Student's t (v={degreesOfFreedom}) Distribution");
         histogram.AssertIsStudentT(degreesOfFreedom, 0.2);
     }

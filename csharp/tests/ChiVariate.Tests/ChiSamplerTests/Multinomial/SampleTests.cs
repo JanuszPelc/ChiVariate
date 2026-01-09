@@ -13,7 +13,6 @@ public class SampleTests
     [Fact]
     public void Sample_ProducesDistributionsWithCorrectMeanCounts()
     {
-        // Arrange
         ReadOnlySpan<double> probabilities = [0.1, 0.2, 0.3, 0.4];
         const int numTrials = 20;
 
@@ -21,7 +20,6 @@ public class SampleTests
         var multinomial = rng.Multinomial(numTrials, probabilities);
         var totalCounts = new long[probabilities.Length];
 
-        // Act
         foreach (var buffer in multinomial.Sample(SampleCount))
             using (buffer)
             {
@@ -29,20 +27,17 @@ public class SampleTests
                     totalCounts[j] += buffer[j];
             }
 
-        // Assert
         totalCounts.AssertIsMultinomial(SampleCount, numTrials, probabilities, 0.1);
     }
 
     [Fact]
     public void Sample_SumOfCounts_AlwaysEqualsNumTrials()
     {
-        // Arrange
         var probabilities = new[] { 0.1, 0.2, 0.7 };
         const int numTrials = 100;
 
         var rng = new ChiRng("Multinomial_SumCheck");
 
-        // Act & Assert
         for (var i = 0; i < 1000; i++)
         {
             using var buffer = rng.Multinomial(numTrials, probabilities).Sample();
@@ -53,17 +48,14 @@ public class SampleTests
     [Fact]
     public void Multinomial_WithEmptyProbabilities_ThrowsArgumentException()
     {
-        // Arrange
         var probabilities = Array.Empty<double>();
 
-        // Act
         var act = () =>
         {
             var rng = new ChiRng(0);
             _ = rng.Multinomial(10, probabilities).Sample();
         };
 
-        // Assert
         act.Should().Throw<ArgumentException>();
     }
 }

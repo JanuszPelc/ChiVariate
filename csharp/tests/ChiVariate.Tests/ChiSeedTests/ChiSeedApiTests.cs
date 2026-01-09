@@ -18,11 +18,9 @@ public class ChiSeedApiTests
     [InlineData(long.MinValue)]
     public void Scramble_GivenSameInput_ReturnsSameOutput(long value)
     {
-        // Arrange & Act
         var scrambled1 = ChiSeed.Scramble(value);
         var scrambled2 = ChiSeed.Scramble(value);
 
-        // Assert
         scrambled2.Should().Be(scrambled1);
     }
 
@@ -35,14 +33,11 @@ public class ChiSeedApiTests
     [InlineData(0L, -1L)]
     public void Scramble_GivenDifferentInputs_ReturnsDifferentOutputs(long value1, long value2)
     {
-        // Arrange
         value1.Should().NotBe(value2);
 
-        // Act
         var scrambled1 = ChiSeed.Scramble(value1);
         var scrambled2 = ChiSeed.Scramble(value2);
 
-        // Assert
         scrambled2.Should().NotBe(scrambled1);
     }
 
@@ -56,11 +51,9 @@ public class ChiSeedApiTests
     [InlineData(long.MinValue)]
     public void Scramble_LongGivenSameInput_ReturnsSameOutput(long value)
     {
-        // Arrange & Act
         var scrambled1 = ChiSeed.Scramble(value);
         var scrambled2 = ChiSeed.Scramble(value);
 
-        // Assert
         scrambled2.Should().Be(scrambled1);
     }
 
@@ -73,14 +66,11 @@ public class ChiSeedApiTests
     [InlineData(0L, -1L)]
     public void Scramble_LongGivenDifferentInputs_ReturnsDifferentOutputs(long value1, long value2)
     {
-        // Arrange
         value1.Should().NotBe(value2);
 
-        // Act
         var scrambled1 = ChiSeed.Scramble(value1);
         var scrambled2 = ChiSeed.Scramble(value2);
 
-        // Assert
         scrambled2.Should().NotBe(scrambled1);
     }
 
@@ -94,11 +84,9 @@ public class ChiSeedApiTests
     [InlineData("👍")] // Supplementary character
     public void Scramble_StringGivenSameInput_ReturnsSameOutput(string input)
     {
-        // Arrange & Act
         var scrambled1 = ChiSeed.Scramble(input);
         var scrambled2 = ChiSeed.Scramble(input);
 
-        // Assert
         scrambled1.Should().Be(scrambled2);
     }
 
@@ -113,39 +101,31 @@ public class ChiSeedApiTests
     public void
         Scramble_StringGivenDifferentInputs_ReturnsDifferentOutputs(string input1, string input2)
     {
-        // Arrange
         input1.Should().NotBe(input2);
 
-        // Act
         var scrambled1 = ChiSeed.Scramble(input1);
         var scrambled2 = ChiSeed.Scramble(input2);
 
-        // Assert
         scrambled2.Should().NotBe(scrambled1);
     }
 
     [Fact]
     public void Scramble_StringGivenNullInput_ThrowsArgumentNullException() // GWT: Given null string input...
     {
-        // Arrange
         string? nullInput = null;
         Action act = () => ChiSeed.Scramble(nullInput!);
 
-        // Act & Assert
         act.Should().Throw<ArgumentNullException>();
     }
 
     [Fact]
     public void Scramble_StringGivenEmptyInput_ReturnsDeterministicOutput()
     {
-        // Arrange
         const string emptyString = "";
 
-        // Act
         var scrambled1 = ChiSeed.Scramble(emptyString);
         var scrambled2 = ChiSeed.Scramble(emptyString);
 
-        // Assert
         scrambled1.Should().Be(scrambled2);
         scrambled1.Should().NotBe(0L);
     }
@@ -160,11 +140,9 @@ public class ChiSeedApiTests
     [InlineData("👍", -7582485440326701622L)] // Supplementary character
     public void ChiMix64_GivenStringInput_ReturnsDeterministicOutput(string input, long expected)
     {
-        // Arrange & Act
         if (string.IsNullOrEmpty(input)) input = null!;
         var scrambled = ChiMix64.MixString(ChiMix64.InitialValue, input);
 
-        // Assert
         scrambled.Should().Be(expected);
     }
 }

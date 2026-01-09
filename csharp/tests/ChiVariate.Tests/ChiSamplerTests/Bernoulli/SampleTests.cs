@@ -19,14 +19,11 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     [InlineData(0.99)]
     public void Sample_WithFixedProbability_HasCorrectMean(double probability)
     {
-        // Arrange
         var rng = new ChiRng(ChiSeed.Scramble("BernoulliFixed", probability));
         var successCount = 0;
 
-        // Act
         for (var i = 0; i < SampleCount; i++) successCount += rng.Bernoulli(probability).Sample();
 
-        // Assert
         var actualMean = (double)successCount / SampleCount;
         actualMean.Should().BeApproximately(probability, 0.01,
             "because the mean of a Bernoulli distribution (the frequency of successes) should be equal to p.");
@@ -38,14 +35,12 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     [InlineData(1.0, 9.0)] // Heavily skewed Beta, expected mean = 0.1
     public void Sample_WithVaryingProbabilityFromBeta_MatchesExpectedMean(double alpha, double beta)
     {
-        // Arrange
         var rng = new ChiRng(ChiSeed.Scramble("BernoulliVarying", alpha + beta * 100));
         var expectedMeanSuccessRate = alpha / (alpha + beta);
 
         var histogram = new Histogram(0, 1, 20);
         var successCount = 0;
 
-        // Act
         for (var i = 0; i < SampleCount; i++)
         {
             var p = rng.Beta(alpha, beta).Sample();
@@ -53,7 +48,6 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
             successCount += rng.Bernoulli(p).Sample();
         }
 
-        // Assert
         histogram.DebugPrint(testOutputHelper, $"Input Probabilities from Beta({alpha}, {beta})");
 
         var actualMeanSuccessRate = (double)successCount / SampleCount;
@@ -67,13 +61,10 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     [InlineData(double.NaN)]
     public void Bernoulli_WithInvalidProbability_ThrowsArgumentOutOfRangeException(double invalidProbability)
     {
-        // Arrange
         var rng = new ChiRng(0);
 
-        // Act
         Action act = () => rng.Bernoulli(invalidProbability).Sample();
 
-        // Assert
         act.Should().Throw<ArgumentOutOfRangeException>().And.ParamName.Should().Be("probability");
     }
 
@@ -82,15 +73,12 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     [InlineData("0.75")]
     public void Sample_Decimal_ProducesDistributionWithCorrectMean(string probabilityStr)
     {
-        // Arrange
         var probability = decimal.Parse(probabilityStr, CultureInfo.InvariantCulture);
         var rng = new ChiRng(ChiSeed.Scramble("BernoulliDecimal", (double)probability));
         var successCount = 0;
 
-        // Act
         for (var i = 0; i < SampleCount; i++) successCount += rng.Bernoulli(probability).Sample();
 
-        // Assert
         var actualMean = (double)successCount / SampleCount;
         actualMean.Should().BeApproximately((double)probability, 0.01,
             "because the mean should be correct for high-precision decimal probabilities.");

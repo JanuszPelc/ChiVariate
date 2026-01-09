@@ -14,12 +14,10 @@ public class SpatialCubeTests(ITestOutputHelper testOutputHelper)
     [Fact]
     public void PointInCube_SamplesAreWithinBounds()
     {
-        // Arrange
         const float extents = 10.0f;
         var rng = new ChiRng(ChiSeed.Scramble("PointInCubeBounds"));
         var sampler = rng.Spatial().InCube(extents);
 
-        // Act & Assert
         for (var i = 0; i < 1000; i++)
         {
             var p = sampler.Sample();
@@ -42,7 +40,6 @@ public class SpatialCubeTests(ITestOutputHelper testOutputHelper)
         var histY = new Histogram(-extents, extents, 20);
         var histZ = new Histogram(-extents, extents, 20);
 
-        // Act
         foreach (var p in sampler.Sample(SampleCount))
         {
             histX.AddSample(p.X);
@@ -50,7 +47,6 @@ public class SpatialCubeTests(ITestOutputHelper testOutputHelper)
             histZ.AddSample(p.Z);
         }
 
-        // Assert
         histX.DebugPrint(testOutputHelper, "PointInCube " + "Marginal X");
         histX.AssertIsUniform(0.15);
 
@@ -64,12 +60,10 @@ public class SpatialCubeTests(ITestOutputHelper testOutputHelper)
     [Fact]
     public void PointOnCube_SamplesAreOnTheSurface()
     {
-        // Arrange
         const float extents = 5.0f;
         var rng = new ChiRng(ChiSeed.Scramble("PointOnCubeBounds"));
         var sampler = rng.Spatial().OnCube(extents);
 
-        // Act & Assert
         for (var i = 0; i < 1000; i++)
         {
             var p = sampler.Sample();
@@ -96,7 +90,6 @@ public class SpatialCubeTests(ITestOutputHelper testOutputHelper)
 
         var faceCounts = new int[6]; // +X, -X, +Y, -Y, +Z, -Z
 
-        // Act
         foreach (var p in sampler.Sample(SampleCount))
             if (Math.Abs(p.X - extents) < 1e-6f) faceCounts[0]++;
             else if (Math.Abs(p.X + extents) < 1e-6f) faceCounts[1]++;
@@ -105,7 +98,6 @@ public class SpatialCubeTests(ITestOutputHelper testOutputHelper)
             else if (Math.Abs(p.Z - extents) < 1e-6f) faceCounts[4]++;
             else faceCounts[5]++;
 
-        // Assert
         var expectedCount = SampleCount / 6.0;
         foreach (var count in faceCounts)
             ((double)count).Should().BeApproximately(expectedCount, expectedCount * 0.05,
@@ -115,14 +107,11 @@ public class SpatialCubeTests(ITestOutputHelper testOutputHelper)
     [Fact]
     public void Sample_WithFixedSeed_IsDeterministic()
     {
-        // Arrange
         var rng = new ChiRng(1337);
 
-        // Act
         var onP = rng.Spatial().OnCube(10.0f).Sample();
         var inP = rng.Spatial().InCube(10.0f).Sample();
 
-        // Assert
         onP.X.Should().BeApproximately(-3.1642f, 0.0001f);
         onP.Y.Should().BeApproximately(10f, 0.0001f);
         onP.Z.Should().BeApproximately(-6.8629f, 0.0001f);
@@ -135,11 +124,9 @@ public class SpatialCubeTests(ITestOutputHelper testOutputHelper)
     [Fact]
     public void PointCube_WithInvalidExtents_ThrowsArgumentOutOfRangeException()
     {
-        // Arrange
         var rng = new ChiRng();
         var act = () => { rng.Spatial().InCube(-1.0f); };
 
-        // Act & Assert
         act.Should().Throw<ArgumentOutOfRangeException>()
             .And.ParamName.Should().Be("extents");
     }

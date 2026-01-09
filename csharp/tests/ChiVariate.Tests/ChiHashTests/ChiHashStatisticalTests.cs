@@ -22,17 +22,14 @@ public class ChiHashStatisticalTests(ITestOutputHelper testOutputHelper)
     [Fact]
     public void ChiHash_SequentialIntegers_ProducesUniformDistribution()
     {
-        // Arrange
         var histogram = new Histogram(int.MinValue, int.MaxValue, 100);
 
-        // Act
         for (var i = 0; i < LargeSampleCount; i++)
         {
             var hash = new ChiHash().Add(i).Hash;
             histogram.AddSample(hash);
         }
 
-        // Assert
         histogram.DebugPrint(testOutputHelper, "Sequential Integer Distribution");
         histogram.AssertIsUniform(0.05);
     }
@@ -40,11 +37,9 @@ public class ChiHashStatisticalTests(ITestOutputHelper testOutputHelper)
     [Fact]
     public void ChiHash_RandomIntegers_ProducesUniformDistribution()
     {
-        // Arrange
         var rng = new ChiRng("statistical-test-integers");
         var histogram = new Histogram(int.MinValue, int.MaxValue, 100);
 
-        // Act
         for (var i = 0; i < LargeSampleCount; i++)
         {
             var randomInt = rng.Chance().Next();
@@ -52,7 +47,6 @@ public class ChiHashStatisticalTests(ITestOutputHelper testOutputHelper)
             histogram.AddSample(hash);
         }
 
-        // Assert
         histogram.DebugPrint(testOutputHelper, "Random Integer Distribution");
         histogram.AssertIsUniform(0.05);
     }
@@ -60,11 +54,9 @@ public class ChiHashStatisticalTests(ITestOutputHelper testOutputHelper)
     [Fact]
     public void ChiHash_LoremIpsumStrings_ProducesUniformDistribution()
     {
-        // Arrange
         var rng = new ChiRng("hash-quality-strings");
         var histogram = new Histogram(int.MinValue, int.MaxValue, 80);
 
-        // Act
         for (var i = 0; i < MediumSampleCount; i++)
         {
             var text = rng.LoremIpsum(1f).DolorSit(1, 15);
@@ -72,7 +64,6 @@ public class ChiHashStatisticalTests(ITestOutputHelper testOutputHelper)
             histogram.AddSample(hash);
         }
 
-        // Assert
         histogram.DebugPrint(testOutputHelper, "Lorem Ipsum String Distribution");
         histogram.AssertIsUniform(0.06);
     }
@@ -80,7 +71,6 @@ public class ChiHashStatisticalTests(ITestOutputHelper testOutputHelper)
     [Fact]
     public void ChiHash_CorporateBuzzwords_ProducesUniformDistribution()
     {
-        // Arrange
         var rng = new ChiRng("corporate-hash-test");
         var histogram = new Histogram(int.MinValue, int.MaxValue, 60);
 
@@ -89,7 +79,6 @@ public class ChiHashStatisticalTests(ITestOutputHelper testOutputHelper)
                                  "digital transformation initiatives, data-driven insights, customer-centric approaches, " +
                                  "agile methodologies, scalable infrastructure, robust security frameworks";
 
-        // Act
         for (var i = 0; i < MediumSampleCount; i++)
         {
             var corporateSpeak = rng.LoremIpsum(1f, buzzwords).DolorSit(1, 12);
@@ -97,7 +86,6 @@ public class ChiHashStatisticalTests(ITestOutputHelper testOutputHelper)
             histogram.AddSample(hash);
         }
 
-        // Assert
         histogram.DebugPrint(testOutputHelper, "Corporate Buzzword Distribution");
         histogram.AssertIsUniform(0.08);
     }
@@ -105,11 +93,9 @@ public class ChiHashStatisticalTests(ITestOutputHelper testOutputHelper)
     [Fact]
     public void ChiHash_MixedTypes_ProducesUniformDistribution()
     {
-        // Arrange
         var rng = new ChiRng("mixed-types-test");
         var histogram = new Histogram(int.MinValue, int.MaxValue, 75);
 
-        // Act
         for (var i = 0; i < MediumSampleCount; i++)
         {
             var scenarioType = rng.Chance().Next(8);
@@ -163,7 +149,6 @@ public class ChiHashStatisticalTests(ITestOutputHelper testOutputHelper)
             histogram.AddSample(hash);
         }
 
-        // Assert
         histogram.DebugPrint(testOutputHelper, "Mixed Type Distribution");
         histogram.AssertIsUniform(0.08);
     }
@@ -171,11 +156,9 @@ public class ChiHashStatisticalTests(ITestOutputHelper testOutputHelper)
     [Fact]
     public void ChiHash_AvalancheEffect_SmallInputChangesCauseLargeHashChanges()
     {
-        // Arrange
         var bitDifferences = new List<int>();
         const int testCount = 10_000;
 
-        // Act
         for (var i = 0; i < testCount; i++)
         {
             var hash1 = new ChiHash().Add(i).Hash;
@@ -188,7 +171,6 @@ public class ChiHashStatisticalTests(ITestOutputHelper testOutputHelper)
         var histogram = new Histogram(0, 32, 32);
         foreach (var diff in bitDifferences) histogram.AddSample(diff);
 
-        // Assert
         histogram.DebugPrint(testOutputHelper, "Avalanche Effect - Bit Differences");
 
         var avgDifference = bitDifferences.Average();
@@ -207,12 +189,10 @@ public class ChiHashStatisticalTests(ITestOutputHelper testOutputHelper)
     [Fact]
     public void ChiHash_StringAvalanche_SmallStringChangesCauseLargeHashChanges()
     {
-        // Arrange
         var rng = new ChiRng("string-avalanche-test");
         var bitDifferences = new List<int>();
         const int testCount = 5_000;
 
-        // Act
         for (var i = 0; i < testCount; i++)
         {
             var baseString = rng.LoremIpsum(0.1f).DolorSit(1, 10);
@@ -228,7 +208,6 @@ public class ChiHashStatisticalTests(ITestOutputHelper testOutputHelper)
         var histogram = new Histogram(0, 32, 32);
         foreach (var diff in bitDifferences) histogram.AddSample(diff);
 
-        // Assert
         histogram.DebugPrint(testOutputHelper, "String Avalanche Effect");
 
         var avgDifference = bitDifferences.Average();
@@ -241,14 +220,12 @@ public class ChiHashStatisticalTests(ITestOutputHelper testOutputHelper)
     [Fact]
     public void ChiHash_OrderSensitivity_DifferentOrdersProduceDifferentDistributions()
     {
-        // Arrange
         var rng = new ChiRng("order-sensitivity-test");
         var histogram1 = new Histogram(int.MinValue, int.MaxValue, 60);
         var histogram2 = new Histogram(int.MinValue, int.MaxValue, 60);
 
         const int testCount = MediumSampleCount;
 
-        // Act
         for (var i = 0; i < testCount; i++)
         {
             var a = rng.Chance().Next();
@@ -262,7 +239,6 @@ public class ChiHashStatisticalTests(ITestOutputHelper testOutputHelper)
             histogram2.AddSample(hash2);
         }
 
-        // Assert
         histogram1.DebugPrint(testOutputHelper, "Order ABC Distribution");
         histogram2.DebugPrint(testOutputHelper, "Order CAB Distribution");
 
@@ -300,11 +276,9 @@ public class ChiHashStatisticalTests(ITestOutputHelper testOutputHelper)
     [Fact]
     public void ChiHash_ChainedHashing_MaintainsUniformity()
     {
-        // Arrange
         var rng = new ChiRng("chained-hashing-test");
         var histogram = new Histogram(int.MinValue, int.MaxValue, 60);
 
-        // Act
         for (var i = 0; i < MediumSampleCount; i++)
         {
             var chainLength = rng.Chance().Next(2, 6);
@@ -327,7 +301,6 @@ public class ChiHashStatisticalTests(ITestOutputHelper testOutputHelper)
             histogram.AddSample(hash.Hash);
         }
 
-        // Assert
         histogram.DebugPrint(testOutputHelper, "Chained Hashing Distribution");
         histogram.AssertIsUniform(0.06);
     }
@@ -335,11 +308,9 @@ public class ChiHashStatisticalTests(ITestOutputHelper testOutputHelper)
     [Fact]
     public void ChiHash_SmallIntegers_ProducesUniformDistribution()
     {
-        // Arrange
         var histogram = new Histogram(int.MinValue, int.MaxValue, 80);
         var rng = new ChiRng("small-integers-test");
 
-        // Act
         for (var i = 0; i < SmallSampleCount; i++)
         {
             var baseValue = rng.Chance().Next(0, 1000);
@@ -356,7 +327,6 @@ public class ChiHashStatisticalTests(ITestOutputHelper testOutputHelper)
             histogram.AddSample(hash);
         }
 
-        // Assert
         histogram.DebugPrint(testOutputHelper, "Small Integers with Mixing Distribution");
         histogram.AssertIsUniform(0.09);
     }

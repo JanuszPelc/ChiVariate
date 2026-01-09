@@ -14,14 +14,12 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     [Fact]
     public void CanonicalSequence_WithFixedSeed_IsBitForBitDeterministic()
     {
-        // Arrange
         var rng1 = new ChiRng("TestSeed");
         var rng2 = new ChiRng(rng1.Snapshot());
 
         var sampler1 = rng1.Sobol(2, ChiSequenceMode.Canonical).OfType<decimal>();
         var sampler2 = rng2.Sobol(2, ChiSequenceMode.Canonical).OfType<decimal>();
 
-        // Act & Assert
         for (var i = 0; i < SampleCount; i++)
         {
             using var p1 = sampler1.Sample();
@@ -34,14 +32,12 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     [Fact]
     public void RandomizedSequence_WithFixedRngSeed_IsBitForBitDeterministic()
     {
-        // Arrange
         var rng1 = new ChiRng("RandomSeedForSobol");
         var rng2 = new ChiRng("RandomSeedForSobol");
 
         var sampler1 = rng1.Sobol(2).OfType<float>();
         var sampler2 = rng2.Sobol(2).OfType<float>();
 
-        // Act & Assert
         for (var i = 0; i < SampleCount; i++)
         {
             using var p1 = sampler1.Sample();
@@ -55,7 +51,6 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     [Fact]
     public void RandomizedSequence_WithDifferentRngSeeds_ProducesDifferentSequences()
     {
-        // Arrange
         var rng1 = new ChiRng("Seed");
         var rng2 = new ChiRng("Different Seed");
 
@@ -70,7 +65,6 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
         var firstPoint1 = sampler1.Sample().ToArray();
         var firstPoint2 = sampler2.Sample().ToArray();
 
-        // Act & Assert
         firstPoint1.Should().NotBeEquivalentTo(firstPoint2,
             "because different RNG seeds should produce different randomized sequences.");
     }
@@ -78,7 +72,6 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     [Fact]
     public void CanonicalSobol_1D_FirstFewPoints_MatchKnownValues()
     {
-        // Arrange
         var expectedValues = new[]
         {
             0.0,
@@ -92,7 +85,6 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
         var rng = new ChiRng();
         var sampler = rng.Sobol(1, ChiSequenceMode.Canonical).OfType<double>();
 
-        // Act & Assert
         for (var i = 0; i < expectedValues.Length; i++)
         {
             using var actualPoint = sampler.Sample();
@@ -104,7 +96,6 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     [Fact]
     public void CanonicalSobol_2D_FirstFewPoints_MatchKnownValues()
     {
-        // Arrange
         var expectedPoints = new[]
         {
             new[] { 0.0, 0.0 },
@@ -120,7 +111,6 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
         var rng = new ChiRng();
         var sampler = rng.Sobol(2, ChiSequenceMode.Canonical).OfType<double>();
 
-        // Act & Assert
         foreach (var t in expectedPoints)
         {
             using var actualPoint = sampler.Sample();
@@ -136,7 +126,6 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     [InlineData(ChiSequenceMode.Randomized, 0.1)]
     public void SobolSequence_Marginals_ShowCorrectUniformity(ChiSequenceMode mode, double tolerance)
     {
-        // Arrange
         const int dimensions = 1024;
         const int samples = 25_000;
         const int bins = 10;
@@ -148,7 +137,6 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
         for (var i = 0; i < dimensions; i++)
             histograms[i] = new Histogram(0.0, 1.0, bins);
 
-        // Act
         foreach (var point in sampler.Sample(samples))
             using (point)
             {
@@ -156,7 +144,6 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
                     histograms[d].AddSample(point[d]);
             }
 
-        // Assert
         const double expectedSamplesPerBin = (double)samples / bins;
         var uniformityTolerance = expectedSamplesPerBin * tolerance;
 
@@ -175,7 +162,6 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     [Fact]
     public void RandomizedSobol_FromSameRng_ProducesDifferentSequencesThanCanonical()
     {
-        // Arrange
         const int sampleCount = 1000;
         const int dimensions = 4;
 
@@ -190,11 +176,9 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
         _ = originPoint1;
         _ = originPoint2;
 
-        // Act
         using var canonicalPoints = canonicalSampler.Sample(sampleCount);
         using var randomizedPoints = randomizedSampler.Sample(sampleCount);
 
-        // Assert
         canonicalPoints.List.Count.Should().Be(sampleCount);
         randomizedPoints.List.Count.Should().Be(sampleCount);
 
@@ -223,7 +207,6 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     [Fact]
     public void Sobol_HighDimensional_ShowsPrecisionDifferencesInComplexFractions()
     {
-        // Arrange - Use many dimensions to create complex fraction combinations
         const int dimensions = 50; // High dimensional stress test
         const int sampleCount = 100; // Fewer samples, but more complex ones
 
@@ -238,7 +221,6 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
         var dimensionsWithDifferences = 0;
         var maxDifference = 0m;
 
-        // Act - Check high-dimensional points for precision differences
         for (var sample = 0; sample < sampleCount; sample++)
         {
             using var doublePoint = doubleSampler.Sample();
@@ -265,7 +247,6 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
             }
         }
 
-        // Assert - High dimensions should reveal precision differences
         testOutputHelper.WriteLine($"Total samples checked: {sampleCount * dimensions:N0}");
         testOutputHelper.WriteLine($"Dimensions with differences: {dimensionsWithDifferences:N0}");
         testOutputHelper.WriteLine($"Total cumulative difference: {totalDifference:G15}");
@@ -283,18 +264,15 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     [InlineData(int.MaxValue)] // Exceeds max supported dimensions for this implementation
     public void Sobol_WithInvalidDimensions_ThrowsArgumentOutOfRangeException(int invalidDimensions)
     {
-        // Arrange
         var rng = new ChiRng();
         var act = () => { rng.Sobol(invalidDimensions).OfType<Half>(); };
 
-        // Act & Assert
         act.Should().Throw<ArgumentOutOfRangeException>();
     }
 
     [Fact]
     public void Sobol_FirstPoints_MatchReferenceImplementation()
     {
-        // Arrange
         var expected2D = new[,]
         {
             { 0.0, 0.0 },
@@ -311,7 +289,6 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
         var rng = new ChiRng();
         var sampler = rng.Sobol(2, ChiSequenceMode.Canonical).OfType<double>();
 
-        // Act & Assert
         for (var i = 0; i < 8; i++)
         {
             using var point = sampler.Sample();
@@ -323,7 +300,6 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     [Fact]
     public void Sobol_DifferentScrambles_ProduceDifferentButValidSequences()
     {
-        // Arrange
         const int numSequences = 10;
         const int dimensions = 3;
 
@@ -339,7 +315,6 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
             firstPoints.Add(firstPoint.ToArray());
         }
 
-        // Act & Assert
         for (var i = 0; i < numSequences - 1; i++)
         for (var j = i + 1; j < numSequences; j++)
             firstPoints[i].Should().NotBeEquivalentTo(firstPoints[j],
@@ -352,11 +327,9 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     [InlineData(500)]
     public void Sobol_HighDimensions_MaintainsValidRange(int dimensions)
     {
-        // Arrange
         var rng = new ChiRng();
         var sampler = rng.Sobol(dimensions).OfType<double>();
 
-        // Act & Assert
         const int testPoints = 1000;
         foreach (var point in sampler.Sample(testPoints))
             for (var d = 0; d < dimensions; d++)

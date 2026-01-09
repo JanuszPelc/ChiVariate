@@ -14,19 +14,16 @@ public class InfrastructureTests
     [Fact]
     public void SkewedSampler_WithGoodRng_FailsUniformityTest()
     {
-        // Arrange
         var rng = new ChiRng(42);
         var histogram = new Histogram(0.0, 1.0, 10);
         var sampler = new SkewedSampler();
 
-        // Act
         var act = () =>
         {
             histogram.Generate<double, ChiRng, SkewedSampler>(ref rng, SampleCount, sampler);
             histogram.AssertIsUniform(0.05);
         };
 
-        // Assert
         act.Should().Throw<XunitException>()
             .WithMessage("*because bin*should be within*of the expected average*");
     }

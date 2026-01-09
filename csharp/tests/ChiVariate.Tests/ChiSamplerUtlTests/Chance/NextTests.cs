@@ -81,11 +81,9 @@ public class NextTests(ITestOutputHelper testOutputHelper)
     [InlineData(int.MaxValue - 100, int.MaxValue)]
     public void Next_WithValidRange_StaysWithinBounds(int minInclusive, int maxExclusive)
     {
-        // Arrange
         var rng = new ChiRng(new ChiHash().Add(minInclusive).Add(maxExclusive).Hash);
         const int sampleCount = 1000;
 
-        // Act & Assert
         for (var i = 0; i < sampleCount; i++)
         {
             var result = rng.Chance().Next(minInclusive, maxExclusive);
@@ -96,11 +94,9 @@ public class NextTests(ITestOutputHelper testOutputHelper)
     [Fact]
     public void Next_WithInvalidRange_ThrowsArgumentOutOfRangeException()
     {
-        // Arrange
         var rng = new ChiRng(0);
         Action act = () => rng.Chance().Next(maxExclusive: 5, minInclusive: 10);
 
-        // Assert
         act.Should().Throw<ArgumentOutOfRangeException>();
     }
 
@@ -113,14 +109,11 @@ public class NextTests(ITestOutputHelper testOutputHelper)
         where T : unmanaged, IBinaryInteger<T>
         where TSampler : IHistogramSamplerWithRange<T, ChiRng>
     {
-        // Arrange
         var rng = new ChiRng(typeof(T).Name);
         var histogram = new Histogram(0.0, 1.0, 10);
 
-        // Act
         histogram.Generate<T, ChiRng, TSampler>(ref rng, SampleCount, sampler);
 
-        // Assert
         histogram.DebugPrint(testOutputHelper, methodName);
         histogram.AssertIsUniform(0.05);
     }
@@ -130,15 +123,12 @@ public class NextTests(ITestOutputHelper testOutputHelper)
         where T : IFloatingPoint<T>
         where TSampler : IHistogramSamplerWithRange<T, ChiRng>
     {
-        // Arrange
         var rng = new ChiRng(typeof(T).Name);
         var histogram = new Histogram(0.0, 1.0, 10);
         const int sampleCount = 100_000;
 
-        // Act
         histogram.Generate<T, ChiRng, TSampler>(ref rng, sampleCount, sampler);
 
-        // Assert
         histogram.DebugPrint(testOutputHelper, methodName);
         histogram.AssertIsUniform(0.05);
     }

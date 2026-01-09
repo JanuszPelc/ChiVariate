@@ -21,7 +21,6 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
         // distribution is that its reciprocal is a Gamma distribution. The Gamma
         // distribution is much better behaved and its statistics are easier to verify.
 
-        // Arrange
         var rng = new ChiRng(ChiSeed.Scramble("InverseGammaReciprocal", new ChiHash().Add(shape).Add(scale).Hash));
         var sampler = rng.InverseGamma(shape, scale);
 
@@ -33,7 +32,6 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
 
         var histogram = new Histogram(0, expectedGammaMean * 5, 150);
 
-        // Act
         foreach (var invGammaSample in sampler.Sample(SampleCount))
             if (invGammaSample > 1e-9) // Avoid division by a near-zero sample
             {
@@ -41,7 +39,6 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
                 histogram.AddSample(reconstructedGammaSample);
             }
 
-        // Assert
         histogram.DebugPrint(testOutputHelper, $"Reconstructed Gamma from 1/InvGamma(α={shape}, β={scale})");
 
         var actualMean = histogram.CalculateMean();
@@ -56,7 +53,6 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     [Fact]
     public void Sample_Decimal_Reciprocal_MatchesCorrespondingGamma()
     {
-        // Arrange
         const decimal shape = 3.0m;
         const decimal scale = 5.0m;
         var rng = new ChiRng(ChiSeed.Scramble("InvGammaDecimalReciprocal"));
@@ -71,7 +67,6 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
         double sumOfSquares = 0;
         var count = 0;
 
-        // Act
         foreach (var invGammaSample in sampler.Sample(SampleCount))
             if (invGammaSample > 1e-9m)
             {
@@ -81,7 +76,6 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
                 count++;
             }
 
-        // Assert
         var actualMean = sum / count;
         var actualVariance = sumOfSquares / count - actualMean * actualMean;
 
@@ -92,13 +86,10 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     [Fact]
     public void Sample_WithFixedSeed_IsDeterministic()
     {
-        // Arrange
         var rng = new ChiRng(1337);
 
-        // Act
         var result = rng.InverseGamma(3.0, 5.0).Sample();
 
-        // Assert
         result.Should().BeApproximately(2.03781, 0.00001);
     }
 
@@ -109,11 +100,9 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     [InlineData(5, -1)]
     public void InverseGamma_WithInvalidParameters_ThrowsArgumentOutOfRangeException(double shape, double scale)
     {
-        // Arrange
         var rng = new ChiRng();
         var act = () => { rng.InverseGamma(shape, scale); };
 
-        // Act & Assert
         act.Should().Throw<ArgumentOutOfRangeException>();
     }
 }

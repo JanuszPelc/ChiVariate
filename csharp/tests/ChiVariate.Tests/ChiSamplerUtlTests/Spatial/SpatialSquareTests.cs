@@ -14,12 +14,10 @@ public class SpatialSquareTests(ITestOutputHelper testOutputHelper)
     [Fact]
     public void PointInSquare_SamplesAreWithinBounds()
     {
-        // Arrange
         const float extents = 10.0f;
         var rng = new ChiRng(ChiSeed.Scramble("PointInSquareBounds"));
         var sampler = rng.Spatial().InSquare(extents);
 
-        // Act & Assert
         for (var i = 0; i < 1000; i++)
         {
             var p = sampler.Sample();
@@ -38,14 +36,12 @@ public class SpatialSquareTests(ITestOutputHelper testOutputHelper)
         var histX = new Histogram(-extents, extents, 20);
         var histY = new Histogram(-extents, extents, 20);
 
-        // Act
         foreach (var p in sampler.Sample(SampleCount))
         {
             histX.AddSample(p.X);
             histY.AddSample(p.Y);
         }
 
-        // Assert
         histX.DebugPrint(testOutputHelper, "PointInSquare Marginal" + " X");
         histY.DebugPrint(testOutputHelper, "PointInSquare Marginal" + " Y");
 
@@ -56,12 +52,10 @@ public class SpatialSquareTests(ITestOutputHelper testOutputHelper)
     [Fact]
     public void PointOnSquare_SamplesAreOnThePerimeter()
     {
-        // Arrange
         const float extents = 5.0f;
         var rng = new ChiRng(ChiSeed.Scramble("PointOnSquareBounds"));
         var sampler = rng.Spatial().OnSquare(extents);
 
-        // Act & Assert
         for (var i = 0; i < 1000; i++)
         {
             var p = sampler.Sample();
@@ -83,14 +77,12 @@ public class SpatialSquareTests(ITestOutputHelper testOutputHelper)
 
         int topEdgeCount = 0, bottomEdgeCount = 0, leftEdgeCount = 0, rightEdgeCount = 0;
 
-        // Act
         foreach (var p in sampler.Sample(SampleCount))
             if (Math.Abs(p.Y - extents) < 1e-6f) topEdgeCount++;
             else if (Math.Abs(p.Y + extents) < 1e-6f) bottomEdgeCount++;
             else if (Math.Abs(p.X - extents) < 1e-6f) rightEdgeCount++;
             else leftEdgeCount++;
 
-        // Assert
         const double expectedCount = SampleCount / 4.0;
         ((double)topEdgeCount).Should()
             .BeApproximately(expectedCount, expectedCount * 0.05, "top edge should have ~25% of points.");
@@ -105,14 +97,11 @@ public class SpatialSquareTests(ITestOutputHelper testOutputHelper)
     [Fact]
     public void Sample_WithFixedSeed_IsDeterministic()
     {
-        // Arrange
         var rng = new ChiRng(1337);
 
-        // Act
         var onP = rng.Spatial().OnSquare(10.0f).Sample();
         var inP = rng.Spatial().InSquare(10.0f).Sample();
 
-        // Assert
         onP.X.Should().BeApproximately(10f, 0.0001f);
         onP.Y.Should().BeApproximately(-6.9566f, 0.0001f);
 
@@ -123,11 +112,9 @@ public class SpatialSquareTests(ITestOutputHelper testOutputHelper)
     [Fact]
     public void PointSquare_WithInvalidExtents_ThrowsArgumentOutOfRangeException()
     {
-        // Arrange
         var rng = new ChiRng();
         var act = () => { rng.Spatial().InSquare(-1.0f); };
 
-        // Act & Assert
         act.Should().Throw<ArgumentOutOfRangeException>()
             .And.ParamName.Should().Be("extents");
     }

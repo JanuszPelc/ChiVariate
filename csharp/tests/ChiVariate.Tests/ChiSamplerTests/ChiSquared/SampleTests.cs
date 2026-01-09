@@ -19,7 +19,6 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     [InlineData(10)] // Becoming more symmetric
     public void Sample_ProducesDistributionWithCorrectStatistics(int degreesOfFreedom)
     {
-        // Arrange
         var rng = new ChiRng(ChiSeed.Scramble("ChiSquared", degreesOfFreedom));
 
         var expectedMean = (double)degreesOfFreedom;
@@ -29,14 +28,12 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
         var maxBound = expectedMean + 5 * expectedStdDev;
         var histogram = new Histogram(0, maxBound, 150);
 
-        // Act
         for (var i = 0; i < SampleCount; i++)
         {
             var sample = rng.ChiSquared((double)degreesOfFreedom).Sample();
             if (sample < maxBound) histogram.AddSample(sample);
         }
 
-        // Assert
         histogram.DebugPrint(testOutputHelper, $"ChiSquared(k={degreesOfFreedom})");
         var varianceTolerance = degreesOfFreedom == 1 ? 0.2 : 0.15;
         histogram.AssertIsChiSquared(degreesOfFreedom, 0.1, varianceTolerance);
@@ -47,13 +44,10 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     [InlineData(-1)]
     public void ChiSquared_WithInvalidDof_ThrowsArgumentOutOfRangeException(int degreesOfFreedom)
     {
-        // Arrange
         var rng = new ChiRng(0);
 
-        // Act
         Action act = () => rng.ChiSquared((float)degreesOfFreedom).Sample();
 
-        // Assert
         act.Should().Throw<ArgumentOutOfRangeException>().And.ParamName.Should().Be("degreesOfFreedom");
     }
 
@@ -62,7 +56,6 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     [InlineData("5")]
     public void Sample_Decimal_ProducesDistributionWithCorrectStatistics(string degreesOfFreedomStr)
     {
-        // Arrange
         var degreesOfFreedom = decimal.Parse(degreesOfFreedomStr, CultureInfo.InvariantCulture);
         var intDof = (int)degreesOfFreedom;
         var rng = new ChiRng(ChiSeed.Scramble("ChiSquaredDecimal", (long)degreesOfFreedom));
@@ -75,10 +68,8 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
         var histogram = new Histogram(0, maxBound, 150);
         var sampler = new DecimalChiSquaredSampler(degreesOfFreedom);
 
-        // Act
         histogram.Generate<decimal, ChiRng, DecimalChiSquaredSampler>(ref rng, 20_000, sampler);
 
-        // Assert
         histogram.DebugPrint(testOutputHelper, $"ChiSquared(k={degreesOfFreedom})");
         histogram.AssertIsChiSquared(intDof, 0.1, 0.2, 0.005);
     }

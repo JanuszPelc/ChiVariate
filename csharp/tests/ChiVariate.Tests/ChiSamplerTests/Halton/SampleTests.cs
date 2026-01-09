@@ -14,14 +14,12 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     [Fact]
     public void CanonicalSequence_WithFixedSeed_IsBitForBitDeterministic()
     {
-        // Arrange
         var rng1 = new ChiRng("TestSeed");
         var rng2 = new ChiRng("TestSeed");
 
         var sampler1 = rng1.Halton(2, ChiSequenceMode.Canonical).OfType<decimal>();
         var sampler2 = rng2.Halton(2, ChiSequenceMode.Canonical).OfType<decimal>();
 
-        // Act & Assert
         for (var i = 0; i < SampleCount; i++)
         {
             using var p1 = sampler1.Sample();
@@ -34,14 +32,12 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     [Fact]
     public void RandomizedSequence_WithFixedRngSeed_IsBitForBitDeterministic()
     {
-        // Arrange
         var rng1 = new ChiRng("RandomSeedForHalton");
         var rng2 = new ChiRng(rng1.Snapshot());
 
         var sampler1 = rng1.Halton(2).OfType<float>();
         var sampler2 = rng2.Halton(2).OfType<float>();
 
-        // Act & Assert
         for (var i = 0; i < SampleCount; i++)
         {
             using var p1 = sampler1.Sample();
@@ -55,7 +51,6 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     [Fact]
     public void RandomizedSequence_WithDifferentRngSeeds_ProducesDifferentSequences()
     {
-        // Arrange
         var rng1 = new ChiRng("SeedA");
         var rng2 = new ChiRng("SeedB");
 
@@ -65,7 +60,6 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
         var firstPoint1 = sampler1.Sample().ToArray();
         var firstPoint2 = sampler2.Sample().ToArray();
 
-        // Act & Assert
         firstPoint1.Should().NotBeEquivalentTo(firstPoint2,
             "because different RNG seeds should produce different randomized offsets.");
     }
@@ -73,7 +67,6 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     [Fact]
     public void RandomizedHalton_FromSameRng_ProducesDifferentSequencesThanCanonical()
     {
-        // Arrange
         const int sampleCount = 1000;
         const int dimensions = 3;
 
@@ -83,11 +76,9 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
         var canonicalSampler = canonicalRng.Halton(dimensions, ChiSequenceMode.Canonical).OfType<double>();
         var randomizedSampler = randomizedRng.Halton(dimensions).OfType<double>();
 
-        // Act - Test bulk sampling
         using var canonicalPoints = canonicalSampler.Sample(sampleCount);
         using var randomizedPoints = randomizedSampler.Sample(sampleCount);
 
-        // Assert
         canonicalPoints.List.Count.Should().Be(sampleCount);
         randomizedPoints.List.Count.Should().Be(sampleCount);
 
@@ -130,7 +121,6 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
         var rng = new ChiRng();
         var sampler = rng.Halton(2, ChiSequenceMode.Canonical).OfType<double>();
 
-        // Act & Assert
         foreach (var t in expectedPoints)
         {
             using var actualPoint = sampler.Sample();
@@ -144,7 +134,6 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     [Fact]
     public void HaltonSequence_Marginals_ShowExcellentUniformity()
     {
-        // Arrange
         const int dimensions = 2;
         const int samples = 10_000;
         const int bins = 50;
@@ -155,14 +144,12 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
         var histograms = new Histogram[dimensions];
         for (var i = 0; i < dimensions; i++) histograms[i] = new Histogram(0.0, 1.0, bins);
 
-        // Act
         foreach (var point in sampler.Sample(samples))
             using (point)
             {
                 for (var d = 0; d < dimensions; d++) histograms[d].AddSample(point[d]);
             }
 
-        // Assert
         var expectedSamplesPerBin = (double)samples / bins;
         const double uniformityTolerance = 0.01;
 
@@ -181,7 +168,6 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     [Fact]
     public void Halton_HighDimensional_ShowsPrecisionDifferencesInPrimeBasedFractions()
     {
-        // Arrange - Use many dimensions to stress different prime bases
         const int dimensions = 50; // First 50 primes: 2,3,5,7,11,13,17,19,23,29...
         const int sampleCount = 100;
 
@@ -197,7 +183,6 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
         var maxDifference = 0m;
         int maxDiffSample = -1, maxDiffDim = -1;
 
-        // Act - Check high-dimensional Halton points for precision differences
         for (var sample = 0; sample < sampleCount; sample++)
         {
             using var doublePoint = doubleSampler.Sample();
@@ -230,7 +215,6 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
             }
         }
 
-        // Assert - Halton should show precision differences due to prime-based fractions
         testOutputHelper.WriteLine($"Total samples checked: {sampleCount * dimensions:N0}");
         testOutputHelper.WriteLine($"Dimensions with differences: {dimensionsWithDifferences:N0}");
         testOutputHelper.WriteLine($"Hit rate: {(double)dimensionsWithDifferences / (sampleCount * dimensions):P2}");
@@ -297,11 +281,9 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     [InlineData(1025)] // Exceeds max supported dimensions
     public void Halton_WithInvalidDimensions_ThrowsArgumentOutOfRangeException(int invalidDimensions)
     {
-        // Arrange
         var rng = new ChiRng();
         var act = () => { rng.Halton(invalidDimensions).OfType<Half>(); };
 
-        // Act & Assert
         act.Should().Throw<ArgumentOutOfRangeException>();
     }
 }

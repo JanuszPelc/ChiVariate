@@ -19,12 +19,10 @@ public class WeightedEnumTests
     [Fact]
     public void ConvenientAndPerformantApproaches_WithSynchronizedRng_ProduceSameResults()
     {
-        // Arrange
         var rng1 = new ChiRng();
         var rng2 = new ChiRng(rng1.Snapshot());
         var categorical = new PerformantMagicCardGenerator().CreateSampler(ref rng2);
 
-        // Act & Assert
         for (var i = 0; i < 10_000; i++)
         {
             var card1 = new ConvenientMagicCardGenerator().GenerateMagicCard(ref rng1);

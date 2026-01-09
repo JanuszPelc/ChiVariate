@@ -18,7 +18,6 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     [InlineData(50, 5, 20)] // Low probability of success
     public void Sample_ProducesDistributionWithCorrectStatistics(int populationSize, int numSuccesses, int sampleSize)
     {
-        // Arrange
         var rng = new ChiRng(ChiSeed.Scramble("Hypergeometric", populationSize));
 
         var minPossible = Math.Max(0, sampleSize - (populationSize - numSuccesses));
@@ -26,14 +25,12 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
 
         var histogram = new Histogram(minPossible, maxPossible + 1, maxPossible - minPossible + 1, true);
 
-        // Act
         for (var i = 0; i < SampleCount; i++)
         {
             var sample = rng.Hypergeometric(populationSize, numSuccesses, sampleSize).Sample();
             histogram.AddSample(sample);
         }
 
-        // Assert
         histogram.DebugPrint(testOutputHelper, $"Hypergeometric(N={populationSize}, K={numSuccesses}, n={sampleSize})");
         histogram.AssertIsHypergeometric(populationSize, numSuccesses, sampleSize, 0.1);
     }
@@ -45,13 +42,10 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     public void Hypergeometric_WithInvalidParameters_ThrowsArgumentOutOfRangeException(int populationSize,
         int numSuccesses, int sampleSize)
     {
-        // Arrange
         var rng = new ChiRng(0);
 
-        // Act
         Action act = () => rng.Hypergeometric(populationSize, numSuccesses, sampleSize).Sample();
 
-        // Assert
         act.Should().Throw<ArgumentOutOfRangeException>();
     }
 }

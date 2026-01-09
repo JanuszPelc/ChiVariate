@@ -13,7 +13,6 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     [Fact]
     public void Sample_2D_IsCorrect()
     {
-        // Arrange
         const int degreesOfFreedom = 5;
         var scaleMatrix = ChiMatrix.With(new[,]
         {
@@ -24,18 +23,15 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
         var wishart = rng.Wishart(degreesOfFreedom, scaleMatrix);
         var samples = new List<double[,]>(SampleCount);
 
-        // Act
         for (var i = 0; i < SampleCount; i++)
             samples.Add(wishart.Sample().ToArray());
 
-        // Assert
         samples.AssertIsWishart(degreesOfFreedom, scaleMatrix.ToArray(), 0.15);
     }
 
     [Fact]
     public void Sample_3D_WithIdentityScale_IsCorrect()
     {
-        // Arrange
         const int degreesOfFreedom = 10;
         var scaleMatrix = ChiMatrix.With(new[,]
         {
@@ -46,7 +42,6 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
         var rng = new ChiRng("Wishart_3D_Identity");
         var wishart = rng.Wishart(degreesOfFreedom, scaleMatrix);
 
-        // Act
         var samples = wishart
             .Sample(SampleCount)
             .Select(matrix =>
@@ -58,14 +53,12 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
             })
             .ToList();
 
-        // Assert
         samples.AssertIsWishart(degreesOfFreedom, scaleMatrix.ToArray(), 0.15);
     }
 
     [Fact]
     public void Sample_DiagonalElements_FollowChiSquaredDistribution()
     {
-        // Arrange
         const int degreesOfFreedom = 10;
         var scaleMatrix = ChiMatrix.With(new[,]
         {
@@ -81,14 +74,12 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
         var maxBound = expectedMean + 8 * expectedStdDev;
         var histogram = new Histogram(0, maxBound, 100);
 
-        // Act
         for (var i = 0; i < SampleCount; i++)
         {
             var sampleMatrix = rng.Wishart(degreesOfFreedom, scaleMatrix).Sample();
             histogram.AddSample(sampleMatrix[0, 0]);
         }
 
-        // Assert
         histogram.DebugPrint(testOutputHelper);
         histogram.AssertIsChiSquared(degreesOfFreedom, 0.1, 0.15);
     }
@@ -96,7 +87,6 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     [Fact]
     public void Sample_Decimal_IsCorrect()
     {
-        // Arrange
         const int degreesOfFreedom = 5;
         var scaleMatrix = ChiMatrix.With(new[,]
         {
@@ -107,11 +97,9 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
 
         var samples = new List<decimal[,]>(SampleCount);
 
-        // Act
         for (var i = 0; i < 1_000; i++)
             samples.Add(rng.Wishart(degreesOfFreedom, scaleMatrix).Sample().ToArray());
 
-        // Assert
         samples.AssertIsWishart(degreesOfFreedom, scaleMatrix.ToArray(), 0.25);
     }
 }

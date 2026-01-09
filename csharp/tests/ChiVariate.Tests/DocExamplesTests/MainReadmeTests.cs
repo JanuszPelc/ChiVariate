@@ -160,7 +160,6 @@ public class MainReadmeTests(ITestOutputHelper testOutputHelper)
         }
         // --- example code end ---
 
-        // Assertions
         // We can assert on the statistical properties of the collected measurements.
         var sampleMean = new[] { 0.0, 0.0 };
         foreach (var m in measurements)
@@ -215,7 +214,6 @@ public class MainReadmeTests(ITestOutputHelper testOutputHelper)
     [Fact]
     public void FinancialSimulation_WithDecimal_ProducesLogNormalDistribution()
     {
-        // Arrange
         var prices = new List<decimal>();
         var testRng = new ChiRng(nameof(FinancialSimulation_WithDecimal_ProducesLogNormalDistribution));
 
@@ -226,7 +224,6 @@ public class MainReadmeTests(ITestOutputHelper testOutputHelper)
         const decimal volatilityArg = 0.80m;
         const decimal timeToMaturityArg = 1.0m / 252.0m;
 
-        // Act
         EstimateTerminalValue(
             ref testRng,
             testNumPaths,
@@ -236,7 +233,6 @@ public class MainReadmeTests(ITestOutputHelper testOutputHelper)
             timeToMaturityArg
         );
 
-        // Assert
         prices.Should().HaveCount(testNumPaths);
 
         var logPrices = prices.Select(ChiMath.Log).ToList();
@@ -328,7 +324,6 @@ public class MainReadmeTests(ITestOutputHelper testOutputHelper)
     [Fact]
     public void ParticleSystem_WithDifferentChaos_ProducesStatisticallyDifferentResults()
     {
-        // Arrange
         const int particleCount = 20_000;
         const float deltaTime = 0.1f;
 
@@ -339,11 +334,9 @@ public class MainReadmeTests(ITestOutputHelper testOutputHelper)
 
         var exampleSystem = new ParticlesExample();
 
-        // Act
         // Run both simulations. This modifies the particles in-place.
         exampleSystem.UpdateAllSystems(nebulaParticles, explosionParticles, deltaTime);
 
-        // Assert
         // We will measure the final displacement (distance from origin) for each particle.
         var nebulaDisplacements = new List<float>(particleCount);
         var explosionDisplacements = new List<float>(particleCount);

@@ -19,19 +19,16 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     [InlineData(5.0, 10.0)] // k>>1, bell-shaped (approaching Normal)
     public void Sample_ProducesDistributionWithCorrectShape(double shape, double scale)
     {
-        // Arrange
         var rng = new ChiRng(ChiSeed.Scramble("Weibull", new ChiHash().Add(shape).Add(scale).Hash));
         var maxBound = scale * 10;
         var histogram = new Histogram(0, maxBound, 150);
 
-        // Act
         for (var i = 0; i < SampleCount; i++)
         {
             var sample = rng.Weibull(shape, scale).Sample();
             if (sample < maxBound) histogram.AddSample(sample);
         }
 
-        // Assert
         histogram.DebugPrint(testOutputHelper, $"Weibull(k={shape}, λ={scale})");
         histogram.AssertIsWeibull(shape, scale, 0.15);
     }
@@ -41,13 +38,10 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     [InlineData(1.0, 0.0)]
     public void Weibull_WithInvalidParameters_ThrowsArgumentOutOfRangeException(double shape, double scale)
     {
-        // Arrange
         var rng = new ChiRng(0);
 
-        // Act
         Action act = () => rng.Weibull(shape, scale).Sample();
 
-        // Assert
         act.Should().Throw<ArgumentOutOfRangeException>();
     }
 
@@ -56,7 +50,6 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     [InlineData("5.0", "10.0")] // k>>1, bell-shaped
     public void Sample_Decimal_ProducesDistributionWithCorrectShape(string shapeStr, string scaleStr)
     {
-        // Arrange
         var shape = decimal.Parse(shapeStr, CultureInfo.InvariantCulture);
         var scale = decimal.Parse(scaleStr, CultureInfo.InvariantCulture);
 
@@ -65,10 +58,8 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
         var histogram = new Histogram(0, maxBound, 150);
         var sampler = new DecimalWeibullSampler(shape, scale);
 
-        // Act
         histogram.Generate<decimal, ChiRng, DecimalWeibullSampler>(ref rng, 150_000, sampler);
 
-        // Assert
         histogram.DebugPrint(testOutputHelper, $"Weibull(k={shape}, λ={scale})");
         histogram.AssertIsWeibull(shape, scale, 0.20);
     }

@@ -18,7 +18,6 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     [InlineData(0.0, 0.25)] // Tightly clustered near 1
     public void Sample_ProducesDistributionWithCorrectStatistics(double mu, double sigma)
     {
-        // Arrange
         var rng = new ChiRng(ChiSeed.Scramble("LogNormal", new ChiHash().Add(mu).Add(sigma).Hash));
 
         var expectedMean = Math.Exp(mu + sigma * sigma / 2.0);
@@ -28,7 +27,6 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
         var maxBound = expectedMean + 4 * expectedStdDev;
         var histogram = new Histogram(0, maxBound, 100);
 
-        // Act
         for (var i = 0; i < SampleCount; i++)
         {
             var sample = rng.LogNormal(mu, sigma).Sample();
@@ -36,7 +34,6 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
                 histogram.AddSample(sample);
         }
 
-        // Assert
         histogram.DebugPrint(testOutputHelper, $"LogNormal(mu={mu}, sigma={sigma})");
         histogram.AssertIsLogNormal(mu, sigma, 0.1);
     }
@@ -46,13 +43,10 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     [InlineData(0.0, -1.0)]
     public void LogNormal_WithInvalidSigma_ThrowsArgumentOutOfRangeException(double logMean, double logStdDev)
     {
-        // Arrange
         var rng = new ChiRng(0);
 
-        // Act
         Action act = () => rng.LogNormal(logMean, logStdDev).Sample();
 
-        // Assert
         act.Should().Throw<ArgumentOutOfRangeException>().And.ParamName.Should().Be("logStandardDeviation");
     }
 
@@ -61,7 +55,6 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     [InlineData("0.0", "0.25")] // Tightly clustered near 1
     public void Sample_Decimal_ProducesDistributionWithCorrectStatistics(string muStr, string sigmaStr)
     {
-        // Arrange
         var mu = decimal.Parse(muStr, CultureInfo.InvariantCulture);
         var sigma = decimal.Parse(sigmaStr, CultureInfo.InvariantCulture);
 
@@ -76,10 +69,8 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
         var histogram = new Histogram(1e-10, maxBound, 100);
         var sampler = new DecimalLogNormalSampler(mu, sigma);
 
-        // Act
         histogram.Generate<decimal, ChiRng, DecimalLogNormalSampler>(ref rng, 20_000, sampler);
 
-        // Assert
         histogram.DebugPrint(testOutputHelper, $"LogNormal(mu={mu}, sigma={sigma})");
         histogram.AssertIsLogNormal(mu, sigma, 0.15);
     }

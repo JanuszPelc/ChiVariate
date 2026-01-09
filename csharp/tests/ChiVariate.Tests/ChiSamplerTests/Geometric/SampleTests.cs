@@ -17,20 +17,17 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     [InlineData(0.1)] // Expected mean = 10
     public void Sample_ProducesDistributionWithCorrectMean(double probability)
     {
-        // Arrange
         var rng = new ChiRng(ChiSeed.Scramble("Geometric", probability));
         var expectedMean = 1.0 / probability;
         var maxBound = (int)Math.Ceiling(expectedMean * 15);
         var histogram = new Histogram(1, maxBound, maxBound - 1, true);
 
-        // Act
         for (var i = 0; i < SampleCount; i++)
         {
             var sample = rng.Geometric(probability).Sample();
             histogram.AddSample(sample);
         }
 
-        // Assert
         histogram.DebugPrint(testOutputHelper, $"Geometric(p={probability})");
         histogram.AssertIsGeometric(probability, 0.05);
     }
@@ -48,13 +45,10 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     [InlineData(1.1)]
     public void Geometric_WithInvalidProbability_ThrowsArgumentOutOfRangeException(double invalidProbability)
     {
-        // Arrange
         var rng = new ChiRng(0);
 
-        // Act
         Action act = () => rng.Geometric(invalidProbability).Sample();
 
-        // Assert
         act.Should().Throw<ArgumentOutOfRangeException>().And.ParamName.Should().Be("probability");
     }
 }

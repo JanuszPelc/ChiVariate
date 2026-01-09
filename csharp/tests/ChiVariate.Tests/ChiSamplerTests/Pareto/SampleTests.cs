@@ -18,19 +18,16 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     [InlineData(10.0, 3.0)] // Finite mean and variance
     public void Sample_ProducesDistributionWithCorrectShape(double scale, double shape)
     {
-        // Arrange
         var rng = new ChiRng(ChiSeed.Scramble("Pareto", new ChiHash().Add(scale).Add(shape).Hash));
         var maxBound = scale * 10;
         var histogram = new Histogram(scale, maxBound, 150);
 
-        // Act
         for (var i = 0; i < SampleCount; i++)
         {
             var sample = rng.Pareto(scale, shape).Sample();
             if (sample < maxBound) histogram.AddSample(sample);
         }
 
-        // Assert
         histogram.DebugPrint(testOutputHelper, $"Pareto(xₘ={scale}, α={shape})");
         histogram.AssertIsPareto(scale, shape, 0.2);
     }
@@ -40,13 +37,10 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     [InlineData(1.0, 0.0)]
     public void Pareto_WithInvalidParameters_ThrowsArgumentOutOfRangeException(double scale, double shape)
     {
-        // Arrange
         var rng = new ChiRng(0);
 
-        // Act
         Action act = () => rng.Pareto(scale, shape).Sample();
 
-        // Assert
         act.Should().Throw<ArgumentOutOfRangeException>();
     }
 
@@ -55,7 +49,6 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     [InlineData("1.0", "2.1")] // Finite mean, infinite variance
     public void Sample_Decimal_ProducesDistributionWithCorrectShape(string scaleStr, string shapeStr)
     {
-        // Arrange
         var scale = decimal.Parse(scaleStr, CultureInfo.InvariantCulture);
         var shape = decimal.Parse(shapeStr, CultureInfo.InvariantCulture);
 
@@ -64,10 +57,8 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
         var histogram = new Histogram((double)scale, maxBound, 150);
         var sampler = new DecimalParetoSampler(scale, shape);
 
-        // Act
         histogram.Generate<decimal, ChiRng, DecimalParetoSampler>(ref rng, 100_000, sampler);
 
-        // Assert
         histogram.DebugPrint(testOutputHelper, $"Pareto(xₘ={scale}, α={shape})");
         histogram.AssertIsPareto(scale, shape, 0.25);
     }

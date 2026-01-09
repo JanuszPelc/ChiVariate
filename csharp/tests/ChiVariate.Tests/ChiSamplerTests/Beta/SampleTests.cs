@@ -20,19 +20,16 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     [InlineData(0.5, 0.5)] // U-shaped case
     public void Sample_ProducesDistributionWithCorrectMean(double alpha, double beta)
     {
-        // Arrange
         var rng = new ChiRng(ChiSeed.Scramble("Beta", alpha * 100 + beta));
         var expectedMean = alpha / (alpha + beta);
         var histogram = new Histogram(0, 1, 100);
 
-        // Act
         for (var i = 0; i < SampleCount; i++)
         {
             var sample = rng.Beta(alpha, beta).Sample();
             histogram.AddSample(sample);
         }
 
-        // Assert
         histogram.DebugPrint(testOutputHelper, $"Beta(alpha={alpha}, beta={beta})");
         histogram.AssertIsBeta(expectedMean, 0.10);
 
@@ -47,13 +44,10 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     [InlineData(1.0, -1.0)]
     public void Beta_WithInvalidParameters_ThrowsArgumentOutOfRangeException(double alpha, double beta)
     {
-        // Arrange
         var rng = new ChiRng(0);
 
-        // Act
         Action act = () => rng.Beta(alpha, beta).Sample();
 
-        // Assert
         act.Should().Throw<ArgumentOutOfRangeException>();
     }
 
@@ -62,7 +56,6 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     [InlineData("0.5", "0.5")] // U-shaped case
     public void Sample_Decimal_ProducesDistributionWithCorrectMean(string alphaStr, string betaStr)
     {
-        // Arrange
         var alpha = decimal.Parse(alphaStr, CultureInfo.InvariantCulture);
         var beta = decimal.Parse(betaStr, CultureInfo.InvariantCulture);
         var expectedMean = (double)alpha / (double)(alpha + beta);
@@ -71,10 +64,8 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
         var histogram = new Histogram(0, 1, 100);
         var sampler = new DecimalBetaSampler(alpha, beta);
 
-        // Act
         histogram.Generate<decimal, ChiRng, DecimalBetaSampler>(ref rng, 20_000, sampler);
 
-        // Assert
         histogram.DebugPrint(testOutputHelper, $"Beta(alpha={alpha}, beta={beta})");
         histogram.AssertIsBeta(expectedMean, 0.15);
     }

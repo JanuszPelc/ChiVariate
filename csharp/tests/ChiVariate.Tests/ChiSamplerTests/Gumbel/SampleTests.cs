@@ -18,7 +18,6 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     [InlineData(-10.0, 0.5)] // Shifted and narrow
     public void Sample_ProducesDistributionWithCorrectStatistics(double location, double scale)
     {
-        // Arrange
         var rng = new ChiRng(ChiSeed.Scramble("Gumbel", new ChiHash().Add(location).Add(scale).Hash));
         var sampler = rng.Gumbel(location, scale);
 
@@ -30,10 +29,8 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
         var minBound = expectedMean - 8 * expectedStdDev;
         var histogram = new Histogram(minBound, maxBound, 200);
 
-        // Act
         foreach (var sample in sampler.Sample(SampleCount)) histogram.AddSample(sample);
 
-        // Assert
         histogram.DebugPrint(testOutputHelper, $"Gumbel (μ={location}, β={scale})");
 
         var actualMean = histogram.CalculateMean();
@@ -48,7 +45,6 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     [Fact]
     public void Sample_Decimal_ProducesCorrectStatistics()
     {
-        // Arrange
         const decimal location = 5.0m;
         const decimal scale = 2.0m;
         var rng = new ChiRng(ChiSeed.Scramble("GumbelDecimal"));
@@ -60,7 +56,6 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
         double sum = 0;
         double sumOfSquares = 0;
 
-        // Act
         foreach (var sample in sampler.Sample(SampleCount))
         {
             var s = (double)sample;
@@ -68,7 +63,6 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
             sumOfSquares += s * s;
         }
 
-        // Assert
         var actualMean = sum / SampleCount;
         var actualVariance = sumOfSquares / SampleCount - actualMean * actualMean;
 
@@ -79,13 +73,10 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     [Fact]
     public void Sample_WithFixedSeed_IsDeterministic()
     {
-        // Arrange
         var rng = new ChiRng(1337);
 
-        // Act
         var result = rng.Gumbel(5.0, 2.0).Sample();
 
-        // Assert
         result.Should().BeApproximately(5.51681, 0.00001);
     }
 
@@ -94,11 +85,9 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     [InlineData(0.0, -1.0)]
     public void Gumbel_WithInvalidScale_ThrowsArgumentOutOfRangeException(double location, double scale)
     {
-        // Arrange
         var rng = new ChiRng();
         var act = () => { rng.Gumbel(location, scale); };
 
-        // Act & Assert
         act.Should().Throw<ArgumentOutOfRangeException>()
             .And.ParamName.Should().Be("scale");
     }

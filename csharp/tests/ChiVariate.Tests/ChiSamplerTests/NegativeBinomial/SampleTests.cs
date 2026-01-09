@@ -17,21 +17,18 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     [InlineData(3, 0.8)] // Expected mean = 3.75
     public void Sample_ProducesDistributionWithCorrectStatistics(int numSuccesses, double probability)
     {
-        // Arrange
         var rng = new ChiRng(
             ChiSeed.Scramble("NegativeBinomial", new ChiHash().Add(numSuccesses).Add(probability).Hash));
         var expectedMean = numSuccesses / probability;
         var maxBound = (int)Math.Ceiling(expectedMean * 3);
         var histogram = new Histogram(numSuccesses, maxBound, maxBound - numSuccesses, true);
 
-        // Act
         for (var i = 0; i < SampleCount; i++)
         {
             var sample = rng.NegativeBinomial(numSuccesses, probability).Sample();
             histogram.AddSample(sample);
         }
 
-        // Assert
         histogram.DebugPrint(testOutputHelper, $"NegativeBinomial(r={numSuccesses}, p={probability})");
         histogram.AssertIsNegativeBinomial(numSuccesses, probability, 0.1);
     }
@@ -39,7 +36,6 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     [Fact]
     public void NegativeBinomial_IsEquivalentToGeometric_WhenNumSuccessesIsOne()
     {
-        // Arrange
         const double probability = 0.3;
         var negBinRng = new ChiRng(123);
         var geoRng = new ChiRng(123);
@@ -47,14 +43,12 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
         var negBinHistogram = new Histogram(1, 50, 49, true);
         var geoHistogram = new Histogram(1, 50, 49, true);
 
-        // Act
         for (var i = 0; i < SampleCount; i++)
         {
             negBinHistogram.AddSample(negBinRng.NegativeBinomial(1, probability).Sample());
             geoHistogram.AddSample(geoRng.Geometric(probability).Sample());
         }
 
-        // Assert
         var negBinMean = negBinHistogram.CalculateMean();
         var geoMean = geoHistogram.CalculateMean();
 
@@ -70,13 +64,10 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     public void NegativeBinomial_WithInvalidParameters_ThrowsArgumentOutOfRangeException(int numSuccesses,
         double probability)
     {
-        // Arrange
         var rng = new ChiRng(0);
 
-        // Act
         Action act = () => rng.NegativeBinomial(numSuccesses, probability).Sample();
 
-        // Assert
         act.Should().Throw<ArgumentOutOfRangeException>();
     }
 }

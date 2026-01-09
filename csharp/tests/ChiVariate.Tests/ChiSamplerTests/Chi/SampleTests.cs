@@ -18,7 +18,6 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     [InlineData(10)]
     public void Sample_Squared_MatchesChiSquaredDistribution(int degreesOfFreedom)
     {
-        // Arrange
         var rng = new ChiRng($"Chi_k={degreesOfFreedom}");
 
         var expectedMean = (double)degreesOfFreedom;
@@ -27,7 +26,6 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
         var maxBound = expectedMean + 8 * expectedStdDev;
         var histogram = new Histogram(0, maxBound, 100);
 
-        // Act
         for (var i = 0; i < SampleCount; i++)
         {
             var chiSample = rng.Chi((double)degreesOfFreedom).Sample();
@@ -35,7 +33,6 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
             histogram.AddSample(chiSquaredSample);
         }
 
-        // Assert
         histogram.DebugPrint(testOutputHelper, $"Chi(k={degreesOfFreedom})^2 Distribution");
         histogram.AssertIsChiSquared(degreesOfFreedom, 0.1, 0.15);
     }
@@ -43,21 +40,18 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     [Fact]
     public void Sample_With2DoF_MatchesRayleighDistribution()
     {
-        // Arrange
         var chiRng = new ChiRng("Chi_vs_Rayleigh");
         var rayleighRng = new ChiRng("Chi_vs_Rayleigh"); // Same seed
 
         var chiHistogram = new Histogram(0, 8, 100);
         var rayleighHistogram = new Histogram(0, 8, 100);
 
-        // Act
         for (var i = 0; i < SampleCount; i++)
         {
             chiHistogram.AddSample(chiRng.Chi(2.0).Sample());
             rayleighHistogram.AddSample(rayleighRng.Rayleigh(1.0).Sample());
         }
 
-        // Assert
         var chiMean = chiHistogram.CalculateMean();
         var rayleighMean = rayleighHistogram.CalculateMean();
         rayleighMean.Should().BeApproximately(chiMean, 0.01,
@@ -73,7 +67,6 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     [InlineData("5")]
     public void Sample_Decimal_Squared_MatchesChiSquaredDistribution(string degreesOfFreedomStr)
     {
-        // Arrange
         var degreesOfFreedom = decimal.Parse(degreesOfFreedomStr, CultureInfo.InvariantCulture);
         var intDof = (int)degreesOfFreedom;
         var rng = new ChiRng(ChiSeed.Scramble("ChiDecimal", (long)degreesOfFreedom));
@@ -84,7 +77,6 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
         var maxBound = expectedMean + 8 * expectedStdDev;
         var histogram = new Histogram(0, maxBound, 100);
 
-        // Act
         for (var i = 0; i < 20_000; i++)
         {
             var chiSample = rng.Chi(degreesOfFreedom).Sample();
@@ -92,7 +84,6 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
             histogram.AddSample((double)chiSquaredSample);
         }
 
-        // Assert
         histogram.DebugPrint(testOutputHelper, $"Chi(k={degreesOfFreedom})^2 Distribution");
         histogram.AssertIsChiSquared(intDof, 0.1, 0.2);
     }

@@ -13,11 +13,9 @@ public class PickEnumTests
     [Fact]
     public void PickEnum_ForSimpleEnum_OnlyReturnsDefinedValues()
     {
-        // Arrange
         var rng = new ChiRng(123);
         var definedValues = Enum.GetValues<TestColor>();
 
-        // Act & Assert
         for (var i = 0; i < SampleCount; i++)
         {
             var result = rng.Chance().PickEnum<TestColor>();
@@ -28,21 +26,18 @@ public class PickEnumTests
     [Fact]
     public void PickEnum_ForSimpleEnum_ProducesUniformDistribution()
     {
-        // Arrange
         var rng = new ChiRng(456);
         var definedValues = Enum.GetValues<TestColor>();
         var histogram = new Dictionary<TestColor, int>();
         foreach (var value in definedValues) histogram[value] = 0;
         const int sampleCount = 100_000;
 
-        // Act
         for (var i = 0; i < sampleCount; i++)
         {
             var result = rng.Chance().PickEnum<TestColor>();
             histogram[result]++;
         }
 
-        // Assert
         var expectedCount = (double)sampleCount / definedValues.Length;
         const double tolerance = 0.05; // 5% tolerance
         var minAllowed = (int)(expectedCount * (1.0 - tolerance));
@@ -56,11 +51,9 @@ public class PickEnumTests
     [Fact]
     public void PickEnum_ForFlagsEnum_OnlyReturnsSingleDefinedFlags()
     {
-        // Arrange
         var rng = new ChiRng(789);
         var definedValues = Enum.GetValues<TestFlags>();
 
-        // Act & Assert
         for (var i = 0; i < SampleCount; i++)
         {
             var result = rng.Chance().PickEnum<TestFlags>();

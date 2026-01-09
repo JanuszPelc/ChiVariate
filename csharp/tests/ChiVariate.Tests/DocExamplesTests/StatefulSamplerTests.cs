@@ -22,7 +22,6 @@ public class StatefulSamplerTests(ITestOutputHelper testOutputHelper)
     [InlineData(-1.0)] // Perfect negative correlation
     public void Sample_ProducesCorrectlyCorrelatedStandardNormalMarginals(double correlation)
     {
-        // Arrange
         var rng = new ChiRng(ChiSeed.Scramble("CorrelatedNormals", correlation));
         var sampler = rng.CorrelatedNormals(correlation);
 
@@ -32,7 +31,6 @@ public class StatefulSamplerTests(ITestOutputHelper testOutputHelper)
         var histogram1 = new Histogram(-4, 4, 100);
         var histogram2 = new Histogram(-4, 4, 100);
 
-        // Act
         foreach (var (z1, z2) in sampler.Sample(SampleCount))
         {
             z1Samples.Add(z1);
@@ -41,7 +39,6 @@ public class StatefulSamplerTests(ITestOutputHelper testOutputHelper)
             histogram2.AddSample(z2);
         }
 
-        // Assert
         histogram1.DebugPrint(testOutputHelper, $"Z1 Marginal (ρ={correlation})");
         histogram1.AssertIsNormal(0.0, 1.0, 0.05);
 
@@ -56,7 +53,6 @@ public class StatefulSamplerTests(ITestOutputHelper testOutputHelper)
     [Fact]
     public void Sample_Decimal_ProducesCorrectCorrelation()
     {
-        // Arrange
         const decimal correlation = 0.6m;
         var rng = new ChiRng(ChiSeed.Scramble("CorrelatedNormalsDecimal", (double)correlation));
         var sampler = rng.CorrelatedNormals(correlation);
@@ -64,14 +60,12 @@ public class StatefulSamplerTests(ITestOutputHelper testOutputHelper)
         var z1Samples = new List<decimal>(SampleCount);
         var z2Samples = new List<decimal>(SampleCount);
 
-        // Act
         foreach (var (z1, z2) in sampler.Sample(SampleCount))
         {
             z1Samples.Add(z1);
             z2Samples.Add(z2);
         }
 
-        // Assert
         var sampleCorrelation = CalculateSampleCorrelation(z1Samples, z2Samples);
         ((double)sampleCorrelation).Should().BeApproximately((double)correlation, 0.05);
     }
@@ -79,13 +73,10 @@ public class StatefulSamplerTests(ITestOutputHelper testOutputHelper)
     [Fact]
     public void Sample_WithFixedSeed_IsDeterministic()
     {
-        // Arrange
         var rng = new ChiRng(1337);
 
-        // Act
         var (z1, z2) = rng.CorrelatedNormals(0.75).Sample();
 
-        // Assert
         z1.Should().BeApproximately(-0.134114, 0.00001);
         z2.Should().BeApproximately(-0.900725, 0.00001);
     }
@@ -96,11 +87,9 @@ public class StatefulSamplerTests(ITestOutputHelper testOutputHelper)
     [InlineData(double.NaN)]
     public void CorrelatedNormals_WithInvalidCorrelation_ThrowsArgumentOutOfRangeException(double invalidCorrelation)
     {
-        // Arrange
         var rng = new ChiRng();
         var act = () => { _ = rng.CorrelatedNormals(invalidCorrelation); };
 
-        // Act & Assert
         act.Should().Throw<ArgumentOutOfRangeException>()
             .And.ParamName.Should().Be("correlation");
     }

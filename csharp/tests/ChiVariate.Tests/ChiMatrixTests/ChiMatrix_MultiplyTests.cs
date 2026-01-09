@@ -15,14 +15,11 @@ public class ChiMatrix_MultiplyTests
     [Fact]
     public void Multiply_MatrixByScalar_ReturnsCorrectResult()
     {
-        // Arrange
         var matrix = ChiMatrix.Full<double>(2, 2, (row, column) => 1 + row * 2 + column);
         var scalar = ChiMatrix.Scalar(2.0);
 
-        // Act
         using var result = matrix.Peek() * scalar.Peek();
 
-        // Assert
         result.RowCount.Should().Be(2);
         result.ColumnCount.Should().Be(2);
         result[0, 0].Should().Be(2.0);
@@ -34,7 +31,6 @@ public class ChiMatrix_MultiplyTests
     [Fact]
     public void Multiply_ScalarByMatrix_ReturnsCorrectResult()
     {
-        // Arrange
         var matrix = ChiMatrix.Zeros<double>(2, 2);
         matrix[0, 0] = 1;
         matrix[0, 1] = 2;
@@ -43,10 +39,8 @@ public class ChiMatrix_MultiplyTests
 
         var scalar = ChiMatrix.Scalar(3.0);
 
-        // Act
         using var result = scalar.Peek() * matrix.Peek();
 
-        // Assert
         result.RowCount.Should().Be(2);
         result.ColumnCount.Should().Be(2);
         result[0, 0].Should().Be(3.0);
@@ -62,7 +56,6 @@ public class ChiMatrix_MultiplyTests
     [Fact]
     public void HadamardProduct_ElementWise_ReturnsCorrectResult()
     {
-        // Arrange
         var a = ChiMatrix.Zeros<double>(2, 2);
         a[0, 0] = 1;
         a[0, 1] = 2;
@@ -75,10 +68,8 @@ public class ChiMatrix_MultiplyTests
         b[1, 0] = 7;
         b[1, 1] = 8;
 
-        // Act
         var result = a.Peek().Hadamard(b.Peek());
 
-        // Assert
         result.RowCount.Should().Be(2);
         result.ColumnCount.Should().Be(2);
         result[0, 0].Should().Be(5.0); // 1*5
@@ -106,7 +97,6 @@ public class ChiMatrix_MultiplyTests
     [Fact]
     public void Multiply_DotProduct_ReturnsCorrectScalar()
     {
-        // Arrange
         var rowVector = ChiMatrix.Zeros<double>(1, 3);
         rowVector[0, 0] = 1;
         rowVector[0, 1] = 2;
@@ -117,10 +107,8 @@ public class ChiMatrix_MultiplyTests
         colVector[1, 0] = 5;
         colVector[2, 0] = 6;
 
-        // Act
         using var result = rowVector.Peek() * colVector.Peek();
 
-        // Assert
         result.IsScalar.Should().BeTrue();
         result[0, 0].Should().Be(32.0); // (1*4) + (2*5) + (3*6)
     }
@@ -132,7 +120,6 @@ public class ChiMatrix_MultiplyTests
     [Fact]
     public void Multiply_MatrixMatrix_ReturnsCorrectResult()
     {
-        // Arrange
         // A (2x3)
         var a = ChiMatrix.Zeros<double>(2, 3);
         a[0, 0] = 1;
@@ -151,11 +138,9 @@ public class ChiMatrix_MultiplyTests
         b[2, 0] = 11;
         b[2, 1] = 12;
 
-        // Act
         // Result should be 2x2
         using var result = a.Peek() * b.Peek();
 
-        // Assert
         result.RowCount.Should().Be(2);
         result.ColumnCount.Should().Be(2);
         result[0, 0].Should().Be(58.0); // (1*7 + 2*9 + 3*11)
@@ -167,17 +152,14 @@ public class ChiMatrix_MultiplyTests
     [Fact]
     public void Multiply_MatrixColVector_ReturnsCorrectResult()
     {
-        // Arrange
         // A (2x3)
         var a = ChiMatrix.Full(2, 3, static i => (Half)(i + 1));
         // B (3x1 column vector)
         var b = ChiMatrix.Full(3, 1, static i => (Half)(i + 7));
 
-        // Act
         // Result should be 2x1
         using var result = a.Peek() * b.Peek();
 
-        // Assert
         result.IsColumn.Should().BeTrue();
         result.IsRow.Should().BeFalse();
         result.IsVector.Should().BeTrue();
@@ -189,15 +171,12 @@ public class ChiMatrix_MultiplyTests
     [Fact]
     public void Multiply_RowVectorMatrix_ReturnsCorrectResult()
     {
-        // Arrange
         var a = ChiMatrix.WithTransposed([3.0m, 4]); // A (1x2 row vector)
         var b = ChiMatrix.With([1.0m, 2, 3], [5, 6, 7]); // B (2x3 matrix)
 
-        // Act
         // Result should be 1x3
         using var result = a.Peek() * b.Peek();
 
-        // Assert
         result.IsRow.Should().BeTrue();
         result.ColumnCount.Should().Be(3);
         result[0, 0].Should().Be(23.0m); // (3*1 + 4*5)
@@ -212,16 +191,13 @@ public class ChiMatrix_MultiplyTests
     [Fact]
     public void Multiply_IncompatibleDimensions_ThrowsInvalidOperationException()
     {
-        // Arrange
         var a = ChiMatrix.Zeros<double>(2, 3);
         var b = ChiMatrix.Zeros<double>(4, 2); // Incompatible: A.Cols (3) != B.Rows (4)
 
-        // Act
         // ReSharper disable AccessToDisposedClosure
         var action = () => { _ = a.Peek() * b.Peek(); };
         // ReSharper enable AccessToDisposedClosure
 
-        // Assert
         action.Should().Throw<InvalidOperationException>()
             .WithMessage("*not compatible for multiplication*");
     }

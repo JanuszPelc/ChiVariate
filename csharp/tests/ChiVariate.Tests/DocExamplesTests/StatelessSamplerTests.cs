@@ -20,19 +20,16 @@ public class StatelessSamplerTests(ITestOutputHelper testOutputHelper)
     [InlineData(10.0)] // Higher temperature/lower mass -> faster speeds
     public void Sample_ProducesDistributionWithCorrectMean(double a)
     {
-        // Arrange
         var rng = new ChiRng(ChiSeed.Scramble("MaxwellBoltzmann", a));
         var sampler = rng.MaxwellBoltzmann(a);
         var expectedMean = 2.0 * a * Math.Sqrt(2.0 / Math.PI);
         var maxBound = expectedMean * 3;
         var histogram = new Histogram(0, maxBound, 150);
 
-        // Act
         foreach (var sample in sampler.Sample(SampleCount))
             if (sample < maxBound)
                 histogram.AddSample(sample);
 
-        // Assert
         histogram.DebugPrint(testOutputHelper, $"Maxwell-Boltzmann (a={a})");
 
         var actualMean = histogram.CalculateMean();
@@ -43,7 +40,6 @@ public class StatelessSamplerTests(ITestOutputHelper testOutputHelper)
     [Fact]
     public void Sample_Decimal_ProducesCorrectStatistics()
     {
-        // Arrange
         const decimal a = 1.5m;
         var rng = new ChiRng(ChiSeed.Scramble("MaxwellBoltzmannDecimal", (double)a));
         var sampler = rng.MaxwellBoltzmann(a);
@@ -55,7 +51,6 @@ public class StatelessSamplerTests(ITestOutputHelper testOutputHelper)
         double sum = 0;
         var samples = new List<double>(SampleCount);
 
-        // Act
         foreach (var sample in sampler.Sample(SampleCount))
         {
             var s = (double)sample;
@@ -63,7 +58,6 @@ public class StatelessSamplerTests(ITestOutputHelper testOutputHelper)
             samples.Add(s);
         }
 
-        // Assert
         var actualMean = sum / SampleCount;
         actualMean.Should().BeApproximately((double)expectedMean, (double)expectedMean * 0.05,
             "because the mean should be correct for high-precision decimal values.");
@@ -83,13 +77,10 @@ public class StatelessSamplerTests(ITestOutputHelper testOutputHelper)
     [Fact]
     public void Sample_WithFixedSeed_IsDeterministic()
     {
-        // Arrange
         var rng = new ChiRng(1337);
 
-        // Act
         var result = rng.MaxwellBoltzmann(10.0).Sample();
 
-        // Assert
         result.Should().BeApproximately(14.33683, 0.00001);
     }
 
@@ -99,11 +90,9 @@ public class StatelessSamplerTests(ITestOutputHelper testOutputHelper)
     [InlineData(double.NaN)]
     public void MaxwellBoltzmann_WithInvalidScale_ThrowsArgumentOutOfRangeException(double invalidA)
     {
-        // Arrange
         var rng = new ChiRng();
         var act = () => { _ = rng.MaxwellBoltzmann(invalidA); };
 
-        // Act & Assert
         act.Should().Throw<ArgumentOutOfRangeException>()
             .And.ParamName.Should().Be("a");
     }
@@ -111,7 +100,6 @@ public class StatelessSamplerTests(ITestOutputHelper testOutputHelper)
     [Fact]
     public void CryptoRng_MultivariateNormalSampling_ProducesExpectedMarginals()
     {
-        // Arrange
         var mean = ChiMatrix.With([10.0, 20.0, 30.0]);
         var covariance = ChiMatrix.With(
             [1.0, 0.0, 0.0], // Var(X1)=1 -> StdDev=1
@@ -124,7 +112,6 @@ public class StatelessSamplerTests(ITestOutputHelper testOutputHelper)
         var histogramX2 = new Histogram(10, 30, 100); // Mean 20, StdDev 2
         var histogramX3 = new Histogram(15, 45, 100); // Mean 30, StdDev 3
 
-        // Act
         const int sampleCount = 100_000;
         for (var i = 0; i < sampleCount; i++)
         {
@@ -135,7 +122,6 @@ public class StatelessSamplerTests(ITestOutputHelper testOutputHelper)
             histogramX3.AddSample(destination[2]);
         }
 
-        // Assert
         const string methodName = nameof(CryptoRng_MultivariateNormalSampling_ProducesExpectedMarginals);
 
         histogramX1.DebugPrint(testOutputHelper, $"{methodName} - Marginal Distribution for X1");
@@ -151,16 +137,13 @@ public class StatelessSamplerTests(ITestOutputHelper testOutputHelper)
     [Fact]
     public void CustomCryptoRng_WithCustomMaxwellBoltzmannSampler_ProducesStatisticallyPlausibleResult()
     {
-        // Arrange
         const double expectedMeanTotalEnergy = 675_000_000.0; // E = N * 0.5 * m * (3 * a^2)
         const double threeSigma = 95_000_000.0; // Derived from the variance of v^2
         const double lowerBound = expectedMeanTotalEnergy - threeSigma;
         const double upperBound = expectedMeanTotalEnergy + threeSigma;
 
-        // Act
         var totalKineticEnergy = SimulateParticleSpeeds();
 
-        // Assert
         totalKineticEnergy.Should().BeInRange(lowerBound, upperBound,
             "because the result of the simulation should be statistically close to the theoretical mean.");
 

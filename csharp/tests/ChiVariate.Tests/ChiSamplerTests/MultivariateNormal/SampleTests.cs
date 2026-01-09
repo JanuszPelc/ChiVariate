@@ -16,7 +16,6 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     [Fact]
     public void Sample_2D_WithPositiveCorrelation_IsCorrect()
     {
-        // Arrange
         // A 2D distribution where X and Y tend to move together.
         var mean = ChiMatrix.With([5.0, -10.0]);
         var covariance = ChiMatrix.With(new[,]
@@ -28,21 +27,18 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
         var multivariateNormal = rng.MultivariateNormal(mean, covariance);
         var samples = new List<double[]>(SampleCount);
 
-        // Act
         foreach (var resultMatrix in multivariateNormal.Sample(SampleCount))
             using (resultMatrix)
             {
                 samples.Add(resultMatrix.VectorToArray());
             }
 
-        // Assert
         samples.AssertIsMultivariateNormal(mean.VectorToArray(), covariance.ToArray(), 0.1);
     }
 
     [Fact]
     public void Sample_2D_WithNegativeCorrelation_IsCorrect()
     {
-        // Arrange
         // A 2D distribution where X and Y tend to move opposite.
         var mean = ChiMatrix.With([0.0, 0.0]);
         var covariance = ChiMatrix.With(new[,]
@@ -54,21 +50,18 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
         var multivariateNormal = rng.MultivariateNormal(mean, covariance);
         var samples = new List<double[]>(SampleCount);
 
-        // Act
         for (var i = 0; i < SampleCount; i++)
         {
             using var destination = multivariateNormal.Sample();
             samples.Add(destination.VectorToArray());
         }
 
-        // Assert
         samples.AssertIsMultivariateNormal(mean.VectorToArray(), covariance.ToArray(), 0.1);
     }
 
     [Fact]
     public void Sample_3D_Uncorrelated_IsCorrect()
     {
-        // Arrange
         var mean = ChiMatrix.With([10.0, 20.0, 30.0]);
         var covariance = ChiMatrix.With(
             [1.0, 0.0, 0.0],
@@ -79,29 +72,24 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
         var multivariateNormal = rng.MultivariateNormal(mean, covariance);
         var samples = new List<double[]>(SampleCount);
 
-        // Act
         for (var i = 0; i < SampleCount; i++)
         {
             using var destination = multivariateNormal.Sample();
             samples.Add(destination.VectorToArray());
         }
 
-        // Assert
         samples.AssertIsMultivariateNormal(mean.VectorToArray(), covariance.ToArray(), 0.1);
     }
 
     [Fact]
     public void Sample_WithInvalidMatrix_ThrowsException()
     {
-        // Arrange
         var rng = new ChiRng();
         var mean = ChiMatrix.With([0.0]);
         var covariance = ChiMatrix.With(new[,] { { -1.0 } }); // Not positive-definite
 
-        // Act
         var act = () => { _ = rng.MultivariateNormal(mean, covariance); };
 
-        // Assert
         act.Should().Throw<ArgumentException>()
             .WithMessage("*not positive-definite*");
     }
@@ -109,7 +97,6 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     [Fact]
     public void Sample_MarginalDistributions_AreCorrectlyNormal()
     {
-        // Arrange: Use the 3D uncorrelated case as a good example.
         var mean = ChiMatrix.With([10.0, 20.0, 30.0]);
         var covariance = ChiMatrix.With(new[,]
         {
@@ -125,7 +112,6 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
         var histogramX2 = new Histogram(10, 30, 100); // Mean 20, StdDev 2
         var histogramX3 = new Histogram(15, 45, 100); // Mean 30, StdDev 3
 
-        // Act
         for (var i = 0; i < SampleCount; i++)
         {
             using var destination = rng.MultivariateNormal(mean, covariance).Sample();
@@ -135,7 +121,6 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
             histogramX3.AddSample(destination[2]);
         }
 
-        // Assert
         const string methodName = nameof(Sample_MarginalDistributions_AreCorrectlyNormal);
 
         histogramX1.DebugPrint(testOutputHelper, $"{methodName} - Marginal Distribution for X1");
@@ -151,7 +136,6 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     [Fact]
     public void Sample_Decimal_IsCorrect()
     {
-        // Arrange
         // A 2D distribution where X and Y tend to move together.
         var mean = ChiMatrix.With([5.0m, -10.0m]);
         var covariance = ChiMatrix.With(new[,]
@@ -163,14 +147,12 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
 
         var samples = new List<decimal[]>(10_000);
 
-        // Act
         for (var i = 0; i < SampleCount; i++)
         {
             using var destination = rng.MultivariateNormal(mean, covariance).Sample();
             samples.Add(destination.VectorToArray());
         }
 
-        // Assert
         samples.AssertIsMultivariateNormal(mean.VectorToArray(), covariance.ToArray(), 0.20);
     }
 }
