@@ -1,10 +1,27 @@
+// SPDX-License-Identifier: MIT
+// See LICENSE file for full terms
+
 using System.Numerics;
 using System.Runtime.CompilerServices;
 
 namespace ChiVariate.Internal.ChiFixed;
 
+/// <summary>
+///     Core mathematical operations for Q21.42 fixed-point numbers.
+/// </summary>
+/// <remarks>
+///     ChiFixed uses Q21.42 format: 21 integer bits + 42 fractional bits in a 64-bit long.
+///     - ScaleFactor = 2^42 = 4,398,046,511,104
+///     - Range: approximately ±2.1 million
+///     - Precision: ~10^-12 (sub-picometer resolution)
+///     Fixed-point arithmetic rules:
+///     - Addition/Subtraction: direct long addition (same scale)
+///     - Multiplication: (a * b) &gt;&gt; 42 (product has 84 fractional bits, shift to get 42)
+///     - Division: (a &lt;&lt; 42) / b (scale numerator before dividing)
+/// </remarks>
 internal static class FixedMath
 {
+    // Precomputed powers of 5 for decimal conversion (5^0 to 5^28)
     private static readonly UInt128[] PrecomputedPow5 = CreatePow5Lookup();
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -221,13 +238,30 @@ internal static class FixedMath
             : new ChiVariate.ChiFixed(floor);
     }
 
+    /// <summary>
+    ///     Fixed-point multiplication: (a * b) >> 42.
+    /// </summary>
+    /// <remarks>
+    ///     When multiplying two Q21.42 numbers, the product has 84 fractional bits.
+    ///     We need to shift right by 42 to get back to Q21.42 format.
+    ///     Uses 128-bit intermediate to avoid overflow.
+    /// </remarks>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static long Mul(long a, long b)
     {
+        // Math.BigMul returns 128-bit result as (hi, lo)
         var hi = Math.BigMul(a, b, out var lo);
+        // Combine hi and lo, shifted right by 42 bits
         return (hi << (64 - ChiVariate.ChiFixed.FractionalBits)) | (lo >>> ChiVariate.ChiFixed.FractionalBits);
     }
 
+    /// <summary>
+    ///     Fixed-point division: (a &lt;&lt; 42) / b.
+    /// </summary>
+    /// <remarks>
+    ///     To maintain precision, we scale the numerator up by 2^42 before dividing.
+    ///     This requires 128-bit arithmetic to avoid overflow.
+    /// </remarks>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static long Div(long a, long b)
     {
@@ -237,6 +271,7 @@ internal static class FixedMath
         var uA = (ulong)(a < 0 ? -a : a);
         var uB = (ulong)(b < 0 ? -b : b);
 
+        // Scale numerator: a << 42 = (hi, lo) where hi has overflow bits
         const int integerBits = 64 - ChiVariate.ChiFixed.FractionalBits;
         var dividendHi = uA >> integerBits;
         var dividendLo = uA << ChiVariate.ChiFixed.FractionalBits;
@@ -245,6 +280,13 @@ internal static class FixedMath
         return negative ? -quotient : quotient;
     }
 
+    /// <summary>
+    ///     128-bit by 64-bit division using Knuth's Algorithm D.
+    /// </summary>
+    /// <remarks>
+    ///     Divides a 128-bit number (hi:lo) by a 64-bit divisor.
+    ///     Uses normalization and quotient digit estimation for efficiency.
+    /// </remarks>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static ulong Div128By64(ulong hi, ulong lo, ulong divisor)
     {

@@ -10,9 +10,30 @@ namespace ChiVariate.Providers;
 ///     Provides methods for generating high-quality floating-point values from an integer-based PRNG source.
 /// </summary>
 /// <remarks>
-///     This class uses precision-aware mantissa bit-filling to create uniformly distributed floating-point numbers.
-///     This avoids the precision loss and potential biases common in simpler conversion methods (like division by
-///     MaxValue).
+///     <para>
+///         This class uses precision-aware mantissa bit-filling to create uniformly distributed floating-point numbers.
+///         This avoids the precision loss and potential biases common in simpler conversion methods (like division by
+///         MaxValue).
+///     </para>
+///     <para>
+///         <b>Why not just divide by MaxValue?</b>
+///         Naive conversion like <c>randomInt / (double)uint.MaxValue</c> has issues:
+///         <list type="bullet">
+///             <item>Loses precision: only uses 32 bits even though double has 53-bit mantissa</item>
+///             <item>Non-uniform distribution: some floating-point values are more likely than others</item>
+///             <item>Includes rounding artifacts from the division</item>
+///         </list>
+///     </para>
+///     <para>
+///         <b>Mantissa bit-filling approach:</b>
+///         Instead, we directly fill the mantissa bits with random data:
+///         <list type="bullet">
+///             <item>float: 24 random bits (23-bit mantissa + 1 implicit bit)</item>
+///             <item>double: 53 random bits (52-bit mantissa + 1 implicit bit)</item>
+///             <item>ChiFixed: 42 random bits (directly into fractional part)</item>
+///         </list>
+///         Then scale by the appropriate power of 2 to get [0, 1).
+///     </para>
 /// </remarks>
 public static class ChiRealProvider
 {
