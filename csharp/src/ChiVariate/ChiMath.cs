@@ -50,6 +50,12 @@ public static class ChiMath
             return Unsafe.As<decimal, T>(ref result);
         }
 
+        if (typeof(T) == typeof(ChiFixed))
+        {
+            var result = ChiFixed.Pow(Unsafe.As<T, ChiFixed>(ref x), Unsafe.As<T, ChiFixed>(ref exponent1));
+            return Unsafe.As<ChiFixed, T>(ref result);
+        }
+
         var fallbackDouble = Math.Pow(Unsafe.As<T, double>(ref x), Unsafe.As<T, double>(ref exponent1));
         return Unsafe.As<double, T>(ref fallbackDouble);
     }
@@ -83,6 +89,12 @@ public static class ChiMath
         {
             var sqrt = ChiDecimalMath.Sqrt(Unsafe.As<T, decimal>(ref x));
             return Unsafe.As<decimal, T>(ref sqrt);
+        }
+
+        if (typeof(T) == typeof(ChiFixed))
+        {
+            var result = ChiFixed.Sqrt(Unsafe.As<T, ChiFixed>(ref x));
+            return Unsafe.As<ChiFixed, T>(ref result);
         }
 
         var fallbackDouble = Math.Sqrt(double.CreateChecked(x));
@@ -120,6 +132,12 @@ public static class ChiMath
             return Unsafe.As<decimal, T>(ref log);
         }
 
+        if (typeof(T) == typeof(ChiFixed))
+        {
+            var result = ChiFixed.Log(Unsafe.As<T, ChiFixed>(ref x));
+            return Unsafe.As<ChiFixed, T>(ref result);
+        }
+
         var fallbackDouble = Math.Log(double.CreateChecked(x));
         return T.CreateChecked(fallbackDouble);
     }
@@ -152,6 +170,12 @@ public static class ChiMath
             return Unsafe.As<decimal, T>(ref exp);
         }
 
+        if (typeof(T) == typeof(ChiFixed))
+        {
+            var result = ChiFixed.Exp(Unsafe.As<T, ChiFixed>(ref x));
+            return Unsafe.As<ChiFixed, T>(ref result);
+        }
+
         var fallbackDouble = Math.Exp(double.CreateChecked(x));
         return T.CreateChecked(fallbackDouble);
     }
@@ -182,6 +206,12 @@ public static class ChiMath
         {
             var cbrt = ChiDecimalMath.Cbrt(Unsafe.As<T, decimal>(ref x));
             return Unsafe.As<decimal, T>(ref cbrt);
+        }
+
+        if (typeof(T) == typeof(ChiFixed))
+        {
+            var result = ChiFixed.Cbrt(Unsafe.As<T, ChiFixed>(ref x));
+            return Unsafe.As<ChiFixed, T>(ref result);
         }
 
         return x < T.Zero
@@ -217,6 +247,12 @@ public static class ChiMath
             return Unsafe.As<decimal, T>(ref tan);
         }
 
+        if (typeof(T) == typeof(ChiFixed))
+        {
+            var result = ChiFixed.Tan(Unsafe.As<T, ChiFixed>(ref x));
+            return Unsafe.As<ChiFixed, T>(ref result);
+        }
+
         var fallbackDouble = Math.Tan(double.CreateChecked(x));
         return T.CreateChecked(fallbackDouble);
     }
@@ -249,6 +285,12 @@ public static class ChiMath
             return Unsafe.As<decimal, T>(ref sin);
         }
 
+        if (typeof(T) == typeof(ChiFixed))
+        {
+            var result = ChiFixed.Sin(Unsafe.As<T, ChiFixed>(ref x));
+            return Unsafe.As<ChiFixed, T>(ref result);
+        }
+
         var fallbackDouble = Math.Sin(double.CreateChecked(x));
         return T.CreateChecked(fallbackDouble);
     }
@@ -279,6 +321,12 @@ public static class ChiMath
         {
             var cos = ChiDecimalMath.Cos(Unsafe.As<T, decimal>(ref x));
             return Unsafe.As<decimal, T>(ref cos);
+        }
+
+        if (typeof(T) == typeof(ChiFixed))
+        {
+            var result = ChiFixed.Cos(Unsafe.As<T, ChiFixed>(ref x));
+            return Unsafe.As<ChiFixed, T>(ref result);
         }
 
         var fallbackDouble = Math.Cos(double.CreateChecked(x));
@@ -393,6 +441,9 @@ public static class ChiMath
 
         private static T GetEpsilon()
         {
+            if (typeof(T) == typeof(ChiFixed))
+                return T.CreateChecked(1e-12);
+
             if (typeof(T) == typeof(double))
                 return T.CreateChecked(1e-14);
 
