@@ -23,7 +23,7 @@ internal static class ZigguratNormal<T>
 
     static ZigguratNormal()
     {
-        var n = ZigguratGoldenTables.LayerCount;
+        var n = ZigguratNormalTables.LayerCount;
 
         // Convert golden tables to type T (once per type)
         Wn = new T[n + 1];
@@ -32,12 +32,12 @@ internal static class ZigguratNormal<T>
 
         for (var i = 0; i <= n; i++)
         {
-            Wn[i] = T.CreateChecked(ZigguratGoldenTables.Wn[i]);
-            Dn[i] = T.CreateChecked(ZigguratGoldenTables.Dn[i]);
-            Fn[i] = T.CreateChecked(ZigguratGoldenTables.Fn[i]);
+            Wn[i] = T.CreateChecked(ZigguratNormalTables.Wn[i]);
+            Dn[i] = T.CreateChecked(ZigguratNormalTables.Dn[i]);
+            Fn[i] = T.CreateChecked(ZigguratNormalTables.Fn[i]);
         }
 
-        R = T.CreateChecked(ZigguratGoldenTables.R);
+        R = T.CreateChecked(ZigguratNormalTables.R);
         Two = T.CreateChecked(2);
         NegativeHalf = T.CreateChecked(-0.5m);
     }
@@ -59,7 +59,7 @@ internal static class ZigguratNormal<T>
     public static T Next<TRng>(ref TRng rng)
         where TRng : struct, IChiRngSource<TRng>
     {
-        const int layerCount = ZigguratGoldenTables.LayerCount;
+        const int layerCount = ZigguratNormalTables.LayerCount;
         const int layerMask = layerCount - 1; // 127 for 128 layers
 
         while (true)

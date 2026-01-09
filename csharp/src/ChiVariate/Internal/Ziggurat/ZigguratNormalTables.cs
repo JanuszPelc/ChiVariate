@@ -11,7 +11,7 @@ namespace ChiVariate.Internal.Ziggurat;
 ///     Based on Marsaglia &amp; Tsang "The Ziggurat Method for Generating Random Variables" (2000).
 ///     Uses 128 layers with tail cutoff at R ≈ 3.44.
 /// </remarks>
-internal static class ZigguratGoldenTables
+internal static class ZigguratNormalTables
 {
     /// <summary>Number of Ziggurat layers.</summary>
     internal const int LayerCount = 128;
@@ -39,7 +39,7 @@ internal static class ZigguratGoldenTables
     /// </summary>
     internal static readonly decimal[] Dn;
 
-    static ZigguratGoldenTables()
+    static ZigguratNormalTables()
     {
         // Standard Ziggurat constants for 128 layers (from Marsaglia & Tsang)
         const decimal dn = 3.442619855899m;
