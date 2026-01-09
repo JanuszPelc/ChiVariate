@@ -3,7 +3,7 @@
 
 using System.Numerics;
 using System.Runtime.CompilerServices;
-using ChiVariate.Providers;
+using ChiVariate.Internal.Ziggurat;
 
 namespace ChiVariate;
 
@@ -39,11 +39,10 @@ public readonly ref struct ChiSamplerRayleigh<TRng, T>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public T Sample()
     {
-        var u = ChiRealProvider.Next<TRng, T>(ref _rng,
-            ChiIntervalOptions.ExcludeMin);
-        var twoSigmaSq = Two * _sigma * _sigma;
-
-        return ChiMath.Sqrt(-twoSigmaSq * ChiMath.Log(u));
+        // Rayleigh(σ) = σ * sqrt(2 * Exp(1))
+        // Ziggurat Exponential avoids logarithm ~98% of the time
+        var exp = ZigguratExponential<T>.Next(ref _rng);
+        return _sigma * ChiMath.Sqrt(Two * exp);
     }
 
     /// <summary>

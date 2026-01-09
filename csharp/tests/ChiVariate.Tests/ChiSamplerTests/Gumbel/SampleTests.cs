@@ -77,7 +77,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
 
         var result = rng.Gumbel(5.0, 2.0).Sample();
 
-        result.Should().BeApproximately(5.51681, 0.00001);
+        result.Should().BeApproximately(8.67707517763548, 0.00001);
     }
 
     [Theory]

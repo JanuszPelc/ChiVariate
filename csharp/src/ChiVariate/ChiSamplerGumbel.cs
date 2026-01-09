@@ -3,7 +3,7 @@
 
 using System.Numerics;
 using System.Runtime.CompilerServices;
-using ChiVariate.Providers;
+using ChiVariate.Internal.Ziggurat;
 
 namespace ChiVariate;
 
@@ -41,9 +41,16 @@ public readonly ref struct ChiSamplerGumbel<TRng, T>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public T Sample()
     {
-        var u = ChiRealProvider.Next<TRng, T>(ref _rng, ChiIntervalOptions.ExcludeMin);
+        // Gumbel = μ - β * log(-log(u)) = μ - β * log(Exp(1))
+        // Ziggurat Exponential avoids inner logarithm ~98% of the time
+        // Regenerate if exp == 0 (probability ~2^-64, negligible)
+        T exp;
+        do
+        {
+            exp = ZigguratExponential<T>.Next(ref _rng);
+        } while (exp == T.Zero);
 
-        return _location - _scale * ChiMath.Log(-ChiMath.Log(u));
+        return _location - _scale * ChiMath.Log(exp);
     }
 
     /// <summary>
