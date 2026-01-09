@@ -18,8 +18,8 @@ public ref struct ChiSamplerSobol<TRng, T>
     where T : unmanaged, IFloatingPoint<T>
 {
     private const int MaxBits = 32;
+    private const decimal ScaleFactor = 1.0m / (1UL << MaxBits);
     private readonly int _dimensions;
-    private readonly T _scaleFactor;
     private ulong _index;
     private bool _originPointReturned;
     private ChiVector<uint> _currentPoint;
@@ -44,7 +44,6 @@ public ref struct ChiSamplerSobol<TRng, T>
         _index = 0;
         _originPointReturned = false;
         _currentPoint = ChiVector.Zeros<uint>(dimensions);
-        _scaleFactor = T.One / T.CreateChecked(1UL << MaxBits);
         _directionNumbers = InitializeDirectionNumbers(ref rng, _dimensions, mode);
     }
 
@@ -102,7 +101,7 @@ public ref struct ChiSamplerSobol<TRng, T>
         var resultSpan = result.Span;
 
         for (var i = 0; i < _dimensions; i++)
-            resultSpan[i] = T.CreateChecked(currentPointSpan[i]) * _scaleFactor;
+            resultSpan[i] = T.CreateChecked(currentPointSpan[i] * ScaleFactor);
 
         return result;
     }
