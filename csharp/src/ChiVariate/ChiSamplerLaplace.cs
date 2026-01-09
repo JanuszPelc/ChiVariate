@@ -3,6 +3,7 @@
 
 using System.Numerics;
 using System.Runtime.CompilerServices;
+using ChiVariate.Internal.Ziggurat;
 
 namespace ChiVariate;
 
@@ -19,9 +20,6 @@ public readonly ref struct ChiSamplerLaplace<TRng, T>
     private readonly ref TRng _rng;
     private readonly T _location;
     private readonly T _scale;
-
-    private static readonly T PointFive = T.CreateChecked(0.5);
-    private static readonly T Two = T.CreateChecked(2.0);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     internal ChiSamplerLaplace(ref TRng rng, T location, T scale)
@@ -41,15 +39,11 @@ public readonly ref struct ChiSamplerLaplace<TRng, T>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public T Sample()
     {
-        var uniform = _rng.Uniform(T.Zero, T.One).Sample();
-        var u = uniform - PointFive;
-
-        var sign = T.CreateChecked(T.Sign(u));
-        var absU = T.Abs(u);
-        var epsilon = ChiMath.Const<T>.Epsilon;
-        var logArg = T.Max(epsilon, T.One - Two * absU);
-
-        return _location - _scale * sign * ChiMath.Log(logArg);
+        // Laplace = location + sign * scale * Exponential(1)
+        // Ziggurat Exponential avoids logarithm ~98% of the time
+        var exp = ZigguratExponential<T>.Next(ref _rng);
+        var sign = (TRng.NextUInt64(ref _rng) & 1) == 0 ? T.One : -T.One;
+        return _location + sign * _scale * exp;
     }
 
     /// <summary>
