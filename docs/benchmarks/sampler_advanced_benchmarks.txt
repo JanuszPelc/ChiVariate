@@ -1,0 +1,313 @@
+// * Summary *
+
+BenchmarkDotNet v0.14.0, macOS Sequoia 15.7.3 (24G419) [Darwin 24.6.0]
+Apple M1 Pro, 1 CPU, 10 logical and 10 physical cores
+.NET SDK 10.0.100
+  [Host]     : .NET 9.0.11 (9.0.1125.51716), Arm64 RyuJIT AdvSIMD
+  Job-XGTSUF : .NET 9.0.11 (9.0.1125.51716), Arm64 RyuJIT AdvSIMD
+
+MinIterationTime=500ms  IterationCount=15  
+
+| Method                | Param           | Mean         | Error      | StdDev     | Ratio | RatioSD | Allocated | Alloc Ratio |
+|---------------------- |---------------- |-------------:|-----------:|-----------:|------:|--------:|----------:|------------:|
+| Beta                  | ForLoop_Float   |    180.35 us |   0.093 us |   0.077 us |  2.00 |    0.00 |         - |          NA |
+| Chi                   | ForLoop_Float   |     90.30 us |   0.049 us |   0.046 us |  1.00 |    0.00 |         - |          NA |
+| Chi-Squared           | ForLoop_Float   |     90.08 us |   0.081 us |   0.072 us |  1.00 |    0.00 |         - |          NA |
+| Dirichlet             | ForLoop_Float   |    625.81 us |   0.259 us |   0.216 us |  6.94 |    0.01 |       1 B |          NA |
+| F                     | ForLoop_Float   |    180.10 us |   0.067 us |   0.062 us |  2.00 |    0.00 |         - |          NA |
+| Gamma                 | ForLoop_Float   |     90.17 us |   0.070 us |   0.062 us |  1.00 |    0.00 |         - |          NA |
+| Halton                | ForLoop_Float   |     71.54 us |   0.078 us |   0.073 us |  0.79 |    0.00 |         - |          NA |
+| Inverse-Gamma         | ForLoop_Float   |     90.18 us |   0.086 us |   0.072 us |  1.00 |    0.00 |         - |          NA |
+| Log-Normal            | ForLoop_Float   |     56.00 us |   0.025 us |   0.023 us |  0.62 |    0.00 |         - |          NA |
+| 'Multivariate Normal' | ForLoop_Float   |    324.06 us |   0.256 us |   0.227 us |  3.59 |    0.00 |         - |          NA |
+| Sobol                 | ForLoop_Float   |    113.65 us |   1.062 us |   0.993 us |  1.26 |    0.01 |         - |          NA |
+| Spatial.OnSphere      | ForLoop_Float   |     52.89 us |   0.077 us |   0.068 us |  0.59 |    0.00 |         - |          NA |
+| StudentT              | ForLoop_Float   |    144.88 us |   0.131 us |   0.116 us |  1.61 |    0.00 |         - |          NA |
+| Wishart               | ForLoop_Float   |    939.06 us |   0.439 us |   0.367 us | 10.41 |    0.01 |       1 B |          NA |
+|                       |                 |              |            |            |       |         |           |             |
+| Beta                  | ForLoop_Double  |    235.10 us |   0.103 us |   0.086 us |  1.99 |    0.01 |         - |          NA |
+| Chi                   | ForLoop_Double  |    120.84 us |   4.420 us |   4.134 us |  1.02 |    0.03 |         - |          NA |
+| Chi-Squared           | ForLoop_Double  |    119.06 us |   1.105 us |   1.033 us |  1.01 |    0.01 |         - |          NA |
+| Dirichlet             | ForLoop_Double  |    838.44 us |   3.131 us |   2.929 us |  7.10 |    0.04 |       1 B |          NA |
+| F                     | ForLoop_Double  |    236.89 us |   1.174 us |   1.098 us |  2.01 |    0.01 |         - |          NA |
+| Gamma                 | ForLoop_Double  |    118.02 us |   0.570 us |   0.533 us |  1.00 |    0.01 |         - |          NA |
+| Halton                | ForLoop_Double  |     78.97 us |   0.498 us |   0.466 us |  0.67 |    0.00 |         - |          NA |
+| Inverse-Gamma         | ForLoop_Double  |    117.68 us |   0.443 us |   0.415 us |  1.00 |    0.01 |         - |          NA |
+| Log-Normal            | ForLoop_Double  |     73.91 us |   0.262 us |   0.245 us |  0.63 |    0.00 |         - |          NA |
+| 'Multivariate Normal' | ForLoop_Double  |    425.74 us |   0.555 us |   0.433 us |  3.61 |    0.02 |         - |          NA |
+| Sobol                 | ForLoop_Double  |     98.08 us |   0.546 us |   0.511 us |  0.83 |    0.01 |         - |          NA |
+| Spatial.OnSphere      | ForLoop_Double  |     94.53 us |   0.348 us |   0.325 us |  0.80 |    0.00 |         - |          NA |
+| StudentT              | ForLoop_Double  |    188.29 us |   0.737 us |   0.689 us |  1.60 |    0.01 |         - |          NA |
+| Wishart               | ForLoop_Double  |  1,239.75 us |   5.666 us |   5.300 us | 10.51 |    0.06 |       1 B |          NA |
+|                       |                 |              |            |            |       |         |           |             |
+| Beta                  | ForLoop_Decimal |  5,187.99 us |  27.446 us |  25.673 us |  1.95 |    0.01 |       6 B |        2.00 |
+| Chi                   | ForLoop_Decimal |  3,594.53 us |  12.464 us |  11.659 us |  1.35 |    0.01 |       3 B |        1.00 |
+| Chi-Squared           | ForLoop_Decimal |  2,668.76 us |  19.715 us |  17.477 us |  1.00 |    0.01 |       3 B |        1.00 |
+| Dirichlet             | ForLoop_Decimal | 16,276.03 us | 111.600 us | 104.391 us |  6.10 |    0.05 |      23 B |        7.67 |
+| F                     | ForLoop_Decimal |  5,399.44 us |  27.468 us |  25.693 us |  2.03 |    0.01 |       6 B |        2.00 |
+| Gamma                 | ForLoop_Decimal |  2,666.26 us |  16.092 us |  15.052 us |  1.00 |    0.01 |       3 B |        1.00 |
+| Halton                | ForLoop_Decimal |  1,081.86 us |   5.801 us |   4.844 us |  0.41 |    0.00 |       1 B |        0.33 |
+| Inverse-Gamma         | ForLoop_Decimal |  2,750.08 us |  15.501 us |  13.741 us |  1.03 |    0.01 |       3 B |        1.00 |
+| Log-Normal            | ForLoop_Decimal |  2,517.00 us |   9.907 us |   9.267 us |  0.94 |    0.01 |       3 B |        1.00 |
+| 'Multivariate Normal' | ForLoop_Decimal |  1,625.17 us |   2.127 us |   1.885 us |  0.61 |    0.00 |       1 B |        0.33 |
+| Sobol                 | ForLoop_Decimal |    110.77 us |   0.157 us |   0.147 us |  0.04 |    0.00 |         - |        0.00 |
+| Spatial.OnSphere      | ForLoop_Decimal |  2,030.87 us |   3.569 us |   3.164 us |  0.76 |    0.00 |       3 B |        1.00 |
+| StudentT              | ForLoop_Decimal |  4,144.30 us |  12.448 us |  11.644 us |  1.55 |    0.01 |       6 B |        2.00 |
+| Wishart               | ForLoop_Decimal | 19,196.33 us |  37.075 us |  34.680 us |  7.20 |    0.04 |      23 B |        7.67 |
+|                       |                 |              |            |            |       |         |           |             |
+| Beta                  | ForLoop_Fixed   |    352.72 us |   0.385 us |   0.341 us |     ? |       ? |         - |           ? |
+| Chi                   | ForLoop_Fixed   |           NA |         NA |         NA |     ? |       ? |        NA |           ? |
+| Chi-Squared           | ForLoop_Fixed   |           NA |         NA |         NA |     ? |       ? |        NA |           ? |
+| Dirichlet             | ForLoop_Fixed   |           NA |         NA |         NA |     ? |       ? |        NA |           ? |
+| F                     | ForLoop_Fixed   |    364.88 us |   2.310 us |   2.161 us |     ? |       ? |         - |           ? |
+| Gamma                 | ForLoop_Fixed   |           NA |         NA |         NA |     ? |       ? |        NA |           ? |
+| Halton                | ForLoop_Fixed   |    438.93 us |   0.547 us |   0.512 us |     ? |       ? |         - |           ? |
+| Inverse-Gamma         | ForLoop_Fixed   |    179.84 us |   0.189 us |   0.176 us |     ? |       ? |         - |           ? |
+| Log-Normal            | ForLoop_Fixed   |     85.40 us |   0.064 us |   0.057 us |     ? |       ? |         - |           ? |
+| 'Multivariate Normal' | ForLoop_Fixed   |    445.87 us |   1.002 us |   0.937 us |     ? |       ? |         - |           ? |
+| Sobol                 | ForLoop_Fixed   |    257.14 us |   0.337 us |   0.315 us |     ? |       ? |         - |           ? |
+| Spatial.OnSphere      | ForLoop_Fixed   |    115.58 us |   0.159 us |   0.133 us |     ? |       ? |         - |           ? |
+| StudentT              | ForLoop_Fixed   |           NA |         NA |         NA |     ? |       ? |        NA |           ? |
+| Wishart               | ForLoop_Fixed   |           NA |         NA |         NA |     ? |       ? |        NA |           ? |
+|                       |                 |              |            |            |       |         |           |             |
+| Beta                  | ForEach_Float   |    185.14 us |   0.165 us |   0.154 us |  1.96 |    0.00 |         - |          NA |
+| Chi                   | ForEach_Float   |     94.55 us |   0.154 us |   0.144 us |  1.00 |    0.00 |         - |          NA |
+| Chi-Squared           | ForEach_Float   |     94.53 us |   0.092 us |   0.077 us |  1.00 |    0.00 |         - |          NA |
+| Dirichlet             | ForEach_Float   |    717.58 us |   3.014 us |   2.517 us |  7.59 |    0.03 |       1 B |          NA |
+| F                     | ForEach_Float   |    185.31 us |   0.825 us |   0.772 us |  1.96 |    0.01 |         - |          NA |
+| Gamma                 | ForEach_Float   |     94.52 us |   0.089 us |   0.075 us |  1.00 |    0.00 |         - |          NA |
+| Halton                | ForEach_Float   |    169.79 us |   0.826 us |   0.772 us |  1.80 |    0.01 |         - |          NA |
+| Inverse-Gamma         | ForEach_Float   |     94.66 us |   0.409 us |   0.383 us |  1.00 |    0.00 |         - |          NA |
+| Log-Normal            | ForEach_Float   |     64.98 us |   0.145 us |   0.136 us |  0.69 |    0.00 |         - |          NA |
+| 'Multivariate Normal' | ForEach_Float   |    332.49 us |   0.702 us |   0.657 us |  3.52 |    0.01 |         - |          NA |
+| Sobol                 | ForEach_Float   |    210.21 us |   1.088 us |   1.018 us |  2.22 |    0.01 |         - |          NA |
+| Spatial.OnSphere      | ForEach_Float   |     57.54 us |   0.084 us |   0.074 us |  0.61 |    0.00 |         - |          NA |
+| StudentT              | ForEach_Float   |    151.73 us |   0.363 us |   0.303 us |  1.61 |    0.00 |         - |          NA |
+| Wishart               | ForEach_Float   |    961.87 us |   2.148 us |   1.904 us | 10.18 |    0.02 |       1 B |          NA |
+|                       |                 |              |            |            |       |         |           |             |
+| Beta                  | ForEach_Double  |    241.02 us |   0.527 us |   0.493 us |  1.99 |    0.00 |         - |          NA |
+| Chi                   | ForEach_Double  |    121.44 us |   0.198 us |   0.175 us |  1.00 |    0.00 |         - |          NA |
+| Chi-Squared           | ForEach_Double  |    122.24 us |   0.392 us |   0.367 us |  1.01 |    0.00 |         - |          NA |
+| Dirichlet             | ForEach_Double  |    934.11 us |   2.798 us |   2.617 us |  7.72 |    0.02 |       1 B |          NA |
+| F                     | ForEach_Double  |    241.32 us |   0.264 us |   0.234 us |  1.99 |    0.00 |         - |          NA |
+| Gamma                 | ForEach_Double  |    120.96 us |   0.195 us |   0.173 us |  1.00 |    0.00 |         - |          NA |
+| Halton                | ForEach_Double  |    167.88 us |   0.362 us |   0.339 us |  1.39 |    0.00 |         - |          NA |
+| Inverse-Gamma         | ForEach_Double  |    120.58 us |   0.079 us |   0.074 us |  1.00 |    0.00 |         - |          NA |
+| Log-Normal            | ForEach_Double  |     76.76 us |   0.207 us |   0.183 us |  0.63 |    0.00 |         - |          NA |
+| 'Multivariate Normal' | ForEach_Double  |    448.25 us |   1.148 us |   1.018 us |  3.71 |    0.01 |         - |          NA |
+| Sobol                 | ForEach_Double  |    202.50 us |   1.009 us |   0.944 us |  1.67 |    0.01 |         - |          NA |
+| Spatial.OnSphere      | ForEach_Double  |     98.61 us |   0.407 us |   0.381 us |  0.82 |    0.00 |         - |          NA |
+| StudentT              | ForEach_Double  |    190.99 us |   0.347 us |   0.325 us |  1.58 |    0.00 |         - |          NA |
+| Wishart               | ForEach_Double  |  1,255.99 us |   1.604 us |   1.253 us | 10.38 |    0.02 |       1 B |          NA |
+|                       |                 |              |            |            |       |         |           |             |
+| Beta                  | ForEach_Decimal |  5,158.15 us |  10.337 us |   9.669 us |  1.95 |    0.00 |       6 B |        2.00 |
+| Chi                   | ForEach_Decimal |  3,582.97 us |   5.051 us |   4.217 us |  1.36 |    0.00 |       3 B |        1.00 |
+| Chi-Squared           | ForEach_Decimal |  2,629.60 us |   7.730 us |   6.035 us |  0.99 |    0.00 |       3 B |        1.00 |
+| Dirichlet             | ForEach_Decimal | 16,279.28 us | 165.461 us | 154.772 us |  6.16 |    0.06 |      23 B |        7.67 |
+| F                     | ForEach_Decimal |  5,380.59 us |   8.541 us |   7.989 us |  2.04 |    0.00 |       6 B |        2.00 |
+| Gamma                 | ForEach_Decimal |  2,643.78 us |   5.256 us |   4.917 us |  1.00 |    0.00 |       3 B |        1.00 |
+| Halton                | ForEach_Decimal |  1,152.78 us |   3.272 us |   2.900 us |  0.44 |    0.00 |       1 B |        0.33 |
+| Inverse-Gamma         | ForEach_Decimal |  2,726.73 us |   9.117 us |   8.082 us |  1.03 |    0.00 |       3 B |        1.00 |
+| Log-Normal            | ForEach_Decimal |  2,505.63 us |   4.332 us |   4.052 us |  0.95 |    0.00 |       3 B |        1.00 |
+| 'Multivariate Normal' | ForEach_Decimal |  1,650.29 us |   2.513 us |   2.351 us |  0.62 |    0.00 |       1 B |        0.33 |
+| Sobol                 | ForEach_Decimal |    200.37 us |   0.446 us |   0.396 us |  0.08 |    0.00 |         - |        0.00 |
+| Spatial.OnSphere      | ForEach_Decimal |  2,034.40 us |   3.789 us |   3.544 us |  0.77 |    0.00 |       3 B |        1.00 |
+| StudentT              | ForEach_Decimal |  4,134.24 us |  12.202 us |  11.413 us |  1.56 |    0.01 |       6 B |        2.00 |
+| Wishart               | ForEach_Decimal | 19,198.86 us |  32.384 us |  30.292 us |  7.26 |    0.02 |      23 B |        7.67 |
+|                       |                 |              |            |            |       |         |           |             |
+| Beta                  | ForEach_Fixed   |    356.60 us |   1.191 us |   1.056 us |     ? |       ? |         - |           ? |
+| Chi                   | ForEach_Fixed   |           NA |         NA |         NA |     ? |       ? |        NA |           ? |
+| Chi-Squared           | ForEach_Fixed   |           NA |         NA |         NA |     ? |       ? |        NA |           ? |
+| Dirichlet             | ForEach_Fixed   |           NA |         NA |         NA |     ? |       ? |        NA |           ? |
+| F                     | ForEach_Fixed   |    369.02 us |   1.044 us |   0.977 us |     ? |       ? |         - |           ? |
+| Gamma                 | ForEach_Fixed   |           NA |         NA |         NA |     ? |       ? |        NA |           ? |
+| Halton                | ForEach_Fixed   |    521.60 us |   3.268 us |   3.057 us |     ? |       ? |       1 B |           ? |
+| Inverse-Gamma         | ForEach_Fixed   |    184.66 us |   0.332 us |   0.294 us |     ? |       ? |         - |           ? |
+| Log-Normal            | ForEach_Fixed   |     87.77 us |   0.142 us |   0.133 us |     ? |       ? |         - |           ? |
+| 'Multivariate Normal' | ForEach_Fixed   |    464.18 us |   0.505 us |   0.421 us |     ? |       ? |         - |           ? |
+| Sobol                 | ForEach_Fixed   |    337.87 us |   0.443 us |   0.393 us |     ? |       ? |         - |           ? |
+| Spatial.OnSphere      | ForEach_Fixed   |    118.64 us |   0.176 us |   0.156 us |     ? |       ? |         - |           ? |
+| StudentT              | ForEach_Fixed   |           NA |         NA |         NA |     ? |       ? |        NA |           ? |
+| Wishart               | ForEach_Fixed   |           NA |         NA |         NA |     ? |       ? |        NA |           ? |
+|                       |                 |              |            |            |       |         |           |             |
+| Beta                  | Linq_Float      |    184.50 us |   0.237 us |   0.210 us |  1.94 |    0.01 |         - |          NA |
+| Chi                   | Linq_Float      |     94.17 us |   0.130 us |   0.122 us |  0.99 |    0.00 |         - |          NA |
+| Chi-Squared           | Linq_Float      |     94.28 us |   0.187 us |   0.175 us |  0.99 |    0.00 |         - |          NA |
+| Dirichlet             | Linq_Float      |    769.63 us |   3.034 us |   2.838 us |  8.07 |    0.04 |     121 B |          NA |
+| F                     | Linq_Float      |    185.91 us |   0.633 us |   0.592 us |  1.95 |    0.01 |         - |          NA |
+| Gamma                 | Linq_Float      |     95.33 us |   0.270 us |   0.253 us |  1.00 |    0.00 |         - |          NA |
+| Halton                | Linq_Float      |    172.90 us |   1.335 us |   1.184 us |  1.81 |    0.01 |     120 B |          NA |
+| Inverse-Gamma         | Linq_Float      |     93.87 us |   0.144 us |   0.128 us |  0.98 |    0.00 |         - |          NA |
+| Log-Normal            | Linq_Float      |     60.18 us |   0.072 us |   0.063 us |  0.63 |    0.00 |         - |          NA |
+| 'Multivariate Normal' | Linq_Float      |    339.44 us |   0.510 us |   0.477 us |  3.56 |    0.01 |     120 B |          NA |
+| Sobol                 | Linq_Float      |    195.30 us |   0.802 us |   0.670 us |  2.05 |    0.01 |     120 B |          NA |
+| Spatial.OnSphere      | Linq_Float      |     57.47 us |   0.069 us |   0.064 us |  0.60 |    0.00 |     120 B |          NA |
+| StudentT              | Linq_Float      |    149.30 us |   0.461 us |   0.431 us |  1.57 |    0.01 |         - |          NA |
+| Wishart               | Linq_Float      |    958.54 us |   3.079 us |   2.880 us | 10.06 |    0.04 |      65 B |          NA |
+|                       |                 |              |            |            |       |         |           |             |
+| Beta                  | Linq_Double     |    239.96 us |   0.275 us |   0.257 us |  1.98 |    0.00 |         - |          NA |
+| Chi                   | Linq_Double     |    120.85 us |   0.113 us |   0.106 us |  1.00 |    0.00 |         - |          NA |
+| Chi-Squared           | Linq_Double     |    120.98 us |   0.140 us |   0.124 us |  1.00 |    0.00 |         - |          NA |
+| Dirichlet             | Linq_Double     |    953.52 us |   0.957 us |   0.799 us |  7.87 |    0.02 |     121 B |          NA |
+| F                     | Linq_Double     |    238.59 us |   0.302 us |   0.268 us |  1.97 |    0.00 |         - |          NA |
+| Gamma                 | Linq_Double     |    121.09 us |   0.283 us |   0.251 us |  1.00 |    0.00 |         - |          NA |
+| Halton                | Linq_Double     |    171.09 us |   0.352 us |   0.312 us |  1.41 |    0.00 |     120 B |          NA |
+| Inverse-Gamma         | Linq_Double     |    120.70 us |   0.154 us |   0.144 us |  1.00 |    0.00 |         - |          NA |
+| Log-Normal            | Linq_Double     |     77.84 us |   0.102 us |   0.095 us |  0.64 |    0.00 |         - |          NA |
+| 'Multivariate Normal' | Linq_Double     |    467.26 us |   0.657 us |   0.548 us |  3.86 |    0.01 |     120 B |          NA |
+| Sobol                 | Linq_Double     |    178.88 us |   1.988 us |   1.762 us |  1.48 |    0.01 |     120 B |          NA |
+| Spatial.OnSphere      | Linq_Double     |     98.68 us |   0.782 us |   0.732 us |  0.81 |    0.01 |     120 B |          NA |
+| StudentT              | Linq_Double     |    191.63 us |   0.347 us |   0.325 us |  1.58 |    0.00 |         - |          NA |
+| Wishart               | Linq_Double     |  1,257.40 us |   3.208 us |   3.000 us | 10.38 |    0.03 |      65 B |          NA |
+|                       |                 |              |            |            |       |         |           |             |
+| Beta                  | Linq_Decimal    |  5,156.33 us |  11.759 us |  11.000 us |  1.95 |    0.01 |       6 B |        2.00 |
+| Chi                   | Linq_Decimal    |  3,590.14 us |   5.605 us |   4.969 us |  1.36 |    0.00 |       3 B |        1.00 |
+| Chi-Squared           | Linq_Decimal    |  2,639.12 us |   8.696 us |   8.135 us |  1.00 |    0.00 |       3 B |        1.00 |
+| Dirichlet             | Linq_Decimal    | 16,164.02 us |  57.190 us |  53.496 us |  6.11 |    0.02 |     151 B |       50.33 |
+| F                     | Linq_Decimal    |  5,398.52 us |  12.568 us |  11.756 us |  2.04 |    0.01 |       6 B |        2.00 |
+| Gamma                 | Linq_Decimal    |  2,646.63 us |   6.071 us |   5.679 us |  1.00 |    0.00 |       3 B |        1.00 |
+| Halton                | Linq_Decimal    |  1,171.61 us |   2.575 us |   2.408 us |  0.44 |    0.00 |     129 B |       43.00 |
+| Inverse-Gamma         | Linq_Decimal    |  2,737.92 us |  13.715 us |  11.452 us |  1.03 |    0.00 |       3 B |        1.00 |
+| Log-Normal            | Linq_Decimal    |  2,505.92 us |   4.914 us |   4.597 us |  0.95 |    0.00 |       3 B |        1.00 |
+| 'Multivariate Normal' | Linq_Decimal    |  1,669.04 us |   2.813 us |   2.632 us |  0.63 |    0.00 |     129 B |       43.00 |
+| Sobol                 | Linq_Decimal    |    209.71 us |   0.535 us |   0.501 us |  0.08 |    0.00 |     128 B |       42.67 |
+| Spatial.OnSphere      | Linq_Decimal    |  2,067.93 us |   4.789 us |   4.245 us |  0.78 |    0.00 |     131 B |       43.67 |
+| StudentT              | Linq_Decimal    |  4,184.41 us |   8.378 us |   7.836 us |  1.58 |    0.00 |       6 B |        2.00 |
+| Wishart               | Linq_Decimal    | 19,440.24 us |  58.507 us |  54.728 us |  7.35 |    0.03 |      87 B |       29.00 |
+|                       |                 |              |            |            |       |         |           |             |
+| Beta                  | Linq_Fixed      |    354.39 us |   1.028 us |   0.962 us |     ? |       ? |         - |           ? |
+| Chi                   | Linq_Fixed      |           NA |         NA |         NA |     ? |       ? |        NA |           ? |
+| Chi-Squared           | Linq_Fixed      |           NA |         NA |         NA |     ? |       ? |        NA |           ? |
+| Dirichlet             | Linq_Fixed      |           NA |         NA |         NA |     ? |       ? |        NA |           ? |
+| F                     | Linq_Fixed      |    363.53 us |   0.942 us |   0.881 us |     ? |       ? |         - |           ? |
+| Gamma                 | Linq_Fixed      |           NA |         NA |         NA |     ? |       ? |        NA |           ? |
+| Halton                | Linq_Fixed      |    494.38 us |   1.555 us |   1.455 us |     ? |       ? |     121 B |           ? |
+| Inverse-Gamma         | Linq_Fixed      |    182.33 us |   0.588 us |   0.550 us |     ? |       ? |         - |           ? |
+| Log-Normal            | Linq_Fixed      |     86.85 us |   0.141 us |   0.132 us |     ? |       ? |         - |           ? |
+| 'Multivariate Normal' | Linq_Fixed      |    476.81 us |   0.697 us |   0.652 us |     ? |       ? |     120 B |           ? |
+| Sobol                 | Linq_Fixed      |    341.91 us |   0.843 us |   0.788 us |     ? |       ? |     120 B |           ? |
+| Spatial.OnSphere      | Linq_Fixed      |    120.69 us |   0.171 us |   0.160 us |     ? |       ? |     120 B |           ? |
+| StudentT              | Linq_Fixed      |           NA |         NA |         NA |     ? |       ? |        NA |           ? |
+| Wishart               | Linq_Fixed      |           NA |         NA |         NA |     ? |       ? |        NA |           ? |
+
+Benchmarks with issues:
+  SamplerAdvancedBenchmarks.Chi: Job-XGTSUF(MinIterationTime=500ms, IterationCount=15) [Param=ForLoop_Fixed]
+  SamplerAdvancedBenchmarks.Chi-Squared: Job-XGTSUF(MinIterationTime=500ms, IterationCount=15) [Param=ForLoop_Fixed]
+  SamplerAdvancedBenchmarks.Dirichlet: Job-XGTSUF(MinIterationTime=500ms, IterationCount=15) [Param=ForLoop_Fixed]
+  SamplerAdvancedBenchmarks.Gamma: Job-XGTSUF(MinIterationTime=500ms, IterationCount=15) [Param=ForLoop_Fixed]
+  SamplerAdvancedBenchmarks.StudentT: Job-XGTSUF(MinIterationTime=500ms, IterationCount=15) [Param=ForLoop_Fixed]
+  SamplerAdvancedBenchmarks.Wishart: Job-XGTSUF(MinIterationTime=500ms, IterationCount=15) [Param=ForLoop_Fixed]
+  SamplerAdvancedBenchmarks.Chi: Job-XGTSUF(MinIterationTime=500ms, IterationCount=15) [Param=ForEach_Fixed]
+  SamplerAdvancedBenchmarks.Chi-Squared: Job-XGTSUF(MinIterationTime=500ms, IterationCount=15) [Param=ForEach_Fixed]
+  SamplerAdvancedBenchmarks.Dirichlet: Job-XGTSUF(MinIterationTime=500ms, IterationCount=15) [Param=ForEach_Fixed]
+  SamplerAdvancedBenchmarks.Gamma: Job-XGTSUF(MinIterationTime=500ms, IterationCount=15) [Param=ForEach_Fixed]
+  SamplerAdvancedBenchmarks.StudentT: Job-XGTSUF(MinIterationTime=500ms, IterationCount=15) [Param=ForEach_Fixed]
+  SamplerAdvancedBenchmarks.Wishart: Job-XGTSUF(MinIterationTime=500ms, IterationCount=15) [Param=ForEach_Fixed]
+  SamplerAdvancedBenchmarks.Chi: Job-XGTSUF(MinIterationTime=500ms, IterationCount=15) [Param=Linq_Fixed]
+  SamplerAdvancedBenchmarks.Chi-Squared: Job-XGTSUF(MinIterationTime=500ms, IterationCount=15) [Param=Linq_Fixed]
+  SamplerAdvancedBenchmarks.Dirichlet: Job-XGTSUF(MinIterationTime=500ms, IterationCount=15) [Param=Linq_Fixed]
+  SamplerAdvancedBenchmarks.Gamma: Job-XGTSUF(MinIterationTime=500ms, IterationCount=15) [Param=Linq_Fixed]
+  SamplerAdvancedBenchmarks.StudentT: Job-XGTSUF(MinIterationTime=500ms, IterationCount=15) [Param=Linq_Fixed]
+  SamplerAdvancedBenchmarks.Wishart: Job-XGTSUF(MinIterationTime=500ms, IterationCount=15) [Param=Linq_Fixed]
+
+// * Warnings *
+BaselineCustomAnalyzer
+  Summary -> A question mark '?' symbol indicates that it was not possible to compute the (Ratio, RatioSD, Alloc Ratio) column(s) because the baseline value is too close to zero.
+
+// * Hints *
+Outliers
+  SamplerAdvancedBenchmarks.Beta: MinIterationTime=500ms, IterationCount=15                  -> 2 outliers were removed, 3 outliers were detected (180.21 us, 180.62 us, 181.43 us)
+  SamplerAdvancedBenchmarks.Chi-Squared: MinIterationTime=500ms, IterationCount=15           -> 1 outlier  was  removed, 2 outliers were detected (89.91 us, 90.26 us)
+  SamplerAdvancedBenchmarks.Dirichlet: MinIterationTime=500ms, IterationCount=15             -> 2 outliers were removed (628.48 us, 630.81 us)
+  SamplerAdvancedBenchmarks.Gamma: MinIterationTime=500ms, IterationCount=15                 -> 1 outlier  was  removed, 3 outliers were detected (89.99 us, 90.09 us, 90.32 us)
+  SamplerAdvancedBenchmarks.Inverse-Gamma: MinIterationTime=500ms, IterationCount=15         -> 2 outliers were removed (90.63 us, 91.74 us)
+  SamplerAdvancedBenchmarks.'Multivariate Normal': MinIterationTime=500ms, IterationCount=15 -> 1 outlier  was  removed (324.99 us)
+  SamplerAdvancedBenchmarks.Sobol: MinIterationTime=500ms, IterationCount=15                 -> 1 outlier  was  detected (111.33 us)
+  SamplerAdvancedBenchmarks.Spatial.OnSphere: MinIterationTime=500ms, IterationCount=15      -> 1 outlier  was  removed (53.20 us)
+  SamplerAdvancedBenchmarks.StudentT: MinIterationTime=500ms, IterationCount=15              -> 1 outlier  was  removed (146.20 us)
+  SamplerAdvancedBenchmarks.Wishart: MinIterationTime=500ms, IterationCount=15               -> 2 outliers were removed, 4 outliers were detected (938.26 us, 938.42 us, 942.22 us, 942.33 us)
+  SamplerAdvancedBenchmarks.Beta: MinIterationTime=500ms, IterationCount=15                  -> 2 outliers were removed (235.74 us, 235.94 us)
+  SamplerAdvancedBenchmarks.Halton: MinIterationTime=500ms, IterationCount=15                -> 1 outlier  was  detected (78.06 us)
+  SamplerAdvancedBenchmarks.'Multivariate Normal': MinIterationTime=500ms, IterationCount=15 -> 3 outliers were removed (428.66 us..429.78 us)
+  SamplerAdvancedBenchmarks.Sobol: MinIterationTime=500ms, IterationCount=15                 -> 2 outliers were detected (96.91 us, 97.28 us)
+  SamplerAdvancedBenchmarks.Chi-Squared: MinIterationTime=500ms, IterationCount=15           -> 1 outlier  was  removed (2.73 ms)
+  SamplerAdvancedBenchmarks.Halton: MinIterationTime=500ms, IterationCount=15                -> 2 outliers were removed (1.11 ms, 1.12 ms)
+  SamplerAdvancedBenchmarks.Inverse-Gamma: MinIterationTime=500ms, IterationCount=15         -> 1 outlier  was  removed (2.79 ms)
+  SamplerAdvancedBenchmarks.'Multivariate Normal': MinIterationTime=500ms, IterationCount=15 -> 1 outlier  was  removed (1.63 ms)
+  SamplerAdvancedBenchmarks.Spatial.OnSphere: MinIterationTime=500ms, IterationCount=15      -> 1 outlier  was  removed (2.04 ms)
+  SamplerAdvancedBenchmarks.Beta: MinIterationTime=500ms, IterationCount=15                  -> 1 outlier  was  removed (355.21 us)
+  SamplerAdvancedBenchmarks.Log-Normal: MinIterationTime=500ms, IterationCount=15            -> 1 outlier  was  removed (85.63 us)
+  SamplerAdvancedBenchmarks.Spatial.OnSphere: MinIterationTime=500ms, IterationCount=15      -> 2 outliers were removed (116.17 us, 116.19 us)
+  SamplerAdvancedBenchmarks.Chi-Squared: MinIterationTime=500ms, IterationCount=15           -> 2 outliers were removed (94.81 us, 95.04 us)
+  SamplerAdvancedBenchmarks.Dirichlet: MinIterationTime=500ms, IterationCount=15             -> 2 outliers were removed, 3 outliers were detected (711.26 us, 724.03 us, 726.06 us)
+  SamplerAdvancedBenchmarks.Gamma: MinIterationTime=500ms, IterationCount=15                 -> 2 outliers were removed (94.97 us, 94.98 us)
+  SamplerAdvancedBenchmarks.Halton: MinIterationTime=500ms, IterationCount=15                -> 1 outlier  was  detected (167.35 us)
+  SamplerAdvancedBenchmarks.Sobol: MinIterationTime=500ms, IterationCount=15                 -> 1 outlier  was  detected (207.92 us)
+  SamplerAdvancedBenchmarks.Spatial.OnSphere: MinIterationTime=500ms, IterationCount=15      -> 1 outlier  was  removed, 2 outliers were detected (57.38 us, 57.73 us)
+  SamplerAdvancedBenchmarks.StudentT: MinIterationTime=500ms, IterationCount=15              -> 2 outliers were removed, 3 outliers were detected (151.00 us, 152.38 us, 152.45 us)
+  SamplerAdvancedBenchmarks.Wishart: MinIterationTime=500ms, IterationCount=15               -> 1 outlier  was  removed (975.09 us)
+  SamplerAdvancedBenchmarks.Chi: MinIterationTime=500ms, IterationCount=15                   -> 1 outlier  was  removed (121.98 us)
+  SamplerAdvancedBenchmarks.F: MinIterationTime=500ms, IterationCount=15                     -> 1 outlier  was  removed (242.04 us)
+  SamplerAdvancedBenchmarks.Gamma: MinIterationTime=500ms, IterationCount=15                 -> 1 outlier  was  removed (121.50 us)
+  SamplerAdvancedBenchmarks.Log-Normal: MinIterationTime=500ms, IterationCount=15            -> 1 outlier  was  removed (78.11 us)
+  SamplerAdvancedBenchmarks.'Multivariate Normal': MinIterationTime=500ms, IterationCount=15 -> 1 outlier  was  removed (452.65 us)
+  SamplerAdvancedBenchmarks.Wishart: MinIterationTime=500ms, IterationCount=15               -> 3 outliers were removed (1.26 ms..1.28 ms)
+  SamplerAdvancedBenchmarks.Chi: MinIterationTime=500ms, IterationCount=15                   -> 2 outliers were removed (3.60 ms, 3.62 ms)
+  SamplerAdvancedBenchmarks.Chi-Squared: MinIterationTime=500ms, IterationCount=15           -> 3 outliers were removed (2.68 ms..2.73 ms)
+  SamplerAdvancedBenchmarks.Halton: MinIterationTime=500ms, IterationCount=15                -> 1 outlier  was  removed, 2 outliers were detected (1.14 ms, 1.16 ms)
+  SamplerAdvancedBenchmarks.Inverse-Gamma: MinIterationTime=500ms, IterationCount=15         -> 1 outlier  was  removed (2.77 ms)
+  SamplerAdvancedBenchmarks.Sobol: MinIterationTime=500ms, IterationCount=15                 -> 1 outlier  was  removed (204.02 us)
+  SamplerAdvancedBenchmarks.Wishart: MinIterationTime=500ms, IterationCount=15               -> 1 outlier  was  detected (19.13 ms)
+  SamplerAdvancedBenchmarks.Beta: MinIterationTime=500ms, IterationCount=15                  -> 1 outlier  was  removed (363.52 us)
+  SamplerAdvancedBenchmarks.F: MinIterationTime=500ms, IterationCount=15                     -> 1 outlier  was  detected (367.28 us)
+  SamplerAdvancedBenchmarks.Halton: MinIterationTime=500ms, IterationCount=15                -> 1 outlier  was  detected (515.73 us)
+  SamplerAdvancedBenchmarks.Inverse-Gamma: MinIterationTime=500ms, IterationCount=15         -> 1 outlier  was  removed (185.73 us)
+  SamplerAdvancedBenchmarks.'Multivariate Normal': MinIterationTime=500ms, IterationCount=15 -> 2 outliers were removed, 3 outliers were detected (463.34 us, 467.86 us, 469.73 us)
+  SamplerAdvancedBenchmarks.Sobol: MinIterationTime=500ms, IterationCount=15                 -> 1 outlier  was  removed (339.12 us)
+  SamplerAdvancedBenchmarks.Spatial.OnSphere: MinIterationTime=500ms, IterationCount=15      -> 1 outlier  was  removed, 2 outliers were detected (118.35 us, 118.98 us)
+  SamplerAdvancedBenchmarks.Beta: MinIterationTime=500ms, IterationCount=15                  -> 1 outlier  was  removed (186.35 us)
+  SamplerAdvancedBenchmarks.Dirichlet: MinIterationTime=500ms, IterationCount=15             -> 1 outlier  was  detected (762.93 us)
+  SamplerAdvancedBenchmarks.Halton: MinIterationTime=500ms, IterationCount=15                -> 1 outlier  was  removed, 3 outliers were detected (170.18 us, 170.20 us, 174.32 us)
+  SamplerAdvancedBenchmarks.Inverse-Gamma: MinIterationTime=500ms, IterationCount=15         -> 1 outlier  was  removed (95.95 us)
+  SamplerAdvancedBenchmarks.Log-Normal: MinIterationTime=500ms, IterationCount=15            -> 1 outlier  was  removed, 2 outliers were detected (60.07 us, 60.36 us)
+  SamplerAdvancedBenchmarks.Sobol: MinIterationTime=500ms, IterationCount=15                 -> 2 outliers were removed (197.64 us, 197.76 us)
+  SamplerAdvancedBenchmarks.Spatial.OnSphere: MinIterationTime=500ms, IterationCount=15      -> 3 outliers were detected (57.36 us..57.37 us)
+  SamplerAdvancedBenchmarks.Beta: MinIterationTime=500ms, IterationCount=15                  -> 2 outliers were detected (239.49 us, 239.49 us)
+  SamplerAdvancedBenchmarks.Chi-Squared: MinIterationTime=500ms, IterationCount=15           -> 1 outlier  was  removed, 2 outliers were detected (120.70 us, 122.39 us)
+  SamplerAdvancedBenchmarks.Dirichlet: MinIterationTime=500ms, IterationCount=15             -> 2 outliers were removed, 4 outliers were detected (951.29 us, 952.84 us, 954.86 us, 957.60 us)
+  SamplerAdvancedBenchmarks.F: MinIterationTime=500ms, IterationCount=15                     -> 1 outlier  was  removed, 2 outliers were detected (238.03 us, 240.87 us)
+  SamplerAdvancedBenchmarks.Gamma: MinIterationTime=500ms, IterationCount=15                 -> 1 outlier  was  removed (122.62 us)
+  SamplerAdvancedBenchmarks.Halton: MinIterationTime=500ms, IterationCount=15                -> 1 outlier  was  removed (172.56 us)
+  SamplerAdvancedBenchmarks.'Multivariate Normal': MinIterationTime=500ms, IterationCount=15 -> 2 outliers were removed (468.93 us, 469.18 us)
+  SamplerAdvancedBenchmarks.Sobol: MinIterationTime=500ms, IterationCount=15                 -> 1 outlier  was  removed (184.03 us)
+  SamplerAdvancedBenchmarks.Beta: MinIterationTime=500ms, IterationCount=15                  -> 2 outliers were detected (5.13 ms, 5.14 ms)
+  SamplerAdvancedBenchmarks.Chi: MinIterationTime=500ms, IterationCount=15                   -> 1 outlier  was  removed (3.62 ms)
+  SamplerAdvancedBenchmarks.Inverse-Gamma: MinIterationTime=500ms, IterationCount=15         -> 2 outliers were removed (2.78 ms, 2.78 ms)
+  SamplerAdvancedBenchmarks.'Multivariate Normal': MinIterationTime=500ms, IterationCount=15 -> 3 outliers were detected (1.66 ms..1.67 ms)
+  SamplerAdvancedBenchmarks.Sobol: MinIterationTime=500ms, IterationCount=15                 -> 1 outlier  was  detected (208.22 us)
+  SamplerAdvancedBenchmarks.Spatial.OnSphere: MinIterationTime=500ms, IterationCount=15      -> 1 outlier  was  removed (2.10 ms)
+  SamplerAdvancedBenchmarks.'Multivariate Normal': MinIterationTime=500ms, IterationCount=15 -> 2 outliers were detected (475.00 us, 475.61 us)
+  SamplerAdvancedBenchmarks.Spatial.OnSphere: MinIterationTime=500ms, IterationCount=15      -> 1 outlier  was  detected (120.36 us)
+
+// * Legends *
+  Param       : Value of the 'Param' parameter
+  Mean        : Arithmetic mean of all measurements
+  Error       : Half of 99.9% confidence interval
+  StdDev      : Standard deviation of all measurements
+  Ratio       : Mean of the ratio distribution ([Current]/[Baseline])
+  RatioSD     : Standard deviation of the ratio distribution ([Current]/[Baseline])
+  Allocated   : Allocated memory per single operation (managed only, inclusive, 1KB = 1024B)
+  Alloc Ratio : Allocated memory ratio distribution ([Current]/[Baseline])
+  1 us        : 1 Microsecond (0.000001 sec)
+
+// * Diagnostic Output - MemoryDiagnoser *
+
+
+// ***** BenchmarkRunner: End *****
+Run time: 00:50:59 (3059.98 sec), executed benchmarks: 168
+
+Global total time: 00:51:08 (3068.55 sec), executed benchmarks: 168
+// * Artifacts cleanup *
+Artifacts cleanup is finished
+
+Process finished with exit code 0.

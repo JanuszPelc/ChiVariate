@@ -23,6 +23,7 @@ public class SamplerAdvancedBenchmarks
 {
     #region Benchmarks
 
+    /*
     [Benchmark(Description = "Beta")]
     public bool ChiVariateBeta()
     {
@@ -66,6 +67,7 @@ public class SamplerAdvancedBenchmarks
             return Consume(sum);
         }
     }
+    */
 
     [Benchmark(Description = "Chi")]
     public bool ChiVariateChi()
@@ -215,6 +217,7 @@ public class SamplerAdvancedBenchmarks
         }
     }
 
+    /*
     [Benchmark(Description = "F")]
     public bool ChiVariateF()
     {
@@ -258,6 +261,7 @@ public class SamplerAdvancedBenchmarks
             return Consume(sum);
         }
     }
+    */
 
     [Benchmark(Description = "Gamma", Baseline = true)]
     public bool ChiVariateGamma()
@@ -303,6 +307,7 @@ public class SamplerAdvancedBenchmarks
         }
     }
 
+    /*
     [Benchmark(Description = "Halton")]
     public bool ChiVariateHalton()
     {
@@ -613,6 +618,7 @@ public class SamplerAdvancedBenchmarks
             return Consume(sum);
         }
     }
+    */
 
     [Benchmark(Description = "StudentT")]
     public bool ChiVariateStudentT()

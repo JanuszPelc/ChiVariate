@@ -687,31 +687,6 @@ public class SamplerBasicBenchmarks
         throw new UnreachableException();
     }
 
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    private static T SumValues<T>(IEnumerable<T> enumerable)
-        where T : INumberBase<T>
-    {
-        if (typeof(T) == typeof(float))
-            return T.CreateTruncating(enumerable.Sum(float.CreateTruncating));
-
-        if (typeof(T) == typeof(double))
-            return T.CreateTruncating(enumerable.Sum(double.CreateTruncating));
-
-        if (typeof(T) == typeof(decimal))
-            return T.CreateTruncating(enumerable.Sum(decimal.CreateTruncating));
-
-        if (typeof(T) == typeof(ChiFixed))
-            return enumerable.Aggregate(T.Zero, (sum, value) => sum + value);
-
-        if (typeof(T) == typeof(int))
-            return T.CreateTruncating(enumerable.Sum(int.CreateTruncating));
-
-        if (typeof(T) == typeof(long))
-            return T.CreateTruncating(enumerable.Sum(long.CreateTruncating));
-
-        throw new UnreachableException();
-    }
-
     private static bool Consume<T>(T value) where T : INumberBase<T>
     {
         if (value.GetHashCode() == Environment.TickCount)

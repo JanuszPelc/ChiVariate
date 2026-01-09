@@ -78,6 +78,8 @@ public ref struct ChiSamplerGamma<TRng, T>
             if (xCubed <= T.Zero) continue;
 
             var x = xCubed * xCubed * xCubed;
+            if (x <= T.Zero) continue;
+
             var v = ChiRealProvider.Next<TRng, T>(ref _rng, ChiIntervalOptions.ExcludeMin);
 
             if (v < T.One - T.CreateChecked(0.0331) * z * z * z * z ||
