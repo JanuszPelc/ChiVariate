@@ -10,7 +10,7 @@
         </Description>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <PackageTags>
-            random prng distributions statistics simulation monte-carlo zero-allocation data-oriented gamedev non-cryptographic
+            random prng distributions statistics simulation monte-carlo zero-allocation data-oriented gamedev non-cryptographic fixed-point
         </PackageTags>
 
         <PackageReadmeFile>README.md</PackageReadmeFile>
