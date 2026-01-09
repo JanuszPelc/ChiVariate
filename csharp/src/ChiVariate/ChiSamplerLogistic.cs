@@ -39,10 +39,9 @@ public readonly ref struct ChiSamplerLogistic<TRng, T>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public T Sample()
     {
-        // Inverse CDF method: Logistic(μ, s) = μ + s * ln(U / (1-U))
-        // Note: Cannot use Ziggurat here because U and (1-U) are dependent
         var u = ChiRealProvider.Next<TRng, T>(ref _rng, ChiIntervalOptions.ExcludeMin);
-        return _location + _scale * ChiMath.Log(u / (T.One - u));
+        // Inverse CDF: μ + s * (ln(U) - ln(1-U))
+        return _location + _scale * (ChiMath.Log(u) - ChiMath.Log(T.One - u));
     }
 
     /// <summary>
