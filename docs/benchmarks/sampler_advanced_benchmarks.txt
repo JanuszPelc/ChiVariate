@@ -56,19 +56,19 @@ MinIterationTime=500ms  IterationCount=15
 | Wishart               | ForLoop_Decimal | 19,196.33 us |  37.075 us |  34.680 us |  7.20 |    0.04 |      23 B |        7.67 |
 |                       |                 |              |            |            |       |         |           |             |
 | Beta                  | ForLoop_Fixed   |    352.72 us |   0.385 us |   0.341 us |     ? |       ? |         - |           ? |
-| Chi                   | ForLoop_Fixed   |           NA |         NA |         NA |     ? |       ? |        NA |           ? |
-| Chi-Squared           | ForLoop_Fixed   |           NA |         NA |         NA |     ? |       ? |        NA |           ? |
-| Dirichlet             | ForLoop_Fixed   |           NA |         NA |         NA |     ? |       ? |        NA |           ? |
+| Chi                   | ForLoop_Fixed   |    177.92 us |   0.692 us |   0.613 us |  1.03 |    0.00 |         - |          NA |
+| Chi-Squared           | ForLoop_Fixed   |    173.02 us |   0.197 us |   0.165 us |  1.00 |    0.00 |         - |          NA |
+| Dirichlet             | ForLoop_Fixed   |  1,068.40 us |   1.704 us |   1.510 us |  6.17 |    0.01 |       1 B |          NA |
 | F                     | ForLoop_Fixed   |    364.88 us |   2.310 us |   2.161 us |     ? |       ? |         - |           ? |
-| Gamma                 | ForLoop_Fixed   |           NA |         NA |         NA |     ? |       ? |        NA |           ? |
+| Gamma                 | ForLoop_Fixed   |    173.12 us |   0.126 us |   0.105 us |  1.00 |    0.00 |         - |          NA |
 | Halton                | ForLoop_Fixed   |    438.93 us |   0.547 us |   0.512 us |     ? |       ? |         - |           ? |
 | Inverse-Gamma         | ForLoop_Fixed   |    179.84 us |   0.189 us |   0.176 us |     ? |       ? |         - |           ? |
 | Log-Normal            | ForLoop_Fixed   |     85.40 us |   0.064 us |   0.057 us |     ? |       ? |         - |           ? |
 | 'Multivariate Normal' | ForLoop_Fixed   |    445.87 us |   1.002 us |   0.937 us |     ? |       ? |         - |           ? |
 | Sobol                 | ForLoop_Fixed   |    257.14 us |   0.337 us |   0.315 us |     ? |       ? |         - |           ? |
 | Spatial.OnSphere      | ForLoop_Fixed   |    115.58 us |   0.159 us |   0.133 us |     ? |       ? |         - |           ? |
-| StudentT              | ForLoop_Fixed   |           NA |         NA |         NA |     ? |       ? |        NA |           ? |
-| Wishart               | ForLoop_Fixed   |           NA |         NA |         NA |     ? |       ? |        NA |           ? |
+| StudentT              | ForLoop_Fixed   |    270.09 us |   0.366 us |   0.306 us |  1.56 |    0.00 |         - |          NA |
+| Wishart               | ForLoop_Fixed   |  1,405.68 us |  10.673 us |   9.984 us |  8.12 |    0.06 |       1 B |          NA |
 |                       |                 |              |            |            |       |         |           |             |
 | Beta                  | ForEach_Float   |    185.14 us |   0.165 us |   0.154 us |  1.96 |    0.00 |         - |          NA |
 | Chi                   | ForEach_Float   |     94.55 us |   0.154 us |   0.144 us |  1.00 |    0.00 |         - |          NA |
@@ -116,19 +116,19 @@ MinIterationTime=500ms  IterationCount=15
 | Wishart               | ForEach_Decimal | 19,198.86 us |  32.384 us |  30.292 us |  7.26 |    0.02 |      23 B |        7.67 |
 |                       |                 |              |            |            |       |         |           |             |
 | Beta                  | ForEach_Fixed   |    356.60 us |   1.191 us |   1.056 us |     ? |       ? |         - |           ? |
-| Chi                   | ForEach_Fixed   |           NA |         NA |         NA |     ? |       ? |        NA |           ? |
-| Chi-Squared           | ForEach_Fixed   |           NA |         NA |         NA |     ? |       ? |        NA |           ? |
-| Dirichlet             | ForEach_Fixed   |           NA |         NA |         NA |     ? |       ? |        NA |           ? |
+| Chi                   | ForEach_Fixed   |    181.82 us |   0.380 us |   0.355 us |  1.04 |    0.00 |         - |          NA |
+| Chi-Squared           | ForEach_Fixed   |    174.46 us |   0.205 us |   0.192 us |  1.00 |    0.00 |         - |          NA |
+| Dirichlet             | ForEach_Fixed   |  1,166.31 us |  10.106 us |   9.453 us |  6.69 |    0.05 |       1 B |          NA |
 | F                     | ForEach_Fixed   |    369.02 us |   1.044 us |   0.977 us |     ? |       ? |         - |           ? |
-| Gamma                 | ForEach_Fixed   |           NA |         NA |         NA |     ? |       ? |        NA |           ? |
+| Gamma                 | ForEach_Fixed   |    174.34 us |   0.192 us |   0.179 us |  1.00 |    0.00 |         - |          NA |
 | Halton                | ForEach_Fixed   |    521.60 us |   3.268 us |   3.057 us |     ? |       ? |       1 B |           ? |
 | Inverse-Gamma         | ForEach_Fixed   |    184.66 us |   0.332 us |   0.294 us |     ? |       ? |         - |           ? |
 | Log-Normal            | ForEach_Fixed   |     87.77 us |   0.142 us |   0.133 us |     ? |       ? |         - |           ? |
 | 'Multivariate Normal' | ForEach_Fixed   |    464.18 us |   0.505 us |   0.421 us |     ? |       ? |         - |           ? |
 | Sobol                 | ForEach_Fixed   |    337.87 us |   0.443 us |   0.393 us |     ? |       ? |         - |           ? |
 | Spatial.OnSphere      | ForEach_Fixed   |    118.64 us |   0.176 us |   0.156 us |     ? |       ? |         - |           ? |
-| StudentT              | ForEach_Fixed   |           NA |         NA |         NA |     ? |       ? |        NA |           ? |
-| Wishart               | ForEach_Fixed   |           NA |         NA |         NA |     ? |       ? |        NA |           ? |
+| StudentT              | ForEach_Fixed   |    274.77 us |   0.502 us |   0.419 us |  1.58 |    0.00 |         - |          NA |
+| Wishart               | ForEach_Fixed   |  1,419.40 us |   2.728 us |   2.552 us |  8.14 |    0.02 |       1 B |          NA |
 |                       |                 |              |            |            |       |         |           |             |
 | Beta                  | Linq_Float      |    184.50 us |   0.237 us |   0.210 us |  1.94 |    0.01 |         - |          NA |
 | Chi                   | Linq_Float      |     94.17 us |   0.130 us |   0.122 us |  0.99 |    0.00 |         - |          NA |
@@ -176,39 +176,19 @@ MinIterationTime=500ms  IterationCount=15
 | Wishart               | Linq_Decimal    | 19,440.24 us |  58.507 us |  54.728 us |  7.35 |    0.03 |      87 B |       29.00 |
 |                       |                 |              |            |            |       |         |           |             |
 | Beta                  | Linq_Fixed      |    354.39 us |   1.028 us |   0.962 us |     ? |       ? |         - |           ? |
-| Chi                   | Linq_Fixed      |           NA |         NA |         NA |     ? |       ? |        NA |           ? |
-| Chi-Squared           | Linq_Fixed      |           NA |         NA |         NA |     ? |       ? |        NA |           ? |
-| Dirichlet             | Linq_Fixed      |           NA |         NA |         NA |     ? |       ? |        NA |           ? |
+| Chi                   | Linq_Fixed      |    176.59 us |   0.145 us |   0.113 us |  1.02 |    0.00 |         - |          NA |
+| Chi-Squared           | Linq_Fixed      |    172.07 us |   0.317 us |   0.281 us |  1.00 |    0.00 |         - |          NA |
+| Dirichlet             | Linq_Fixed      |  1,157.72 us |   2.290 us |   2.030 us |  6.72 |    0.02 |     121 B |          NA |
 | F                     | Linq_Fixed      |    363.53 us |   0.942 us |   0.881 us |     ? |       ? |         - |           ? |
-| Gamma                 | Linq_Fixed      |           NA |         NA |         NA |     ? |       ? |        NA |           ? |
+| Gamma                 | Linq_Fixed      |    172.29 us |   0.433 us |   0.362 us |  1.00 |    0.00 |         - |          NA |
 | Halton                | Linq_Fixed      |    494.38 us |   1.555 us |   1.455 us |     ? |       ? |     121 B |           ? |
 | Inverse-Gamma         | Linq_Fixed      |    182.33 us |   0.588 us |   0.550 us |     ? |       ? |         - |           ? |
 | Log-Normal            | Linq_Fixed      |     86.85 us |   0.141 us |   0.132 us |     ? |       ? |         - |           ? |
 | 'Multivariate Normal' | Linq_Fixed      |    476.81 us |   0.697 us |   0.652 us |     ? |       ? |     120 B |           ? |
 | Sobol                 | Linq_Fixed      |    341.91 us |   0.843 us |   0.788 us |     ? |       ? |     120 B |           ? |
 | Spatial.OnSphere      | Linq_Fixed      |    120.69 us |   0.171 us |   0.160 us |     ? |       ? |     120 B |           ? |
-| StudentT              | Linq_Fixed      |           NA |         NA |         NA |     ? |       ? |        NA |           ? |
-| Wishart               | Linq_Fixed      |           NA |         NA |         NA |     ? |       ? |        NA |           ? |
-
-Benchmarks with issues:
-  SamplerAdvancedBenchmarks.Chi: Job-XGTSUF(MinIterationTime=500ms, IterationCount=15) [Param=ForLoop_Fixed]
-  SamplerAdvancedBenchmarks.Chi-Squared: Job-XGTSUF(MinIterationTime=500ms, IterationCount=15) [Param=ForLoop_Fixed]
-  SamplerAdvancedBenchmarks.Dirichlet: Job-XGTSUF(MinIterationTime=500ms, IterationCount=15) [Param=ForLoop_Fixed]
-  SamplerAdvancedBenchmarks.Gamma: Job-XGTSUF(MinIterationTime=500ms, IterationCount=15) [Param=ForLoop_Fixed]
-  SamplerAdvancedBenchmarks.StudentT: Job-XGTSUF(MinIterationTime=500ms, IterationCount=15) [Param=ForLoop_Fixed]
-  SamplerAdvancedBenchmarks.Wishart: Job-XGTSUF(MinIterationTime=500ms, IterationCount=15) [Param=ForLoop_Fixed]
-  SamplerAdvancedBenchmarks.Chi: Job-XGTSUF(MinIterationTime=500ms, IterationCount=15) [Param=ForEach_Fixed]
-  SamplerAdvancedBenchmarks.Chi-Squared: Job-XGTSUF(MinIterationTime=500ms, IterationCount=15) [Param=ForEach_Fixed]
-  SamplerAdvancedBenchmarks.Dirichlet: Job-XGTSUF(MinIterationTime=500ms, IterationCount=15) [Param=ForEach_Fixed]
-  SamplerAdvancedBenchmarks.Gamma: Job-XGTSUF(MinIterationTime=500ms, IterationCount=15) [Param=ForEach_Fixed]
-  SamplerAdvancedBenchmarks.StudentT: Job-XGTSUF(MinIterationTime=500ms, IterationCount=15) [Param=ForEach_Fixed]
-  SamplerAdvancedBenchmarks.Wishart: Job-XGTSUF(MinIterationTime=500ms, IterationCount=15) [Param=ForEach_Fixed]
-  SamplerAdvancedBenchmarks.Chi: Job-XGTSUF(MinIterationTime=500ms, IterationCount=15) [Param=Linq_Fixed]
-  SamplerAdvancedBenchmarks.Chi-Squared: Job-XGTSUF(MinIterationTime=500ms, IterationCount=15) [Param=Linq_Fixed]
-  SamplerAdvancedBenchmarks.Dirichlet: Job-XGTSUF(MinIterationTime=500ms, IterationCount=15) [Param=Linq_Fixed]
-  SamplerAdvancedBenchmarks.Gamma: Job-XGTSUF(MinIterationTime=500ms, IterationCount=15) [Param=Linq_Fixed]
-  SamplerAdvancedBenchmarks.StudentT: Job-XGTSUF(MinIterationTime=500ms, IterationCount=15) [Param=Linq_Fixed]
-  SamplerAdvancedBenchmarks.Wishart: Job-XGTSUF(MinIterationTime=500ms, IterationCount=15) [Param=Linq_Fixed]
+| StudentT              | Linq_Fixed      |    271.52 us |   0.219 us |   0.183 us |  1.58 |    0.00 |         - |          NA |
+| Wishart               | Linq_Fixed      |  1,420.86 us |   4.281 us |   4.005 us |  8.25 |    0.03 |      65 B |          NA |
 
 // * Warnings *
 BaselineCustomAnalyzer
