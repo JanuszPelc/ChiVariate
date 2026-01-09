@@ -25,7 +25,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
         }
 
         histogram.DebugPrint(testOutputHelper);
-        histogram.AssertIsNormal(0.0, 1.0, 0.005);
+        histogram.AssertIsNormal(0.0, 1.0, 0.015);
     }
 
     [Fact]

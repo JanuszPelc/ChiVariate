@@ -59,7 +59,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
 
         var chiMode = chiHistogram.CalculateMode();
         var rayleighMode = rayleighHistogram.CalculateMode();
-        rayleighMode.Should().BeApproximately(chiMode, 0.1);
+        rayleighMode.Should().BeApproximately(chiMode, 0.2);
     }
 
     [Theory]

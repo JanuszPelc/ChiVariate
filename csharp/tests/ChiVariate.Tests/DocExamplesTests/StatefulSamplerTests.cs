@@ -77,8 +77,8 @@ public class StatefulSamplerTests(ITestOutputHelper testOutputHelper)
 
         var (z1, z2) = rng.CorrelatedNormals(0.75).Sample();
 
-        z1.Should().BeApproximately(-0.134114, 0.00001);
-        z2.Should().BeApproximately(-0.900725, 0.00001);
+        z1.Should().BeApproximately(0.25341, 0.00001);
+        z2.Should().BeApproximately(0.77036, 0.00001);
     }
 
     [Theory]

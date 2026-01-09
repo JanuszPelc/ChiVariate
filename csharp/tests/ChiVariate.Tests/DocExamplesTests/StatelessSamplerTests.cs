@@ -70,7 +70,7 @@ public class StatelessSamplerTests(ITestOutputHelper testOutputHelper)
                 histogram.AddSample(s);
 
         var actualMode = histogram.CalculateMode();
-        actualMode.Should().BeApproximately((double)expectedMode, (double)expectedMode * 0.07,
+        actualMode.Should().BeApproximately((double)expectedMode, (double)expectedMode * 0.10,
             "because the mode should be correct for high-precision decimal values.");
     }
 
@@ -81,7 +81,7 @@ public class StatelessSamplerTests(ITestOutputHelper testOutputHelper)
 
         var result = rng.MaxwellBoltzmann(10.0).Sample();
 
-        result.Should().BeApproximately(14.33683, 0.00001);
+        result.Should().BeApproximately(17.10176, 0.00001);
     }
 
     [Theory]

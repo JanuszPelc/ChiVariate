@@ -538,8 +538,8 @@ public static class ChiMatrix
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ChiMatrix<T> Uninitialized<T>(int rows, int columns) where T : unmanaged, IFloatingPoint<T>
         {
-            ArgumentOutOfRangeException.ThrowIfLessThanOrEqual(rows, 0, nameof(rows));
-            ArgumentOutOfRangeException.ThrowIfLessThanOrEqual(columns, 0, nameof(columns));
+            ArgumentOutOfRangeException.ThrowIfLessThanOrEqual(rows, 0);
+            ArgumentOutOfRangeException.ThrowIfLessThanOrEqual(columns, 0);
 
             var length = rows * columns;
             var matrix = default(ChiMatrix<T>) with

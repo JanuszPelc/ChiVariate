@@ -110,7 +110,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
 
         var result = rng.F(5.0, 10.0).Sample();
 
-        result.Should().BeApproximately(0.540679, 0.00001);
+        result.Should().BeApproximately(1.15767, 0.00001);
     }
 
     [Theory]

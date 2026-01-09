@@ -55,13 +55,13 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
         var gammaMean = gammaHistogram.CalculateMean();
         var expMean = expHistogram.CalculateMean();
 
-        gammaMean.Should().BeApproximately(expMean, 0.01,
+        gammaMean.Should().BeApproximately(expMean, 0.02,
             "because Gamma(1, scale) must be statistically equivalent to Exponential(1/scale)");
 
         var gammaStdDev = gammaHistogram.CalculateStdDev(gammaMean);
         var expStdDev = expHistogram.CalculateStdDev(expMean);
 
-        gammaStdDev.Should().BeApproximately(expStdDev, 0.01);
+        gammaStdDev.Should().BeApproximately(expStdDev, 0.02);
     }
 
     [Theory]

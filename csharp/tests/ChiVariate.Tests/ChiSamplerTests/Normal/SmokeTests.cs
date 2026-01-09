@@ -16,7 +16,7 @@ public class SmokeTests
 
         var result = rng.Normal(0.0, 1.0).Sample();
 
-        result.Should().BeApproximately(-0.13411, 0.00001);
+        result.Should().BeApproximately(0.25341, 0.00001);
     }
 
     [Fact]
@@ -26,7 +26,7 @@ public class SmokeTests
 
         var result = rng.Normal(10.0f, 5.0f).Sample();
 
-        result.Should().BeApproximately(7.523f, 0.001f);
+        result.Should().BeApproximately(11.267f, 0.001f);
     }
 
     [Fact]

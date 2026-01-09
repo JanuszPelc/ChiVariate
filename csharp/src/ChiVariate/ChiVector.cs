@@ -90,7 +90,7 @@ public static class ChiVector
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ChiVector<T> Uninitialized<T>(int length) where T : unmanaged
         {
-            ArgumentOutOfRangeException.ThrowIfNegativeOrZero(length, nameof(length));
+            ArgumentOutOfRangeException.ThrowIfNegativeOrZero(length);
 
             var vector = default(ChiVector<T>) with
             {

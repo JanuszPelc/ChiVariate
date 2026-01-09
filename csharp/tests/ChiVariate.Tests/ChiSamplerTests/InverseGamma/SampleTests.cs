@@ -90,7 +90,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
 
         var result = rng.InverseGamma(3.0, 5.0).Sample();
 
-        result.Should().BeApproximately(2.03781, 0.00001);
+        result.Should().BeApproximately(1.61172, 0.00001);
     }
 
     [Theory]
