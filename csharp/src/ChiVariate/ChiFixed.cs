@@ -83,10 +83,14 @@ public readonly struct ChiFixed(long raw) : IFloatingPointIeee754<ChiFixed>, IMi
     /// <inheritdoc />
     public static ChiFixed Tau { get; } = (ChiFixed)6.2831853071795864769252867665m;
 
-    /// <inheritdoc />
+    /// <summary>
+    ///     The natural logarithm of 2.
+    /// </summary>
     public static ChiFixed Ln2 { get; } = (ChiFixed)0.69314718055994530941723212146m;
 
-    /// <inheritdoc />
+    /// <summary>
+    ///     The natural logarithm of 10.
+    /// </summary>
     public static ChiFixed Ln10 { get; } = (ChiFixed)2.30258509299404568401799145468m;
 
     /// <summary>
