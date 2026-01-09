@@ -137,7 +137,7 @@ ChiVariate emphasizes correctness, reproducibility, and statistical reliability 
 - **Integrity and precision**: all integer and floating-point distributions follow best practices:
   - Rejection sampling avoids modulo bias in bounded integer generation.
   - High-order bits are prioritized to eliminate low-bit artifacts common in simpler PRNGs.
-  - Floating-point distributions use precision-aware mantissa bit-filling for `float`, `double`, `Half`, and high-quality `decimal` values.
+  - Floating-point distributions use precision-aware mantissa bit-filling for `float`, `double`, `Half`, `decimal`, and `ChiFixed` values.
 
 These examples illustrate how ChiVariate, supported by helper types like ChiMatrix for linear algebra and ChiMath for generic math functions, supports deterministic, precision-critical simulations in domains like actuarial modeling and financial forecasting.
 
@@ -341,7 +341,7 @@ Distributions that produce integer-valued outcomes. Useful for modeling countabl
 
 ### Continuous distributions
 
-Distributions that produce real-valued variates, including `float`, `double`, `Half`, and high-quality `decimal` types. Suitable for modeling measurements, durations, or naturally varying quantities.
+Distributions that produce real-valued variates, including `float`, `double`, `Half`, `decimal`, and `ChiFixed` types. Suitable for modeling measurements, durations, or naturally varying quantities.
 
 #### Beta
 
@@ -545,6 +545,46 @@ var sobolSampler = rng.Sobol(4).OfType<double>();
 var points = sobolSampler.Sample(100);
 ```
 
+### Deterministic fixed-point arithmetic
+
+#### ChiFixed
+
+> A Q21.42 fixed-point numeric type providing deterministic cross-platform results with ~12 decimal digit precision. Useful for simulations requiring bit-exact reproducibility across different machines, runtimes, and architectures.
+>
+> Range: approximately ±2 million. Precision: ~12 decimal digits.
+
+ChiFixed implements `IFloatingPointIeee754<ChiFixed>`, so it works with .NET's generic math and all ChiVariate distribution samplers. Unlike `float` and `double`, which rely on platform-specific `System.Math` implementations, ChiFixed uses pure integer arithmetic with precomputed lookup tables for all operations.
+
+When to use ChiFixed:
+- Cross-platform determinism is required (save/load, replays, networked simulations)
+- Transcendental functions (sin, cos, exp, log) need to be reproducible
+- Precision of ~12 decimal digits is sufficient
+- Values stay within the ±2 million range
+
+Performance characteristics:
+- Addition/subtraction: ~1.7x faster than `double`
+- Multiplication: ~1.3x slower than `double`
+- Division: ~6x slower than `double`
+- Trigonometric functions: ~2x faster than `double`
+- Square root: ~2.7x slower than `double`
+- Memory: 8 bytes (same as `double`)
+
+```csharp
+// Generate deterministic random values in [0, 1)
+var rng = new ChiRng(42);
+var sample = rng.Uniform<ChiFixed>().Sample();
+
+// Use with any distribution
+var normalSampler = rng.Normal(ChiFixed.Zero, ChiFixed.One);
+var values = normalSampler.Sample(1000);
+
+// Full math support
+var angle = ChiFixed.Pi / 4;
+var (sin, cos) = ChiFixed.SinCos(angle);
+```
+
+For applications where `decimal`'s 96-bit precision is needed or values exceed ±2 million, use `decimal` instead. For maximum floating-point performance without cross-platform determinism requirements, use `double`.
+
 Beyond these built-in samplers, understanding the library's design constraints helps ensure effective usage in production scenarios.
 
 ## Trade-offs and gotchas
@@ -574,6 +614,7 @@ ChiVariate guarantees bit-for-bit reproducibility across platforms and .NET runt
 **Fully deterministic across all platforms:**
 - All integer distributions of any bit-size (8-bit through 128-bit)
 - All `decimal` distributions - ChiVariate implements its own decimal math library with no dependencies on platform-specific math functions
+- All `ChiFixed` distributions - a deterministic fixed-point type using pure integer arithmetic with lookup tables
 - Hashing, seeding, and core RNG state generation
 
 **Platform-dependent precision in last bits:**
