@@ -1,0 +1,116 @@
+// * Summary *
+
+BenchmarkDotNet v0.14.0, macOS Sequoia 15.7.3 (24G419) [Darwin 24.6.0]
+Apple M1 Pro, 1 CPU, 10 logical and 10 physical cores
+.NET SDK 10.0.100
+  [Host]     : .NET 9.0.11 (9.0.1125.51716), Arm64 RyuJIT AdvSIMD
+  Job-VJXNHB : .NET 9.0.11 (9.0.1125.51716), Arm64 RyuJIT AdvSIMD
+
+MinIterationTime=500ms  IterationCount=15  
+
+| Method             | Mean        | Error       | StdDev    | Allocated |
+|------------------- |------------:|------------:|----------:|----------:|
+| Fixed_Add          |    523.4 ns |     1.43 ns |   1.19 ns |         - |
+| Double_Add         |    896.7 ns |     0.95 ns |   0.85 ns |         - |
+| Fixed_Sub          |    522.7 ns |     0.42 ns |   0.37 ns |         - |
+| Double_Sub         |    896.4 ns |     0.97 ns |   0.91 ns |         - |
+| Fixed_Mul          |    852.8 ns |     0.86 ns |   0.76 ns |         - |
+| Double_Mul         |    670.0 ns |     0.40 ns |   0.38 ns |         - |
+| Fixed_Div          |  4,053.9 ns |     5.16 ns |   4.58 ns |         - |
+| Double_Div         |    670.5 ns |     0.67 ns |   0.60 ns |         - |
+| Fixed_Mod          |    789.5 ns |     0.39 ns |   0.36 ns |         - |
+| Double_Mod         |  3,738.8 ns |    13.36 ns |  11.85 ns |         - |
+|                    |             |             |           |           |
+| Fixed_FromDecimal  | 47,737.8 ns |   306.86 ns | 287.03 ns |         - |
+| Double_FromDecimal |  4,576.6 ns |     3.50 ns |   3.28 ns |         - |
+| Fixed_ToDecimal    | 70,871.1 ns | 1,007.99 ns | 893.55 ns |         - |
+| Double_ToDecimal   |  4,139.8 ns |     2.82 ns |   2.50 ns |         - |
+|                    |             |             |           |           |
+| Fixed_Exp          |  6,241.9 ns |    15.22 ns |  12.71 ns |         - |
+| Double_Exp         |  2,939.3 ns |    21.61 ns |  19.16 ns |         - |
+| Fixed_Log          |  4,187.4 ns |     2.93 ns |   2.60 ns |         - |
+| Double_Log         |  3,189.6 ns |     1.27 ns |   1.13 ns |         - |
+|                    |             |             |           |           |
+| Fixed_Pow          | 10,431.5 ns |    11.11 ns |   9.85 ns |         - |
+| Double_Pow         |  8,923.7 ns |    11.14 ns |   9.88 ns |         - |
+|                    |             |             |           |           |
+| Fixed_Sqrt         |  2,005.5 ns |     1.74 ns |   1.45 ns |         - |
+| Double_Sqrt        |    623.1 ns |     0.43 ns |   0.36 ns |         - |
+| Fixed_Cbrt         |  3,178.8 ns |     2.20 ns |   2.05 ns |         - |
+| Double_Cbrt        |  2,506.4 ns |     4.06 ns |   3.39 ns |         - |
+|                    |             |             |           |           |
+| Fixed_Floor        |    536.3 ns |     0.58 ns |   0.51 ns |         - |
+| Double_Floor       |    396.4 ns |     0.18 ns |   0.16 ns |         - |
+| Fixed_Ceiling      |    590.6 ns |     1.54 ns |   1.20 ns |         - |
+| Double_Ceiling     |    398.3 ns |     0.83 ns |   0.78 ns |         - |
+| Fixed_Truncate     |    911.0 ns |     0.38 ns |   0.31 ns |         - |
+| Double_Truncate    |    396.4 ns |     0.50 ns |   0.42 ns |         - |
+| Fixed_Round        |    951.5 ns |     0.41 ns |   0.38 ns |         - |
+| Double_Round       |    396.1 ns |     0.19 ns |   0.16 ns |         - |
+|                    |             |             |           |           |
+| Fixed_Sin          |  2,268.7 ns |     1.18 ns |   1.11 ns |         - |
+| Double_Sin         |  3,696.0 ns |    15.21 ns |  13.48 ns |         - |
+| Fixed_Cos          |  2,268.3 ns |     1.07 ns |   0.83 ns |         - |
+| Double_Cos         |  3,616.9 ns |    12.59 ns |  11.77 ns |         - |
+| Fixed_Tan          |  8,136.4 ns |     6.80 ns |   6.36 ns |         - |
+| Double_Tan         |  4,263.7 ns |     1.59 ns |   1.48 ns |         - |
+| Fixed_SinCos       |  2,282.1 ns |     2.85 ns |   2.53 ns |         - |
+| Double_SinCos      |  8,330.6 ns |    23.10 ns |  20.48 ns |         - |
+| Fixed_Atan         |  4,479.4 ns |     2.13 ns |   1.89 ns |         - |
+| Double_Atan        |  4,773.6 ns |    15.30 ns |  14.31 ns |         - |
+| Fixed_Atan2        |  5,666.9 ns |     2.25 ns |   2.00 ns |         - |
+| Double_Atan2       |  6,292.0 ns |    15.65 ns |  13.07 ns |         - |
+
+// * Hints *
+Outliers
+  FixedBenchmarks.Fixed_Add: MinIterationTime=500ms, IterationCount=15        -> 2 outliers were removed (530.28 ns, 530.33 ns)
+  FixedBenchmarks.Double_Add: MinIterationTime=500ms, IterationCount=15       -> 1 outlier  was  removed (909.59 ns)
+  FixedBenchmarks.Fixed_Sub: MinIterationTime=500ms, IterationCount=15        -> 1 outlier  was  removed (526.23 ns)
+  FixedBenchmarks.Fixed_Mul: MinIterationTime=500ms, IterationCount=15        -> 1 outlier  was  removed (861.22 ns)
+  FixedBenchmarks.Fixed_Div: MinIterationTime=500ms, IterationCount=15        -> 1 outlier  was  removed (4.07 us)
+  FixedBenchmarks.Double_Div: MinIterationTime=500ms, IterationCount=15       -> 1 outlier  was  removed (675.55 ns)
+  FixedBenchmarks.Double_Mod: MinIterationTime=500ms, IterationCount=15       -> 1 outlier  was  removed (3.79 us)
+  FixedBenchmarks.Fixed_ToDecimal: MinIterationTime=500ms, IterationCount=15  -> 1 outlier  was  removed (73.81 us)
+  FixedBenchmarks.Double_ToDecimal: MinIterationTime=500ms, IterationCount=15 -> 1 outlier  was  removed (4.20 us)
+  FixedBenchmarks.Fixed_Exp: MinIterationTime=500ms, IterationCount=15        -> 2 outliers were removed (6.30 us, 6.32 us)
+  FixedBenchmarks.Double_Exp: MinIterationTime=500ms, IterationCount=15       -> 1 outlier  was  removed (3.00 us)
+  FixedBenchmarks.Fixed_Log: MinIterationTime=500ms, IterationCount=15        -> 1 outlier  was  removed (4.24 us)
+  FixedBenchmarks.Double_Log: MinIterationTime=500ms, IterationCount=15       -> 1 outlier  was  removed (3.20 us)
+  FixedBenchmarks.Fixed_Pow: MinIterationTime=500ms, IterationCount=15        -> 1 outlier  was  removed (10.46 us)
+  FixedBenchmarks.Double_Pow: MinIterationTime=500ms, IterationCount=15       -> 1 outlier  was  removed (8.98 us)
+  FixedBenchmarks.Fixed_Sqrt: MinIterationTime=500ms, IterationCount=15       -> 2 outliers were removed (2.01 us, 2.01 us)
+  FixedBenchmarks.Double_Sqrt: MinIterationTime=500ms, IterationCount=15      -> 2 outliers were removed (626.44 ns, 627.63 ns)
+  FixedBenchmarks.Double_Cbrt: MinIterationTime=500ms, IterationCount=15      -> 2 outliers were removed (2.54 us, 2.55 us)
+  FixedBenchmarks.Fixed_Floor: MinIterationTime=500ms, IterationCount=15      -> 1 outlier  was  removed (544.18 ns)
+  FixedBenchmarks.Double_Floor: MinIterationTime=500ms, IterationCount=15     -> 1 outlier  was  removed (403.73 ns)
+  FixedBenchmarks.Fixed_Ceiling: MinIterationTime=500ms, IterationCount=15    -> 3 outliers were removed (599.38 ns..603.55 ns)
+  FixedBenchmarks.Double_Ceiling: MinIterationTime=500ms, IterationCount=15   -> 1 outlier  was  detected (398.58 ns)
+  FixedBenchmarks.Fixed_Truncate: MinIterationTime=500ms, IterationCount=15   -> 2 outliers were removed (914.53 ns, 917.08 ns)
+  FixedBenchmarks.Double_Truncate: MinIterationTime=500ms, IterationCount=15  -> 2 outliers were removed (400.10 ns, 427.82 ns)
+  FixedBenchmarks.Double_Round: MinIterationTime=500ms, IterationCount=15     -> 2 outliers were removed (398.86 ns, 398.97 ns)
+  FixedBenchmarks.Double_Sin: MinIterationTime=500ms, IterationCount=15       -> 1 outlier  was  removed (3.74 us)
+  FixedBenchmarks.Fixed_Cos: MinIterationTime=500ms, IterationCount=15        -> 3 outliers were removed (2.28 us..2.28 us)
+  FixedBenchmarks.Fixed_SinCos: MinIterationTime=500ms, IterationCount=15     -> 1 outlier  was  removed (2.30 us)
+  FixedBenchmarks.Double_SinCos: MinIterationTime=500ms, IterationCount=15    -> 1 outlier  was  removed (8.51 us)
+  FixedBenchmarks.Fixed_Atan: MinIterationTime=500ms, IterationCount=15       -> 1 outlier  was  removed (4.49 us)
+  FixedBenchmarks.Fixed_Atan2: MinIterationTime=500ms, IterationCount=15      -> 1 outlier  was  removed (5.70 us)
+  FixedBenchmarks.Double_Atan2: MinIterationTime=500ms, IterationCount=15     -> 2 outliers were removed (6.40 us, 6.42 us)
+
+// * Legends *
+  Mean      : Arithmetic mean of all measurements
+  Error     : Half of 99.9% confidence interval
+  StdDev    : Standard deviation of all measurements
+  Allocated : Allocated memory per single operation (managed only, inclusive, 1KB = 1024B)
+  1 ns      : 1 Nanosecond (0.000000001 sec)
+
+// * Diagnostic Output - MemoryDiagnoser *
+
+
+// ***** BenchmarkRunner: End *****
+Run time: 00:13:53 (833.15 sec), executed benchmarks: 44
+
+Global total time: 00:13:59 (839.59 sec), executed benchmarks: 44
+// * Artifacts cleanup *
+Artifacts cleanup is finished
+
+Process finished with exit code 0.
