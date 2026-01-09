@@ -555,6 +555,8 @@ var points = sobolSampler.Sample(100);
 
 ChiFixed implements `IFloatingPointIeee754<ChiFixed>`, so it works with .NET's generic math and all ChiVariate distribution samplers. Unlike `float` and `double`, which rely on platform-specific `System.Math` implementations, ChiFixed uses pure integer arithmetic with precomputed lookup tables for all operations.
 
+Built around a 64-bit integer representation, ChiFixed is particularly well-suited for high-performance scenarios like game development, real-time simulations, and networked applications where determinism matters more than extended range.
+
 When to use ChiFixed:
 - Cross-platform determinism is required (save/load, replays, networked simulations)
 - Transcendental functions (sin, cos, exp, log) need to be reproducible
@@ -582,6 +584,12 @@ var values = normalSampler.Sample(1000);
 var angle = ChiFixed.Pi / 4;
 var (sin, cos) = ChiFixed.SinCos(angle);
 ```
+
+Limitations:
+- Overflow wraps silently, like native integer types
+- Transcendental functions (sin, cos, exp, log) have ~0.1% error compared to double
+- NaN and Infinity are sentinel bit patterns, not IEEE 754 encodings
+- Division by zero returns Infinity (IEEE floating-point semantics)
 
 For applications where `decimal`'s 96-bit precision is needed or values exceed ±2 million, use `decimal` instead. For maximum floating-point performance without cross-platform determinism requirements, use `double`.
 
