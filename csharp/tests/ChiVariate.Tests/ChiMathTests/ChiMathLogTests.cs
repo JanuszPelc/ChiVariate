@@ -68,7 +68,7 @@ public class ChiMathLogTests
 
         ((double)decimalResult).Should().BeApproximately(doubleResult, 1e-12);
         floatResult.Should().BeApproximately((float)doubleResult, 1e-5f);
-        ((double)(decimal)fixedResult).Should().BeApproximately(doubleResult, 1e-10);
+        ((double)(decimal)fixedResult).Should().BeApproximately(doubleResult, 1e-8);
     }
 
     #endregion
@@ -192,7 +192,7 @@ public class ChiMathLogTests
 
         var result = ChiMath.Log(input);
 
-        ((decimal)result).Should().BeApproximately((decimal)expected, 1e-10m);
+        ((decimal)result).Should().BeApproximately((decimal)expected, 1e-8m);
     }
 
     [Theory]

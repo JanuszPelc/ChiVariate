@@ -6,7 +6,7 @@ using System.Runtime.CompilerServices;
 namespace ChiVariate.Internal.ChiFixed;
 
 /// <summary>
-///     Table-based arctangent for Q21.42 fixed-point numbers.
+///     Table-based arctangent for ChiFixed fixed-point numbers.
 /// </summary>
 /// <remarks>
 ///     Algorithm: Direct table lookup for atan(x) where x ∈ [0, 1], with

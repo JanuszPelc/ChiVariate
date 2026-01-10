@@ -268,8 +268,8 @@ public class RootTests
     }
 
     [Theory]
-    [InlineData("1500000", "1500000")]
-    [InlineData("2000000", "2000000")]
+    [InlineData("1600000000", "1600000000")]
+    [InlineData("2000000000", "2000000000")]
     public void Hypot_VeryLargeValues_SaturatesToMaxValue(string xStr, string yStr)
     {
         var x = (ChiFixed)decimal.Parse(xStr, CultureInfo.InvariantCulture);

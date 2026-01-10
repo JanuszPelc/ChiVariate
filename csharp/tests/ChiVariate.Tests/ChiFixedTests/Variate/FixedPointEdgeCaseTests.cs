@@ -13,8 +13,7 @@ public class FixedPointEdgeCaseTests
 {
     /// <summary>
     ///     Logistic distribution with ChiFixed must not overflow.
-    ///     The inverse CDF formula log(u/(1-u)) can overflow when u approaches 1.
-    ///     With Q21.42 format (range ±2.1M), u/(1-u) overflows when u > 0.9999995.
+    ///     The inverse CDF formula log(u/(1-u)) can produce extreme values when u approaches 0 or 1.
     ///     This test generates enough samples to statistically hit such extreme values.
     /// </summary>
     [Fact]

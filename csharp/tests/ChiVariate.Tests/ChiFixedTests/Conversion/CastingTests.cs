@@ -102,8 +102,8 @@ public class CastingTests
     {
         var result = (decimal)ChiFixed.MaxValue;
 
-        (result > 2000000m).Should().BeTrue();
-        (result < 3000000m).Should().BeTrue();
+        (result > 2_000_000_000m).Should().BeTrue();
+        (result < 2_200_000_000m).Should().BeTrue();
     }
 
     [Fact]
@@ -111,8 +111,8 @@ public class CastingTests
     {
         var result = (decimal)ChiFixed.MinValue;
 
-        (result < -2000000m).Should().BeTrue();
-        (result > -3000000m).Should().BeTrue();
+        (result < -2_000_000_000m).Should().BeTrue();
+        (result > -2_200_000_000m).Should().BeTrue();
     }
 
     [Fact]
@@ -135,7 +135,7 @@ public class CastingTests
         var result = (ChiFixed)(1, 3);
 
         var resultStr = result.ToString();
-        resultStr.Should().StartWith("0.3333333333");
+        resultStr.Should().StartWith("0.33333333");
     }
 
     [Fact]
@@ -157,7 +157,7 @@ public class CastingTests
     [InlineData(1, 4, 0.25)]
     [InlineData(3, 4, 0.75)]
     [InlineData(-1, 2, -0.5)]
-    [InlineData(22, 7, 3.142857142857)]
+    [InlineData(22, 7, 3.1428571428)]
     public void RationalToChiFixed_VariousFractions_ReturnsExpectedValue(
         int numerator,
         int denominator,

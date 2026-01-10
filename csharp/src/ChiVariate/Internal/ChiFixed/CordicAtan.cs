@@ -6,7 +6,7 @@ using System.Runtime.CompilerServices;
 namespace ChiVariate.Internal.ChiFixed;
 
 /// <summary>
-///     CORDIC-based arctangent for Q21.42 fixed-point numbers.
+///     CORDIC-based arctangent for ChiFixed fixed-point numbers.
 /// </summary>
 /// <remarks>
 ///     CORDIC (COordinate Rotation DIgital Computer) computes atan(y/x) by

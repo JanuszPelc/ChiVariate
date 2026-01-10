@@ -15,7 +15,7 @@ namespace ChiVariate.Internal.ChiFixed;
 ///     Tables:
 ///     - AtanTable[i] = arctan(2^-i) for i = 0..47
 ///     - K = scaling factor = Π cos(arctan(2^-i)) ≈ 0.6073 (compensates for CORDIC gain)
-///     48 iterations provide ~48 bits of precision, sufficient for Q21.42 format.
+///     48 iterations provide ~48 bits of precision, sufficient for ChiFixed format.
 /// </remarks>
 internal static class CordicTables
 {

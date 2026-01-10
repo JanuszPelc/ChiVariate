@@ -76,7 +76,7 @@ public class ChiFixedTests
 
         var result = value.ToString();
 
-        result.Should().StartWith("3.1415926535898");
+        result.Should().StartWith("3.14159265");
     }
 
     [Fact]
@@ -228,7 +228,7 @@ public class ChiFixedTests
 
         var result = oneSeventh.ToString();
 
-        result.Should().Be("0.1428571428571");
+        result.Should().StartWith("0.1428571");
     }
 
     [Fact]

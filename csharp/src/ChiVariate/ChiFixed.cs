@@ -8,7 +8,9 @@ using ChiVariate.Internal.ChiFixed;
 namespace ChiVariate;
 
 /// <summary>
-///     A Q21.42 fixed-point numeric type providing deterministic cross-platform arithmetic.
+///     A Q31.32 fixed-point numeric type providing deterministic cross-platform arithmetic.
+///     Uses 31 integer bits and 32 fractional bits, allowing exact representation of any int32 value
+///     with ~9.6 decimal digits of fractional precision.
 /// </summary>
 /// <param name="raw">The raw 64-bit integer representation of the fixed-point value.</param>
 [method: MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -17,7 +19,7 @@ public readonly struct ChiFixed(long raw) : IFloatingPointIeee754<ChiFixed>, IMi
     #region Raw Storage
 
     /// <summary>
-    ///     The raw 64-bit integer representation. The actual value equals Raw / 2^42.
+    ///     The raw 64-bit integer representation. The actual value equals Raw / ScaleFactor.
     /// </summary>
     public readonly long Raw = raw;
 
@@ -26,12 +28,12 @@ public readonly struct ChiFixed(long raw) : IFloatingPointIeee754<ChiFixed>, IMi
     #region Constants & Configuration
 
     /// <summary>
-    ///     The number of bits used for the fractional part (42 bits).
+    ///     The number of bits used for the fractional part.
     /// </summary>
-    public const int FractionalBits = 42;
+    public const int FractionalBits = 32;
 
     /// <summary>
-    ///     The scaling factor (2^42) used to convert between raw and actual values.
+    ///     The scaling factor used to convert between raw and actual values.
     /// </summary>
     public const long ScaleFactor = 1L << FractionalBits;
 

@@ -6,7 +6,7 @@ using System.Runtime.CompilerServices;
 namespace ChiVariate.Internal.ChiFixed;
 
 /// <summary>
-///     Table-based sine and cosine for Q21.42 fixed-point numbers.
+///     Table-based sine and cosine for ChiFixed fixed-point numbers.
 /// </summary>
 /// <remarks>
 ///     Algorithm: Quarter-wave table lookup exploiting trigonometric symmetries.

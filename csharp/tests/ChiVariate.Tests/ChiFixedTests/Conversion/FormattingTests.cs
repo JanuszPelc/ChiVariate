@@ -193,13 +193,13 @@ public class FormattingTests
         {
             CultureInfo.CurrentCulture = new CultureInfo("de-DE");
 
-            var value = (ChiFixed)123.450000m;
+            var value = (ChiFixed)123.5m;
             Span<char> buffer = stackalloc char[100];
             var success = value.TryFormat(buffer, out var charsWritten, "G", CultureInfo.InvariantCulture);
             var result = buffer[..charsWritten].ToString();
 
             success.Should().BeTrue();
-            result.Should().Be("123.45");
+            result.Should().Be("123.5");
         }
         finally
         {

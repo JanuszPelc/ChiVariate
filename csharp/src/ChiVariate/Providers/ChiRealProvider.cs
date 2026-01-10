@@ -30,7 +30,7 @@ namespace ChiVariate.Providers;
 ///         <list type="bullet">
 ///             <item>float: 24 random bits (23-bit mantissa + 1 implicit bit)</item>
 ///             <item>double: 53 random bits (52-bit mantissa + 1 implicit bit)</item>
-///             <item>ChiFixed: 42 random bits (directly into fractional part)</item>
+///             <item>ChiFixed: random bits directly into the fractional part</item>
 ///         </list>
 ///         Then scale by the appropriate power of 2 to get [0, 1).
 ///     </para>
@@ -210,35 +210,43 @@ public static class ChiRealProvider
     }
 
     /// <summary>
-    ///     Generates a random <see cref="ChiFixed" /> using the upper 42 bits of a 64-bit random integer.
+    ///     Generates a random <see cref="ChiFixed" /> in [0, 1) by injecting random bits into the fractional part.
     /// </summary>
     /// <remarks>
-    ///     ChiFixed uses Q21.42 format (42 fractional bits). This method directly injects random bits
-    ///     into the fractional part, providing full precision without any division or multiplication.
+    ///     This method directly injects random bits into the fractional part,
+    ///     providing full precision without any division or multiplication.
     /// </remarks>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static ChiFixed NextChiFixed<TRng>(ref TRng rng, ChiIntervalOptions options = ChiIntervalOptions.None)
         where TRng : struct, IChiRngSource<TRng>
     {
         const int fractionalBits = ChiFixed.FractionalBits;
-        const int shiftAmount = 64 - fractionalBits;
         const long maxSample = 1L << fractionalBits;
 
-        var raw = (long)(TRng.NextUInt64(ref rng) >> shiftAmount);
+#pragma warning disable CS0162 // Unreachable code detected
+        // Use NextUInt32 when fractional bits fit in 32 bits (faster), otherwise NextUInt64
+        var raw = fractionalBits <= 32
+            ? TRng.NextUInt32(ref rng)
+            : (long)(TRng.NextUInt64(ref rng) >> (64 - fractionalBits));
 
         if (options.HasFlag(ChiIntervalOptions.ExcludeMin))
             while (raw == 0)
-                raw = (long)(TRng.NextUInt64(ref rng) >> shiftAmount);
+                raw = fractionalBits <= 32
+                    ? TRng.NextUInt32(ref rng)
+                    : (long)(TRng.NextUInt64(ref rng) >> (64 - fractionalBits));
+#pragma warning restore CS0162 // Unreachable code detected
 
-        if (options.HasFlag(ChiIntervalOptions.IncludeMax))
-            // For IncludeMax, we need to scale so maxSample maps to exactly 1.0
-            // Use rejection sampling: if we get maxSample, that's exactly 1.0
-            if (raw == maxSample - 1)
-                // Small chance to bump to exactly 1.0
-                if ((TRng.NextUInt32(ref rng) & 1) == 0)
-                    return ChiFixed.One;
+        if (!options.HasFlag(ChiIntervalOptions.IncludeMax))
+            return new ChiFixed(raw);
 
-        // raw ∈ [0, 2^42) which is [0, 1) in ChiFixed representation
+        // For IncludeMax, we need to scale so maxSample maps to exactly 1.0
+        // Use rejection sampling: if we get maxSample, that's exactly 1.0
+        if (raw == maxSample - 1)
+            // Small chance to bump to exactly 1.0
+            if ((TRng.NextUInt32(ref rng) & 1) == 0)
+                return ChiFixed.One;
+
+        // raw ∈ [0, ScaleFactor) which is [0, 1) in ChiFixed representation
         return new ChiFixed(raw);
     }
 }

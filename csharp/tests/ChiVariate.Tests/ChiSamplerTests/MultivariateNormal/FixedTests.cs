@@ -68,7 +68,7 @@ public class FixedTests(ITestOutputHelper testOutputHelper)
             [ChiFixed.Zero, (ChiFixed)4m, ChiFixed.Zero],
             [ChiFixed.Zero, ChiFixed.Zero, (ChiFixed)9m]
         );
-        var rng = new ChiRng("MvNormal_Fixed_Uncorrelated");
+        var rng = new ChiRng(12345);
         var multivariateNormal = rng.MultivariateNormal(mean, covariance);
         var samples = new List<double[]>(SampleCount);
 

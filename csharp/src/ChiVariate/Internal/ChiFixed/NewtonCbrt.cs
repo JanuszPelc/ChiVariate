@@ -6,7 +6,7 @@ using System.Runtime.CompilerServices;
 namespace ChiVariate.Internal.ChiFixed;
 
 /// <summary>
-///     Table-based cube root for Q21.42 fixed-point numbers.
+///     Table-based cube root for ChiFixed fixed-point numbers.
 /// </summary>
 /// <remarks>
 ///     Algorithm: Table lookup with bit manipulation (no Newton iterations at runtime).

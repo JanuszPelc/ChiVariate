@@ -228,7 +228,7 @@ public class ChiMathSqrtTests
         decimalVerification.Should().BeApproximately(2m, 1e-10m);
 
         var fixedVerification = fixedResult * fixedResult;
-        ((decimal)fixedVerification).Should().BeApproximately(2m, 1e-10m);
+        ((decimal)fixedVerification).Should().BeApproximately(2m, 1e-8m);
     }
 
     #endregion

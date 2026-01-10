@@ -6,7 +6,7 @@ using System.Runtime.CompilerServices;
 namespace ChiVariate.Internal.ChiFixed;
 
 /// <summary>
-///     Table-based natural logarithm for Q21.42 fixed-point numbers.
+///     Table-based natural logarithm for ChiFixed fixed-point numbers.
 /// </summary>
 /// <remarks>
 ///     Algorithm: Argument reduction + table lookup with linear interpolation.

@@ -85,7 +85,7 @@ public class ClassificationTests
     [Theory]
     [InlineData("0.5")]
     [InlineData("-1.25")]
-    [InlineData("0.000000000001")]
+    [InlineData("0.000000001")]
     public void IsInteger_FractionalValues_ReturnsFalse(string value)
     {
         ChiFixed.IsInteger(ChiFixed.Parse(value)).Should().BeFalse();

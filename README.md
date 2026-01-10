@@ -549,9 +549,9 @@ var points = sobolSampler.Sample(100);
 
 #### ChiFixed
 
-> A Q21.42 fixed-point numeric type providing deterministic cross-platform results with ~12 decimal digit precision. Useful for simulations requiring bit-exact reproducibility across different machines, runtimes, and architectures.
+> A Q31.32 fixed-point numeric type providing deterministic cross-platform results with ~9.6 decimal digit precision. Useful for simulations requiring bit-exact reproducibility across different machines, runtimes, and architectures.
 >
-> Range: approximately ±2 million. Precision: ~12 decimal digits.
+> Range: approximately ±2 billion (any int32 value can be represented exactly). Precision: ~9.6 decimal digits.
 
 ChiFixed implements `IFloatingPointIeee754<ChiFixed>`, so it works with .NET's generic math and all ChiVariate distribution samplers. Unlike `float` and `double`, which rely on platform-specific `System.Math` implementations, ChiFixed uses pure integer arithmetic with precomputed lookup tables for all operations.
 
@@ -560,8 +560,8 @@ Built around a 64-bit integer representation, ChiFixed is particularly well-suit
 When to use ChiFixed:
 - Cross-platform determinism is required (save/load, replays, networked simulations)
 - Transcendental functions (sin, cos, exp, log) need to be reproducible
-- Precision of ~12 decimal digits is sufficient
-- Values stay within the ±2 million range
+- Precision of ~9.6 decimal digits is sufficient
+- Values stay within the ±2 billion range (any int32 can be stored exactly)
 
 Performance characteristics:
 - Addition/subtraction: ~1.7x faster than `double`
@@ -591,7 +591,7 @@ Limitations:
 - Transcendental functions (sin, cos, exp, log) have ~0.1% error compared to double
 - NaN and Infinity are sentinel bit patterns, not IEEE 754 encodings
 
-For applications where `decimal`'s 96-bit precision is needed or values exceed ±2 million, use `decimal` instead. For maximum floating-point performance without cross-platform determinism requirements, use `double`.
+For applications where `decimal`'s 96-bit precision is needed or values exceed ±2 billion, use `decimal` instead. For maximum floating-point performance without cross-platform determinism requirements, use `double`.
 
 Beyond these built-in samplers, understanding the library's design constraints helps ensure effective usage in production scenarios.
 

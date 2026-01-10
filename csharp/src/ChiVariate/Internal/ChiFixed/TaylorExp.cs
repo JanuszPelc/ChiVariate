@@ -6,7 +6,7 @@ using System.Runtime.CompilerServices;
 namespace ChiVariate.Internal.ChiFixed;
 
 /// <summary>
-///     Table-based exponential (e^x) for Q21.42 fixed-point numbers.
+///     Table-based exponential (e^x) for ChiFixed fixed-point numbers.
 /// </summary>
 /// <remarks>
 ///     Algorithm: Split x into integer and fractional parts, use precomputed tables.
