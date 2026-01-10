@@ -369,6 +369,30 @@ public static class ChiMath
     }
 
     /// <summary>
+    ///     Returns the nth point in the golden ratio low-discrepancy sequence.
+    /// </summary>
+    /// <remarks>
+    ///     <para>
+    ///         The golden ratio sequence produces well-distributed points in [0, 1) without
+    ///         knowing the total sample count upfront. Each new point lands in the largest
+    ///         gap of existing points, making it ideal for adaptive sampling.
+    ///     </para>
+    ///     <para>
+    ///         The sequence is deterministic: given the same index and seed, the result is always identical.
+    ///     </para>
+    /// </remarks>
+    /// <param name="index">The zero-based index in the sequence.</param>
+    /// <param name="seed">Optional starting offset for the sequence (default is zero).</param>
+    /// <typeparam name="T">The floating-point type.</typeparam>
+    /// <returns>A value in the range [0, 1).</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static T Golden<T>(int index, T? seed = default) where T : IFloatingPoint<T>
+    {
+        var result = (seed ?? T.Zero) + Const<T>.PhiConjugate * T.CreateChecked(index);
+        return result - T.Floor(result);
+    }
+
+    /// <summary>
     ///     Provides commonly used mathematical constants for generic floating-point types.
     /// </summary>
     public static class Const<T>
@@ -470,6 +494,17 @@ public static class ChiMath
         public static readonly T SqrtThreeHalf = GetSqrtThreeHalf();
 
         /// <summary>
+        ///     The golden ratio φ (phi), equal to (1 + √5) / 2, approximately 1.6180339887.
+        /// </summary>
+        public static readonly T Phi = GetPhi();
+
+        /// <summary>
+        ///     The golden ratio conjugate (φ - 1 or 1/φ), approximately 0.6180339887.
+        ///     Used in low-discrepancy sequences for optimal spacing.
+        /// </summary>
+        public static readonly T PhiConjugate = Phi - One;
+
+        /// <summary>
         ///     A smallest positive value, used for convergence checks.
         /// </summary>
         public static T Epsilon { get; } = GetEpsilon();
@@ -524,6 +559,13 @@ public static class ChiMath
             if (typeof(T) == typeof(decimal))
                 return T.CreateChecked(0.866025403784438646763723170752936183471402626905190314027m);
             return T.CreateChecked(Math.Sqrt(3.0) / 2.0);
+        }
+
+        private static T GetPhi()
+        {
+            if (typeof(T) == typeof(decimal))
+                return T.CreateChecked(1.6180339887498948482045868343656381177203091798057628621354m);
+            return T.CreateChecked((1.0 + Math.Sqrt(5.0)) / 2.0);
         }
     }
 }
