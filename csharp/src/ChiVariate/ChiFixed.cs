@@ -114,7 +114,7 @@ public readonly struct ChiFixed(long raw) : IFloatingPointIeee754<ChiFixed>, IMi
     #region Factory Methods
 
     /// <summary>
-    ///     Converts a decimal value to ChiFixed.
+    ///     Converts a decimal value to ChiFixed. Best suited for initialization, not hot paths.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static explicit operator ChiFixed(decimal v)
@@ -129,6 +129,27 @@ public readonly struct ChiFixed(long raw) : IFloatingPointIeee754<ChiFixed>, IMi
     public static explicit operator decimal(ChiFixed v)
     {
         return FixedMath.ToDecimal(v.Raw);
+    }
+
+    /// <summary>
+    ///     Converts an int value to ChiFixed.
+    /// </summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static explicit operator ChiFixed(int v)
+    {
+        // Exact when FractionalBits ≤ 32, may truncate when FractionalBits > 32
+        return new ChiFixed((long)v << FractionalBits);
+    }
+
+    /// <summary>
+    ///     Converts a ChiFixed value to int.
+    /// </summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static explicit operator int(ChiFixed v)
+    {
+        // Exact when FractionalBits ≥ 32, may truncate when FractionalBits < 32
+        // Division truncates toward zero; shift would truncate toward negative infinity
+        return (int)(v.Raw / ScaleFactor);
     }
 
     /// <summary>

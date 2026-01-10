@@ -127,6 +127,123 @@ public class CastingTests
 
     #endregion
 
+    #region Int to ChiFixed Casting
+
+    [Fact]
+    public void IntToChiFixed_Zero_ReturnsChiFixedZero()
+    {
+        var result = (ChiFixed)0;
+
+        result.Should().Be(ChiFixed.Zero);
+    }
+
+    [Fact]
+    public void IntToChiFixed_One_ReturnsChiFixedOne()
+    {
+        var result = (ChiFixed)1;
+
+        result.Should().Be(ChiFixed.One);
+    }
+
+    [Fact]
+    public void IntToChiFixed_NegativeOne_ReturnsChiFixedNegativeOne()
+    {
+        var result = (ChiFixed)(-1);
+
+        result.Should().Be(ChiFixed.NegativeOne);
+    }
+
+    [Theory]
+    [InlineData(42)]
+    [InlineData(-42)]
+    [InlineData(1000000)]
+    [InlineData(-1000000)]
+    [InlineData(int.MaxValue)]
+    [InlineData(int.MinValue)]
+    public void IntToChiFixed_VariousValues_PreservesValueExactly(int input)
+    {
+        var result = (ChiFixed)input;
+        var backToInt = (int)result;
+
+        backToInt.Should().Be(input);
+    }
+
+    [Fact]
+    public void IntToChiFixed_MaxInt32_IsRepresentableExactly()
+    {
+        var result = (ChiFixed)int.MaxValue;
+        var asDecimal = (decimal)result;
+
+        asDecimal.Should().Be(int.MaxValue);
+    }
+
+    [Fact]
+    public void IntToChiFixed_MinInt32_IsRepresentableExactly()
+    {
+        var result = (ChiFixed)int.MinValue;
+        var asDecimal = (decimal)result;
+
+        asDecimal.Should().Be(int.MinValue);
+    }
+
+    #endregion
+
+    #region ChiFixed to Int Casting
+
+    [Fact]
+    public void ChiFixedToInt_Zero_ReturnsZero()
+    {
+        var result = (int)ChiFixed.Zero;
+
+        result.Should().Be(0);
+    }
+
+    [Fact]
+    public void ChiFixedToInt_One_ReturnsOne()
+    {
+        var result = (int)ChiFixed.One;
+
+        result.Should().Be(1);
+    }
+
+    [Fact]
+    public void ChiFixedToInt_NegativeOne_ReturnsNegativeOne()
+    {
+        var result = (int)ChiFixed.NegativeOne;
+
+        result.Should().Be(-1);
+    }
+
+    [Theory]
+    [InlineData(3.7, 3)]
+    [InlineData(3.2, 3)]
+    [InlineData(-3.7, -3)]
+    [InlineData(-3.2, -3)]
+    [InlineData(0.999, 0)]
+    [InlineData(-0.999, 0)]
+    public void ChiFixedToInt_FractionalValues_TruncatesTowardZero(decimal input, int expected)
+    {
+        var fixedValue = (ChiFixed)input;
+        var result = (int)fixedValue;
+
+        result.Should().Be(expected);
+    }
+
+    [Theory]
+    [InlineData(42)]
+    [InlineData(-42)]
+    [InlineData(1000000)]
+    [InlineData(-1000000)]
+    public void ChiFixedToInt_WholeNumbers_ReturnsExactValue(int expected)
+    {
+        var fixedValue = (ChiFixed)expected;
+        var result = (int)fixedValue;
+
+        result.Should().Be(expected);
+    }
+
+    #endregion
+
     #region Rational to ChiFixed Casting
 
     [Fact]
