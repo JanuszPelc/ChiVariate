@@ -38,12 +38,11 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     [Fact]
     public void Sample_WithEscalation_HasHigherSuccessRateThanBase()
     {
-        var baseProbability = 0.05;
-        var increment = 0.05;
-        var softThreshold = 0;
+        const double baseProbability = 0.05;
+        const double increment = 0.05;
 
         var rng = new ChiRng(ChiSeed.Scramble("PityEscalation", 42));
-        var pity = rng.Pity(baseProbability, increment, softThreshold, 0);
+        var pity = rng.Pity(baseProbability, increment);
         var successCount = 0;
 
         for (var i = 0; i < SampleCount; i++)
@@ -61,8 +60,8 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     [Fact]
     public void Sample_WithHardCap_GuaranteesSuccessAtCap()
     {
-        var baseProbability = 0.001;
-        var hardCap = 10;
+        const double baseProbability = 0.001;
+        const int hardCap = 10;
 
         var rng = new ChiRng(ChiSeed.Scramble("PityHardCap", 42));
         var pity = rng.Pity(baseProbability, 0.0, 0, hardCap);
@@ -110,9 +109,9 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     [Fact]
     public void Sample_CurrentProbability_IncreasesAfterSoftThreshold()
     {
-        var baseProbability = 0.01;
-        var increment = 0.05;
-        var softThreshold = 3;
+        const double baseProbability = 0.01;
+        const double increment = 0.05;
+        const int softThreshold = 3;
 
         var rng = new ChiRng(ChiSeed.Scramble("PitySoftThreshold", 42));
         var pity = rng.Pity(baseProbability, increment, softThreshold, 100);
@@ -137,11 +136,11 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     [Fact]
     public void Sample_CurrentProbability_CapsAtOne()
     {
-        var baseProbability = 0.0;
-        var increment = 1.5;
+        const double baseProbability = 0.0;
+        const double increment = 1.5;
 
         var rng = new ChiRng(ChiSeed.Scramble("PityCap", 42));
-        var pity = rng.Pity(baseProbability, increment, 0, 0);
+        var pity = rng.Pity(baseProbability, increment);
 
         pity.Sample();
 
@@ -152,8 +151,8 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     [Fact]
     public void Sample_CurrentProbability_ResetsOnSuccess()
     {
-        var baseProbability = 0.01;
-        var increment = 0.1;
+        const double baseProbability = 0.01;
+        const double increment = 0.1;
 
         var rng = new ChiRng(ChiSeed.Scramble("PityProbReset", 42));
         var pity = rng.Pity(baseProbability, increment, 0, 20);
@@ -170,7 +169,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     public void SampleCount_ReturnsCorrectEnumerable()
     {
         var rng = new ChiRng(ChiSeed.Scramble("PitySampleCount", 42));
-        var pity = rng.Pity(0.5, 0.0, 0, 0);
+        var pity = rng.Pity(0.5, 0.0);
 
         using var samples = pity.Sample(100);
 
@@ -211,7 +210,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
         var act = () =>
         {
             var rng = new ChiRng(0);
-            rng.Pity(0.5, 0.1, -1, 0);
+            rng.Pity(0.5, 0.1, -1);
         };
 
         act.Should().Throw<ArgumentOutOfRangeException>().And.ParamName.Should().Be("softPityThreshold");
@@ -291,7 +290,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
         var rng2 = new ChiRng("PityGeometric");
 
         // PRD with escalation
-        var pity = rng1.Pity(probability, probability, 0, 0);
+        var pity = rng1.Pity(probability, probability);
 
         var prdHistogram = new Histogram(1, 50, 49, true);
         var geometricHistogram = new Histogram(1, 50, 49, true);

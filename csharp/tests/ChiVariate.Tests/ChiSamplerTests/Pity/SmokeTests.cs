@@ -14,7 +14,7 @@ public class SmokeTests(ITestOutputHelper output)
     public void Sample_WithKnownSeed_ReturnsExpectedSequence()
     {
         var rng = new ChiRng(Seed);
-        var pity = rng.Pity(0.1, 0.05, 0, 0);
+        var pity = rng.Pity(0.1, 0.05);
 
         var results = new int[10];
         for (var i = 0; i < 10; i++)
@@ -75,9 +75,7 @@ public class SmokeTests(ITestOutputHelper output)
         // PRD C-value for 25% = ~8.5% starting, escalates
         var basher = rng.Pity(
             0.085,
-            0.085,
-            0,
-            0);
+            0.085);
 
         var procCount = 0;
         var longestStreak = 0;
@@ -153,7 +151,7 @@ public class SmokeTests(ITestOutputHelper output)
         var rng2 = new ChiRng("CritBernoulli");
 
         // PRD with ~5.7% base (C-value for 20% effective rate)
-        var prdCrit = rng1.Pity(0.057, 0.057, 0, 0);
+        var prdCrit = rng1.Pity(0.057, 0.057);
 
         var prdStreaks = new List<int>();
         var bernoulliStreaks = new List<int>();

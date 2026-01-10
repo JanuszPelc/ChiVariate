@@ -20,7 +20,7 @@ public class FixedTests(ITestOutputHelper testOutputHelper)
         var increment = ChiFixed.Zero;
 
         var rng = new ChiRng(ChiSeed.Scramble("PityFixed", probability));
-        var pity = rng.Pity(baseProbability, increment, 0, 0);
+        var pity = rng.Pity(baseProbability, increment);
         var successCount = 0;
 
         for (var i = 0; i < SampleCount; i++)
@@ -42,7 +42,7 @@ public class FixedTests(ITestOutputHelper testOutputHelper)
         var increment = (ChiFixed)0.05m;
 
         var rng = new ChiRng(ChiSeed.Scramble("PityFixedEscalation", 42));
-        var pity = rng.Pity(baseProbability, increment, 0, 0);
+        var pity = rng.Pity(baseProbability, increment);
         var successCount = 0;
 
         for (var i = 0; i < SampleCount; i++)
@@ -62,7 +62,7 @@ public class FixedTests(ITestOutputHelper testOutputHelper)
     {
         var baseProbability = (ChiFixed)0.001m;
         var increment = ChiFixed.Zero;
-        var hardCap = 10;
+        const int hardCap = 10;
 
         var rng = new ChiRng(ChiSeed.Scramble("PityFixedHardCap", 42));
         var pity = rng.Pity(baseProbability, increment, 0, hardCap);
@@ -84,7 +84,7 @@ public class FixedTests(ITestOutputHelper testOutputHelper)
     {
         var baseProbability = (ChiFixed)0.01m;
         var increment = (ChiFixed)0.05m;
-        var softThreshold = 2;
+        const int softThreshold = 2;
 
         var rng = new ChiRng(ChiSeed.Scramble("PityFixedCurrentProb", 42));
         var pity = rng.Pity(baseProbability, increment, softThreshold, 100);
@@ -126,13 +126,13 @@ public class FixedTests(ITestOutputHelper testOutputHelper)
     {
         var rng = new ChiRng("PityExtremeFixed");
 
-        var pZero = rng.Pity(ChiFixed.Zero, ChiFixed.Zero, 0, 0);
+        var pZero = rng.Pity(ChiFixed.Zero, ChiFixed.Zero);
         var zeroSuccesses = 0;
         for (var i = 0; i < 1000; i++)
             zeroSuccesses += pZero.Sample();
         zeroSuccesses.Should().Be(0, "because p=0 with no hard cap should never succeed.");
 
-        var pOne = rng.Pity(ChiFixed.One, ChiFixed.Zero, 0, 0);
+        var pOne = rng.Pity(ChiFixed.One, ChiFixed.Zero);
         var oneSuccesses = 0;
         for (var i = 0; i < 1000; i++)
             oneSuccesses += pOne.Sample();
