@@ -276,8 +276,10 @@ internal static class FixedMath
         var dividendHi = uA >> integerBits;
         var dividendLo = uA << ChiVariate.ChiFixed.FractionalBits;
 
-        var quotient = (long)Div128By64(dividendHi, dividendLo, uB);
-        return negative ? -quotient : quotient;
+        var quotient = Div128By64(dividendHi, dividendLo, uB);
+        if (quotient > long.MaxValue)
+            throw new OverflowException("Quotient exceeds signed 64-bit range");
+        return negative ? -(long)quotient : (long)quotient;
     }
 
     /// <summary>

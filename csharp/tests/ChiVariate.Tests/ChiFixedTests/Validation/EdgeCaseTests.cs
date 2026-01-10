@@ -85,11 +85,11 @@ public class EdgeCaseTests
     }
 
     [Fact]
-    public void Division_MinValueByNegativeOne_Wraps()
+    public void Division_MinValueByNegativeOne_ThrowsOverflow()
     {
-        var result = ChiFixed.MinValue / ChiFixed.NegativeOne;
+        var act = () => ChiFixed.MinValue / ChiFixed.NegativeOne;
 
-        result.Should().Be(ChiFixed.MinValue);
+        act.Should().Throw<OverflowException>();
     }
 
     [Fact]
