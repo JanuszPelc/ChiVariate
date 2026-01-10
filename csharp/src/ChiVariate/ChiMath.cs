@@ -334,6 +334,41 @@ public static class ChiMath
     }
 
     /// <summary>
+    ///     Performs linear interpolation between two values.
+    /// </summary>
+    /// <remarks>
+    ///     <para>
+    ///         This method interpolates bidirectionally - it works correctly regardless of whether
+    ///         <paramref name="origin" /> is less than or greater than <paramref name="target" />.
+    ///     </para>
+    ///     <para>
+    ///         The interpolation formula is: <c>origin + (target - origin) * step / totalSteps</c>
+    ///     </para>
+    /// </remarks>
+    /// <param name="origin">The starting value of the interpolation.</param>
+    /// <param name="target">The ending value of the interpolation.</param>
+    /// <param name="step">The current step (0 returns origin, totalSteps returns target).</param>
+    /// <param name="totalSteps">The total number of steps in the interpolation.</param>
+    /// <typeparam name="T">The numeric type supporting basic arithmetic operations.</typeparam>
+    /// <returns>The interpolated value at the specified step.</returns>
+    /// <exception cref="ArgumentOutOfRangeException">Thrown when totalSteps is zero or negative.</exception>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static T Lerp<T>(T origin, T target, int step, int totalSteps)
+        where T : INumberBase<T>
+    {
+        if (totalSteps <= 0)
+            throw new ArgumentOutOfRangeException(nameof(totalSteps), "Total steps must be positive.");
+
+        if (step <= 0)
+            return origin;
+
+        if (step >= totalSteps)
+            return target;
+
+        return origin + (target - origin) * T.CreateChecked(step) / T.CreateChecked(totalSteps);
+    }
+
+    /// <summary>
     ///     Provides commonly used mathematical constants for generic floating-point types.
     /// </summary>
     public static class Const<T>
