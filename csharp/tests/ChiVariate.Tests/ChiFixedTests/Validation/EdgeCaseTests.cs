@@ -42,12 +42,12 @@ public class EdgeCaseTests
     }
 
     [Fact]
-    public void Multiplication_MaxValueTimesTwo_Wraps()
+    public void Multiplication_MaxValueTimesTwo_SaturatesToMaxValue()
     {
         var two = (ChiFixed)2m;
         var result = ChiFixed.MaxValue * two;
 
-        (result.Raw < ChiFixed.MaxValue.Raw).Should().BeTrue();
+        result.Should().Be(ChiFixed.MaxValue);
     }
 
     [Fact]
@@ -85,11 +85,11 @@ public class EdgeCaseTests
     }
 
     [Fact]
-    public void Division_MinValueByNegativeOne_ThrowsOverflow()
+    public void Division_MinValueByNegativeOne_SaturatesToMaxValue()
     {
-        var act = () => ChiFixed.MinValue / ChiFixed.NegativeOne;
+        var result = ChiFixed.MinValue / ChiFixed.NegativeOne;
 
-        act.Should().Throw<OverflowException>();
+        result.Should().Be(ChiFixed.MaxValue);
     }
 
     [Fact]

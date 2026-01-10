@@ -270,13 +270,13 @@ public class RootTests
     [Theory]
     [InlineData("1500000", "1500000")]
     [InlineData("2000000", "2000000")]
-    public void Hypot_VeryLargeValues_OverflowsToNegative(string xStr, string yStr)
+    public void Hypot_VeryLargeValues_SaturatesToMaxValue(string xStr, string yStr)
     {
         var x = (ChiFixed)decimal.Parse(xStr, CultureInfo.InvariantCulture);
         var y = (ChiFixed)decimal.Parse(yStr, CultureInfo.InvariantCulture);
         var result = ChiFixed.Hypot(x, y);
 
-        (result.Raw < 0).Should().BeTrue($"Expected overflow to negative, got {(decimal)result}");
+        result.Should().Be(ChiFixed.MaxValue, $"Expected saturation to MaxValue, got {(decimal)result}");
     }
 
     #endregion

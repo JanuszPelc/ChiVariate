@@ -40,8 +40,8 @@ public readonly ref struct ChiSamplerLogistic<TRng, T>
     public T Sample()
     {
         var u = ChiRealProvider.Next<TRng, T>(ref _rng, ChiIntervalOptions.ExcludeMin);
-        // Inverse CDF: μ + s * (ln(U) - ln(1-U))
-        return _location + _scale * (ChiMath.Log(u) - ChiMath.Log(T.One - u));
+        // Inverse CDF: μ + s * ln(U / (1-U))
+        return _location + _scale * ChiMath.Log(u / (T.One - u));
     }
 
     /// <summary>

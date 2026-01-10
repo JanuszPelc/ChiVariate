@@ -586,7 +586,8 @@ var (sin, cos) = ChiFixed.SinCos(angle);
 ```
 
 Limitations:
-- Arithmetic overflow wraps silently, like native integer types
+- Addition and subtraction overflow wraps silently, like native integer types
+- Multiplication and division overflow saturates to min/max values (DSP-style)
 - Transcendental functions (sin, cos, exp, log) have ~0.1% error compared to double
 - NaN and Infinity are sentinel bit patterns, not IEEE 754 encodings
 

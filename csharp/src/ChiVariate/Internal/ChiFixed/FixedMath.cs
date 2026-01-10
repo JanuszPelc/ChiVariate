@@ -251,8 +251,17 @@ internal static class FixedMath
     {
         // Math.BigMul returns 128-bit result as (hi, lo)
         var hi = Math.BigMul(a, b, out var lo);
+
         // Combine hi and lo, shifted right by 42 bits
-        return (hi << (64 - ChiVariate.ChiFixed.FractionalBits)) | (lo >>> ChiVariate.ChiFixed.FractionalBits);
+        const int shift = ChiVariate.ChiFixed.FractionalBits;
+        var result = (hi << (64 - shift)) | (lo >>> shift);
+
+        // Check for overflow: verify hi bits match sign extension of result
+        var expectedHi = result >> (64 - shift);
+        if (hi != expectedHi)
+            return (a ^ b) < 0 ? long.MinValue : long.MaxValue; // Saturate
+
+        return result;
     }
 
     /// <summary>
@@ -276,9 +285,9 @@ internal static class FixedMath
         var dividendHi = uA >> integerBits;
         var dividendLo = uA << ChiVariate.ChiFixed.FractionalBits;
 
-        var quotient = Div128By64(dividendHi, dividendLo, uB);
+        var quotient = Div128By64(dividendHi, dividendLo, uB, true);
         if (quotient > long.MaxValue)
-            throw new OverflowException("Quotient exceeds signed 64-bit range");
+            return negative ? long.MinValue : long.MaxValue; // Saturate
         return negative ? -(long)quotient : (long)quotient;
     }
 
@@ -290,7 +299,7 @@ internal static class FixedMath
     ///     Uses normalization and quotient digit estimation for efficiency.
     /// </remarks>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    private static ulong Div128By64(ulong hi, ulong lo, ulong divisor)
+    private static ulong Div128By64(ulong hi, ulong lo, ulong divisor, bool saturate = false)
     {
         const int totalBits = 64;
         const int halfBits = 32;
@@ -300,7 +309,7 @@ internal static class FixedMath
             return lo / divisor;
 
         if (hi >= divisor)
-            throw new OverflowException("Quotient exceeds 64 bits");
+            return saturate ? ulong.MaxValue : throw new OverflowException("Quotient exceeds 64 bits");
 
         var shift = BitOperations.LeadingZeroCount(divisor);
         divisor <<= shift;
