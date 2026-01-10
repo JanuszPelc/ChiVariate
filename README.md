@@ -491,6 +491,20 @@ ChiVariate provides specialized tools for general-purpose randomness tasks and u
 >
 > *Complexity: Generally `O(1)`, except for collection methods like `Shuffle` (`O(n)`). Tier 1.*
 
+#### Pity
+
+> A Pseudo-Random Distribution (PRD) sampler with escalating probability, implementing the "pity system" found in games like Dota 2 and Genshin Impact. Unlike independent Bernoulli trials, probability escalates after each failure, bounding worst-case streaks while maintaining randomness. Ideal for critical hits, gacha pulls, and loot drops.
+>
+> *Complexity: `O(1)`. Tier 1.*
+
+The stateful sampler tracks consecutive failures and supports soft pity (escalation threshold) and hard pity (guaranteed success cap).
+
+```csharp
+// Gacha system: 1% base, +2% after 5 failures, guaranteed at 20
+var gacha = rng.Pity(0.01, 0.02, softPityThreshold: 5, hardPityCap: 20);
+while (gacha.Sample() == 0) { }
+```
+
 #### Spatial
 
 > A toolkit for uniform spatial sampling within or on the surface of geometric primitives. Delivers a simple, reliable API for tasks like picking random positions in areas (`InSquare`, `InCube`) or generating random direction vectors (`OnCircle`, `OnSphere`), handling all mathematical corrections internally to prevent common statistical biases.
