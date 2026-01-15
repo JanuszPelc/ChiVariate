@@ -326,4 +326,21 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
         prdStdDev.Should().BeLessThan(geoStdDev,
             "because PRD should have lower variance (fewer long streaks).");
     }
+
+    [Fact]
+    public void Snapshot_WithRestoredState_ProducesIdenticalSamples()
+    {
+        var rng = new ChiRng("PitySnapshot");
+        var pity = rng.Pity(0.02, 0.01, 50, 90);
+        _ = pity.Sample(rng.Chance().PickBetween(100, 1000)).ToList();
+
+        var rngSnapshot = rng.Snapshot();
+        var pitySnapshot = pity.Snapshot();
+
+        var rngClone = new ChiRng(rngSnapshot);
+        var pityClone = rngClone.Pity(0.02, 0.01, 50, 90).WithSnapshot(pitySnapshot);
+
+        for (var i = 0; i < 100; i++)
+            pity.Sample().Should().Be(pityClone.Sample());
+    }
 }
