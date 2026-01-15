@@ -66,4 +66,19 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
 
         act.Should().Throw<ArgumentException>();
     }
+
+    [Fact]
+    public void Snapshot_WithRestoredState_ProducesIdenticalSamples()
+    {
+        var weights = new[] { 0.1, 0.2, 0.3, 0.4 };
+        var rng = new ChiRng("CategoricalSnapshot");
+        _ = rng.Categorical(weights).Sample(rng.Chance().PickBetween(100, 1000)).ToList();
+
+        var rngSnapshot = rng.Snapshot();
+
+        var rngClone = new ChiRng(rngSnapshot);
+
+        for (var i = 0; i < 100; i++)
+            rng.Categorical(weights).Sample().Should().Be(rngClone.Categorical(weights).Sample());
+    }
 }

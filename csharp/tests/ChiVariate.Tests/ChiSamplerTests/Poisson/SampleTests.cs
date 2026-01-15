@@ -42,4 +42,18 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
 
         act.Should().Throw<ArgumentOutOfRangeException>().And.ParamName.Should().Be("mean");
     }
+
+    [Fact]
+    public void Snapshot_WithRestoredState_ProducesIdenticalSamples()
+    {
+        var rng = new ChiRng("PoissonSnapshot");
+        _ = rng.Poisson(5.0).Sample(rng.Chance().PickBetween(100, 1000)).ToList();
+
+        var rngSnapshot = rng.Snapshot();
+
+        var rngClone = new ChiRng(rngSnapshot);
+
+        for (var i = 0; i < 100; i++)
+            rng.Poisson(5.0).Sample().Should().Be(rngClone.Poisson(5.0).Sample());
+    }
 }

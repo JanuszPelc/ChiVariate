@@ -70,4 +70,18 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
 
         act.Should().Throw<ArgumentOutOfRangeException>();
     }
+
+    [Fact]
+    public void Snapshot_WithRestoredState_ProducesIdenticalSamples()
+    {
+        var rng = new ChiRng("UniformDiscreteSnapshot");
+        _ = rng.Uniform(1, 101).Sample(rng.Chance().PickBetween(100, 1000)).ToList();
+
+        var rngSnapshot = rng.Snapshot();
+
+        var rngClone = new ChiRng(rngSnapshot);
+
+        for (var i = 0; i < 100; i++)
+            rng.Uniform(1, 101).Sample().Should().Be(rngClone.Uniform(1, 101).Sample());
+    }
 }

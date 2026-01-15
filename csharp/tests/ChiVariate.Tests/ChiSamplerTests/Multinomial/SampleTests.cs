@@ -58,4 +58,26 @@ public class SampleTests
 
         act.Should().Throw<ArgumentException>();
     }
+
+    [Fact]
+    public void Snapshot_WithRestoredState_ProducesIdenticalSamples()
+    {
+        var probabilities = new[] { 0.1, 0.2, 0.3, 0.4 };
+        var rng = new ChiRng("MultinomialSnapshot");
+        for (var i = 0; i < rng.Chance().PickBetween(100, 1000); i++)
+            using (rng.Multinomial(20, probabilities).Sample())
+            {
+            }
+
+        var rngSnapshot = rng.Snapshot();
+
+        var rngClone = new ChiRng(rngSnapshot);
+
+        for (var i = 0; i < 100; i++)
+        {
+            using var sample = rng.Multinomial(20, probabilities).Sample();
+            using var cloneSample = rngClone.Multinomial(20, probabilities).Sample();
+            sample.ToArray().Should().BeEquivalentTo(cloneSample.ToArray());
+        }
+    }
 }
