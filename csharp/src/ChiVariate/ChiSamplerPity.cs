@@ -69,22 +69,12 @@ public ref struct ChiSamplerPity<TRng, T>
     /// <summary>
     ///     Gets the current number of consecutive failures.
     /// </summary>
-    public int FailureCount
-    {
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        get;
-        private set;
-    }
+    public int FailureCount { get; private set; }
 
     /// <summary>
     ///     Gets the current probability of success (escalates after soft pity threshold).
     /// </summary>
-    public T CurrentProbability
-    {
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        get;
-        private set;
-    }
+    public T CurrentProbability { get; private set; }
 
     /// <summary>
     ///     Samples once from the pity distribution.
@@ -134,6 +124,29 @@ public ref struct ChiSamplerPity<TRng, T>
         return enumerable;
     }
 
+    /// <summary>
+    ///     Captures the current state of the sampler for later restoration.
+    /// </summary>
+    /// <returns>A snapshot of the sampler's current state.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public ChiSamplerPityState<T> Snapshot()
+    {
+        return new ChiSamplerPityState<T>(FailureCount, CurrentProbability);
+    }
+
+    /// <summary>
+    ///     Restores the sampler to a previously captured snapshot.
+    /// </summary>
+    /// <param name="snapshot">The snapshot to restore.</param>
+    /// <returns>The sampler with restored state.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public ChiSamplerPity<TRng, T> WithSnapshot(ChiSamplerPityState<T> snapshot)
+    {
+        FailureCount = snapshot.FailureCount;
+        CurrentProbability = snapshot.CurrentProbability;
+        return this;
+    }
+
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private void Reset()
     {
@@ -141,6 +154,15 @@ public ref struct ChiSamplerPity<TRng, T>
         FailureCount = 0;
     }
 }
+
+/// <summary>
+///     Represents the snapshot state of a <see cref="ChiSamplerPity{TRng,T}" />.
+/// </summary>
+/// <typeparam name="T">The floating-point type of the probability.</typeparam>
+/// <param name="FailureCount">The number of consecutive failures.</param>
+/// <param name="CurrentProbability">The current probability of success.</param>
+public readonly record struct ChiSamplerPityState<T>(int FailureCount, T CurrentProbability)
+    where T : IFloatingPoint<T>;
 
 /// <summary>
 ///     Provides extension methods for sampling from the Pity (PRD) distribution.
