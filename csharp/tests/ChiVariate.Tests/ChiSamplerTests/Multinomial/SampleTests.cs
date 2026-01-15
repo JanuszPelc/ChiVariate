@@ -66,22 +66,16 @@ public class SampleTests
     {
         var probabilities = new[] { 0.1, 0.2, 0.3, 0.4 };
         var rng = seed == "Randomized" ? new ChiRng() : new ChiRng(seed);
-        var sampler = rng.Multinomial(20, probabilities);
-        for (var i = 0; i < rng.Chance().PickBetween(100, 1000); i++)
-            using (sampler.Sample())
-            {
-            }
+        var warmupCount = rng.Chance().PickBetween(100, 1000);
+        for (var i = 0; i < warmupCount; i++)
+            _ = rng.Multinomial(20, probabilities).Sample().ToArray();
 
         var rngSnapshot = rng.Snapshot();
 
         var rngClone = new ChiRng(rngSnapshot);
-        var samplerClone = rngClone.Multinomial(20, probabilities);
 
         for (var i = 0; i < 10_000; i++)
-        {
-            using var sample = sampler.Sample();
-            using var cloneSample = samplerClone.Sample();
-            sample.ToArray().Should().BeEquivalentTo(cloneSample.ToArray());
-        }
+            rng.Multinomial(20, probabilities).Sample().ToArray()
+                .Should().BeEquivalentTo(rngClone.Multinomial(20, probabilities).Sample().ToArray());
     }
 }

@@ -74,15 +74,15 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     {
         var weights = new[] { 0.1, 0.2, 0.3, 0.4 };
         var rng = seed == "Randomized" ? new ChiRng() : new ChiRng(seed);
-        var sampler = rng.Categorical(weights);
-        _ = sampler.Sample(rng.Chance().PickBetween(100, 1000)).ToList();
+        var warmupCount = rng.Chance().PickBetween(100, 1000);
+        for (var i = 0; i < warmupCount; i++)
+            _ = rng.Categorical(weights).Sample();
 
         var rngSnapshot = rng.Snapshot();
 
         var rngClone = new ChiRng(rngSnapshot);
-        var samplerClone = rngClone.Categorical(weights);
 
         for (var i = 0; i < 10_000; i++)
-            sampler.Sample().Should().Be(samplerClone.Sample());
+            rng.Categorical(weights).Sample().Should().Be(rngClone.Categorical(weights).Sample());
     }
 }

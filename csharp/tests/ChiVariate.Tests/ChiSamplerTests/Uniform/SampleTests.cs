@@ -77,15 +77,15 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     public void Snapshot_WithRestoredState_ProducesIdenticalSamples(string seed)
     {
         var rng = seed == "Randomized" ? new ChiRng() : new ChiRng(seed);
-        var sampler = rng.Uniform(1, 101);
-        _ = sampler.Sample(rng.Chance().PickBetween(100, 1000)).ToList();
+        var warmupCount = rng.Chance().PickBetween(100, 1000);
+        for (var i = 0; i < warmupCount; i++)
+            _ = rng.Uniform(1, 101).Sample();
 
         var rngSnapshot = rng.Snapshot();
 
         var rngClone = new ChiRng(rngSnapshot);
-        var samplerClone = rngClone.Uniform(1, 101);
 
         for (var i = 0; i < 10_000; i++)
-            sampler.Sample().Should().Be(samplerClone.Sample());
+            rng.Uniform(1, 101).Sample().Should().Be(rngClone.Uniform(1, 101).Sample());
     }
 }

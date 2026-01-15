@@ -107,6 +107,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
         var rngClone = new ChiRng(rngSnapshot);
 
         for (var i = 0; i < 10_000; i++)
-            rng.Dirichlet(alpha).Sample().ToArray().Should().BeEquivalentTo(rngClone.Dirichlet(alpha).Sample().ToArray());
+            rng.Dirichlet(alpha).Sample().ToArray().Should()
+                .BeEquivalentTo(rngClone.Dirichlet(alpha).Sample().ToArray());
     }
 }
