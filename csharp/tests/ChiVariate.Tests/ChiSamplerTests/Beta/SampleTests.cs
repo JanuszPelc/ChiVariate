@@ -70,6 +70,22 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
         histogram.AssertIsBeta(expectedMean, 0.15);
     }
 
+    [Theory]
+    [InlineData("Deterministic")]
+    [InlineData("Randomized")]
+    public void Snapshot_WithRestoredState_ProducesIdenticalSamples(string seed)
+    {
+        var rng = seed == "Randomized" ? new ChiRng() : new ChiRng(seed);
+        _ = rng.Beta(2.0, 5.0).Sample(rng.Chance().PickBetween(100, 1000)).ToList();
+
+        var rngSnapshot = rng.Snapshot();
+
+        var rngClone = new ChiRng(rngSnapshot);
+
+        for (var i = 0; i < 100; i++)
+            rng.Beta(2.0, 5.0).Sample().Should().Be(rngClone.Beta(2.0, 5.0).Sample());
+    }
+
     private readonly struct DecimalBetaSampler(decimal alpha, decimal beta) :
         IHistogramSamplerWithRange<decimal, ChiRng>
     {

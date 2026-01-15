@@ -45,6 +45,22 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     }
 
     [Theory]
+    [InlineData("Deterministic")]
+    [InlineData("Randomized")]
+    public void Snapshot_WithRestoredState_ProducesIdenticalSamples(string seed)
+    {
+        var rng = seed == "Randomized" ? new ChiRng() : new ChiRng(seed);
+        _ = rng.Pareto(1.0, 2.0).Sample(rng.Chance().PickBetween(100, 1000)).ToList();
+
+        var rngSnapshot = rng.Snapshot();
+
+        var rngClone = new ChiRng(rngSnapshot);
+
+        for (var i = 0; i < 100; i++)
+            rng.Pareto(1.0, 2.0).Sample().Should().Be(rngClone.Pareto(1.0, 2.0).Sample());
+    }
+
+    [Theory]
     [InlineData("10.0", "3.0")] // Finite mean and variance
     [InlineData("1.0", "2.1")] // Finite mean, infinite variance
     public void Sample_Decimal_ProducesDistributionWithCorrectShape(string scaleStr, string shapeStr)

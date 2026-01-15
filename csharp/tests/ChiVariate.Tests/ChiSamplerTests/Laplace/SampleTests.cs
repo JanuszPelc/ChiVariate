@@ -1,4 +1,5 @@
 using System.Globalization;
+using AwesomeAssertions;
 using ChiVariate.Tests.TestInfrastructure;
 using Xunit;
 using Xunit.Abstractions;
@@ -49,6 +50,22 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
 
         histogram.DebugPrint(testOutputHelper, $"Laplace(μ={location}, b={scale}) Distribution");
         histogram.AssertIsLaplace(location, scale, 0.15);
+    }
+
+    [Theory]
+    [InlineData("Deterministic")]
+    [InlineData("Randomized")]
+    public void Snapshot_WithRestoredState_ProducesIdenticalSamples(string seed)
+    {
+        var rng = seed == "Randomized" ? new ChiRng() : new ChiRng(seed);
+        _ = rng.Laplace(0.0, 1.0).Sample(rng.Chance().PickBetween(100, 1000)).ToList();
+
+        var rngSnapshot = rng.Snapshot();
+
+        var rngClone = new ChiRng(rngSnapshot);
+
+        for (var i = 0; i < 100; i++)
+            rng.Laplace(0.0, 1.0).Sample().Should().Be(rngClone.Laplace(0.0, 1.0).Sample());
     }
 
     private readonly struct DecimalLaplaceSampler(decimal location, decimal scale) :

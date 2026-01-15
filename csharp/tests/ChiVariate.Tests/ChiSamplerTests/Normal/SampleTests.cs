@@ -1,4 +1,5 @@
 using System.Globalization;
+using AwesomeAssertions;
 using ChiVariate.Tests.TestInfrastructure;
 using Xunit;
 using Xunit.Abstractions;
@@ -78,6 +79,22 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
 
         histogram.DebugPrint(testOutputHelper);
         histogram.AssertIsNormal(expectedMean, expectedStdDev, 0.03);
+    }
+
+    [Theory]
+    [InlineData("Deterministic")]
+    [InlineData("Randomized")]
+    public void Snapshot_WithRestoredState_ProducesIdenticalSamples(string seed)
+    {
+        var rng = seed == "Randomized" ? new ChiRng() : new ChiRng(seed);
+        _ = rng.Normal(0.0, 1.0).Sample(rng.Chance().PickBetween(100, 1000)).ToList();
+
+        var rngSnapshot = rng.Snapshot();
+
+        var rngClone = new ChiRng(rngSnapshot);
+
+        for (var i = 0; i < 100; i++)
+            rng.Normal(0.0, 1.0).Sample().Should().Be(rngClone.Normal(0.0, 1.0).Sample());
     }
 
     [Theory]
