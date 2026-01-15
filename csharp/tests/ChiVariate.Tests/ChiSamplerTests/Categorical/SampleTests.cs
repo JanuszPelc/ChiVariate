@@ -67,11 +67,13 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
         act.Should().Throw<ArgumentException>();
     }
 
-    [Fact]
-    public void Snapshot_WithRestoredState_ProducesIdenticalSamples()
+    [Theory]
+    [InlineData("Deterministic")]
+    [InlineData("Randomized")]
+    public void Snapshot_WithRestoredState_ProducesIdenticalSamples(string seed)
     {
         var weights = new[] { 0.1, 0.2, 0.3, 0.4 };
-        var rng = new ChiRng("CategoricalSnapshot");
+        var rng = seed == "Randomized" ? new ChiRng() : new ChiRng(seed);
         _ = rng.Categorical(weights).Sample(rng.Chance().PickBetween(100, 1000)).ToList();
 
         var rngSnapshot = rng.Snapshot();

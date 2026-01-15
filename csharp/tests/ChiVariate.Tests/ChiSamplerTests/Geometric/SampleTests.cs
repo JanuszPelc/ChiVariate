@@ -52,10 +52,12 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
         act.Should().Throw<ArgumentOutOfRangeException>().And.ParamName.Should().Be("probability");
     }
 
-    [Fact]
-    public void Snapshot_WithRestoredState_ProducesIdenticalSamples()
+    [Theory]
+    [InlineData("Deterministic")]
+    [InlineData("Randomized")]
+    public void Snapshot_WithRestoredState_ProducesIdenticalSamples(string seed)
     {
-        var rng = new ChiRng("GeometricSnapshot");
+        var rng = seed == "Randomized" ? new ChiRng() : new ChiRng(seed);
         _ = rng.Geometric(0.3).Sample(rng.Chance().PickBetween(100, 1000)).ToList();
 
         var rngSnapshot = rng.Snapshot();

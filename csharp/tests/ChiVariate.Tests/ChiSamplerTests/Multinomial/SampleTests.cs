@@ -59,11 +59,13 @@ public class SampleTests
         act.Should().Throw<ArgumentException>();
     }
 
-    [Fact]
-    public void Snapshot_WithRestoredState_ProducesIdenticalSamples()
+    [Theory]
+    [InlineData("Deterministic")]
+    [InlineData("Randomized")]
+    public void Snapshot_WithRestoredState_ProducesIdenticalSamples(string seed)
     {
         var probabilities = new[] { 0.1, 0.2, 0.3, 0.4 };
-        var rng = new ChiRng("MultinomialSnapshot");
+        var rng = seed == "Randomized" ? new ChiRng() : new ChiRng(seed);
         for (var i = 0; i < rng.Chance().PickBetween(100, 1000); i++)
             using (rng.Multinomial(20, probabilities).Sample())
             {

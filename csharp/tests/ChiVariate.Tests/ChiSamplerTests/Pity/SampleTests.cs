@@ -327,10 +327,12 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
             "because PRD should have lower variance (fewer long streaks).");
     }
 
-    [Fact]
-    public void Snapshot_WithRestoredState_ProducesIdenticalSamples()
+    [Theory]
+    [InlineData("Deterministic")]
+    [InlineData("Randomized")]
+    public void Snapshot_WithRestoredState_ProducesIdenticalSamples(string seed)
     {
-        var rng = new ChiRng("PitySnapshot");
+        var rng = seed == "Randomized" ? new ChiRng() : new ChiRng(seed);
         var pity = rng.Pity(0.02, 0.01, 50, 90);
         _ = pity.Sample(rng.Chance().PickBetween(100, 1000)).ToList();
 
