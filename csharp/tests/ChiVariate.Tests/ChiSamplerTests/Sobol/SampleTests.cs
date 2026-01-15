@@ -336,4 +336,23 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
                 point[d].Should().BeInRange(0.0, 1.0,
                     $"All values should be in [0,1] even in dimension {d + 1} of {dimensions}");
     }
+
+    [Theory]
+    [InlineData("Deterministic")]
+    [InlineData("Randomized")]
+    public void Snapshot_WithRestoredState_ProducesIdenticalSamples(string seed)
+    {
+        var rng = seed == "Randomized" ? new ChiRng() : new ChiRng(seed);
+        var warmupCount = rng.Chance().PickBetween(100, 1000);
+        for (var i = 0; i < warmupCount; i++)
+            _ = rng.Sobol(3).OfType<double>().Sample().ToArray();
+
+        var rngSnapshot = rng.Snapshot();
+
+        var rngClone = new ChiRng(rngSnapshot);
+
+        for (var i = 0; i < 10_000; i++)
+            rng.Sobol(3).OfType<double>().Sample().ToArray()
+                .Should().BeEquivalentTo(rngClone.Sobol(3).OfType<double>().Sample().ToArray());
+    }
 }

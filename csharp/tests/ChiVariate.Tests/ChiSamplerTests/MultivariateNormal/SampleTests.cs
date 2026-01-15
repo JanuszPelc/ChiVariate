@@ -155,4 +155,34 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
 
         samples.AssertIsMultivariateNormal(mean.VectorToArray(), covariance.ToArray(), 0.20);
     }
+
+    [Theory]
+    [InlineData("Deterministic")]
+    [InlineData("Randomized")]
+    public void Snapshot_WithRestoredState_ProducesIdenticalSamples(string seed)
+    {
+        var mean = ChiMatrix.With([0.0, 0.0]);
+        var covariance = ChiMatrix.With(new[,]
+        {
+            { 1.0, 0.5 },
+            { 0.5, 1.0 }
+        });
+        var rng = seed == "Randomized" ? new ChiRng() : new ChiRng(seed);
+        var warmupCount = rng.Chance().PickBetween(100, 1000);
+        for (var i = 0; i < warmupCount; i++)
+        {
+            using var sample = rng.MultivariateNormal(mean, covariance).Sample();
+        }
+
+        var rngSnapshot = rng.Snapshot();
+
+        var rngClone = new ChiRng(rngSnapshot);
+
+        for (var i = 0; i < 10_000; i++)
+        {
+            using var sample1 = rng.MultivariateNormal(mean, covariance).Sample();
+            using var sample2 = rngClone.MultivariateNormal(mean, covariance).Sample();
+            sample1.VectorToArray().Should().BeEquivalentTo(sample2.VectorToArray());
+        }
+    }
 }

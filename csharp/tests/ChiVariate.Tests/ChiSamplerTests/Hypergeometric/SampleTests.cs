@@ -55,13 +55,15 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     public void Snapshot_WithRestoredState_ProducesIdenticalSamples(string seed)
     {
         var rng = seed == "Randomized" ? new ChiRng() : new ChiRng(seed);
-        _ = rng.Hypergeometric(52, 13, 5).Sample(rng.Chance().PickBetween(100, 1000)).ToList();
+        var sampler = rng.Hypergeometric(52, 13, 5);
+        _ = sampler.Sample(rng.Chance().PickBetween(100, 1000)).ToList();
 
         var rngSnapshot = rng.Snapshot();
 
         var rngClone = new ChiRng(rngSnapshot);
+        var samplerClone = rngClone.Hypergeometric(52, 13, 5);
 
-        for (var i = 0; i < 100; i++)
-            rng.Hypergeometric(52, 13, 5).Sample().Should().Be(rngClone.Hypergeometric(52, 13, 5).Sample());
+        for (var i = 0; i < 10_000; i++)
+            sampler.Sample().Should().Be(samplerClone.Sample());
     }
 }

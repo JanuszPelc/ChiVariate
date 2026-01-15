@@ -90,4 +90,23 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
 
         samples.AssertIsDirichlet(alpha, 0.15);
     }
+
+    [Theory]
+    [InlineData("Deterministic")]
+    [InlineData("Randomized")]
+    public void Snapshot_WithRestoredState_ProducesIdenticalSamples(string seed)
+    {
+        var alpha = new[] { 2.0, 3.0, 5.0 };
+        var rng = seed == "Randomized" ? new ChiRng() : new ChiRng(seed);
+        var warmupCount = rng.Chance().PickBetween(100, 1000);
+        for (var i = 0; i < warmupCount; i++)
+            _ = rng.Dirichlet(alpha).Sample().ToArray();
+
+        var rngSnapshot = rng.Snapshot();
+
+        var rngClone = new ChiRng(rngSnapshot);
+
+        for (var i = 0; i < 10_000; i++)
+            rng.Dirichlet(alpha).Sample().ToArray().Should().BeEquivalentTo(rngClone.Dirichlet(alpha).Sample().ToArray());
+    }
 }

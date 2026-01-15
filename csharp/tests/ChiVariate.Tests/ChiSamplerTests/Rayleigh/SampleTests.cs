@@ -49,14 +49,16 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     public void Snapshot_WithRestoredState_ProducesIdenticalSamples(string seed)
     {
         var rng = seed == "Randomized" ? new ChiRng() : new ChiRng(seed);
-        _ = rng.Rayleigh(1.0).Sample(rng.Chance().PickBetween(100, 1000)).ToList();
+        var sampler = rng.Rayleigh(1.0);
+        _ = sampler.Sample(rng.Chance().PickBetween(100, 1000)).ToList();
 
         var rngSnapshot = rng.Snapshot();
 
         var rngClone = new ChiRng(rngSnapshot);
+        var samplerClone = rngClone.Rayleigh(1.0);
 
-        for (var i = 0; i < 100; i++)
-            rng.Rayleigh(1.0).Sample().Should().Be(rngClone.Rayleigh(1.0).Sample());
+        for (var i = 0; i < 10_000; i++)
+            sampler.Sample().Should().Be(samplerClone.Sample());
     }
 
     [Theory]

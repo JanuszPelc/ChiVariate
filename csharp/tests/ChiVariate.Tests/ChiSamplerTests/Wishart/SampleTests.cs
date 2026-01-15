@@ -1,3 +1,4 @@
+using AwesomeAssertions;
 using ChiVariate.Tests.TestInfrastructure;
 using Xunit;
 using Xunit.Abstractions;
@@ -101,5 +102,35 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
             samples.Add(rng.Wishart(degreesOfFreedom, scaleMatrix).Sample().ToArray());
 
         samples.AssertIsWishart(degreesOfFreedom, scaleMatrix.ToArray(), 0.25);
+    }
+
+    [Theory]
+    [InlineData("Deterministic")]
+    [InlineData("Randomized")]
+    public void Snapshot_WithRestoredState_ProducesIdenticalSamples(string seed)
+    {
+        const int degreesOfFreedom = 5;
+        var scaleMatrix = ChiMatrix.With(new[,]
+        {
+            { 1.0, 0.5 },
+            { 0.5, 2.0 }
+        });
+        var rng = seed == "Randomized" ? new ChiRng() : new ChiRng(seed);
+        var warmupCount = rng.Chance().PickBetween(100, 1000);
+        for (var i = 0; i < warmupCount; i++)
+        {
+            using var sample = rng.Wishart(degreesOfFreedom, scaleMatrix).Sample();
+        }
+
+        var rngSnapshot = rng.Snapshot();
+
+        var rngClone = new ChiRng(rngSnapshot);
+
+        for (var i = 0; i < 10_000; i++)
+        {
+            using var sample1 = rng.Wishart(degreesOfFreedom, scaleMatrix).Sample();
+            using var sample2 = rngClone.Wishart(degreesOfFreedom, scaleMatrix).Sample();
+            sample1.ToArray().Should().BeEquivalentTo(sample2.ToArray());
+        }
     }
 }

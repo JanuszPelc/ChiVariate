@@ -286,4 +286,23 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
 
         act.Should().Throw<ArgumentOutOfRangeException>();
     }
+
+    [Theory]
+    [InlineData("Deterministic")]
+    [InlineData("Randomized")]
+    public void Snapshot_WithRestoredState_ProducesIdenticalSamples(string seed)
+    {
+        var rng = seed == "Randomized" ? new ChiRng() : new ChiRng(seed);
+        var warmupCount = rng.Chance().PickBetween(100, 1000);
+        for (var i = 0; i < warmupCount; i++)
+            _ = rng.Halton(3).OfType<double>().Sample().ToArray();
+
+        var rngSnapshot = rng.Snapshot();
+
+        var rngClone = new ChiRng(rngSnapshot);
+
+        for (var i = 0; i < 10_000; i++)
+            rng.Halton(3).OfType<double>().Sample().ToArray()
+                .Should().BeEquivalentTo(rngClone.Halton(3).OfType<double>().Sample().ToArray());
+    }
 }

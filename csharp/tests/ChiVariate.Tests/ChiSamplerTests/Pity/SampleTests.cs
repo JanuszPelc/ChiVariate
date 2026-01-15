@@ -333,16 +333,16 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     public void Snapshot_WithRestoredState_ProducesIdenticalSamples(string seed)
     {
         var rng = seed == "Randomized" ? new ChiRng() : new ChiRng(seed);
-        var pity = rng.Pity(0.02, 0.01, 50, 90);
-        _ = pity.Sample(rng.Chance().PickBetween(100, 1000)).ToList();
+        var sampler = rng.Pity(0.02, 0.01, 50, 90);
+        _ = sampler.Sample(rng.Chance().PickBetween(100, 1000)).ToList();
 
         var rngSnapshot = rng.Snapshot();
-        var pitySnapshot = pity.Snapshot();
+        var samplerSnapshot = sampler.Snapshot();
 
         var rngClone = new ChiRng(rngSnapshot);
-        var pityClone = rngClone.Pity(0.02, 0.01, 50, 90).WithSnapshot(pitySnapshot);
+        var samplerClone = rngClone.Pity(0.02, 0.01, 50, 90).WithSnapshot(samplerSnapshot);
 
-        for (var i = 0; i < 100; i++)
-            pity.Sample().Should().Be(pityClone.Sample());
+        for (var i = 0; i < 10_000; i++)
+            sampler.Sample().Should().Be(samplerClone.Sample());
     }
 }
