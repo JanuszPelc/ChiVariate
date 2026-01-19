@@ -47,26 +47,25 @@ public readonly ref struct ChiSamplerHypergeometric<TRng, T>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public T Sample()
     {
-        var N = _populationSize;
-        var K = _numberOfSuccesses;
-        var n = _sampleSize;
+        var n = _populationSize;
+        var k = _numberOfSuccesses;
 
         var successesDrawn = T.Zero;
 
-        for (var i = T.Zero; i < n; i++)
+        for (var i = T.Zero; i < _sampleSize; i++)
         {
-            var p = double.CreateChecked(K) / double.CreateChecked(N);
+            var p = double.CreateChecked(k) / double.CreateChecked(n);
 
             if (_rng.Chance().NextBool(p))
             {
                 successesDrawn++;
-                K--;
+                k--;
             }
 
-            N--;
+            n--;
 
-            if (K == T.Zero) break;
-            if (N < n - i) break;
+            if (k == T.Zero) break;
+            if (n < _sampleSize - i) break;
         }
 
         return successesDrawn;
