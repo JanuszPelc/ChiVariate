@@ -117,9 +117,6 @@ file static class DecimalTables
     /// <summary>Tail cutoff R where we switch to tail sampling.</summary>
     internal static readonly decimal R;
 
-    /// <summary>Area of each Ziggurat layer.</summary>
-    internal static readonly decimal V;
-
     /// <summary>
     ///     We[i] = width of layer i for scaling uniform samples.
     /// </summary>
@@ -143,7 +140,6 @@ file static class DecimalTables
         const decimal ve = 0.003949659822581557199253251687m; // Layer area V
 
         R = de;
-        V = ve;
 
         We = new decimal[LayerCount + 1];
         Fe = new decimal[LayerCount + 1];

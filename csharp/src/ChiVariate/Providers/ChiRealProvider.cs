@@ -224,7 +224,8 @@ public static class ChiRealProvider
         const long maxSample = 1L << fractionalBits;
 
 #pragma warning disable CS0162 // Unreachable code detected
-        // Use NextUInt32 when fractional bits fit in 32 bits (faster), otherwise NextUInt64
+        // ReSharper disable HeuristicUnreachableCode
+
         var raw = fractionalBits <= 32
             ? TRng.NextUInt32(ref rng)
             : (long)(TRng.NextUInt64(ref rng) >> (64 - fractionalBits));
@@ -234,6 +235,8 @@ public static class ChiRealProvider
                 raw = fractionalBits <= 32
                     ? TRng.NextUInt32(ref rng)
                     : (long)(TRng.NextUInt64(ref rng) >> (64 - fractionalBits));
+
+        // ReSharper restore HeuristicUnreachableCode
 #pragma warning restore CS0162 // Unreachable code detected
 
         if (!options.HasFlag(ChiIntervalOptions.IncludeMax))

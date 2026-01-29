@@ -56,7 +56,7 @@ internal static class ZigguratNormal<T>
     ///     Generates a single standard normal variate using the Ziggurat algorithm.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static T Next<TRng>(ref TRng rng)
+    private static T Next<TRng>(ref TRng rng)
         where TRng : struct, IChiRngSource<TRng>
     {
         const int layerCount = DecimalTables.LayerCount;
@@ -163,9 +163,6 @@ file static class DecimalTables
     /// <summary>Tail cutoff R where we switch to tail sampling.</summary>
     internal static readonly decimal R;
 
-    /// <summary>Area of each Ziggurat layer.</summary>
-    internal static readonly decimal V;
-
     /// <summary>
     ///     Wn[i] = width of layer i for scaling uniform samples.
     ///     The base layer (i=0) is special and includes the tail.
@@ -190,7 +187,6 @@ file static class DecimalTables
         const decimal vn = 0.00991256303526217m;
 
         R = dn;
-        V = vn;
 
         Wn = new decimal[LayerCount + 1];
         Fn = new decimal[LayerCount + 1];
