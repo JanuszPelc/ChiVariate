@@ -132,33 +132,12 @@ public readonly struct ChiFixed(long raw) : IFloatingPointIeee754<ChiFixed>, IMi
     }
 
     /// <summary>
-    ///     Converts an int value to ChiFixed.
-    /// </summary>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static explicit operator ChiFixed(int v)
-    {
-        // Exact when FractionalBits ≤ 32, may truncate when FractionalBits > 32
-        return new ChiFixed((long)v << FractionalBits);
-    }
-
-    /// <summary>
-    ///     Converts a ChiFixed value to int.
-    /// </summary>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static explicit operator int(ChiFixed v)
-    {
-        // Exact when FractionalBits ≥ 32, may truncate when FractionalBits < 32
-        // Division truncates toward zero; shift would truncate toward negative infinity
-        return (int)(v.Raw / ScaleFactor);
-    }
-
-    /// <summary>
     ///     Converts a fraction (numerator, denominator) to ChiFixed.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static explicit operator ChiFixed((int numerator, int denominator) v)
     {
-        return (ChiFixed)v.numerator / (ChiFixed)v.denominator;
+        return new ChiFixed((long)v.numerator << FractionalBits) / new ChiFixed((long)v.denominator << FractionalBits);
     }
 
     #endregion
