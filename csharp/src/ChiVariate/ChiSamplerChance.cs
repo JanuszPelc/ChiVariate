@@ -295,6 +295,15 @@ public readonly ref struct ChiSamplerChance<TRng>(ref TRng rng)
     }
 
     /// <summary>
+    ///     Returns a random fixed-point number that is greater than or equal to 0.0, and less than 1.0.
+    /// </summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public ChiFixed NextFixed(ChiIntervalOptions options = ChiIntervalOptions.None)
+    {
+        return ChiRealProvider.Next<TRng, ChiFixed>(ref _rng, options);
+    }
+
+    /// <summary>
     ///     Simulates a fair coin flip.
     /// </summary>
     /// <returns><c>true</c> for heads, <c>false</c> for tails.</returns>

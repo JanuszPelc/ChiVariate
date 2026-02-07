@@ -74,6 +74,12 @@ public class NextTests(ITestOutputHelper testOutputHelper)
         RunFloatingPointDistributionTest<double, SingleSampler>(new SingleSampler());
     }
 
+    [Fact]
+    public void NextFixed_CalledRepeatedly_ProducesUniformDistribution()
+    {
+        RunFloatingPointDistributionTest<double, FixedSampler>(new FixedSampler());
+    }
+
     [Theory]
     [InlineData(0, 100)]
     [InlineData(-50, 50)]
@@ -123,7 +129,7 @@ public class NextTests(ITestOutputHelper testOutputHelper)
         where T : IFloatingPoint<T>
         where TSampler : IHistogramSamplerWithRange<T, ChiRng>
     {
-        var rng = new ChiRng(typeof(T).Name);
+        var rng = new ChiRng(typeof(TSampler).Name);
         var histogram = new Histogram(0.0, 1.0, 10);
         const int sampleCount = 100_000;
 
@@ -162,12 +168,26 @@ public class NextTests(ITestOutputHelper testOutputHelper)
         }
     }
 
-    private readonly struct SingleSampler : IHistogramSamplerWithRange<double, ChiRng>
+    private readonly struct SingleSampler : IHistogramSamplerWithRange<double, ChiRng> // TODO: T should be float
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public double NextSample(ref ChiRng rng)
         {
             return rng.Chance().NextSingle();
+        }
+
+        public double Normalize(double value)
+        {
+            return value;
+        }
+    }
+
+    private readonly struct FixedSampler : IHistogramSamplerWithRange<double, ChiRng> // TODO: T should be fixed
+    {
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public double NextSample(ref ChiRng rng)
+        {
+            return double.CreateChecked(rng.Chance().NextFixed());
         }
 
         public double Normalize(double value)

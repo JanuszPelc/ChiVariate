@@ -53,7 +53,7 @@ public class NextTests(ITestOutputHelper testOutputHelper)
         where T : IFloatingPoint<T>
         where TSampler : IHistogramSamplerWithRange<T, ChiRng>
     {
-        var rng = new ChiRng(typeof(T).Name);
+        var rng = new ChiRng(typeof(TSampler).Name);
         var histogram = new Histogram(0.0, 1.0, 10);
         const int sampleCount = 100_000;
 

@@ -163,4 +163,14 @@ public class SmokeTests
 
         result.Should().BeFalse();
     }
+
+    [Fact]
+    public void NextFixed_ReturnsExpectedValue()
+    {
+        var rng = new ChiRng(Seed);
+
+        var result = rng.Chance().NextFixed();
+
+        result.Raw.Should().Be(3526690074L);
+    }
 }
