@@ -471,7 +471,7 @@ public class FixedBenchmarks
 
     [Benchmark]
     [BenchmarkCategory("Conversion")]
-    public ChiFixed Fixed_FromDecimal()
+    public ChiFixed Fixed_FromDouble_ViaDecimal()
     {
         var result = ChiFixed.Zero;
         for (var i = 0; i < Ops; i++)
@@ -481,11 +481,31 @@ public class FixedBenchmarks
 
     [Benchmark]
     [BenchmarkCategory("Conversion")]
-    public double Double_FromDecimal()
+    public ChiFixed Fixed_FromDouble_ViaCreateChecked()
+    {
+        var result = ChiFixed.Zero;
+        for (var i = 0; i < Ops; i++)
+            result = ChiFixed.CreateChecked(_doubleValues[i]);
+        return result;
+    }
+
+    [Benchmark]
+    [BenchmarkCategory("Conversion")]
+    public double Fixed_ToDouble_ViaDecimal()
     {
         var result = 0.0;
         for (var i = 0; i < Ops; i++)
-            result = (double)(decimal)_doubleValues[i];
+            result = (double)(decimal)_fixedValues[i];
+        return result;
+    }
+
+    [Benchmark]
+    [BenchmarkCategory("Conversion")]
+    public double Fixed_ToDouble_ViaCreateChecked()
+    {
+        var result = 0.0;
+        for (var i = 0; i < Ops; i++)
+            result = double.CreateChecked(_fixedValues[i]);
         return result;
     }
 
@@ -506,6 +526,16 @@ public class FixedBenchmarks
         var result = 0m;
         for (var i = 0; i < Ops; i++)
             result = (decimal)_doubleValues[i];
+        return result;
+    }
+
+    [Benchmark]
+    [BenchmarkCategory("Conversion")]
+    public double Double_ViaDecimal()
+    {
+        var result = 0.0;
+        for (var i = 0; i < Ops; i++)
+            result = (double)(decimal)_doubleValues[i];
         return result;
     }
 

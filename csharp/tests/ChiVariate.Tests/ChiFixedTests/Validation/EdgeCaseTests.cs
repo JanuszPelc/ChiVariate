@@ -354,12 +354,11 @@ public class EdgeCaseTests
     public void CreateChecked_VeryLargeDecimal_Behavior(string decimalStr)
     {
         var value = decimal.Parse(decimalStr);
-        var success = ChiFixed.TryConvertFromChecked(value, out var result);
+        var result = ChiFixed.CreateChecked(value);
 
-        if (success)
-            (result == ChiFixed.PositiveInfinity ||
-             result.Raw > 0 ||
-             result.Raw < 0).Should().BeTrue("CreateChecked should produce deterministic result");
+        (result == ChiFixed.PositiveInfinity ||
+         result.Raw > 0 ||
+         result.Raw < 0).Should().BeTrue("CreateChecked should produce deterministic result");
     }
 
     [Theory]
@@ -368,12 +367,11 @@ public class EdgeCaseTests
     public void CreateChecked_VeryLargeNegativeDecimal_Behavior(string decimalStr)
     {
         var value = decimal.Parse(decimalStr);
-        var success = ChiFixed.TryConvertFromChecked(value, out var result);
+        var result = ChiFixed.CreateChecked(value);
 
-        if (success)
-            (result == ChiFixed.NegativeInfinity ||
-             result.Raw > 0 ||
-             result.Raw < 0).Should().BeTrue("CreateChecked should produce deterministic result");
+        (result == ChiFixed.NegativeInfinity ||
+         result.Raw > 0 ||
+         result.Raw < 0).Should().BeTrue("CreateChecked should produce deterministic result");
     }
 
     [Theory]
@@ -382,9 +380,8 @@ public class EdgeCaseTests
     public void CreateSaturating_VeryLargeDecimal_Saturates(string decimalStr)
     {
         var value = decimal.Parse(decimalStr);
-        var success = ChiFixed.TryConvertFromSaturating(value, out var result);
+        var result = ChiFixed.CreateSaturating(value);
 
-        success.Should().BeTrue();
         (result == ChiFixed.PositiveInfinity ||
          result == ChiFixed.MaxValue ||
          result.Raw > 0).Should().BeTrue("CreateSaturating should saturate or truncate to valid positive value");
@@ -396,9 +393,8 @@ public class EdgeCaseTests
     public void CreateSaturating_VeryLargeNegativeDecimal_Saturates(string decimalStr)
     {
         var value = decimal.Parse(decimalStr);
-        var success = ChiFixed.TryConvertFromSaturating(value, out var result);
+        var result = ChiFixed.CreateSaturating(value);
 
-        success.Should().BeTrue();
         (result == ChiFixed.NegativeInfinity ||
          result == ChiFixed.MinValue ||
          result.Raw < 0).Should().BeTrue("CreateSaturating should saturate or truncate to valid negative value");
@@ -410,9 +406,9 @@ public class EdgeCaseTests
     public void CreateTruncating_VeryLargeDecimal_ProducesResult(string decimalStr)
     {
         var value = decimal.Parse(decimalStr);
-        var success = ChiFixed.TryConvertFromTruncating(value, out _);
+        var act = () => ChiFixed.CreateTruncating(value);
 
-        success.Should().BeTrue();
+        act.Should().NotThrow();
     }
 
     [Theory]
@@ -421,32 +417,32 @@ public class EdgeCaseTests
     public void CreateTruncating_VeryLargeNegativeDecimal_ProducesResult(string decimalStr)
     {
         var value = decimal.Parse(decimalStr);
-        var success = ChiFixed.TryConvertFromTruncating(value, out _);
+        var act = () => ChiFixed.CreateTruncating(value);
 
-        success.Should().BeTrue();
+        act.Should().NotThrow();
     }
 
     [Fact]
     public void CreateChecked_DecimalMaxValue_DoesNotThrowOrProducesResult()
     {
-        var act = () => ChiFixed.TryConvertFromChecked(decimal.MaxValue, out _);
+        var act = () => ChiFixed.CreateChecked(decimal.MaxValue);
         act.Should().NotThrow();
     }
 
     [Fact]
     public void CreateSaturating_DecimalMaxValue_Succeeds()
     {
-        var success = ChiFixed.TryConvertFromSaturating(decimal.MaxValue, out _);
+        var act = () => ChiFixed.CreateSaturating(decimal.MaxValue);
 
-        success.Should().BeTrue();
+        act.Should().NotThrow();
     }
 
     [Fact]
     public void CreateTruncating_DecimalMaxValue_Succeeds()
     {
-        var success = ChiFixed.TryConvertFromTruncating(decimal.MaxValue, out _);
+        var act = () => ChiFixed.CreateTruncating(decimal.MaxValue);
 
-        success.Should().BeTrue();
+        act.Should().NotThrow();
     }
 
     [Fact]
@@ -455,9 +451,9 @@ public class EdgeCaseTests
         const decimal testValue = 123.456m;
 
         var directCast = (ChiFixed)testValue;
-        ChiFixed.TryConvertFromChecked(testValue, out var fromChecked);
-        ChiFixed.TryConvertFromSaturating(testValue, out var fromSaturating);
-        ChiFixed.TryConvertFromTruncating(testValue, out var fromTruncating);
+        var fromChecked = ChiFixed.CreateChecked(testValue);
+        var fromSaturating = ChiFixed.CreateSaturating(testValue);
+        var fromTruncating = ChiFixed.CreateTruncating(testValue);
 
         fromChecked.Should().Be(directCast);
         fromSaturating.Should().Be(directCast);

@@ -525,6 +525,45 @@ public readonly struct ChiFixed(long raw) : IFloatingPointIeee754<ChiFixed>, IMi
     #region Conversion
 
     /// <inheritdoc />
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static ChiFixed CreateChecked<TOther>(TOther value)
+        where TOther : INumberBase<TOther>
+    {
+        ChiFixed result;
+        if (typeof(TOther) == typeof(ChiFixed))
+            result = (ChiFixed)(object)value;
+        else if (!TryConvertFromChecked(value, out result) && !TOther.TryConvertToChecked(value, out result))
+            throw new NotSupportedException();
+        return result;
+    }
+
+    /// <inheritdoc />
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static ChiFixed CreateSaturating<TOther>(TOther value)
+        where TOther : INumberBase<TOther>
+    {
+        ChiFixed result;
+        if (typeof(TOther) == typeof(ChiFixed))
+            result = (ChiFixed)(object)value;
+        else if (!TryConvertFromSaturating(value, out result) && !TOther.TryConvertToSaturating(value, out result))
+            throw new NotSupportedException();
+        return result;
+    }
+
+    /// <inheritdoc />
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static ChiFixed CreateTruncating<TOther>(TOther value)
+        where TOther : INumberBase<TOther>
+    {
+        ChiFixed result;
+        if (typeof(TOther) == typeof(ChiFixed))
+            result = (ChiFixed)(object)value;
+        else if (!TryConvertFromTruncating(value, out result) && !TOther.TryConvertToTruncating(value, out result))
+            throw new NotSupportedException();
+        return result;
+    }
+
+    /// <inheritdoc />
     public static bool TryConvertFromChecked<TOther>(TOther value, out ChiFixed result)
         where TOther : INumberBase<TOther>
     {
