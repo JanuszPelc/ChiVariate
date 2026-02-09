@@ -3,6 +3,7 @@
 
 using System.Numerics;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 
 namespace ChiVariate.Internal.ChiFixed;
 
@@ -20,18 +21,35 @@ internal static class FixedMath
     // Precomputed powers of 5 for decimal conversion (5^0 to 5^28)
     private static readonly UInt128[] PrecomputedPow5 = CreatePow5Lookup();
 
+    // Precomputed powers of 5 (ulong) for fast decimal path (5^0 to 5^24)
+    // Limit 24: for scale s, remainder r < 5^s, and (r << (32-s)) must fit in ulong.
+    // Constraint: 5^s * 2^(32-s) < 2^64, which holds for s ≤ 24.
+    private static readonly ulong[] PrecomputePow5Fast = CreatePow5FastLookup();
+
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static decimal ToDecimal(long raw)
     {
-        const long mask = ChiVariate.ChiFixed.ScaleFactor - 1;
+        const long fracMask = ChiVariate.ChiFixed.ScaleFactor - 1;
+        if ((raw & fracMask) == 0)
+            return raw >> ChiVariate.ChiFixed.FractionalBits;
 
-        var integerPart = raw >> ChiVariate.ChiFixed.FractionalBits;
-        if ((raw & mask) == 0)
-            return integerPart;
+        var negative = raw < 0;
+        var absRaw = (ulong)(negative ? -raw : raw);
 
-        var fractionalBits = raw & mask;
-        const decimal scaleAsDecimal = ChiVariate.ChiFixed.ScaleFactor;
-        return integerPart + fractionalBits / scaleAsDecimal;
+        // mantissa = absRaw * 10^10 / 2^32, with banker's rounding
+        // UInt128 multiply is fast (two 64-bit multiplies), unlike UInt128 division
+        var product = (UInt128)absRaw * 10_000_000_000UL;
+        var rem = (uint)product;
+        var m0 = (uint)(product >> 32);
+        var m1 = (uint)(product >> 64);
+        var m2 = (uint)(product >> 96);
+
+        if (rem > 0x80000000U || (rem == 0x80000000U && (m0 & 1) != 0))
+            if (++m0 == 0)
+                if (++m1 == 0)
+                    m2++;
+
+        return new decimal((int)m0, (int)m1, (int)m2, negative, 10);
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -40,32 +58,56 @@ internal static class FixedMath
         if (v == 0m)
             return 0;
 
-        Span<int> bits = stackalloc int[4];
-        decimal.GetBits(v, bits);
-        var lo = (uint)bits[0];
-        var mid = (uint)bits[1];
-        var hi = (uint)bits[2];
-        var signBit = (uint)bits[3];
+        ref readonly var d = ref Unsafe.As<decimal, DecimalRaw>(ref Unsafe.AsRef(in v));
+        var lo64 = d.Lo64;
+        var hi32 = d.Hi32;
+        var flags = d.Flags;
+        var negative = flags < 0;
+        var scale = (flags >> 16) & 0x7F;
 
-        var negative = (signBit & 0x80000000) != 0;
-        var scale = (int)((signBit >> 16) & 0x7F);
-
-        if (scale == 0 && hi == 0)
-        {
-            var mant64 = ((ulong)mid << 32) | lo;
-            const int fracBits = ChiVariate.ChiFixed.FractionalBits;
-
-            if (mant64 <= (ulong)long.MaxValue >> fracBits)
+        if (scale == 0 && hi32 == 0)
+            if (lo64 <= (ulong)long.MaxValue >> ChiVariate.ChiFixed.FractionalBits)
             {
-                var scaled = (long)(mant64 << fracBits);
+                var scaled = (long)(lo64 << ChiVariate.ChiFixed.FractionalBits);
                 return negative ? -scaled : scaled;
             }
+
+        // Fast path: hi == 0, scale 1-24 — pure ulong arithmetic
+        // Uses 10^s = 5^s × 2^s, so mantissa × 2^32 / 10^s = (mantissa / 5^s) << (32 - s)
+        if (hi32 == 0 && scale <= 24)
+        {
+            var p5 = PrecomputePow5Fast[scale];
+            var sh = ChiVariate.ChiFixed.FractionalBits - scale;
+
+            var quot = lo64 / p5;
+            var rem5 = lo64 - quot * p5;
+
+            if (quot >> (63 - sh) != 0)
+                return negative
+                    ? ChiVariate.ChiFixed.NegativeInfinity.Raw
+                    : ChiVariate.ChiFixed.PositiveInfinity.Raw;
+
+            // rem5 < 5^s and sh = 32-s, so rem5 << sh < 5^s × 2^(32-s) < 2^64 for s ≤ 24
+            var remShifted = rem5 << sh;
+            var frac = remShifted / p5;
+            var fracRem = remShifted - frac * p5;
+
+            // Banker's rounding
+            if (fracRem * 2 > p5 || (fracRem * 2 == p5 && (frac & 1) != 0))
+                frac++;
+
+            var result = (long)((quot << sh) + frac);
+            if (result < 0)
+                return negative
+                    ? ChiVariate.ChiFixed.NegativeInfinity.Raw
+                    : ChiVariate.ChiFixed.PositiveInfinity.Raw;
+
+            return negative ? -result : result;
         }
 
         var mantissa =
-            ((UInt128)hi << 64) |
-            ((UInt128)mid << 32) |
-            lo;
+            ((UInt128)hi32 << 64) |
+            lo64;
 
         var shift = ChiVariate.ChiFixed.FractionalBits - scale;
         var maxMantissa = UInt128.MaxValue >> shift;
@@ -152,6 +194,27 @@ internal static class FixedMath
         for (var i = 1; i < result.Length; i++)
             result[i] = result[i - 1] * 5;
         return result;
+    }
+
+    private static ulong[] CreatePow5FastLookup()
+    {
+        var result = new ulong[25]; // 5^0 to 5^24
+        result[0] = 1;
+
+        for (var i = 1; i < result.Length; i++)
+            result[i] = result[i - 1] * 5;
+        return result;
+    }
+
+    /// <summary>
+    ///     Mirrors the internal layout of System.Decimal in CoreCLR.
+    /// </summary>
+    [StructLayout(LayoutKind.Explicit)]
+    private readonly struct DecimalRaw
+    {
+        [FieldOffset(0)] public readonly int Flags;
+        [FieldOffset(4)] public readonly uint Hi32;
+        [FieldOffset(8)] public readonly ulong Lo64;
     }
 
     #region ChiFixed Overloads (Table/CORDIC)

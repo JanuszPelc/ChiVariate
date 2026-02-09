@@ -113,20 +113,14 @@ public readonly struct ChiFixed(long raw) : IFloatingPointIeee754<ChiFixed>, IMi
 
     #region Factory Methods
 
-    /// <summary>
-    ///     Converts a decimal to ChiFixed.
-    ///     Deterministic across platforms but best suited for initialization, not hot paths.
-    /// </summary>
+    /// <summary>Converts a decimal to ChiFixed.</summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static explicit operator ChiFixed(decimal v)
     {
         return CreateSaturating(v);
     }
 
-    /// <summary>
-    ///     Converts a ChiFixed to decimal.
-    ///     Deterministic across platforms but best suited for initialization, not hot paths.
-    /// </summary>
+    /// <summary>Converts a ChiFixed to decimal.</summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static explicit operator decimal(ChiFixed v)
     {

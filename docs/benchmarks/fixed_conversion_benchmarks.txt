@@ -4,78 +4,73 @@ BenchmarkDotNet v0.14.0, macOS Sequoia 15.7.3 (24G419) [Darwin 24.6.0]
 Apple M1 Pro, 1 CPU, 10 logical and 10 physical cores
 .NET SDK 10.0.100
   [Host]     : .NET 9.0.11 (9.0.1125.51716), Arm64 RyuJIT AdvSIMD
-  Job-DLPLEC : .NET 9.0.11 (9.0.1125.51716), Arm64 RyuJIT AdvSIMD
+  Job-MAIOCM : .NET 9.0.11 (9.0.1125.51716), Arm64 RyuJIT AdvSIMD
 
 MinIterationTime=500ms  IterationCount=15  
 
 | Method                          | Mean      | Error     | StdDev    | Allocated |
 |-------------------------------- |----------:|----------:|----------:|----------:|
-| DoubleToDecimal                 |  4.190 us | 0.0050 us | 0.0044 us |         - |
+| DoubleToDecimal                 |  4.195 us | 0.0074 us | 0.0070 us |         - |
 | DecimalToDouble                 |  1.113 us | 0.0007 us | 0.0006 us |         - |
 |                                 |           |           |           |           |
-| DecimalToFixed_Cast             | 40.616 us | 0.0341 us | 0.0266 us |         - |
-| DecimalToFixed_CreateSaturating | 40.634 us | 0.0327 us | 0.0273 us |         - |
-| FixedToDecimal_Cast             | 75.077 us | 0.4842 us | 0.4529 us |         - |
-| FixedToDecimal_CreateSaturating | 75.937 us | 0.6391 us | 0.5666 us |         - |
+| DecimalToFixed_Cast             |  6.222 us | 0.0558 us | 0.0522 us |         - |
+| DecimalToFixed_CreateSaturating |  6.279 us | 0.0532 us | 0.0497 us |         - |
+| FixedToDecimal_Cast             |  4.048 us | 0.0194 us | 0.0182 us |         - |
+| FixedToDecimal_CreateSaturating |  4.034 us | 0.0225 us | 0.0211 us |         - |
 |                                 |           |           |           |           |
-| DoubleToFixed_Cast              |  2.389 us | 0.0015 us | 0.0013 us |         - |
-| DoubleToFixed_CreateSaturating  |  2.389 us | 0.0016 us | 0.0014 us |         - |
-| FixedToDouble_Cast              |  2.350 us | 0.0014 us | 0.0012 us |         - |
-| FixedToDouble_CreateSaturating  |  2.349 us | 0.0013 us | 0.0012 us |         - |
-| DoubleToFixed_ViaDecimal        | 48.967 us | 0.4556 us | 0.4261 us |         - |
-| FixedToDouble_ViaDecimal        | 72.460 us | 0.6978 us | 0.6186 us |         - |
+| DoubleToFixed_Cast              |  2.391 us | 0.0019 us | 0.0018 us |         - |
+| DoubleToFixed_CreateSaturating  |  2.400 us | 0.0174 us | 0.0145 us |         - |
+| FixedToDouble_Cast              |  2.354 us | 0.0020 us | 0.0015 us |         - |
+| FixedToDouble_CreateSaturating  |  2.352 us | 0.0013 us | 0.0012 us |         - |
+| DoubleToFixed_ViaDecimal        | 11.162 us | 0.0187 us | 0.0156 us |         - |
+| FixedToDouble_ViaDecimal        |  4.220 us | 0.0087 us | 0.0077 us |         - |
 |                                 |           |           |           |           |
-| FloatToFixed_Cast               |  2.427 us | 0.0010 us | 0.0009 us |         - |
-| FloatToFixed_CreateSaturating   |  2.428 us | 0.0015 us | 0.0014 us |         - |
-| FixedToFloat_Cast               |  2.394 us | 0.0056 us | 0.0049 us |         - |
-| FixedToFloat_CreateSaturating   |  2.389 us | 0.0020 us | 0.0018 us |         - |
+| FloatToFixed_Cast               |  2.431 us | 0.0014 us | 0.0012 us |         - |
+| FloatToFixed_CreateSaturating   |  2.431 us | 0.0015 us | 0.0013 us |         - |
+| FixedToFloat_Cast               |  2.391 us | 0.0017 us | 0.0015 us |         - |
+| FixedToFloat_CreateSaturating   |  2.391 us | 0.0020 us | 0.0018 us |         - |
 |                                 |           |           |           |           |
-| IntToFixed_Cast                 |  1.728 us | 0.0008 us | 0.0006 us |         - |
-| IntToFixed_CreateSaturating     |  1.728 us | 0.0009 us | 0.0008 us |         - |
-| FixedToInt_Cast                 |  2.066 us | 0.0057 us | 0.0047 us |         - |
-| FixedToInt_CreateSaturating     |  1.764 us | 0.0091 us | 0.0085 us |         - |
+| IntToFixed_Cast                 |  1.727 us | 0.0010 us | 0.0008 us |         - |
+| IntToFixed_CreateSaturating     |  1.730 us | 0.0007 us | 0.0007 us |         - |
+| FixedToInt_Cast                 |  2.064 us | 0.0066 us | 0.0058 us |         - |
+| FixedToInt_CreateSaturating     |  1.769 us | 0.0152 us | 0.0135 us |         - |
 |                                 |           |           |           |           |
-| LongToFixed_Cast                |  1.332 us | 0.0008 us | 0.0007 us |         - |
-| LongToFixed_CreateSaturating    |  1.332 us | 0.0011 us | 0.0010 us |         - |
-| FixedToLong_Cast                |  1.576 us | 0.0104 us | 0.0087 us |         - |
-| FixedToLong_CreateSaturating    |  1.571 us | 0.0087 us | 0.0068 us |         - |
+| LongToFixed_Cast                |  1.333 us | 0.0007 us | 0.0006 us |         - |
+| LongToFixed_CreateSaturating    |  1.334 us | 0.0010 us | 0.0009 us |         - |
+| FixedToLong_Cast                |  1.590 us | 0.0110 us | 0.0098 us |         - |
+| FixedToLong_CreateSaturating    |  1.575 us | 0.0110 us | 0.0098 us |         - |
 |                                 |           |           |           |           |
-| UIntToFixed_Cast                |  1.750 us | 0.0025 us | 0.0022 us |         - |
-| UIntToFixed_CreateSaturating    |  1.744 us | 0.0168 us | 0.0157 us |         - |
-| FixedToUInt_Cast                |  1.711 us | 0.0016 us | 0.0012 us |         - |
-| FixedToUInt_CreateSaturating    |  1.712 us | 0.0030 us | 0.0025 us |         - |
+| UIntToFixed_Cast                |  1.738 us | 0.0011 us | 0.0010 us |         - |
+| UIntToFixed_CreateSaturating    |  1.752 us | 0.0087 us | 0.0073 us |         - |
+| FixedToUInt_Cast                |  1.683 us | 0.0026 us | 0.0024 us |         - |
+| FixedToUInt_CreateSaturating    |  1.738 us | 0.0027 us | 0.0025 us |         - |
 |                                 |           |           |           |           |
-| ULongToFixed_Cast               |  1.216 us | 0.0016 us | 0.0012 us |         - |
-| ULongToFixed_CreateSaturating   |  1.237 us | 0.0100 us | 0.0093 us |         - |
-| FixedToULong_Cast               |  1.728 us | 0.0188 us | 0.0176 us |         - |
-| FixedToULong_CreateSaturating   |  1.712 us | 0.0014 us | 0.0013 us |         - |
+| ULongToFixed_Cast               |  1.233 us | 0.0022 us | 0.0020 us |         - |
+| ULongToFixed_CreateSaturating   |  1.275 us | 0.0016 us | 0.0015 us |         - |
+| FixedToULong_Cast               |  1.715 us | 0.0035 us | 0.0027 us |         - |
+| FixedToULong_CreateSaturating   |  1.714 us | 0.0023 us | 0.0018 us |         - |
 
 // * Hints *
 Outliers
-  FixedConversionBenchmarks.DoubleToDecimal: MinIterationTime=500ms, IterationCount=15                 -> 1 outlier  was  removed (4.21 us)
-  FixedConversionBenchmarks.DecimalToDouble: MinIterationTime=500ms, IterationCount=15                 -> 1 outlier  was  removed (1.12 us)
-  FixedConversionBenchmarks.DecimalToFixed_Cast: MinIterationTime=500ms, IterationCount=15             -> 3 outliers were removed (40.72 us..40.93 us)
-  FixedConversionBenchmarks.DecimalToFixed_CreateSaturating: MinIterationTime=500ms, IterationCount=15 -> 2 outliers were removed (40.73 us, 40.73 us)
-  FixedConversionBenchmarks.FixedToDecimal_Cast: MinIterationTime=500ms, IterationCount=15             -> 2 outliers were detected (74.12 us, 74.24 us)
-  FixedConversionBenchmarks.FixedToDecimal_CreateSaturating: MinIterationTime=500ms, IterationCount=15 -> 1 outlier  was  removed (81.39 us)
-  FixedConversionBenchmarks.DoubleToFixed_Cast: MinIterationTime=500ms, IterationCount=15              -> 1 outlier  was  removed (2.41 us)
-  FixedConversionBenchmarks.DoubleToFixed_CreateSaturating: MinIterationTime=500ms, IterationCount=15  -> 1 outlier  was  removed (2.39 us)
-  FixedConversionBenchmarks.FixedToDouble_Cast: MinIterationTime=500ms, IterationCount=15              -> 1 outlier  was  removed (2.36 us)
-  FixedConversionBenchmarks.DoubleToFixed_ViaDecimal: MinIterationTime=500ms, IterationCount=15        -> 1 outlier  was  detected (48.00 us)
-  FixedConversionBenchmarks.FixedToDouble_ViaDecimal: MinIterationTime=500ms, IterationCount=15        -> 1 outlier  was  removed (74.73 us)
-  FixedConversionBenchmarks.FloatToFixed_Cast: MinIterationTime=500ms, IterationCount=15               -> 1 outlier  was  removed (2.43 us)
-  FixedConversionBenchmarks.FixedToFloat_Cast: MinIterationTime=500ms, IterationCount=15               -> 1 outlier  was  removed (2.44 us)
-  FixedConversionBenchmarks.IntToFixed_Cast: MinIterationTime=500ms, IterationCount=15                 -> 3 outliers were removed (1.73 us..1.78 us)
-  FixedConversionBenchmarks.IntToFixed_CreateSaturating: MinIterationTime=500ms, IterationCount=15     -> 2 outliers were removed (1.73 us, 1.74 us)
-  FixedConversionBenchmarks.FixedToInt_Cast: MinIterationTime=500ms, IterationCount=15                 -> 2 outliers were removed (2.09 us, 2.09 us)
-  FixedConversionBenchmarks.LongToFixed_Cast: MinIterationTime=500ms, IterationCount=15                -> 1 outlier  was  removed (1.34 us)
-  FixedConversionBenchmarks.FixedToLong_Cast: MinIterationTime=500ms, IterationCount=15                -> 2 outliers were removed (1.62 us, 1.62 us)
-  FixedConversionBenchmarks.FixedToLong_CreateSaturating: MinIterationTime=500ms, IterationCount=15    -> 3 outliers were removed (1.64 us..1.72 us)
-  FixedConversionBenchmarks.UIntToFixed_Cast: MinIterationTime=500ms, IterationCount=15                -> 1 outlier  was  removed (1.79 us)
-  FixedConversionBenchmarks.FixedToUInt_Cast: MinIterationTime=500ms, IterationCount=15                -> 3 outliers were removed (1.73 us..1.73 us)
-  FixedConversionBenchmarks.FixedToUInt_CreateSaturating: MinIterationTime=500ms, IterationCount=15    -> 2 outliers were removed (1.74 us, 1.74 us)
-  FixedConversionBenchmarks.ULongToFixed_Cast: MinIterationTime=500ms, IterationCount=15               -> 3 outliers were removed (1.23 us..1.24 us)
-  FixedConversionBenchmarks.ULongToFixed_CreateSaturating: MinIterationTime=500ms, IterationCount=15   -> 3 outliers were detected (1.22 us..1.23 us)
+  FixedConversionBenchmarks.FixedToDecimal_Cast: MinIterationTime=500ms, IterationCount=15            -> 1 outlier  was  detected (4.01 us)
+  FixedConversionBenchmarks.DoubleToFixed_CreateSaturating: MinIterationTime=500ms, IterationCount=15 -> 2 outliers were removed (2.47 us, 2.48 us)
+  FixedConversionBenchmarks.FixedToDouble_Cast: MinIterationTime=500ms, IterationCount=15             -> 3 outliers were removed (2.36 us..2.37 us)
+  FixedConversionBenchmarks.DoubleToFixed_ViaDecimal: MinIterationTime=500ms, IterationCount=15       -> 2 outliers were removed (11.25 us, 11.26 us)
+  FixedConversionBenchmarks.FixedToDouble_ViaDecimal: MinIterationTime=500ms, IterationCount=15       -> 1 outlier  was  removed (4.27 us)
+  FixedConversionBenchmarks.FloatToFixed_Cast: MinIterationTime=500ms, IterationCount=15              -> 2 outliers were removed (2.44 us, 2.44 us)
+  FixedConversionBenchmarks.FloatToFixed_CreateSaturating: MinIterationTime=500ms, IterationCount=15  -> 1 outlier  was  removed (2.44 us)
+  FixedConversionBenchmarks.FixedToFloat_Cast: MinIterationTime=500ms, IterationCount=15              -> 1 outlier  was  removed (2.40 us)
+  FixedConversionBenchmarks.FixedToFloat_CreateSaturating: MinIterationTime=500ms, IterationCount=15  -> 1 outlier  was  removed (2.43 us)
+  FixedConversionBenchmarks.IntToFixed_Cast: MinIterationTime=500ms, IterationCount=15                -> 3 outliers were removed (1.73 us..1.75 us)
+  FixedConversionBenchmarks.IntToFixed_CreateSaturating: MinIterationTime=500ms, IterationCount=15    -> 1 outlier  was  removed (1.73 us)
+  FixedConversionBenchmarks.FixedToInt_Cast: MinIterationTime=500ms, IterationCount=15                -> 1 outlier  was  removed (2.08 us)
+  FixedConversionBenchmarks.FixedToInt_CreateSaturating: MinIterationTime=500ms, IterationCount=15    -> 1 outlier  was  removed (1.84 us)
+  FixedConversionBenchmarks.LongToFixed_Cast: MinIterationTime=500ms, IterationCount=15               -> 1 outlier  was  removed (1.34 us)
+  FixedConversionBenchmarks.FixedToLong_Cast: MinIterationTime=500ms, IterationCount=15               -> 1 outlier  was  removed (1.62 us)
+  FixedConversionBenchmarks.FixedToLong_CreateSaturating: MinIterationTime=500ms, IterationCount=15   -> 1 outlier  was  removed (1.61 us)
+  FixedConversionBenchmarks.UIntToFixed_CreateSaturating: MinIterationTime=500ms, IterationCount=15   -> 2 outliers were removed (1.77 us, 1.78 us)
+  FixedConversionBenchmarks.FixedToULong_Cast: MinIterationTime=500ms, IterationCount=15              -> 3 outliers were removed (1.74 us..1.74 us)
+  FixedConversionBenchmarks.FixedToULong_CreateSaturating: MinIterationTime=500ms, IterationCount=15  -> 3 outliers were removed (1.76 us..1.82 us)
 
 // * Legends *
   Mean      : Arithmetic mean of all measurements
@@ -88,9 +83,9 @@ Outliers
 
 
 // ***** BenchmarkRunner: End *****
-Run time: 00:10:14 (614.3 sec), executed benchmarks: 32
+Run time: 00:10:25 (625.22 sec), executed benchmarks: 32
 
-Global total time: 00:10:21 (621.35 sec), executed benchmarks: 32
+Global total time: 00:10:31 (631.49 sec), executed benchmarks: 32
 // * Artifacts cleanup *
 Artifacts cleanup is finished
 
