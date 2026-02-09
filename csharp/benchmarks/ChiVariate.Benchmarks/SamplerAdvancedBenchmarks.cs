@@ -860,3 +860,298 @@ public class SamplerAdvancedBenchmarks
 
     #endregion
 }
+
+/*
+
+// * Summary *
+
+BenchmarkDotNet v0.14.0, macOS Sequoia 15.7.3 (24G419) [Darwin 24.6.0]
+Apple M1 Pro, 1 CPU, 10 logical and 10 physical cores
+.NET SDK 10.0.100
+  [Host]     : .NET 9.0.11 (9.0.1125.51716), Arm64 RyuJIT AdvSIMD
+  Job-AMWZTP : .NET 9.0.11 (9.0.1125.51716), Arm64 RyuJIT AdvSIMD
+
+MinIterationTime=500ms  IterationCount=15
+
+| Method                | Param           | Mean         | Error     | StdDev    | Ratio | RatioSD | Allocated | Alloc Ratio |
+|---------------------- |---------------- |-------------:|----------:|----------:|------:|--------:|----------:|------------:|
+| Beta                  | ForLoop_Float   |    179.48 μs |  0.078 μs |  0.073 μs |  2.00 |    0.00 |         - |          NA |
+| Chi                   | ForLoop_Float   |     89.93 μs |  0.057 μs |  0.053 μs |  1.00 |    0.00 |         - |          NA |
+| Chi-Squared           | ForLoop_Float   |     89.88 μs |  0.034 μs |  0.031 μs |  1.00 |    0.00 |         - |          NA |
+| Dirichlet             | ForLoop_Float   |    624.19 μs |  0.437 μs |  0.387 μs |  6.95 |    0.01 |       1 B |          NA |
+| F                     | ForLoop_Float   |    179.11 μs |  0.055 μs |  0.051 μs |  1.99 |    0.00 |         - |          NA |
+| Gamma                 | ForLoop_Float   |     89.84 μs |  0.042 μs |  0.037 μs |  1.00 |    0.00 |         - |          NA |
+| Halton                | ForLoop_Float   |     71.08 μs |  0.042 μs |  0.037 μs |  0.79 |    0.00 |         - |          NA |
+| Inverse-Gamma         | ForLoop_Float   |     89.63 μs |  0.037 μs |  0.033 μs |  1.00 |    0.00 |         - |          NA |
+| Log-Normal            | ForLoop_Float   |     55.71 μs |  0.026 μs |  0.023 μs |  0.62 |    0.00 |         - |          NA |
+| 'Multivariate Normal' | ForLoop_Float   |    321.81 μs |  0.113 μs |  0.100 μs |  3.58 |    0.00 |         - |          NA |
+| Sobol                 | ForLoop_Float   |    115.51 μs |  1.515 μs |  1.417 μs |  1.29 |    0.02 |         - |          NA |
+| Spatial.OnSphere      | ForLoop_Float   |     52.58 μs |  0.026 μs |  0.022 μs |  0.59 |    0.00 |         - |          NA |
+| StudentT              | ForLoop_Float   |    144.32 μs |  0.055 μs |  0.052 μs |  1.61 |    0.00 |         - |          NA |
+| Wishart               | ForLoop_Float   |    935.30 μs |  0.315 μs |  0.279 μs | 10.41 |    0.01 |       1 B |          NA |
+|                       |                 |              |           |           |       |         |           |             |
+| Beta                  | ForLoop_Double  |    236.71 μs |  0.046 μs |  0.038 μs |  2.00 |    0.00 |         - |          NA |
+| Chi                   | ForLoop_Double  |    118.11 μs |  0.027 μs |  0.025 μs |  1.00 |    0.00 |         - |          NA |
+| Chi-Squared           | ForLoop_Double  |    118.23 μs |  0.032 μs |  0.028 μs |  1.00 |    0.00 |         - |          NA |
+| Dirichlet             | ForLoop_Double  |    838.94 μs |  0.390 μs |  0.346 μs |  7.10 |    0.00 |       1 B |          NA |
+| F                     | ForLoop_Double  |    236.95 μs |  0.060 μs |  0.053 μs |  2.01 |    0.00 |         - |          NA |
+| Gamma                 | ForLoop_Double  |    118.16 μs |  0.036 μs |  0.034 μs |  1.00 |    0.00 |         - |          NA |
+| Halton                | ForLoop_Double  |     77.91 μs |  0.044 μs |  0.039 μs |  0.66 |    0.00 |         - |          NA |
+| Inverse-Gamma         | ForLoop_Double  |    117.95 μs |  0.033 μs |  0.030 μs |  1.00 |    0.00 |         - |          NA |
+| Log-Normal            | ForLoop_Double  |     77.41 μs |  6.522 μs |  6.101 μs |  0.66 |    0.05 |         - |          NA |
+| 'Multivariate Normal' | ForLoop_Double  |    423.92 μs |  0.200 μs |  0.187 μs |  3.59 |    0.00 |         - |          NA |
+| Sobol                 | ForLoop_Double  |     97.76 μs |  0.820 μs |  0.727 μs |  0.83 |    0.01 |         - |          NA |
+| Spatial.OnSphere      | ForLoop_Double  |     93.76 μs |  0.266 μs |  0.222 μs |  0.79 |    0.00 |         - |          NA |
+| StudentT              | ForLoop_Double  |    188.04 μs |  0.071 μs |  0.067 μs |  1.59 |    0.00 |         - |          NA |
+| Wishart               | ForLoop_Double  |  1,233.78 μs |  0.517 μs |  0.483 μs | 10.44 |    0.00 |       1 B |          NA |
+|                       |                 |              |           |           |       |         |           |             |
+| Beta                  | ForLoop_Decimal |  5,144.90 μs |  8.301 μs |  7.359 μs |  1.94 |    0.00 |       6 B |        2.00 |
+| Chi                   | ForLoop_Decimal |  3,562.01 μs |  4.473 μs |  4.184 μs |  1.35 |    0.00 |       3 B |        1.00 |
+| Chi-Squared           | ForLoop_Decimal |  2,632.78 μs |  4.642 μs |  4.343 μs |  0.99 |    0.00 |       3 B |        1.00 |
+| Dirichlet             | ForLoop_Decimal | 16,023.49 μs | 40.177 μs | 37.582 μs |  6.06 |    0.02 |      23 B |        7.67 |
+| F                     | ForLoop_Decimal |  5,383.20 μs |  8.843 μs |  7.385 μs |  2.03 |    0.00 |       6 B |        2.00 |
+| Gamma                 | ForLoop_Decimal |  2,646.03 μs |  4.818 μs |  4.506 μs |  1.00 |    0.00 |       3 B |        1.00 |
+| Halton                | ForLoop_Decimal |  1,078.24 μs |  0.400 μs |  0.374 μs |  0.41 |    0.00 |       1 B |        0.33 |
+| Inverse-Gamma         | ForLoop_Decimal |  2,724.48 μs |  5.742 μs |  5.371 μs |  1.03 |    0.00 |       3 B |        1.00 |
+| Log-Normal            | ForLoop_Decimal |  2,489.05 μs |  1.801 μs |  1.597 μs |  0.94 |    0.00 |       3 B |        1.00 |
+| 'Multivariate Normal' | ForLoop_Decimal |  1,618.08 μs |  3.925 μs |  3.479 μs |  0.61 |    0.00 |       1 B |        0.33 |
+| Sobol                 | ForLoop_Decimal |    112.01 μs |  0.277 μs |  0.259 μs |  0.04 |    0.00 |         - |        0.00 |
+| Spatial.OnSphere      | ForLoop_Decimal |  2,053.49 μs |  3.559 μs |  3.329 μs |  0.78 |    0.00 |       3 B |        1.00 |
+| StudentT              | ForLoop_Decimal |  4,188.85 μs |  8.192 μs |  7.662 μs |  1.58 |    0.00 |       6 B |        2.00 |
+| Wishart               | ForLoop_Decimal | 19,428.64 μs | 58.893 μs | 52.208 μs |  7.34 |    0.02 |      23 B |        7.67 |
+|                       |                 |              |           |           |       |         |           |             |
+| Beta                  | ForLoop_Fixed   |    310.17 μs |  0.924 μs |  0.865 μs |  2.08 |    0.01 |         - |          NA |
+| Chi                   | ForLoop_Fixed   |    155.51 μs |  0.258 μs |  0.229 μs |  1.04 |    0.00 |         - |          NA |
+| Chi-Squared           | ForLoop_Fixed   |    152.48 μs |  0.298 μs |  0.264 μs |  1.02 |    0.00 |         - |          NA |
+| Dirichlet             | ForLoop_Fixed   |    890.91 μs |  5.853 μs |  5.475 μs |  5.98 |    0.04 |       1 B |          NA |
+| F                     | ForLoop_Fixed   |    311.59 μs |  0.708 μs |  0.628 μs |  2.09 |    0.01 |         - |          NA |
+| Gamma                 | ForLoop_Fixed   |    149.09 μs |  0.350 μs |  0.328 μs |  1.00 |    0.00 |         - |          NA |
+| Halton                | ForLoop_Fixed   |    337.27 μs |  0.863 μs |  0.807 μs |  2.26 |    0.01 |         - |          NA |
+| Inverse-Gamma         | ForLoop_Fixed   |    152.49 μs |  0.367 μs |  0.343 μs |  1.02 |    0.00 |         - |          NA |
+| Log-Normal            | ForLoop_Fixed   |     71.86 μs |  0.145 μs |  0.121 μs |  0.48 |    0.00 |         - |          NA |
+| 'Multivariate Normal' | ForLoop_Fixed   |    406.85 μs |  0.716 μs |  0.670 μs |  2.73 |    0.01 |         - |          NA |
+| Sobol                 | ForLoop_Fixed   |    248.21 μs |  0.660 μs |  0.617 μs |  1.66 |    0.01 |         - |          NA |
+| Spatial.OnSphere      | ForLoop_Fixed   |     75.00 μs |  0.162 μs |  0.151 μs |  0.50 |    0.00 |         - |          NA |
+| StudentT              | ForLoop_Fixed   |    224.50 μs |  0.560 μs |  0.496 μs |  1.51 |    0.00 |         - |          NA |
+| Wishart               | ForLoop_Fixed   |  1,257.92 μs |  3.347 μs |  3.131 μs |  8.44 |    0.03 |       1 B |          NA |
+|                       |                 |              |           |           |       |         |           |             |
+| Beta                  | ForEach_Float   |    184.10 μs |  0.049 μs |  0.046 μs |  1.96 |    0.00 |         - |          NA |
+| Chi                   | ForEach_Float   |     94.22 μs |  0.043 μs |  0.033 μs |  1.00 |    0.00 |         - |          NA |
+| Chi-Squared           | ForEach_Float   |     93.95 μs |  0.041 μs |  0.039 μs |  1.00 |    0.00 |         - |          NA |
+| Dirichlet             | ForEach_Float   |    714.01 μs |  0.972 μs |  0.909 μs |  7.59 |    0.01 |       1 B |          NA |
+| F                     | ForEach_Float   |    184.03 μs |  0.086 μs |  0.081 μs |  1.96 |    0.00 |         - |          NA |
+| Gamma                 | ForEach_Float   |     94.04 μs |  0.044 μs |  0.039 μs |  1.00 |    0.00 |         - |          NA |
+| Halton                | ForEach_Float   |    168.54 μs |  0.455 μs |  0.403 μs |  1.79 |    0.00 |         - |          NA |
+| Inverse-Gamma         | ForEach_Float   |     93.87 μs |  0.088 μs |  0.069 μs |  1.00 |    0.00 |         - |          NA |
+| Log-Normal            | ForEach_Float   |     64.53 μs |  0.034 μs |  0.032 μs |  0.69 |    0.00 |         - |          NA |
+| 'Multivariate Normal' | ForEach_Float   |    330.74 μs |  0.281 μs |  0.263 μs |  3.52 |    0.00 |         - |          NA |
+| Sobol                 | ForEach_Float   |    207.70 μs |  1.317 μs |  1.232 μs |  2.21 |    0.01 |         - |          NA |
+| Spatial.OnSphere      | ForEach_Float   |     57.06 μs |  0.023 μs |  0.019 μs |  0.61 |    0.00 |         - |          NA |
+| StudentT              | ForEach_Float   |    151.09 μs |  0.137 μs |  0.107 μs |  1.61 |    0.00 |         - |          NA |
+| Wishart               | ForEach_Float   |    957.29 μs |  1.240 μs |  1.160 μs | 10.18 |    0.01 |       1 B |          NA |
+|                       |                 |              |           |           |       |         |           |             |
+| Beta                  | ForEach_Double  |    242.04 μs |  0.334 μs |  0.312 μs |  1.98 |    0.00 |         - |          NA |
+| Chi                   | ForEach_Double  |    122.55 μs |  0.301 μs |  0.282 μs |  1.00 |    0.00 |         - |          NA |
+| Chi-Squared           | ForEach_Double  |    122.48 μs |  0.275 μs |  0.258 μs |  1.00 |    0.00 |         - |          NA |
+| Dirichlet             | ForEach_Double  |    927.86 μs |  1.289 μs |  1.206 μs |  7.59 |    0.01 |       1 B |          NA |
+| F                     | ForEach_Double  |    241.15 μs |  0.295 μs |  0.276 μs |  1.97 |    0.00 |         - |          NA |
+| Gamma                 | ForEach_Double  |    122.29 μs |  0.197 μs |  0.184 μs |  1.00 |    0.00 |         - |          NA |
+| Halton                | ForEach_Double  |    167.32 μs |  0.424 μs |  0.376 μs |  1.37 |    0.00 |         - |          NA |
+| Inverse-Gamma         | ForEach_Double  |    121.39 μs |  0.169 μs |  0.158 μs |  0.99 |    0.00 |         - |          NA |
+| Log-Normal            | ForEach_Double  |     77.05 μs |  0.615 μs |  0.575 μs |  0.63 |    0.00 |         - |          NA |
+| 'Multivariate Normal' | ForEach_Double  |    443.80 μs |  0.602 μs |  0.563 μs |  3.63 |    0.01 |         - |          NA |
+| Sobol                 | ForEach_Double  |    201.60 μs |  0.333 μs |  0.311 μs |  1.65 |    0.00 |         - |          NA |
+| Spatial.OnSphere      | ForEach_Double  |     98.39 μs |  0.857 μs |  0.801 μs |  0.80 |    0.01 |         - |          NA |
+| StudentT              | ForEach_Double  |    191.66 μs |  0.316 μs |  0.296 μs |  1.57 |    0.00 |         - |          NA |
+| Wishart               | ForEach_Double  |  1,256.37 μs |  2.765 μs |  2.586 μs | 10.27 |    0.03 |       1 B |          NA |
+|                       |                 |              |           |           |       |         |           |             |
+| Beta                  | ForEach_Decimal |  5,164.84 μs | 13.160 μs | 12.310 μs |  1.92 |    0.01 |       6 B |        2.00 |
+| Chi                   | ForEach_Decimal |  3,581.23 μs |  6.726 μs |  5.962 μs |  1.33 |    0.01 |       3 B |        1.00 |
+| Chi-Squared           | ForEach_Decimal |  2,625.89 μs | 11.127 μs |  9.291 μs |  0.97 |    0.01 |       3 B |        1.00 |
+| Dirichlet             | ForEach_Decimal | 16,153.57 μs | 71.147 μs | 59.411 μs |  6.00 |    0.05 |      23 B |        7.67 |
+| F                     | ForEach_Decimal |  5,468.44 μs | 35.258 μs | 32.980 μs |  2.03 |    0.02 |       6 B |        2.00 |
+| Gamma                 | ForEach_Decimal |  2,694.41 μs | 20.724 μs | 19.385 μs |  1.00 |    0.01 |       3 B |        1.00 |
+| Halton                | ForEach_Decimal |  1,191.82 μs | 14.120 μs | 12.517 μs |  0.44 |    0.01 |       1 B |        0.33 |
+| Inverse-Gamma         | ForEach_Decimal |  2,764.05 μs | 14.181 μs | 13.265 μs |  1.03 |    0.01 |       3 B |        1.00 |
+| Log-Normal            | ForEach_Decimal |  2,542.79 μs | 16.020 μs | 14.985 μs |  0.94 |    0.01 |       3 B |        1.00 |
+| 'Multivariate Normal' | ForEach_Decimal |  1,649.92 μs |  9.359 μs |  8.754 μs |  0.61 |    0.01 |       1 B |        0.33 |
+| Sobol                 | ForEach_Decimal |    200.89 μs |  0.898 μs |  0.840 μs |  0.07 |    0.00 |         - |        0.00 |
+| Spatial.OnSphere      | ForEach_Decimal |  2,032.19 μs |  8.072 μs |  7.550 μs |  0.75 |    0.01 |       3 B |        1.00 |
+| StudentT              | ForEach_Decimal |  4,135.89 μs | 12.387 μs | 10.981 μs |  1.54 |    0.01 |       6 B |        2.00 |
+| Wishart               | ForEach_Decimal | 19,216.95 μs | 85.705 μs | 80.169 μs |  7.13 |    0.06 |      23 B |        7.67 |
+|                       |                 |              |           |           |       |         |           |             |
+| Beta                  | ForEach_Fixed   |    309.83 μs |  4.033 μs |  3.773 μs |  2.01 |    0.02 |         - |          NA |
+| Chi                   | ForEach_Fixed   |    154.53 μs |  0.850 μs |  0.795 μs |  1.00 |    0.01 |         - |          NA |
+| Chi-Squared           | ForEach_Fixed   |    152.95 μs |  0.424 μs |  0.397 μs |  0.99 |    0.00 |         - |          NA |
+| Dirichlet             | ForEach_Fixed   |  1,006.04 μs |  3.047 μs |  2.850 μs |  6.53 |    0.03 |       1 B |          NA |
+| F                     | ForEach_Fixed   |    319.55 μs |  0.967 μs |  0.857 μs |  2.08 |    0.01 |         - |          NA |
+| Gamma                 | ForEach_Fixed   |    153.95 μs |  0.545 μs |  0.509 μs |  1.00 |    0.00 |         - |          NA |
+| Halton                | ForEach_Fixed   |    461.61 μs |  1.668 μs |  1.478 μs |  3.00 |    0.01 |         - |          NA |
+| Inverse-Gamma         | ForEach_Fixed   |    155.29 μs |  0.477 μs |  0.446 μs |  1.01 |    0.00 |         - |          NA |
+| Log-Normal            | ForEach_Fixed   |     74.62 μs |  0.384 μs |  0.359 μs |  0.48 |    0.00 |         - |          NA |
+| 'Multivariate Normal' | ForEach_Fixed   |    431.90 μs |  2.450 μs |  2.292 μs |  2.81 |    0.02 |         - |          NA |
+| Sobol                 | ForEach_Fixed   |    341.95 μs |  0.688 μs |  0.643 μs |  2.22 |    0.01 |         - |          NA |
+| Spatial.OnSphere      | ForEach_Fixed   |     79.34 μs |  0.281 μs |  0.263 μs |  0.52 |    0.00 |         - |          NA |
+| StudentT              | ForEach_Fixed   |    231.89 μs |  0.688 μs |  0.644 μs |  1.51 |    0.01 |         - |          NA |
+| Wishart               | ForEach_Fixed   |  1,298.20 μs |  2.010 μs |  1.782 μs |  8.43 |    0.03 |       1 B |          NA |
+|                       |                 |              |           |           |       |         |           |             |
+| Beta                  | Linq_Float      |    187.24 μs |  0.286 μs |  0.267 μs |  1.99 |    0.00 |         - |          NA |
+| Chi                   | Linq_Float      |     95.79 μs |  0.290 μs |  0.271 μs |  1.02 |    0.00 |         - |          NA |
+| Chi-Squared           | Linq_Float      |     95.17 μs |  0.242 μs |  0.226 μs |  1.01 |    0.00 |         - |          NA |
+| Dirichlet             | Linq_Float      |    770.41 μs |  2.289 μs |  2.030 μs |  8.18 |    0.02 |     121 B |          NA |
+| F                     | Linq_Float      |    185.65 μs |  0.819 μs |  0.726 μs |  1.97 |    0.01 |         - |          NA |
+| Gamma                 | Linq_Float      |     94.19 μs |  0.035 μs |  0.031 μs |  1.00 |    0.00 |         - |          NA |
+| Halton                | Linq_Float      |    171.39 μs |  0.227 μs |  0.212 μs |  1.82 |    0.00 |     120 B |          NA |
+| Inverse-Gamma         | Linq_Float      |     94.95 μs |  0.438 μs |  0.409 μs |  1.01 |    0.00 |         - |          NA |
+| Log-Normal            | Linq_Float      |     60.33 μs |  0.075 μs |  0.062 μs |  0.64 |    0.00 |         - |          NA |
+| 'Multivariate Normal' | Linq_Float      |    340.21 μs |  0.260 μs |  0.243 μs |  3.61 |    0.00 |     120 B |          NA |
+| Sobol                 | Linq_Float      |    196.36 μs |  1.072 μs |  0.951 μs |  2.08 |    0.01 |     120 B |          NA |
+| Spatial.OnSphere      | Linq_Float      |     57.59 μs |  0.083 μs |  0.069 μs |  0.61 |    0.00 |     120 B |          NA |
+| StudentT              | Linq_Float      |    149.59 μs |  0.301 μs |  0.282 μs |  1.59 |    0.00 |         - |          NA |
+| Wishart               | Linq_Float      |    963.27 μs |  2.366 μs |  2.213 μs | 10.23 |    0.02 |      65 B |          NA |
+|                       |                 |              |           |           |       |         |           |             |
+| Beta                  | Linq_Double     |    243.68 μs |  0.670 μs |  0.594 μs |  1.99 |    0.01 |         - |          NA |
+| Chi                   | Linq_Double     |    122.62 μs |  0.381 μs |  0.338 μs |  1.00 |    0.00 |         - |          NA |
+| Chi-Squared           | Linq_Double     |    122.66 μs |  0.106 μs |  0.094 μs |  1.00 |    0.00 |         - |          NA |
+| Dirichlet             | Linq_Double     |    963.06 μs |  2.126 μs |  1.988 μs |  7.86 |    0.03 |     121 B |          NA |
+| F                     | Linq_Double     |    242.40 μs |  0.371 μs |  0.347 μs |  1.98 |    0.01 |         - |          NA |
+| Gamma                 | Linq_Double     |    122.58 μs |  0.434 μs |  0.385 μs |  1.00 |    0.00 |         - |          NA |
+| Halton                | Linq_Double     |    171.42 μs |  0.696 μs |  0.651 μs |  1.40 |    0.01 |     120 B |          NA |
+| Inverse-Gamma         | Linq_Double     |    122.86 μs |  0.237 μs |  0.210 μs |  1.00 |    0.00 |         - |          NA |
+| Log-Normal            | Linq_Double     |     77.98 μs |  0.093 μs |  0.087 μs |  0.64 |    0.00 |         - |          NA |
+| 'Multivariate Normal' | Linq_Double     |    471.48 μs |  2.277 μs |  2.130 μs |  3.85 |    0.02 |     120 B |          NA |
+| Sobol                 | Linq_Double     |    180.43 μs |  1.591 μs |  1.411 μs |  1.47 |    0.01 |     120 B |          NA |
+| Spatial.OnSphere      | Linq_Double     |     98.80 μs |  0.666 μs |  0.623 μs |  0.81 |    0.01 |     120 B |          NA |
+| StudentT              | Linq_Double     |    193.79 μs |  0.294 μs |  0.261 μs |  1.58 |    0.01 |         - |          NA |
+| Wishart               | Linq_Double     |  1,264.02 μs |  2.518 μs |  2.232 μs | 10.31 |    0.04 |      65 B |          NA |
+|                       |                 |              |           |           |       |         |           |             |
+| Beta                  | Linq_Decimal    |  5,157.21 μs | 12.521 μs |  9.776 μs |  1.95 |    0.01 |       6 B |        2.00 |
+| Chi                   | Linq_Decimal    |  3,624.13 μs | 12.119 μs | 10.743 μs |  1.37 |    0.01 |       3 B |        1.00 |
+| Chi-Squared           | Linq_Decimal    |  2,655.04 μs | 10.160 μs |  9.504 μs |  1.00 |    0.00 |       3 B |        1.00 |
+| Dirichlet             | Linq_Decimal    | 16,286.78 μs | 72.731 μs | 64.474 μs |  6.15 |    0.03 |     151 B |       50.33 |
+| F                     | Linq_Decimal    |  5,425.70 μs | 35.166 μs | 32.895 μs |  2.05 |    0.01 |       6 B |        2.00 |
+| Gamma                 | Linq_Decimal    |  2,650.20 μs |  8.872 μs |  8.299 μs |  1.00 |    0.00 |       3 B |        1.00 |
+| Halton                | Linq_Decimal    |  1,169.11 μs |  2.136 μs |  1.998 μs |  0.44 |    0.00 |     129 B |       43.00 |
+| Inverse-Gamma         | Linq_Decimal    |  2,732.41 μs |  7.619 μs |  7.127 μs |  1.03 |    0.00 |       3 B |        1.00 |
+| Log-Normal            | Linq_Decimal    |  2,509.21 μs |  5.347 μs |  4.740 μs |  0.95 |    0.00 |       3 B |        1.00 |
+| 'Multivariate Normal' | Linq_Decimal    |  1,663.76 μs |  3.297 μs |  2.922 μs |  0.63 |    0.00 |     129 B |       43.00 |
+| Sobol                 | Linq_Decimal    |    209.05 μs |  0.482 μs |  0.402 μs |  0.08 |    0.00 |     128 B |       42.67 |
+| Spatial.OnSphere      | Linq_Decimal    |  2,040.71 μs |  2.043 μs |  1.706 μs |  0.77 |    0.00 |     131 B |       43.67 |
+| StudentT              | Linq_Decimal    |  4,136.41 μs |  5.727 μs |  5.357 μs |  1.56 |    0.01 |       6 B |        2.00 |
+| Wishart               | Linq_Decimal    | 19,163.26 μs | 36.996 μs | 34.606 μs |  7.23 |    0.03 |      87 B |       29.00 |
+|                       |                 |              |           |           |       |         |           |             |
+| Beta                  | Linq_Fixed      |    308.54 μs |  2.768 μs |  2.590 μs |  2.10 |    0.02 |         - |          NA |
+| Chi                   | Linq_Fixed      |    153.34 μs |  0.107 μs |  0.095 μs |  1.05 |    0.00 |         - |          NA |
+| Chi-Squared           | Linq_Fixed      |    146.81 μs |  0.170 μs |  0.150 μs |  1.00 |    0.00 |         - |          NA |
+| Dirichlet             | Linq_Fixed      |    989.80 μs |  0.634 μs |  0.593 μs |  6.75 |    0.01 |     121 B |          NA |
+| F                     | Linq_Fixed      |    315.74 μs |  0.242 μs |  0.227 μs |  2.15 |    0.00 |         - |          NA |
+| Gamma                 | Linq_Fixed      |    146.70 μs |  0.153 μs |  0.143 μs |  1.00 |    0.00 |         - |          NA |
+| Halton                | Linq_Fixed      |    459.55 μs |  0.329 μs |  0.308 μs |  3.13 |    0.00 |     120 B |          NA |
+| Inverse-Gamma         | Linq_Fixed      |    152.51 μs |  0.122 μs |  0.108 μs |  1.04 |    0.00 |         - |          NA |
+| Log-Normal            | Linq_Fixed      |     73.43 μs |  0.066 μs |  0.058 μs |  0.50 |    0.00 |         - |          NA |
+| 'Multivariate Normal' | Linq_Fixed      |    444.18 μs |  0.713 μs |  0.667 μs |  3.03 |    0.01 |     120 B |          NA |
+| Sobol                 | Linq_Fixed      |    335.18 μs |  0.405 μs |  0.379 μs |  2.28 |    0.00 |     120 B |          NA |
+| Spatial.OnSphere      | Linq_Fixed      |     80.82 μs |  0.045 μs |  0.035 μs |  0.55 |    0.00 |     120 B |          NA |
+| StudentT              | Linq_Fixed      |    226.06 μs |  0.155 μs |  0.138 μs |  1.54 |    0.00 |         - |          NA |
+| Wishart               | Linq_Fixed      |  1,285.11 μs |  1.576 μs |  1.475 μs |  8.76 |    0.01 |      65 B |          NA |
+
+// * Warnings *
+MultimodalDistribution
+  SamplerAdvancedBenchmarks.Log-Normal: MinIterationTime=500ms, IterationCount=15 -> It seems that the distribution can have several modes (mValue = 3)
+
+// * Hints *
+Outliers
+  SamplerAdvancedBenchmarks.Dirichlet: MinIterationTime=500ms, IterationCount=15             -> 1 outlier  was  removed (627.38 μs)
+  SamplerAdvancedBenchmarks.F: MinIterationTime=500ms, IterationCount=15                     -> 1 outlier  was  detected (179.02 μs)
+  SamplerAdvancedBenchmarks.Gamma: MinIterationTime=500ms, IterationCount=15                 -> 1 outlier  was  removed, 2 outliers were detected (89.75 μs, 89.97 μs)
+  SamplerAdvancedBenchmarks.Halton: MinIterationTime=500ms, IterationCount=15                -> 1 outlier  was  removed (71.19 μs)
+  SamplerAdvancedBenchmarks.Inverse-Gamma: MinIterationTime=500ms, IterationCount=15         -> 1 outlier  was  removed (89.73 μs)
+  SamplerAdvancedBenchmarks.Log-Normal: MinIterationTime=500ms, IterationCount=15            -> 1 outlier  was  removed (55.83 μs)
+  SamplerAdvancedBenchmarks.'Multivariate Normal': MinIterationTime=500ms, IterationCount=15 -> 1 outlier  was  removed (322.49 μs)
+  SamplerAdvancedBenchmarks.Spatial.OnSphere: MinIterationTime=500ms, IterationCount=15      -> 2 outliers were removed (52.80 μs, 53.40 μs)
+  SamplerAdvancedBenchmarks.Wishart: MinIterationTime=500ms, IterationCount=15               -> 1 outlier  was  removed (936.17 μs)
+  SamplerAdvancedBenchmarks.Beta: MinIterationTime=500ms, IterationCount=15                  -> 2 outliers were removed (236.84 μs, 236.87 μs)
+  SamplerAdvancedBenchmarks.Chi-Squared: MinIterationTime=500ms, IterationCount=15           -> 1 outlier  was  removed (118.36 μs)
+  SamplerAdvancedBenchmarks.Dirichlet: MinIterationTime=500ms, IterationCount=15             -> 1 outlier  was  removed (839.86 μs)
+  SamplerAdvancedBenchmarks.F: MinIterationTime=500ms, IterationCount=15                     -> 1 outlier  was  removed (237.09 μs)
+  SamplerAdvancedBenchmarks.Halton: MinIterationTime=500ms, IterationCount=15                -> 1 outlier  was  removed (78.21 μs)
+  SamplerAdvancedBenchmarks.Inverse-Gamma: MinIterationTime=500ms, IterationCount=15         -> 1 outlier  was  removed (118.16 μs)
+  SamplerAdvancedBenchmarks.Sobol: MinIterationTime=500ms, IterationCount=15                 -> 1 outlier  was  removed (100.14 μs)
+  SamplerAdvancedBenchmarks.Spatial.OnSphere: MinIterationTime=500ms, IterationCount=15      -> 2 outliers were removed (94.64 μs, 103.86 μs)
+  SamplerAdvancedBenchmarks.StudentT: MinIterationTime=500ms, IterationCount=15              -> 1 outlier  was  detected (187.88 μs)
+  SamplerAdvancedBenchmarks.Wishart: MinIterationTime=500ms, IterationCount=15               -> 1 outlier  was  detected (1.23 ms)
+  SamplerAdvancedBenchmarks.Beta: MinIterationTime=500ms, IterationCount=15                  -> 1 outlier  was  removed (5.17 ms)
+  SamplerAdvancedBenchmarks.F: MinIterationTime=500ms, IterationCount=15                     -> 2 outliers were removed, 3 outliers were detected (5.37 ms, 5.40 ms, 5.41 ms)
+  SamplerAdvancedBenchmarks.Log-Normal: MinIterationTime=500ms, IterationCount=15            -> 1 outlier  was  removed (2.51 ms)
+  SamplerAdvancedBenchmarks.'Multivariate Normal': MinIterationTime=500ms, IterationCount=15 -> 1 outlier  was  removed (1.64 ms)
+  SamplerAdvancedBenchmarks.Wishart: MinIterationTime=500ms, IterationCount=15               -> 1 outlier  was  removed, 2 outliers were detected (19.32 ms, 19.89 ms)
+  SamplerAdvancedBenchmarks.Chi: MinIterationTime=500ms, IterationCount=15                   -> 1 outlier  was  removed (156.51 μs)
+  SamplerAdvancedBenchmarks.Chi-Squared: MinIterationTime=500ms, IterationCount=15           -> 1 outlier  was  removed (153.29 μs)
+  SamplerAdvancedBenchmarks.F: MinIterationTime=500ms, IterationCount=15                     -> 1 outlier  was  removed (314.98 μs)
+  SamplerAdvancedBenchmarks.Log-Normal: MinIterationTime=500ms, IterationCount=15            -> 2 outliers were removed (72.30 μs, 72.47 μs)
+  SamplerAdvancedBenchmarks.StudentT: MinIterationTime=500ms, IterationCount=15              -> 1 outlier  was  removed (226.89 μs)
+  SamplerAdvancedBenchmarks.Chi: MinIterationTime=500ms, IterationCount=15                   -> 3 outliers were removed, 5 outliers were detected (94.13 μs, 94.18 μs, 94.29 μs..94.61 μs)
+  SamplerAdvancedBenchmarks.Dirichlet: MinIterationTime=500ms, IterationCount=15             -> 1 outlier  was  detected (710.93 μs)
+  SamplerAdvancedBenchmarks.Gamma: MinIterationTime=500ms, IterationCount=15                 -> 1 outlier  was  removed, 2 outliers were detected (93.98 μs, 94.27 μs)
+  SamplerAdvancedBenchmarks.Halton: MinIterationTime=500ms, IterationCount=15                -> 1 outlier  was  removed (169.97 μs)
+  SamplerAdvancedBenchmarks.Inverse-Gamma: MinIterationTime=500ms, IterationCount=15         -> 3 outliers were removed (94.31 μs..98.32 μs)
+  SamplerAdvancedBenchmarks.Sobol: MinIterationTime=500ms, IterationCount=15                 -> 1 outlier  was  detected (205.04 μs)
+  SamplerAdvancedBenchmarks.Spatial.OnSphere: MinIterationTime=500ms, IterationCount=15      -> 2 outliers were removed, 4 outliers were detected (57.02 μs, 57.02 μs, 57.11 μs, 57.40 μs)
+  SamplerAdvancedBenchmarks.StudentT: MinIterationTime=500ms, IterationCount=15              -> 3 outliers were removed (151.79 μs..153.21 μs)
+  SamplerAdvancedBenchmarks.Dirichlet: MinIterationTime=500ms, IterationCount=15             -> 1 outlier  was  detected (925.32 μs)
+  SamplerAdvancedBenchmarks.Halton: MinIterationTime=500ms, IterationCount=15                -> 1 outlier  was  removed (170.04 μs)
+  SamplerAdvancedBenchmarks.Chi: MinIterationTime=500ms, IterationCount=15                   -> 1 outlier  was  removed (3.62 ms)
+  SamplerAdvancedBenchmarks.Chi-Squared: MinIterationTime=500ms, IterationCount=15           -> 2 outliers were removed (2.67 ms, 2.70 ms)
+  SamplerAdvancedBenchmarks.Dirichlet: MinIterationTime=500ms, IterationCount=15             -> 2 outliers were removed (16.39 ms, 16.40 ms)
+  SamplerAdvancedBenchmarks.F: MinIterationTime=500ms, IterationCount=15                     -> 1 outlier  was  detected (5.38 ms)
+  SamplerAdvancedBenchmarks.Halton: MinIterationTime=500ms, IterationCount=15                -> 1 outlier  was  removed (1.24 ms)
+  SamplerAdvancedBenchmarks.StudentT: MinIterationTime=500ms, IterationCount=15              -> 1 outlier  was  removed (4.16 ms)
+  SamplerAdvancedBenchmarks.Halton: MinIterationTime=500ms, IterationCount=15                -> 1 outlier  was  removed (465.38 μs)
+  SamplerAdvancedBenchmarks.Wishart: MinIterationTime=500ms, IterationCount=15               -> 1 outlier  was  removed (1.30 ms)
+  SamplerAdvancedBenchmarks.Dirichlet: MinIterationTime=500ms, IterationCount=15             -> 1 outlier  was  removed, 3 outliers were detected (766.07 μs, 766.48 μs, 775.21 μs)
+  SamplerAdvancedBenchmarks.F: MinIterationTime=500ms, IterationCount=15                     -> 1 outlier  was  removed, 3 outliers were detected (183.98 μs, 183.99 μs, 186.38 μs)
+  SamplerAdvancedBenchmarks.Gamma: MinIterationTime=500ms, IterationCount=15                 -> 1 outlier  was  removed (94.34 μs)
+  SamplerAdvancedBenchmarks.Log-Normal: MinIterationTime=500ms, IterationCount=15            -> 2 outliers were removed (60.55 μs, 60.75 μs)
+  SamplerAdvancedBenchmarks.'Multivariate Normal': MinIterationTime=500ms, IterationCount=15 -> 1 outlier  was  detected (339.68 μs)
+  SamplerAdvancedBenchmarks.Sobol: MinIterationTime=500ms, IterationCount=15                 -> 1 outlier  was  removed (201.25 μs)
+  SamplerAdvancedBenchmarks.Spatial.OnSphere: MinIterationTime=500ms, IterationCount=15      -> 2 outliers were removed (57.83 μs, 57.95 μs)
+  SamplerAdvancedBenchmarks.Beta: MinIterationTime=500ms, IterationCount=15                  -> 1 outlier  was  removed (245.98 μs)
+  SamplerAdvancedBenchmarks.Chi: MinIterationTime=500ms, IterationCount=15                   -> 1 outlier  was  removed (123.68 μs)
+  SamplerAdvancedBenchmarks.Chi-Squared: MinIterationTime=500ms, IterationCount=15           -> 1 outlier  was  removed (123.20 μs)
+  SamplerAdvancedBenchmarks.Gamma: MinIterationTime=500ms, IterationCount=15                 -> 1 outlier  was  removed (123.73 μs)
+  SamplerAdvancedBenchmarks.Halton: MinIterationTime=500ms, IterationCount=15                -> 1 outlier  was  detected (169.60 μs)
+  SamplerAdvancedBenchmarks.Inverse-Gamma: MinIterationTime=500ms, IterationCount=15         -> 1 outlier  was  removed (124.12 μs)
+  SamplerAdvancedBenchmarks.Sobol: MinIterationTime=500ms, IterationCount=15                 -> 1 outlier  was  removed (185.82 μs)
+  SamplerAdvancedBenchmarks.StudentT: MinIterationTime=500ms, IterationCount=15              -> 1 outlier  was  removed, 3 outliers were detected (193.24 μs, 193.28 μs, 194.46 μs)
+  SamplerAdvancedBenchmarks.Beta: MinIterationTime=500ms, IterationCount=15                  -> 3 outliers were removed (5.24 ms..5.29 ms)
+  SamplerAdvancedBenchmarks.Chi: MinIterationTime=500ms, IterationCount=15                   -> 1 outlier  was  removed (3.66 ms)
+  SamplerAdvancedBenchmarks.Dirichlet: MinIterationTime=500ms, IterationCount=15             -> 1 outlier  was  removed (16.47 ms)
+  SamplerAdvancedBenchmarks.Log-Normal: MinIterationTime=500ms, IterationCount=15            -> 1 outlier  was  removed (2.52 ms)
+  SamplerAdvancedBenchmarks.'Multivariate Normal': MinIterationTime=500ms, IterationCount=15 -> 1 outlier  was  removed (1.67 ms)
+  SamplerAdvancedBenchmarks.Sobol: MinIterationTime=500ms, IterationCount=15                 -> 2 outliers were removed, 3 outliers were detected (207.76 μs, 210.09 μs, 210.24 μs)
+  SamplerAdvancedBenchmarks.Spatial.OnSphere: MinIterationTime=500ms, IterationCount=15      -> 2 outliers were removed (2.05 ms, 2.05 ms)
+  SamplerAdvancedBenchmarks.Chi: MinIterationTime=500ms, IterationCount=15                   -> 1 outlier  was  removed (154.40 μs)
+  SamplerAdvancedBenchmarks.Chi-Squared: MinIterationTime=500ms, IterationCount=15           -> 1 outlier  was  removed (147.58 μs)
+  SamplerAdvancedBenchmarks.Inverse-Gamma: MinIterationTime=500ms, IterationCount=15         -> 1 outlier  was  removed (154.16 μs)
+  SamplerAdvancedBenchmarks.Log-Normal: MinIterationTime=500ms, IterationCount=15            -> 1 outlier  was  removed (74.18 μs)
+  SamplerAdvancedBenchmarks.Spatial.OnSphere: MinIterationTime=500ms, IterationCount=15      -> 3 outliers were removed (81.02 μs..82.03 μs)
+  SamplerAdvancedBenchmarks.StudentT: MinIterationTime=500ms, IterationCount=15              -> 1 outlier  was  removed (226.78 μs)
+
+// * Legends *
+  Param       : Value of the 'Param' parameter
+  Mean        : Arithmetic mean of all measurements
+  Error       : Half of 99.9% confidence interval
+  StdDev      : Standard deviation of all measurements
+  Ratio       : Mean of the ratio distribution ([Current]/[Baseline])
+  RatioSD     : Standard deviation of the ratio distribution ([Current]/[Baseline])
+  Allocated   : Allocated memory per single operation (managed only, inclusive, 1KB = 1024B)
+  Alloc Ratio : Allocated memory ratio distribution ([Current]/[Baseline])
+  1 μs        : 1 Microsecond (0.000001 sec)
+
+// * Diagnostic Output - MemoryDiagnoser *
+
+
+// ***** BenchmarkRunner: End *****
+Run time: 00:54:12 (3252.19 sec), executed benchmarks: 168
+
+*/
