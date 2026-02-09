@@ -8,39 +8,41 @@ internal static class FixedConversion
     public static bool TryConvertFromChecked<TOther>(TOther value, out long result)
         where TOther : INumberBase<TOther>
     {
+        const int shift = ChiVariate.ChiFixed.FractionalBits;
+
         if (typeof(TOther) == typeof(byte))
         {
-            result = FixedMath.FromDecimal((byte)(object)value);
+            result = (long)(byte)(object)value << shift;
             return true;
         }
 
         if (typeof(TOther) == typeof(sbyte))
         {
-            result = FixedMath.FromDecimal((sbyte)(object)value);
+            result = (long)(sbyte)(object)value << shift;
             return true;
         }
 
         if (typeof(TOther) == typeof(short))
         {
-            result = FixedMath.FromDecimal((short)(object)value);
+            result = (long)(short)(object)value << shift;
             return true;
         }
 
         if (typeof(TOther) == typeof(ushort))
         {
-            result = FixedMath.FromDecimal((ushort)(object)value);
+            result = (long)(ushort)(object)value << shift;
             return true;
         }
 
         if (typeof(TOther) == typeof(int))
         {
-            result = FixedMath.FromDecimal((int)(object)value);
+            result = (long)(int)(object)value << shift;
             return true;
         }
 
         if (typeof(TOther) == typeof(uint))
         {
-            result = FixedMath.FromDecimal((uint)(object)value);
+            result = (long)(uint)(object)value << shift;
             return true;
         }
 
@@ -53,7 +55,7 @@ internal static class FixedConversion
                 return false;
             }
 
-            result = FixedMath.FromDecimal(longValue);
+            result = longValue << shift;
             return true;
         }
 
@@ -66,7 +68,7 @@ internal static class FixedConversion
                 return false;
             }
 
-            result = FixedMath.FromDecimal(ulongValue);
+            result = (long)(ulongValue << shift);
             return true;
         }
 
@@ -79,7 +81,7 @@ internal static class FixedConversion
                 return false;
             }
 
-            result = FixedMath.FromDecimal((decimal)floatValue);
+            result = FixedMath.FromFloat(floatValue);
             return true;
         }
 
@@ -92,7 +94,7 @@ internal static class FixedConversion
                 return false;
             }
 
-            result = FixedMath.FromDecimal((decimal)doubleValue);
+            result = FixedMath.FromDouble(doubleValue);
             return true;
         }
 
@@ -111,7 +113,7 @@ internal static class FixedConversion
                 return false;
             }
 
-            result = FixedMath.FromDecimal((decimal)halfValue);
+            result = FixedMath.FromDouble((double)halfValue);
             return true;
         }
 
@@ -140,7 +142,7 @@ internal static class FixedConversion
                     result = ChiVariate.ChiFixed.MaxValue.Raw;
                     return true;
                 default:
-                    result = FixedMath.FromDecimal(longValue);
+                    result = longValue << ChiVariate.ChiFixed.FractionalBits;
                     return true;
             }
         }
@@ -154,7 +156,7 @@ internal static class FixedConversion
                 return true;
             }
 
-            result = FixedMath.FromDecimal(ulongValue);
+            result = (long)(ulongValue << ChiVariate.ChiFixed.FractionalBits);
             return true;
         }
 
@@ -193,7 +195,7 @@ internal static class FixedConversion
                 return false;
             }
 
-            result = (TOther)(object)(byte)Math.Round(FixedMath.ToDecimal(raw));
+            result = (TOther)(object)(byte)FixedMath.ToIntegerRounded(raw);
             return true;
         }
 
@@ -207,7 +209,7 @@ internal static class FixedConversion
                 return false;
             }
 
-            result = (TOther)(object)(sbyte)Math.Round(FixedMath.ToDecimal(raw));
+            result = (TOther)(object)(sbyte)FixedMath.ToIntegerRounded(raw);
             return true;
         }
 
@@ -221,7 +223,7 @@ internal static class FixedConversion
                 return false;
             }
 
-            result = (TOther)(object)(short)Math.Round(FixedMath.ToDecimal(raw));
+            result = (TOther)(object)(short)FixedMath.ToIntegerRounded(raw);
             return true;
         }
 
@@ -234,13 +236,13 @@ internal static class FixedConversion
                 return false;
             }
 
-            result = (TOther)(object)(ushort)Math.Round(FixedMath.ToDecimal(raw));
+            result = (TOther)(object)(ushort)FixedMath.ToIntegerRounded(raw);
             return true;
         }
 
         if (typeof(TOther) == typeof(int))
         {
-            var value = Math.Round(FixedMath.ToDecimal(raw));
+            var value = FixedMath.ToIntegerRounded(raw);
             if (value is < int.MinValue or > int.MaxValue)
             {
                 result = default;
@@ -259,7 +261,7 @@ internal static class FixedConversion
                 return false;
             }
 
-            var value = Math.Round(FixedMath.ToDecimal(raw));
+            var value = FixedMath.ToIntegerRounded(raw);
             if (value > uint.MaxValue)
             {
                 result = default;
@@ -272,7 +274,7 @@ internal static class FixedConversion
 
         if (typeof(TOther) == typeof(long))
         {
-            result = (TOther)(object)(long)Math.Round(FixedMath.ToDecimal(raw));
+            result = (TOther)(object)FixedMath.ToIntegerRounded(raw);
             return true;
         }
 
@@ -284,19 +286,19 @@ internal static class FixedConversion
                 return false;
             }
 
-            result = (TOther)(object)(ulong)Math.Round(FixedMath.ToDecimal(raw));
+            result = (TOther)(object)(ulong)FixedMath.ToIntegerRounded(raw);
             return true;
         }
 
         if (typeof(TOther) == typeof(float))
         {
-            result = (TOther)(object)(float)FixedMath.ToDecimal(raw);
+            result = (TOther)(object)FixedMath.ToFloat(raw);
             return true;
         }
 
         if (typeof(TOther) == typeof(double))
         {
-            result = (TOther)(object)(double)FixedMath.ToDecimal(raw);
+            result = (TOther)(object)FixedMath.ToDouble(raw);
             return true;
         }
 
@@ -308,7 +310,7 @@ internal static class FixedConversion
 
         if (typeof(TOther) == typeof(Half))
         {
-            result = (TOther)(object)(Half)FixedMath.ToDecimal(raw);
+            result = (TOther)(object)(Half)FixedMath.ToFloat(raw);
             return true;
         }
 
@@ -340,7 +342,7 @@ internal static class FixedConversion
                 return true;
             }
 
-            result = (TOther)(object)(byte)Math.Round(FixedMath.ToDecimal(raw));
+            result = (TOther)(object)(byte)FixedMath.ToIntegerRounded(raw);
             return true;
         }
 
@@ -358,7 +360,7 @@ internal static class FixedConversion
                     result = (TOther)(object)sbyte.MaxValue;
                     return true;
                 default:
-                    result = (TOther)(object)(sbyte)Math.Round(FixedMath.ToDecimal(raw));
+                    result = (TOther)(object)(sbyte)FixedMath.ToIntegerRounded(raw);
                     return true;
             }
         }
@@ -377,7 +379,7 @@ internal static class FixedConversion
                     result = (TOther)(object)short.MaxValue;
                     return true;
                 default:
-                    result = (TOther)(object)(short)Math.Round(FixedMath.ToDecimal(raw));
+                    result = (TOther)(object)(short)FixedMath.ToIntegerRounded(raw);
                     return true;
             }
         }
@@ -397,13 +399,13 @@ internal static class FixedConversion
                 return true;
             }
 
-            result = (TOther)(object)(ushort)Math.Round(FixedMath.ToDecimal(raw));
+            result = (TOther)(object)(ushort)FixedMath.ToIntegerRounded(raw);
             return true;
         }
 
         if (typeof(TOther) == typeof(int))
         {
-            var value = Math.Round(FixedMath.ToDecimal(raw));
+            var value = FixedMath.ToIntegerRounded(raw);
             switch (value)
             {
                 case < int.MinValue:
@@ -426,7 +428,7 @@ internal static class FixedConversion
                 return true;
             }
 
-            var value = Math.Round(FixedMath.ToDecimal(raw));
+            var value = FixedMath.ToIntegerRounded(raw);
             if (value > uint.MaxValue)
             {
                 result = (TOther)(object)uint.MaxValue;
@@ -439,7 +441,7 @@ internal static class FixedConversion
 
         if (typeof(TOther) == typeof(long))
         {
-            result = (TOther)(object)(long)Math.Round(FixedMath.ToDecimal(raw));
+            result = (TOther)(object)FixedMath.ToIntegerRounded(raw);
             return true;
         }
 
@@ -451,7 +453,7 @@ internal static class FixedConversion
                 return true;
             }
 
-            result = (TOther)(object)(ulong)Math.Round(FixedMath.ToDecimal(raw));
+            result = (TOther)(object)(ulong)FixedMath.ToIntegerRounded(raw);
             return true;
         }
 
@@ -463,7 +465,7 @@ internal static class FixedConversion
     {
         if (typeof(TOther) == typeof(byte))
         {
-            var rounded = (long)Math.Round(FixedMath.ToDecimal(raw));
+            var rounded = FixedMath.ToIntegerRounded(raw);
             unchecked
             {
                 result = (TOther)(object)(byte)rounded;
@@ -474,7 +476,7 @@ internal static class FixedConversion
 
         if (typeof(TOther) == typeof(sbyte))
         {
-            var rounded = (long)Math.Round(FixedMath.ToDecimal(raw));
+            var rounded = FixedMath.ToIntegerRounded(raw);
             unchecked
             {
                 result = (TOther)(object)(sbyte)rounded;
@@ -485,42 +487,42 @@ internal static class FixedConversion
 
         if (typeof(TOther) == typeof(short))
         {
-            result = (TOther)(object)(short)Math.Round(FixedMath.ToDecimal(raw));
+            result = (TOther)(object)(short)FixedMath.ToIntegerRounded(raw);
 
             return true;
         }
 
         if (typeof(TOther) == typeof(ushort))
         {
-            result = (TOther)(object)(ushort)Math.Round(FixedMath.ToDecimal(raw));
+            result = (TOther)(object)(ushort)FixedMath.ToIntegerRounded(raw);
 
             return true;
         }
 
         if (typeof(TOther) == typeof(int))
         {
-            result = (TOther)(object)(int)Math.Round(FixedMath.ToDecimal(raw));
+            result = (TOther)(object)(int)FixedMath.ToIntegerRounded(raw);
 
             return true;
         }
 
         if (typeof(TOther) == typeof(uint))
         {
-            result = (TOther)(object)(uint)Math.Round(FixedMath.ToDecimal(raw));
+            result = (TOther)(object)(uint)FixedMath.ToIntegerRounded(raw);
 
             return true;
         }
 
         if (typeof(TOther) == typeof(long))
         {
-            result = (TOther)(object)(long)Math.Round(FixedMath.ToDecimal(raw));
+            result = (TOther)(object)FixedMath.ToIntegerRounded(raw);
 
             return true;
         }
 
         if (typeof(TOther) == typeof(ulong))
         {
-            result = (TOther)(object)(ulong)Math.Round(FixedMath.ToDecimal(raw));
+            result = (TOther)(object)(ulong)FixedMath.ToIntegerRounded(raw);
 
             return true;
         }

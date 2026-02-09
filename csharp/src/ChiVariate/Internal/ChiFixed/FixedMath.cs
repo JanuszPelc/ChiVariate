@@ -98,6 +98,52 @@ internal static class FixedMath
         return raw;
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static long FromDouble(double v)
+    {
+        const double scale = ChiVariate.ChiFixed.ScaleFactor;
+        var scaled = Math.Round(v * scale, MidpointRounding.ToEven);
+        if (scaled >= long.MaxValue) return ChiVariate.ChiFixed.PositiveInfinity.Raw;
+        if (scaled <= long.MinValue) return ChiVariate.ChiFixed.NegativeInfinity.Raw;
+        return (long)scaled;
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static double ToDouble(long raw)
+    {
+        return raw * (1.0 / ChiVariate.ChiFixed.ScaleFactor);
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static long FromFloat(float v)
+    {
+        return FromDouble(v);
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static float ToFloat(long raw)
+    {
+        return (float)ToDouble(raw);
+    }
+
+    /// <summary>
+    ///     Rounds raw Q31.32 to nearest integer using banker's rounding.
+    /// </summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static long ToIntegerRounded(long raw)
+    {
+        const long half = ChiVariate.ChiFixed.ScaleFactor >> 1;
+        const long fracMask = ChiVariate.ChiFixed.ScaleFactor - 1;
+
+        var intPart = raw >> ChiVariate.ChiFixed.FractionalBits;
+        var frac = raw & fracMask;
+
+        if (frac > half || (frac == half && (intPart & 1) != 0))
+            intPart++;
+
+        return intPart;
+    }
+
     private static UInt128[] CreatePow5Lookup()
     {
         var result = new UInt128[29];

@@ -21,13 +21,18 @@ MinIterationTime=500ms  IterationCount=15
 | Fixed_Mod                         |    793.0 ns |   1.80 ns |   1.50 ns |         - |
 | Double_Mod                        |  4,163.6 ns |  24.41 ns |  20.38 ns |         - |
 |                                   |             |           |           |           |
-| Fixed_FromDouble_ViaDecimal       | 46,665.9 ns | 307.45 ns | 272.55 ns |         - |
-| Fixed_FromDouble_ViaCreateChecked | 41,833.8 ns | 519.15 ns | 485.62 ns |         - |
-| Fixed_ToDouble_ViaDecimal         | 69,468.2 ns | 914.21 ns | 810.43 ns |         - |
-| Fixed_ToDouble_ViaCreateChecked   | 74,934.5 ns | 754.81 ns | 669.12 ns |         - |
-| Fixed_ToDecimal                   | 71,958.1 ns | 799.22 ns | 708.49 ns |         - |
-| Double_ToDecimal                  |  4,218.9 ns |  13.08 ns |  12.23 ns |         - |
-| Double_ViaDecimal                 |  4,665.9 ns |  11.83 ns |  10.48 ns |         - |
+| Fixed_FromDouble_ViaDecimal       | 45,371.0 ns | 412.80 ns | 365.90 ns |         - |
+| Fixed_FromDouble_ViaCreateChecked |  1,802.0 ns |   0.40 ns |   0.30 ns |         - |
+| Fixed_ToDouble_ViaDecimal         | 70,478.0 ns | 1109.60 ns | 983.60 ns |         - |
+| Fixed_ToDouble_ViaCreateChecked   |  1,919.0 ns |   1.00 ns |   0.90 ns |         - |
+| Fixed_FromFloat_ViaCreateChecked  |  1,841.0 ns |   1.00 ns |   0.80 ns |         - |
+| Fixed_ToFloat_ViaCreateChecked    |  1,958.0 ns |   0.60 ns |   0.50 ns |         - |
+| Fixed_FromInt_ViaCreateChecked    |  1,138.0 ns |   0.70 ns |   0.60 ns |         - |
+| Fixed_ToInt_ViaCreateChecked      |  1,909.0 ns |  17.50 ns |  15.50 ns |         - |
+| Fixed_FromDecimal                 | 38,391.0 ns |  38.40 ns |  35.90 ns |         - |
+| Fixed_ToDecimal                   | 69,302.0 ns | 1340.40 ns | 1188.20 ns |         - |
+| Double_ToDecimal                  |  4,185.0 ns |   4.60 ns |   3.60 ns |         - |
+| Double_FromDecimal                |  1,099.0 ns |   0.50 ns |   0.40 ns |         - |
 |                                   |             |           |           |           |
 | Fixed_Exp                         |  6,417.0 ns |  15.91 ns |  14.88 ns |         - |
 | Double_Exp                        |  2,994.2 ns |  24.17 ns |  21.43 ns |         - |
@@ -69,11 +74,9 @@ Outliers
   FixedBenchmarks.Fixed_Div: MinIterationTime=500ms, IterationCount=15                       -> 1 outlier  was  detected (4.04 us)
   FixedBenchmarks.Fixed_Mod: MinIterationTime=500ms, IterationCount=15                       -> 2 outliers were removed, 4 outliers were detected (791.30 ns, 792.94 ns, 798.09 ns, 799.21 ns)
   FixedBenchmarks.Double_Mod: MinIterationTime=500ms, IterationCount=15                      -> 2 outliers were removed, 3 outliers were detected (4.12 us, 4.23 us, 4.26 us)
-  FixedBenchmarks.Fixed_FromDouble_ViaDecimal: MinIterationTime=500ms, IterationCount=15     -> 1 outlier  was  removed, 2 outliers were detected (46.00 us, 47.35 us)
+  FixedBenchmarks.Fixed_FromDouble_ViaDecimal: MinIterationTime=500ms, IterationCount=15     -> 1 outlier  was  removed (47.35 us)
   FixedBenchmarks.Fixed_ToDouble_ViaDecimal: MinIterationTime=500ms, IterationCount=15       -> 1 outlier  was  removed (71.94 us)
-  FixedBenchmarks.Fixed_ToDouble_ViaCreateChecked: MinIterationTime=500ms, IterationCount=15 -> 1 outlier  was  removed (77.31 us)
-  FixedBenchmarks.Fixed_ToDecimal: MinIterationTime=500ms, IterationCount=15                 -> 1 outlier  was  removed, 2 outliers were detected (70.11 us, 74.86 us)
-  FixedBenchmarks.Double_ViaDecimal: MinIterationTime=500ms, IterationCount=15               -> 1 outlier  was  removed, 2 outliers were detected (4.64 us, 4.70 us)
+  FixedBenchmarks.Fixed_ToDecimal: MinIterationTime=500ms, IterationCount=15                 -> 1 outlier  was  removed (74.86 us)
   FixedBenchmarks.Double_Exp: MinIterationTime=500ms, IterationCount=15                      -> 1 outlier  was  removed, 2 outliers were detected (2.95 us, 3.04 us)
   FixedBenchmarks.Fixed_Pow: MinIterationTime=500ms, IterationCount=15                       -> 1 outlier  was  removed (11.84 us)
   FixedBenchmarks.Fixed_Floor: MinIterationTime=500ms, IterationCount=15                     -> 2 outliers were removed (540.54 ns, 542.08 ns)
@@ -96,9 +99,9 @@ Outliers
 
 
 // ***** BenchmarkRunner: End *****
-Run time: 00:14:35 (875.46 sec), executed benchmarks: 47
+Run time: 00:14:35 (875.46 sec), executed benchmarks: 52
 
-Global total time: 00:14:41 (881.85 sec), executed benchmarks: 47
+Global total time: 00:14:41 (881.85 sec), executed benchmarks: 52
 // * Artifacts cleanup *
 Artifacts cleanup is finished
 
