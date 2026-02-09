@@ -393,12 +393,8 @@ internal static class FixedMath
     }
 
     /// <summary>
-    ///     Fixed-point division with scaling to maintain precision.
+    ///     Fixed-point division with saturation on overflow.
     /// </summary>
-    /// <remarks>
-    ///     Scales the numerator up by the scale factor before dividing.
-    ///     This requires 128-bit arithmetic to avoid overflow.
-    /// </remarks>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static long Div(long a, long b)
     {
@@ -408,71 +404,47 @@ internal static class FixedMath
         var uA = (ulong)(a < 0 ? -a : a);
         var uB = (ulong)(b < 0 ? -b : b);
 
-        // Scale numerator by FractionalBits, splitting into (hi, lo) for 128-bit dividend
-        const int integerBits = 64 - ChiVariate.ChiFixed.FractionalBits;
-        var dividendHi = uA >> integerBits;
-        var dividendLo = uA << ChiVariate.ChiFixed.FractionalBits;
+        // Decompose: (uA << 32) / uB = (uA/uB) << 32 + ((uA%uB) << 32) / uB
+        var q1 = uA / uB;
+        var r1 = uA - q1 * uB;
 
-        var quotient = Div128By64(dividendHi, dividendLo, uB, true);
-        if (quotient > long.MaxValue)
-            return negative ? long.MinValue : long.MaxValue; // Saturate
-        return negative ? -(long)quotient : (long)quotient;
-    }
+        if (q1 > uint.MaxValue)
+            return negative ? long.MinValue : long.MaxValue;
 
-    /// <summary>
-    ///     128-bit by 64-bit division using Knuth's Algorithm D.
-    /// </summary>
-    /// <remarks>
-    ///     Divides a 128-bit number (hi:lo) by a 64-bit divisor.
-    ///     Uses normalization and quotient digit estimation for efficiency.
-    /// </remarks>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    private static ulong Div128By64(ulong hi, ulong lo, ulong divisor, bool saturate = false)
-    {
-        const int totalBits = 64;
-        const int halfBits = 32;
-        const ulong lowMask = 0xFFFF_FFFF;
-
-        if (hi == 0)
-            return lo / divisor;
-
-        if (hi >= divisor)
-            return saturate ? ulong.MaxValue : throw new OverflowException("Quotient exceeds 64 bits");
-
-        var shift = BitOperations.LeadingZeroCount(divisor);
-        divisor <<= shift;
-
-        var nHi = (hi << shift) | (shift == 0 ? 0 : lo >> (totalBits - shift));
-        var nLo = lo << shift;
-
-        var dHi = divisor >> halfBits;
-        var dLo = divisor & lowMask;
-
-        var qHi = EstimateQuotientDigit(nHi, nLo >> halfBits, dHi, dLo);
-        var rem = ((nHi << halfBits) | (nLo >> halfBits)) - qHi * divisor;
-
-        var qLo = EstimateQuotientDigit(rem, nLo & lowMask, dHi, dLo);
-
-        return (qHi << halfBits) | qLo;
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static ulong EstimateQuotientDigit(ulong nHi, ulong nLo, ulong dHi, ulong dLo)
+        // Fractional part: (r1 << 32) / uB, result < 2^32
+        ulong q2;
+        var r1Hi = r1 >> 32;
+        if (r1Hi == 0)
         {
-            const int halfBits = 32;
-            const ulong halfMax = 0x1_0000_0000;
-
-            var q = nHi / dHi;
-            var r = nHi - q * dHi;
-
-            while (q >= halfMax || q * dLo > ((r << halfBits) | nLo))
-            {
-                q--;
-                r += dHi;
-                if (r >= halfMax) break;
-            }
-
-            return q;
+            // r1 << 32 fits in 64 bits — plain division
+            q2 = (r1 << 32) / uB;
         }
+        else
+        {
+            // Single-digit Knuth: quotient fits in 32 bits
+            var shift = BitOperations.LeadingZeroCount(uB);
+            var d = uB << shift;
+            var nHi = (r1Hi << shift) | (shift == 0 ? 0 : (r1 << 32) >> (64 - shift));
+            var nLo = r1 << (32 + shift);
+
+            var dHi = d >> 32;
+            var dLo = d & 0xFFFF_FFFF;
+            var rem = (nHi << 32) | (nLo >> 32);
+
+            q2 = rem / dHi;
+            var rr = rem - q2 * dHi;
+            while (q2 >= 0x1_0000_0000UL || q2 * dLo > ((rr << 32) | (nLo & 0xFFFF_FFFF)))
+            {
+                q2--;
+                rr += dHi;
+                if (rr >= 0x1_0000_0000UL) break;
+            }
+        }
+
+        var quotient = (q1 << 32) | q2;
+        if (quotient > long.MaxValue)
+            return negative ? long.MinValue : long.MaxValue;
+        return negative ? -(long)quotient : (long)quotient;
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
