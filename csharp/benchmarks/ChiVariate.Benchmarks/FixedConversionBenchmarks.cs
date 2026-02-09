@@ -98,26 +98,6 @@ public class FixedConversionBenchmarks
         return result;
     }
 
-    [Benchmark]
-    [BenchmarkCategory("Double")]
-    public ChiFixed DoubleToFixed_ViaDecimal()
-    {
-        var result = ChiFixed.Zero;
-        for (var i = 0; i < Ops; i++)
-            result = (ChiFixed)(decimal)_doubleValues[i];
-        return result;
-    }
-
-    [Benchmark]
-    [BenchmarkCategory("Double")]
-    public double FixedToDouble_ViaDecimal()
-    {
-        var result = 0.0;
-        for (var i = 0; i < Ops; i++)
-            result = (double)(decimal)_fixedValues[i];
-        return result;
-    }
-
     #endregion
 
     #region Float
@@ -435,8 +415,6 @@ MinIterationTime=500ms  IterationCount=15
 | DoubleToFixed_CreateSaturating  |  2.400 us | 0.0174 us | 0.0145 us |         - |
 | FixedToDouble_Cast              |  2.354 us | 0.0020 us | 0.0015 us |         - |
 | FixedToDouble_CreateSaturating  |  2.352 us | 0.0013 us | 0.0012 us |         - |
-| DoubleToFixed_ViaDecimal        | 11.162 us | 0.0187 us | 0.0156 us |         - |
-| FixedToDouble_ViaDecimal        |  4.220 us | 0.0087 us | 0.0077 us |         - |
 |                                 |           |           |           |           |
 | FloatToFixed_Cast               |  2.431 us | 0.0014 us | 0.0012 us |         - |
 | FloatToFixed_CreateSaturating   |  2.431 us | 0.0015 us | 0.0013 us |         - |
@@ -468,9 +446,7 @@ Outliers
   FixedConversionBenchmarks.FixedToDecimal_Cast: MinIterationTime=500ms, IterationCount=15            -> 1 outlier  was  detected (4.01 us)
   FixedConversionBenchmarks.DoubleToFixed_CreateSaturating: MinIterationTime=500ms, IterationCount=15 -> 2 outliers were removed (2.47 us, 2.48 us)
   FixedConversionBenchmarks.FixedToDouble_Cast: MinIterationTime=500ms, IterationCount=15             -> 3 outliers were removed (2.36 us..2.37 us)
-  FixedConversionBenchmarks.DoubleToFixed_ViaDecimal: MinIterationTime=500ms, IterationCount=15       -> 2 outliers were removed (11.25 us, 11.26 us)
-  FixedConversionBenchmarks.FixedToDouble_ViaDecimal: MinIterationTime=500ms, IterationCount=15       -> 1 outlier  was  removed (4.27 us)
-  FixedConversionBenchmarks.FloatToFixed_Cast: MinIterationTime=500ms, IterationCount=15              -> 2 outliers were removed (2.44 us, 2.44 us)
+FixedConversionBenchmarks.FloatToFixed_Cast: MinIterationTime=500ms, IterationCount=15              -> 2 outliers were removed (2.44 us, 2.44 us)
   FixedConversionBenchmarks.FloatToFixed_CreateSaturating: MinIterationTime=500ms, IterationCount=15  -> 1 outlier  was  removed (2.44 us)
   FixedConversionBenchmarks.FixedToFloat_Cast: MinIterationTime=500ms, IterationCount=15              -> 1 outlier  was  removed (2.40 us)
   FixedConversionBenchmarks.FixedToFloat_CreateSaturating: MinIterationTime=500ms, IterationCount=15  -> 1 outlier  was  removed (2.43 us)
@@ -496,9 +472,9 @@ Outliers
 
 
 // ***** BenchmarkRunner: End *****
-Run time: 00:10:25 (625.22 sec), executed benchmarks: 32
+Run time: 00:10:25 (625.22 sec), executed benchmarks: 30
 
-Global total time: 00:10:31 (631.49 sec), executed benchmarks: 32
+Global total time: 00:10:31 (631.49 sec), executed benchmarks: 30
 // * Artifacts cleanup *
 Artifacts cleanup is finished
 
