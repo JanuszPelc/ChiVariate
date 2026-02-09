@@ -244,6 +244,43 @@ internal static class ChiDecimalMath
     }
 
     /// <summary>
+    ///     Returns the arc tangent of the specified decimal number.
+    /// </summary>
+    /// <remarks>
+    ///     Uses Taylor series: arctan(x) = x - x³/3 + x⁵/5 - x⁷/7 + ... for |x| ≤ 1.
+    ///     For |x| > 1: arctan(x) = π/2 - arctan(1/x).
+    /// </remarks>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static decimal Atan(decimal x)
+    {
+        switch (x)
+        {
+            case 0m:
+                return 0m;
+            case 1m:
+                return Pi / 4m;
+            case -1m:
+                return -Pi / 4m;
+            case > 1m:
+                return Pi / 2m - Atan(1m / x);
+            case < -1m:
+                return -Pi / 2m - Atan(1m / x);
+        }
+
+        var result = x;
+        var term = x;
+        var xSquared = x * x;
+
+        for (var n = 1; n <= 100 && Math.Abs(term) > ChiMath.Const<decimal>.Epsilon; n++)
+        {
+            term *= -xSquared;
+            result += term / (2m * n + 1m);
+        }
+
+        return result;
+    }
+
+    /// <summary>
     ///     Returns the cube root of a specified decimal number.
     /// </summary>
     /// <remarks>

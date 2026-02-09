@@ -33,16 +33,16 @@ internal static class NewtonCbrt
         for (var i = 0; i < TableSize; i++)
         {
             // Table for exponent mod 3 = 0: input in [1.0, 2.0)
-            var input0 = 1.0 + (double)i / TableSize;
-            table[i] = (long)(Math.Cbrt(input0) * ChiVariate.ChiFixed.ScaleFactor);
+            var input0 = 1.0m + (decimal)i / TableSize;
+            table[i] = FixedMath.FromDecimal(ChiDecimalMath.Cbrt(input0));
 
             // Table for exponent mod 3 = 1: input in [2.0, 4.0)
-            var input1 = 2.0 + 2.0 * i / TableSize;
-            table[TableSize + i] = (long)(Math.Cbrt(input1) * ChiVariate.ChiFixed.ScaleFactor);
+            var input1 = 2.0m + 2.0m * i / TableSize;
+            table[TableSize + i] = FixedMath.FromDecimal(ChiDecimalMath.Cbrt(input1));
 
             // Table for exponent mod 3 = 2: input in [4.0, 8.0)
-            var input2 = 4.0 + 4.0 * i / TableSize;
-            table[2 * TableSize + i] = (long)(Math.Cbrt(input2) * ChiVariate.ChiFixed.ScaleFactor);
+            var input2 = 4.0m + 4.0m * i / TableSize;
+            table[2 * TableSize + i] = FixedMath.FromDecimal(ChiDecimalMath.Cbrt(input2));
         }
 
         return table;

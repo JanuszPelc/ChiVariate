@@ -47,8 +47,8 @@ internal static class TaylorExp
         ExpFracTable = new long[TableSize];
         for (var i = 0; i < TableSize; i++)
         {
-            var x = (double)i / TableSize;
-            ExpFracTable[i] = (long)(Math.Exp(x) * ChiVariate.ChiFixed.ScaleFactor);
+            var x = (decimal)i / TableSize;
+            ExpFracTable[i] = FixedMath.FromDecimal(ChiDecimalMath.Exp(x));
         }
     }
 

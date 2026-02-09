@@ -37,8 +37,8 @@ internal static class TableAtan
         AtanTable = new long[TableSize + 1];
         for (var i = 0; i <= TableSize; i++)
         {
-            var x = (double)i / TableSize;
-            AtanTable[i] = (long)(Math.Atan(x) * ChiVariate.ChiFixed.ScaleFactor);
+            var x = (decimal)i / TableSize;
+            AtanTable[i] = FixedMath.FromDecimal(ChiDecimalMath.Atan(x));
         }
     }
 

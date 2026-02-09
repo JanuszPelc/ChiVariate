@@ -32,12 +32,12 @@ internal static class NewtonSqrt
         for (var i = 0; i < TableSize; i++)
         {
             // Table for even exponents: input in [1.0, 2.0)
-            var evenInput = 1.0 + (double)i / TableSize;
-            table[i] = (long)(Math.Sqrt(evenInput) * ChiVariate.ChiFixed.ScaleFactor);
+            var evenInput = 1.0m + (decimal)i / TableSize;
+            table[i] = FixedMath.FromDecimal(ChiDecimalMath.Sqrt(evenInput));
 
             // Table for odd exponents: input in [2.0, 4.0)
-            var oddInput = 2.0 + 2.0 * i / TableSize;
-            table[TableSize + i] = (long)(Math.Sqrt(oddInput) * ChiVariate.ChiFixed.ScaleFactor);
+            var oddInput = 2.0m + 2.0m * i / TableSize;
+            table[TableSize + i] = FixedMath.FromDecimal(ChiDecimalMath.Sqrt(oddInput));
         }
 
         return table;

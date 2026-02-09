@@ -40,7 +40,7 @@ internal static class CordicTables
         for (var i = 0; i < Iterations; i++)
         {
             var powerOf2 = 1m / (1L << i); // 2^-i
-            var atan = DecimalAtan(powerOf2); // arctan(2^-i)
+            var atan = ChiDecimalMath.Atan(powerOf2); // arctan(2^-i)
             AtanTable[i] = FixedMath.FromDecimal(atan);
             k *= DecimalCos(atan); // Accumulate gain factor
         }
@@ -49,43 +49,6 @@ internal static class CordicTables
         Pi = FixedMath.FromDecimal(DecimalPi);
         HalfPi = FixedMath.FromDecimal(DecimalPi / 2m);
         TwoPi = FixedMath.FromDecimal(DecimalPi * 2m);
-    }
-
-    /// <summary>
-    ///     Decimal arctan using Taylor series (for table generation only).
-    /// </summary>
-    /// <remarks>
-    ///     arctan(x) = x - x³/3 + x⁵/5 - x⁷/7 + ... for |x| ≤ 1
-    ///     For |x| > 1: arctan(x) = π/2 - arctan(1/x)
-    /// </remarks>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    private static decimal DecimalAtan(decimal x)
-    {
-        switch (x)
-        {
-            case 0m:
-                return 0m;
-            case 1m:
-                return DecimalPi / 4m;
-            case -1m:
-                return -DecimalPi / 4m;
-            case > 1m:
-                return DecimalPi / 2m - DecimalAtan(1m / x);
-            case < -1m:
-                return -DecimalPi / 2m - DecimalAtan(1m / x);
-        }
-
-        var result = x;
-        var term = x;
-        var xSquared = x * x;
-
-        for (var n = 1; n <= 100 && Math.Abs(term) > DecimalEpsilon; n++)
-        {
-            term *= -xSquared;
-            result += term / (2m * n + 1m);
-        }
-
-        return result;
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]

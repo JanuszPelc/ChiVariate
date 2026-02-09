@@ -36,11 +36,12 @@ internal static class TableSinCos
         TwoPi = CordicTables.TwoPi;
 
         // Precompute sin(θ) for θ = 0, π/8192, 2π/8192, ..., π/2
+        const decimal halfPiDecimal = 3.14159265358979323846264338327950288419716939937510582097494m / 2m;
         SinTable = new long[TableSize + 1];
         for (var i = 0; i <= TableSize; i++)
         {
-            var angle = (double)i / TableSize * Math.PI / 2.0;
-            SinTable[i] = (long)(Math.Sin(angle) * ChiVariate.ChiFixed.ScaleFactor);
+            var angle = (decimal)i / TableSize * halfPiDecimal;
+            SinTable[i] = FixedMath.FromDecimal(ChiDecimalMath.Sin(angle));
         }
     }
 
