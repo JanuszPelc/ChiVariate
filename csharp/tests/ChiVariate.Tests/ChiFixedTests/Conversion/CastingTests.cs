@@ -23,6 +23,119 @@ public class CastingTests
 
     #endregion
 
+    #region Double Casting
+
+    [Theory]
+    [InlineData(0.0)]
+    [InlineData(3.14)]
+    [InlineData(-42.5)]
+    [InlineData(1000000.125)]
+    public void DoubleToChiFixed_RoundTrip_PreservesValue(double input)
+    {
+        var result = (double)(ChiFixed)input;
+
+        result.Should().BeApproximately(input, 1e-9);
+    }
+
+    #endregion
+
+    #region Float Casting
+
+    [Theory]
+    [InlineData(0.0f)]
+    [InlineData(3.14f)]
+    [InlineData(-42.5f)]
+    [InlineData(1234.75f)]
+    public void FloatToChiFixed_RoundTrip_PreservesValue(float input)
+    {
+        var result = (float)(ChiFixed)input;
+
+        result.Should().BeApproximately(input, 1e-5f);
+    }
+
+    #endregion
+
+    #region Int Casting
+
+    [Theory]
+    [InlineData(0)]
+    [InlineData(42)]
+    [InlineData(-100)]
+    [InlineData(int.MaxValue)]
+    [InlineData(int.MinValue)]
+    public void IntToChiFixed_RoundTrip_PreservesValue(int input)
+    {
+        var result = (int)(ChiFixed)input;
+
+        result.Should().Be(input);
+    }
+
+    #endregion
+
+    #region UInt Casting
+
+    [Theory]
+    [InlineData(0u)]
+    [InlineData(42u)]
+    [InlineData(1000000u)]
+    public void UIntToChiFixed_RoundTrip_PreservesValue(uint input)
+    {
+        var result = (uint)(ChiFixed)input;
+
+        result.Should().Be(input);
+    }
+
+    #endregion
+
+    #region Long Casting
+
+    [Theory]
+    [InlineData(0L)]
+    [InlineData(42L)]
+    [InlineData(-100L)]
+    [InlineData(int.MaxValue)]
+    [InlineData(int.MinValue)]
+    public void LongToChiFixed_RoundTrip_PreservesValue(long input)
+    {
+        var result = (long)(ChiFixed)input;
+
+        result.Should().Be(input);
+    }
+
+    #endregion
+
+    #region ULong Casting
+
+    [Theory]
+    [InlineData(0UL)]
+    [InlineData(42UL)]
+    [InlineData(1000000UL)]
+    public void ULongToChiFixed_RoundTrip_PreservesValue(ulong input)
+    {
+        var result = (ulong)(ChiFixed)input;
+
+        result.Should().Be(input);
+    }
+
+    #endregion
+
+    #region Short Casting
+
+    [Theory]
+    [InlineData((short)0)]
+    [InlineData((short)42)]
+    [InlineData((short)-100)]
+    [InlineData(short.MaxValue)]
+    [InlineData(short.MinValue)]
+    public void ShortToChiFixed_RoundTrip_PreservesValue(short input)
+    {
+        var result = (short)(ChiFixed)input;
+
+        result.Should().Be(input);
+    }
+
+    #endregion
+
     #region Decimal to ChiFixed Casting
 
     [Fact]

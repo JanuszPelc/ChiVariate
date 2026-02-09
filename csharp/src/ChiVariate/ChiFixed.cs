@@ -114,21 +114,107 @@ public readonly struct ChiFixed(long raw) : IFloatingPointIeee754<ChiFixed>, IMi
     #region Factory Methods
 
     /// <summary>
-    ///     Converts a decimal value to ChiFixed. Best suited for initialization, not hot paths.
+    ///     Converts a decimal to ChiFixed.
+    ///     Deterministic across platforms but best suited for initialization, not hot paths.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static explicit operator ChiFixed(decimal v)
     {
-        return new ChiFixed(FixedMath.FromDecimal(v));
+        return CreateSaturating(v);
     }
 
     /// <summary>
-    ///     Converts a ChiFixed value to decimal.
+    ///     Converts a ChiFixed to decimal.
+    ///     Deterministic across platforms but best suited for initialization, not hot paths.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static explicit operator decimal(ChiFixed v)
     {
-        return FixedMath.ToDecimal(v.Raw);
+        return decimal.CreateSaturating(v);
+    }
+
+    /// <summary>Converts a double to ChiFixed.</summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static explicit operator ChiFixed(double v)
+    {
+        return CreateSaturating(v);
+    }
+
+    /// <summary>Converts a ChiFixed to double.</summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static explicit operator double(ChiFixed v)
+    {
+        return double.CreateSaturating(v);
+    }
+
+    /// <summary>Converts a float to ChiFixed.</summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static explicit operator ChiFixed(float v)
+    {
+        return CreateSaturating(v);
+    }
+
+    /// <summary>Converts a ChiFixed to float.</summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static explicit operator float(ChiFixed v)
+    {
+        return float.CreateSaturating(v);
+    }
+
+    /// <summary>Converts an int to ChiFixed.</summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static explicit operator ChiFixed(int v)
+    {
+        return CreateSaturating(v);
+    }
+
+    /// <summary>Converts a ChiFixed to int.</summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static explicit operator int(ChiFixed v)
+    {
+        return int.CreateSaturating(v);
+    }
+
+    /// <summary>Converts a uint to ChiFixed.</summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static explicit operator ChiFixed(uint v)
+    {
+        return CreateSaturating(v);
+    }
+
+    /// <summary>Converts a ChiFixed to uint.</summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static explicit operator uint(ChiFixed v)
+    {
+        return uint.CreateSaturating(v);
+    }
+
+    /// <summary>Converts a long to ChiFixed.</summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static explicit operator ChiFixed(long v)
+    {
+        return CreateSaturating(v);
+    }
+
+    /// <summary>Converts a ChiFixed to long.</summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static explicit operator long(ChiFixed v)
+    {
+        return long.CreateSaturating(v);
+    }
+
+    /// <summary>Converts a ulong to ChiFixed.</summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static explicit operator ChiFixed(ulong v)
+    {
+        return CreateSaturating(v);
+    }
+
+    /// <summary>Converts a ChiFixed to ulong.</summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static explicit operator ulong(ChiFixed v)
+    {
+        return ulong.CreateSaturating(v);
     }
 
     /// <summary>
@@ -148,14 +234,14 @@ public readonly struct ChiFixed(long raw) : IFloatingPointIeee754<ChiFixed>, IMi
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static ChiFixed operator +(ChiFixed a, ChiFixed b)
     {
-        return new ChiFixed(a.Raw + b.Raw);
+        return new ChiFixed(FixedMath.Add(a.Raw, b.Raw));
     }
 
     /// <inheritdoc />
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static ChiFixed operator -(ChiFixed a, ChiFixed b)
     {
-        return new ChiFixed(a.Raw - b.Raw);
+        return new ChiFixed(FixedMath.Sub(a.Raw, b.Raw));
     }
 
     /// <inheritdoc />
@@ -169,20 +255,18 @@ public readonly struct ChiFixed(long raw) : IFloatingPointIeee754<ChiFixed>, IMi
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static ChiFixed operator /(ChiFixed a, ChiFixed b)
     {
-        if (b.Raw == 0)
-            throw new DivideByZeroException();
-
-        return new ChiFixed(FixedMath.Div(a.Raw, b.Raw));
+        return b.Raw == 0
+            ? throw new DivideByZeroException()
+            : new ChiFixed(FixedMath.Div(a.Raw, b.Raw));
     }
 
     /// <inheritdoc />
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static ChiFixed operator %(ChiFixed left, ChiFixed right)
     {
-        if (right.Raw == 0)
-            throw new DivideByZeroException();
-
-        return new ChiFixed(FixedMath.Mod(left.Raw, right.Raw));
+        return right.Raw == 0
+            ? throw new DivideByZeroException()
+            : new ChiFixed(FixedMath.Mod(left.Raw, right.Raw));
     }
 
     #endregion

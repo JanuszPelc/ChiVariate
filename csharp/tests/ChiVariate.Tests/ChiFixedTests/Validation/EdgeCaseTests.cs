@@ -8,37 +8,35 @@ namespace ChiVariate.Tests.ChiFixedTests.Validation;
 public class EdgeCaseTests
 {
     [Fact]
-    public void Addition_MaxValuePlusOne_WrapsToNegative()
+    public void Addition_MaxValuePlusOne_SaturatesToMaxValue()
     {
         var result = ChiFixed.MaxValue + ChiFixed.One;
 
-        (result.Raw < 0).Should().BeTrue();
-        (result < ChiFixed.Zero).Should().BeTrue();
+        result.Should().Be(ChiFixed.MaxValue);
     }
 
     [Fact]
-    public void Addition_MaxValuePlusEpsilon_Wraps()
+    public void Addition_MaxValuePlusEpsilon_SaturatesToMaxValue()
     {
         var result = ChiFixed.MaxValue + ChiFixed.Epsilon;
 
-        (result.Raw < ChiFixed.MaxValue.Raw).Should().BeTrue();
+        result.Should().Be(ChiFixed.MaxValue);
     }
 
     [Fact]
-    public void Subtraction_MinValueMinusOne_WrapsToPositive()
+    public void Subtraction_MinValueMinusOne_SaturatesToMinValue()
     {
         var result = ChiFixed.MinValue - ChiFixed.One;
 
-        (result.Raw > 0).Should().BeTrue();
-        (result > ChiFixed.Zero).Should().BeTrue();
+        result.Should().Be(ChiFixed.MinValue);
     }
 
     [Fact]
-    public void Subtraction_MinValueMinusEpsilon_Wraps()
+    public void Subtraction_MinValueMinusEpsilon_SaturatesToMinValue()
     {
         var result = ChiFixed.MinValue - ChiFixed.Epsilon;
 
-        (result.Raw > ChiFixed.MinValue.Raw).Should().BeTrue();
+        result.Should().Be(ChiFixed.MinValue);
     }
 
     [Fact]
@@ -93,23 +91,21 @@ public class EdgeCaseTests
     }
 
     [Fact]
-    public void Increment_MaxValue_WrapsToNegative()
+    public void Increment_MaxValue_SaturatesToMaxValue()
     {
         var value = ChiFixed.MaxValue;
         value++;
 
-        (value.Raw < 0).Should().BeTrue();
-        (value < ChiFixed.Zero).Should().BeTrue();
+        value.Should().Be(ChiFixed.MaxValue);
     }
 
     [Fact]
-    public void Decrement_MinValue_WrapsToPositive()
+    public void Decrement_MinValue_SaturatesToMinValue()
     {
         var value = ChiFixed.MinValue;
         value--;
 
-        (value.Raw > 0).Should().BeTrue();
-        (value > ChiFixed.Zero).Should().BeTrue();
+        value.Should().Be(ChiFixed.MinValue);
     }
 
     [Fact]
@@ -172,23 +168,23 @@ public class EdgeCaseTests
     }
 
     [Fact]
-    public void Addition_NearMaxValue_Wraps()
+    public void Addition_NearMaxValue_SaturatesToMaxValue()
     {
         var nearMax = new ChiFixed(ChiFixed.MaxValue.Raw - 100);
         var large = (ChiFixed)1000m;
         var result = nearMax + large;
 
-        (result.Raw < nearMax.Raw).Should().BeTrue();
+        result.Should().Be(ChiFixed.MaxValue);
     }
 
     [Fact]
-    public void Subtraction_NearMinValue_Wraps()
+    public void Subtraction_NearMinValue_SaturatesToMinValue()
     {
         var nearMin = new ChiFixed(ChiFixed.MinValue.Raw + 100);
         var large = (ChiFixed)1000m;
         var result = nearMin - large;
 
-        (result.Raw > nearMin.Raw).Should().BeTrue();
+        result.Should().Be(ChiFixed.MinValue);
     }
 
     [Fact]

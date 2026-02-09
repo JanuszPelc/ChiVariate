@@ -14,14 +14,10 @@ public class FixedBenchmarks
 {
     private const int Ops = 1_000;
     private static readonly ChiFixed Ten = (ChiFixed)10m;
-    private decimal[] _decimalValues = null!;
-
     private double[] _doubleValues = null!;
     private double[] _doubleValues2 = null!;
     private ChiFixed[] _fixedValues = null!;
     private ChiFixed[] _fixedValues2 = null!;
-    private float[] _floatValues = null!;
-    private int[] _intValues = null!;
 
     [GlobalSetup]
     public void Setup()
@@ -32,9 +28,6 @@ public class FixedBenchmarks
         _fixedValues2 = new ChiFixed[Ops];
         _doubleValues = new double[Ops];
         _doubleValues2 = new double[Ops];
-        _floatValues = new float[Ops];
-        _intValues = new int[Ops];
-        _decimalValues = new decimal[Ops];
 
         for (var i = 0; i < Ops; i++)
         {
@@ -44,11 +37,8 @@ public class FixedBenchmarks
 
             _doubleValues[i] = v1;
             _doubleValues2[i] = v2;
-            _floatValues[i] = (float)v1;
-            _intValues[i] = (int)v1;
-            _decimalValues[i] = (decimal)v1;
-            _fixedValues[i] = (ChiFixed)(decimal)v1;
-            _fixedValues2[i] = (ChiFixed)(decimal)v2;
+            _fixedValues[i] = (ChiFixed)v1;
+            _fixedValues2[i] = (ChiFixed)v2;
         }
     }
 
@@ -471,131 +461,6 @@ public class FixedBenchmarks
         var result = 0.0;
         for (var i = 0; i < Ops; i++)
             result = Math.Log(Math.Abs(_doubleValues[i]) + 1.0);
-        return result;
-    }
-
-    #endregion
-
-    #region Conversion
-
-    [Benchmark]
-    [BenchmarkCategory("Conversion")]
-    public ChiFixed Fixed_FromDouble_ViaDecimal()
-    {
-        var result = ChiFixed.Zero;
-        for (var i = 0; i < Ops; i++)
-            result = (ChiFixed)(decimal)_doubleValues[i];
-        return result;
-    }
-
-    [Benchmark]
-    [BenchmarkCategory("Conversion")]
-    public ChiFixed Fixed_FromDouble_ViaCreateChecked()
-    {
-        var result = ChiFixed.Zero;
-        for (var i = 0; i < Ops; i++)
-            result = ChiFixed.CreateChecked(_doubleValues[i]);
-        return result;
-    }
-
-    [Benchmark]
-    [BenchmarkCategory("Conversion")]
-    public double Fixed_ToDouble_ViaDecimal()
-    {
-        var result = 0.0;
-        for (var i = 0; i < Ops; i++)
-            result = (double)(decimal)_fixedValues[i];
-        return result;
-    }
-
-    [Benchmark]
-    [BenchmarkCategory("Conversion")]
-    public double Fixed_ToDouble_ViaCreateChecked()
-    {
-        var result = 0.0;
-        for (var i = 0; i < Ops; i++)
-            result = double.CreateChecked(_fixedValues[i]);
-        return result;
-    }
-
-    [Benchmark]
-    [BenchmarkCategory("Conversion")]
-    public ChiFixed Fixed_FromFloat_ViaCreateChecked()
-    {
-        var result = ChiFixed.Zero;
-        for (var i = 0; i < Ops; i++)
-            result = ChiFixed.CreateChecked(_floatValues[i]);
-        return result;
-    }
-
-    [Benchmark]
-    [BenchmarkCategory("Conversion")]
-    public float Fixed_ToFloat_ViaCreateChecked()
-    {
-        var result = 0f;
-        for (var i = 0; i < Ops; i++)
-            result = float.CreateChecked(_fixedValues[i]);
-        return result;
-    }
-
-    [Benchmark]
-    [BenchmarkCategory("Conversion")]
-    public ChiFixed Fixed_FromInt_ViaCreateChecked()
-    {
-        var result = ChiFixed.Zero;
-        for (var i = 0; i < Ops; i++)
-            result = ChiFixed.CreateChecked(_intValues[i]);
-        return result;
-    }
-
-    [Benchmark]
-    [BenchmarkCategory("Conversion")]
-    public int Fixed_ToInt_ViaCreateChecked()
-    {
-        var result = 0;
-        for (var i = 0; i < Ops; i++)
-            result = int.CreateChecked(_fixedValues[i]);
-        return result;
-    }
-
-
-    [Benchmark]
-    [BenchmarkCategory("Conversion")]
-    public ChiFixed Fixed_FromDecimal()
-    {
-        var result = ChiFixed.Zero;
-        for (var i = 0; i < Ops; i++)
-            result = (ChiFixed)_decimalValues[i];
-        return result;
-    }
-
-    [Benchmark]
-    [BenchmarkCategory("Conversion")]
-    public decimal Fixed_ToDecimal()
-    {
-        var result = 0m;
-        for (var i = 0; i < Ops; i++)
-            result = (decimal)_fixedValues[i];
-        return result;
-    }
-
-    [Benchmark]
-    [BenchmarkCategory("Conversion")]
-    public decimal Double_ToDecimal()
-    {
-        var result = 0m;
-        for (var i = 0; i < Ops; i++)
-            result = (decimal)_doubleValues[i];
-        return result;
-    }
-
-    [Benchmark]
-    [BenchmarkCategory("Conversion")]
-    public double Double_FromDecimal()
-    {
-        var result = 0.0;
-        for (var i = 0; i < Ops; i++)
-            result = (double)_decimalValues[i];
         return result;
     }
 

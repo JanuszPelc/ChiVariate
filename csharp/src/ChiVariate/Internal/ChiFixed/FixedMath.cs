@@ -281,6 +281,30 @@ internal static class FixedMath
     }
 
     /// <summary>
+    ///     Fixed-point addition with saturation on overflow.
+    /// </summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static long Add(long a, long b)
+    {
+        var result = a + b;
+        if (((a ^ result) & (b ^ result)) < 0)
+            result = a >= 0 ? long.MaxValue : long.MinValue;
+        return result;
+    }
+
+    /// <summary>
+    ///     Fixed-point subtraction with saturation on overflow.
+    /// </summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static long Sub(long a, long b)
+    {
+        var result = a - b;
+        if (((a ^ result) & (~b ^ result)) < 0)
+            result = a >= 0 ? long.MaxValue : long.MinValue;
+        return result;
+    }
+
+    /// <summary>
     ///     Fixed-point multiplication with saturation on overflow.
     /// </summary>
     /// <remarks>
