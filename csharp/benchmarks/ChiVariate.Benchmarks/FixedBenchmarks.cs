@@ -475,81 +475,68 @@ BenchmarkDotNet v0.14.0, macOS Sequoia 15.7.3 (24G419) [Darwin 24.6.0]
 Apple M1 Pro, 1 CPU, 10 logical and 10 physical cores
 .NET SDK 10.0.100
   [Host]     : .NET 9.0.11 (9.0.1125.51716), Arm64 RyuJIT AdvSIMD
-  Job-QMXRNN : .NET 9.0.11 (9.0.1125.51716), Arm64 RyuJIT AdvSIMD
+  Job-BHHXHU : .NET 9.0.11 (9.0.1125.51716), Arm64 RyuJIT AdvSIMD
 
-MinIterationTime=500ms  IterationCount=15
+MinIterationTime=500ms  IterationCount=15  
 
-| Method          | Mean        | Error    | StdDev   | Allocated |
-|---------------- |------------:|---------:|---------:|----------:|
-| Fixed_Add       |    638.5 ns |  0.32 ns |  0.29 ns |         - |
-| Double_Add      |    899.9 ns |  0.84 ns |  0.79 ns |         - |
-| Fixed_Sub       |    719.4 ns |  0.60 ns |  0.50 ns |         - |
-| Double_Sub      |    900.0 ns |  0.47 ns |  0.44 ns |         - |
-| Fixed_Mul       |    902.5 ns |  0.69 ns |  0.61 ns |         - |
-| Double_Mul      |    673.4 ns |  0.40 ns |  0.37 ns |         - |
-| Fixed_Div       |  4,026.4 ns |  3.46 ns |  3.23 ns |         - |
-| Double_Div      |    674.7 ns |  1.72 ns |  1.61 ns |         - |
-| Fixed_Mod       |    792.8 ns |  1.46 ns |  1.29 ns |         - |
-| Double_Mod      |  3,792.0 ns | 33.95 ns | 31.76 ns |         - |
-|                 |             |          |          |           |
-| Fixed_Exp       |  6,419.3 ns |  5.53 ns |  4.62 ns |         - |
-| Double_Exp      |  2,965.6 ns | 34.71 ns | 32.46 ns |         - |
-| Fixed_Log       |  4,211.3 ns |  8.18 ns |  6.39 ns |         - |
-| Double_Log      |  3,216.5 ns |  7.02 ns |  6.56 ns |         - |
-|                 |             |          |          |           |
-| Fixed_Pow       | 11,801.1 ns | 40.96 ns | 38.31 ns |         - |
-| Double_Pow      |  9,325.9 ns | 24.66 ns | 23.06 ns |         - |
-|                 |             |          |          |           |
-| Fixed_Sqrt      |  2,011.1 ns |  3.32 ns |  2.77 ns |         - |
-| Double_Sqrt     |    626.7 ns |  1.40 ns |  1.31 ns |         - |
-| Fixed_Cbrt      |  3,191.3 ns |  3.40 ns |  3.02 ns |         - |
-| Double_Cbrt     |  2,525.2 ns | 21.14 ns | 19.77 ns |         - |
-|                 |             |          |          |           |
-| Fixed_Floor     |    537.5 ns |  1.10 ns |  0.97 ns |         - |
-| Double_Floor    |    396.3 ns |  0.72 ns |  0.60 ns |         - |
-| Fixed_Ceiling   |    551.8 ns |  0.44 ns |  0.39 ns |         - |
-| Double_Ceiling  |    396.0 ns |  0.45 ns |  0.42 ns |         - |
-| Fixed_Truncate  |    910.8 ns |  2.03 ns |  1.80 ns |         - |
-| Double_Truncate |    396.7 ns |  0.90 ns |  0.85 ns |         - |
-| Fixed_Round     |    956.1 ns |  6.05 ns |  4.72 ns |         - |
-| Double_Round    |    396.5 ns |  0.45 ns |  0.38 ns |         - |
-|                 |             |          |          |           |
-| Fixed_Sin       |  2,274.0 ns |  3.83 ns |  3.39 ns |         - |
-| Double_Sin      |  3,775.5 ns | 26.79 ns | 25.06 ns |         - |
-| Fixed_Cos       |  2,267.8 ns |  4.63 ns |  4.10 ns |         - |
-| Double_Cos      |  3,728.9 ns | 15.84 ns | 14.82 ns |         - |
-| Fixed_Tan       |  4,051.8 ns |  4.12 ns |  3.65 ns |         - |
-| Double_Tan      |  4,260.1 ns |  3.09 ns |  2.41 ns |         - |
-| Fixed_SinCos    |  2,286.9 ns |  5.25 ns |  4.91 ns |         - |
-| Double_SinCos   |  8,468.0 ns | 63.70 ns | 59.58 ns |         - |
-| Fixed_Atan      |  4,258.4 ns |  6.30 ns |  5.90 ns |         - |
-| Double_Atan     |  4,722.3 ns | 14.04 ns | 12.45 ns |         - |
-| Fixed_Atan2     |  5,552.6 ns |  7.78 ns |  7.28 ns |         - |
-| Double_Atan2    |  6,303.4 ns | 60.58 ns | 50.58 ns |         - |
+| Method          | Mean        | Error     | StdDev    | Allocated |
+|---------------- |------------:|----------:|----------:|----------:|
+| Fixed_Add       |    638.4 ns |   0.66 ns |   0.55 ns |         - |
+| Double_Add      |    895.3 ns |   1.37 ns |   1.28 ns |         - |
+| Fixed_Sub       |    714.5 ns |   1.54 ns |   1.44 ns |         - |
+| Double_Sub      |    894.4 ns |   1.24 ns |   1.16 ns |         - |
+| Fixed_Mul       |    894.2 ns |   1.09 ns |   1.02 ns |         - |
+| Double_Mul      |    668.2 ns |   1.36 ns |   1.27 ns |         - |
+| Fixed_Div       |  3,697.3 ns |   5.90 ns |   5.23 ns |         - |
+| Double_Div      |    668.1 ns |   1.26 ns |   1.18 ns |         - |
+| Fixed_Mod       |    786.2 ns |   1.07 ns |   1.00 ns |         - |
+| Double_Mod      |  3,750.0 ns |  21.76 ns |  20.35 ns |         - |
+|                 |             |           |           |           |
+| Fixed_Exp       |  7,099.2 ns |  11.41 ns |  10.67 ns |         - |
+| Double_Exp      |  2,914.4 ns |  19.63 ns |  18.36 ns |         - |
+| Fixed_Log       |  4,184.4 ns |  11.95 ns |  11.18 ns |         - |
+| Double_Log      |  3,179.6 ns |   5.12 ns |   4.28 ns |         - |
+|                 |             |           |           |           |
+| Fixed_Pow       | 11,807.3 ns |  34.71 ns |  32.47 ns |         - |
+| Double_Pow      |  8,892.1 ns |  31.24 ns |  29.22 ns |         - |
+|                 |             |           |           |           |
+| Fixed_Sqrt      |  1,998.1 ns |   3.84 ns |   3.59 ns |         - |
+| Double_Sqrt     |    620.9 ns |   1.26 ns |   1.18 ns |         - |
+| Fixed_Cbrt      |  3,169.1 ns |   5.73 ns |   5.36 ns |         - |
+| Double_Cbrt     |  2,499.1 ns |   4.45 ns |   4.16 ns |         - |
+|                 |             |           |           |           |
+| Fixed_Floor     |    534.8 ns |   1.34 ns |   1.12 ns |         - |
+| Double_Floor    |    395.3 ns |   0.77 ns |   0.72 ns |         - |
+| Fixed_Ceiling   |    550.9 ns |   1.03 ns |   0.97 ns |         - |
+| Double_Ceiling  |    395.3 ns |   0.64 ns |   0.60 ns |         - |
+| Fixed_Truncate  |    921.2 ns |  20.81 ns |  17.38 ns |         - |
+| Double_Truncate |    395.3 ns |   0.66 ns |   0.61 ns |         - |
+| Fixed_Round     |    950.5 ns |   1.71 ns |   1.60 ns |         - |
+| Double_Round    |    395.7 ns |   0.95 ns |   0.84 ns |         - |
+|                 |             |           |           |           |
+| Fixed_Sin       |  2,263.9 ns |   5.06 ns |   4.73 ns |         - |
+| Double_Sin      |  3,661.5 ns |  38.51 ns |  36.03 ns |         - |
+| Fixed_Cos       |  2,275.3 ns |  21.08 ns |  19.72 ns |         - |
+| Double_Cos      |  3,622.6 ns |  23.81 ns |  22.27 ns |         - |
+| Fixed_Tan       |  4,387.9 ns |  11.58 ns |  10.84 ns |         - |
+| Double_Tan      |  4,255.2 ns |  11.51 ns |  10.77 ns |         - |
+| Fixed_SinCos    |  2,299.3 ns |  20.97 ns |  19.61 ns |         - |
+| Double_SinCos   |  8,309.5 ns |  15.30 ns |  13.57 ns |         - |
+| Fixed_Atan      |  4,867.3 ns |   9.81 ns |   9.18 ns |         - |
+| Double_Atan     |  4,722.7 ns |  14.44 ns |  12.80 ns |         - |
+| Fixed_Atan2     |  5,163.6 ns |  12.49 ns |  11.69 ns |         - |
+| Double_Atan2    |  6,422.2 ns | 125.10 ns | 117.02 ns |         - |
 
 // * Hints *
 Outliers
-  FixedBenchmarks.Fixed_Add: MinIterationTime=500ms, IterationCount=15      -> 1 outlier  was  removed (642.03 ns)
-  FixedBenchmarks.Fixed_Sub: MinIterationTime=500ms, IterationCount=15      -> 2 outliers were removed (733.16 ns, 744.67 ns)
-  FixedBenchmarks.Double_Sub: MinIterationTime=500ms, IterationCount=15     -> 1 outlier  was  detected (901.08 ns)
-  FixedBenchmarks.Fixed_Mul: MinIterationTime=500ms, IterationCount=15      -> 1 outlier  was  removed (907.55 ns)
-  FixedBenchmarks.Fixed_Mod: MinIterationTime=500ms, IterationCount=15      -> 1 outlier  was  removed, 2 outliers were detected (792.54 ns, 798.19 ns)
-  FixedBenchmarks.Fixed_Exp: MinIterationTime=500ms, IterationCount=15      -> 2 outliers were removed (6.44 us, 6.46 us)
-  FixedBenchmarks.Fixed_Log: MinIterationTime=500ms, IterationCount=15      -> 3 outliers were removed (4.26 us..4.32 us)
-  FixedBenchmarks.Fixed_Sqrt: MinIterationTime=500ms, IterationCount=15     -> 2 outliers were removed (2.03 us, 2.03 us)
-  FixedBenchmarks.Fixed_Cbrt: MinIterationTime=500ms, IterationCount=15     -> 1 outlier  was  removed (3.21 us)
-  FixedBenchmarks.Fixed_Floor: MinIterationTime=500ms, IterationCount=15    -> 1 outlier  was  removed (542.36 ns)
-  FixedBenchmarks.Double_Floor: MinIterationTime=500ms, IterationCount=15   -> 2 outliers were removed (404.04 ns, 473.90 ns)
-  FixedBenchmarks.Fixed_Ceiling: MinIterationTime=500ms, IterationCount=15  -> 1 outlier  was  removed (555.47 ns)
-  FixedBenchmarks.Fixed_Truncate: MinIterationTime=500ms, IterationCount=15 -> 1 outlier  was  removed (919.00 ns)
-  FixedBenchmarks.Fixed_Round: MinIterationTime=500ms, IterationCount=15    -> 3 outliers were removed (983.44 ns..1.13 us)
-  FixedBenchmarks.Double_Round: MinIterationTime=500ms, IterationCount=15   -> 2 outliers were removed (400.11 ns, 400.42 ns)
-  FixedBenchmarks.Fixed_Sin: MinIterationTime=500ms, IterationCount=15      -> 1 outlier  was  removed (2.29 us)
-  FixedBenchmarks.Fixed_Cos: MinIterationTime=500ms, IterationCount=15      -> 1 outlier  was  removed (2.30 us)
-  FixedBenchmarks.Fixed_Tan: MinIterationTime=500ms, IterationCount=15      -> 1 outlier  was  removed (4.07 us)
-  FixedBenchmarks.Double_Tan: MinIterationTime=500ms, IterationCount=15     -> 3 outliers were removed (4.28 us..4.36 us)
-  FixedBenchmarks.Double_Atan: MinIterationTime=500ms, IterationCount=15    -> 1 outlier  was  removed (4.77 us)
-  FixedBenchmarks.Double_Atan2: MinIterationTime=500ms, IterationCount=15   -> 2 outliers were removed (6.47 us, 6.49 us)
+  FixedBenchmarks.Fixed_Add: MinIterationTime=500ms, IterationCount=15      -> 2 outliers were removed (642.84 ns, 657.38 ns)
+  FixedBenchmarks.Fixed_Div: MinIterationTime=500ms, IterationCount=15      -> 1 outlier  was  removed (3.71 μs)
+  FixedBenchmarks.Double_Log: MinIterationTime=500ms, IterationCount=15     -> 2 outliers were removed (3.20 μs, 3.22 μs)
+  FixedBenchmarks.Fixed_Floor: MinIterationTime=500ms, IterationCount=15    -> 2 outliers were removed (542.30 ns, 549.42 ns)
+  FixedBenchmarks.Fixed_Truncate: MinIterationTime=500ms, IterationCount=15 -> 2 outliers were removed (1.04 μs, 1.14 μs)
+  FixedBenchmarks.Double_Round: MinIterationTime=500ms, IterationCount=15   -> 1 outlier  was  removed (401.65 ns)
+  FixedBenchmarks.Double_SinCos: MinIterationTime=500ms, IterationCount=15  -> 1 outlier  was  removed (8.36 μs)
+  FixedBenchmarks.Double_Atan: MinIterationTime=500ms, IterationCount=15    -> 1 outlier  was  removed (4.78 μs)
 
 // * Legends *
   Mean      : Arithmetic mean of all measurements
@@ -562,12 +549,6 @@ Outliers
 
 
 // ***** BenchmarkRunner: End *****
-Run time: 00:12:57 (777.02 sec), executed benchmarks: 40
-
-Global total time: 00:13:03 (783.49 sec), executed benchmarks: 40
-// * Artifacts cleanup *
-Artifacts cleanup is finished
-
-Process finished with exit code 0.
+Run time: 00:12:57 (777.01 sec), executed benchmarks: 40
 
 */

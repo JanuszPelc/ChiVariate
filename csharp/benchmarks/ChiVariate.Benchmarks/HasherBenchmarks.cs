@@ -89,30 +89,28 @@ BenchmarkDotNet v0.14.0, macOS Sequoia 15.7.3 (24G419) [Darwin 24.6.0]
 Apple M1 Pro, 1 CPU, 10 logical and 10 physical cores
 .NET SDK 10.0.100
   [Host]     : .NET 9.0.11 (9.0.1125.51716), Arm64 RyuJIT AdvSIMD
-  Job-AMWZTP : .NET 9.0.11 (9.0.1125.51716), Arm64 RyuJIT AdvSIMD
+  Job-BHHXHU : .NET 9.0.11 (9.0.1125.51716), Arm64 RyuJIT AdvSIMD
 
-MinIterationTime=500ms  IterationCount=15
+MinIterationTime=500ms  IterationCount=15  
 
-| Method               | Mean     | Error    | StdDev   | Ratio | Allocated | Alloc Ratio |
-|--------------------- |---------:|---------:|---------:|------:|----------:|------------:|
-| HashCode.Hash32      | 11.64 μs | 0.004 μs | 0.003 μs |  1.00 |         - |          NA |
-| ChiHash.Hash32       | 31.76 μs | 0.081 μs | 0.071 μs |  2.73 |         - |          NA |
-| ChiSeed.Hash64       | 33.99 μs | 0.012 μs | 0.011 μs |  2.92 |         - |          NA |
-| ChiSeed.Generate64   | 55.31 μs | 0.022 μs | 0.020 μs |  4.75 |         - |          NA |
-| CryptoRng.Generate64 | 83.23 μs | 0.032 μs | 0.029 μs |  7.15 |         - |          NA |
+| Method               | Mean     | Error    | StdDev   | Ratio | RatioSD | Allocated | Alloc Ratio |
+|--------------------- |---------:|---------:|---------:|------:|--------:|----------:|------------:|
+| HashCode.Hash32      | 11.81 μs | 0.023 μs | 0.021 μs |  1.00 |    0.00 |         - |          NA |
+| ChiHash.Hash32       | 32.17 μs | 0.100 μs | 0.084 μs |  2.72 |    0.01 |         - |          NA |
+| ChiSeed.Hash64       | 34.26 μs | 0.255 μs | 0.239 μs |  2.90 |    0.02 |         - |          NA |
+| ChiSeed.Generate64   | 55.70 μs | 0.440 μs | 0.412 μs |  4.72 |    0.03 |         - |          NA |
+| CryptoRng.Generate64 | 83.12 μs | 0.169 μs | 0.158 μs |  7.04 |    0.02 |         - |          NA |
 
 // * Hints *
 Outliers
-  HasherBenchmarks.HashCode.Hash32: MinIterationTime=500ms, IterationCount=15      -> 1 outlier  was  removed (11.66 μs)
-  HasherBenchmarks.ChiHash.Hash32: MinIterationTime=500ms, IterationCount=15       -> 1 outlier  was  removed (32.03 μs)
-  HasherBenchmarks.ChiSeed.Generate64: MinIterationTime=500ms, IterationCount=15   -> 1 outlier  was  removed (55.41 μs)
-  HasherBenchmarks.CryptoRng.Generate64: MinIterationTime=500ms, IterationCount=15 -> 1 outlier  was  removed (83.40 μs)
+  HasherBenchmarks.ChiHash.Hash32: MinIterationTime=500ms, IterationCount=15 -> 2 outliers were removed (32.50 μs, 32.55 μs)
 
 // * Legends *
   Mean        : Arithmetic mean of all measurements
   Error       : Half of 99.9% confidence interval
   StdDev      : Standard deviation of all measurements
   Ratio       : Mean of the ratio distribution ([Current]/[Baseline])
+  RatioSD     : Standard deviation of the ratio distribution ([Current]/[Baseline])
   Allocated   : Allocated memory per single operation (managed only, inclusive, 1KB = 1024B)
   Alloc Ratio : Allocated memory ratio distribution ([Current]/[Baseline])
   1 μs        : 1 Microsecond (0.000001 sec)
@@ -121,6 +119,6 @@ Outliers
 
 
 // ***** BenchmarkRunner: End *****
-Run time: 00:01:28 (88.19 sec), executed benchmarks: 5
+Run time: 00:01:26 (86.99 sec), executed benchmarks: 5
 
 */
