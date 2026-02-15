@@ -1,11 +1,12 @@
 using AwesomeAssertions;
 using Xunit;
+using Xunit.Abstractions;
 
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 
 namespace ChiVariate.Tests.ChiFixedTests;
 
-public class ChiFixedTests
+public class ChiFixedTests(ITestOutputHelper testOutputHelper)
 {
     [Fact]
     public void Constants_Zero_HasValueZero()
@@ -278,5 +279,22 @@ public class ChiFixedTests
 
             y.Raw.Should().Be(x.Raw);
         }
+    }
+
+    [Fact]
+    public void WarmUp_Called_ReturnsPerTableTimings()
+    {
+        var timings = ChiFixed.WarmUp();
+
+        timings.Should().NotBeEmpty();
+
+        var total = TimeSpan.Zero;
+        foreach (var (type, elapsed) in timings.OrderByDescending(kv => kv.Value))
+        {
+            testOutputHelper.WriteLine($"{type.Name,-20} {elapsed.TotalMilliseconds,8:F2} ms");
+            total += elapsed;
+        }
+
+        testOutputHelper.WriteLine($"{"Total",-20} {total.TotalMilliseconds,8:F2} ms");
     }
 }

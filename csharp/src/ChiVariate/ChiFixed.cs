@@ -1199,4 +1199,16 @@ public readonly struct ChiFixed(long raw) : IFloatingPointIeee754<ChiFixed>, IMi
     }
 
     #endregion
+
+    #region Initialization
+
+    /// <summary>
+    ///     Forces initialization of all internal lookup tables, returning per-table timings.
+    /// </summary>
+    public static Dictionary<Type, TimeSpan> WarmUp()
+    {
+        return FixedWarmUp.Run();
+    }
+
+    #endregion
 }
