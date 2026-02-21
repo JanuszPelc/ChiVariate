@@ -39,7 +39,7 @@ public record struct ChiRng(long Seed, long Phase = 0) : IChiRngSource<ChiRng>
     ///     Initializes the <see cref="ChiRng" /> struct from a state captured with <see cref="Snapshot" />.
     /// </summary>
     /// <param name="state">The state object containing the seed and phase to restore.</param>
-    public ChiRng(ChiRngState state) : this(state.Seed, state.Phase)
+    public ChiRng(State state) : this(state.Seed, state.Phase)
     {
     }
 
@@ -77,20 +77,20 @@ public record struct ChiRng(long Seed, long Phase = 0) : IChiRngSource<ChiRng>
     /// <summary>
     ///     Creates a snapshot of the current state.
     /// </summary>
-    /// <returns>A <see cref="ChiRngState" /> object containing the current seed and phase.</returns>
+    /// <returns>A <see cref="State" /> object containing the current seed and phase.</returns>
     /// <remarks>
     ///     The captured state can be used to create a new <see cref="ChiRng" /> instance that will produce
     ///     an identical sequence of random numbers, enabling features like save/load and simulation replay.
     /// </remarks>
-    public ChiRngState Snapshot()
+    public State Snapshot()
     {
-        return new ChiRngState(Seed, Phase);
+        return new State(Seed, Phase);
     }
-}
 
-/// <summary>
-///     Represents the state of a <see cref="ChiRng" /> instance at a specific moment.
-/// </summary>
-/// <param name="Seed">The initial 64-bit value that determines the unique sequence of random numbers.</param>
-/// <param name="Phase">The 64-bit position, or counter, within the random sequence at the time of the snapshot.</param>
-public readonly record struct ChiRngState(long Seed, long Phase);
+    /// <summary>
+    ///     Represents the state of a <see cref="ChiRng" /> instance at a specific moment.
+    /// </summary>
+    /// <param name="Seed">The initial 64-bit value that determines the unique sequence of random numbers.</param>
+    /// <param name="Phase">The 64-bit position, or counter, within the random sequence at the time of the snapshot.</param>
+    public readonly record struct State(long Seed, long Phase);
+}
