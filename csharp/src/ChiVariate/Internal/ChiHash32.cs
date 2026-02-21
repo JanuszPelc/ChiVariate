@@ -140,16 +140,7 @@ internal static class ChiHash32
         if (typeof(T) == typeof(double))
         {
             var dv = Unsafe.As<T, double>(ref value);
-            if (double.IsNaN(dv))
-            {
-                const ulong canonicalQNaN = 0x7FF8_0000_0000_0000UL;
-                TryHashPrimitive(canonicalQNaN, ref hash, true);
-            }
-            else
-            {
-                if (dv == 0d) dv = +0d;
-                TryHashPrimitive(BitConverter.DoubleToUInt64Bits(dv), ref hash, true);
-            }
+            HashCanonicalDouble(dv, ref hash);
         }
         else if (typeof(T) == typeof(float))
         {
@@ -237,10 +228,8 @@ internal static class ChiHash32
         else if (typeof(T) == typeof(Complex))
         {
             var complex = Unsafe.As<T, Complex>(ref value);
-            var realBits = BitConverter.DoubleToUInt64Bits(complex.Real);
-            var imagBits = BitConverter.DoubleToUInt64Bits(complex.Imaginary);
-            TryHashPrimitive(realBits, ref hash, true);
-            TryHashPrimitive(imagBits, ref hash, true);
+            HashCanonicalDouble(complex.Real, ref hash);
+            HashCanonicalDouble(complex.Imaginary, ref hash);
         }
         else if (typeof(T) == typeof(DateTime))
         {
@@ -264,5 +253,20 @@ internal static class ChiHash32
         }
 
         return true;
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private static void HashCanonicalDouble(double dv, ref int hash)
+    {
+        if (double.IsNaN(dv))
+        {
+            const ulong canonicalQNaN = 0x7FF8_0000_0000_0000UL;
+            TryHashPrimitive(canonicalQNaN, ref hash, true);
+        }
+        else
+        {
+            if (dv == 0d) dv = +0d;
+            TryHashPrimitive(BitConverter.DoubleToUInt64Bits(dv), ref hash, true);
+        }
     }
 }

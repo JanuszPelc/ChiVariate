@@ -195,6 +195,41 @@ public class ChiHashReproducibilityTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
+    public void ChiHash_ComplexEdgeCases_CanonicalizesNaNAndNegativeZero()
+    {
+        var nanFromConst = new Complex(double.NaN, 2.5);
+        var nanFromSqrt = new Complex(Math.Sqrt(-1.0), 2.5);
+        new ChiHash().Add(nanFromConst).Hash.Should().Be(new ChiHash().Add(nanFromSqrt).Hash);
+
+        var nanImagConst = new Complex(1.0, double.NaN);
+        var nanImagFromLog = new Complex(1.0, Math.Log(-1.0));
+        new ChiHash().Add(nanImagConst).Hash.Should().Be(new ChiHash().Add(nanImagFromLog).Hash);
+
+        var negZeroReal = new Complex(-0.0, 1.0);
+        var posZeroReal = new Complex(+0.0, 1.0);
+        new ChiHash().Add(negZeroReal).Hash.Should().Be(new ChiHash().Add(posZeroReal).Hash);
+
+        var negZeroImag = new Complex(1.0, -0.0);
+        var posZeroImag = new Complex(1.0, +0.0);
+        new ChiHash().Add(negZeroImag).Hash.Should().Be(new ChiHash().Add(posZeroImag).Hash);
+
+        var negZeroBoth = new Complex(-0.0, -0.0);
+        new ChiHash().Add(negZeroBoth).Hash.Should().Be(new ChiHash().Add(Complex.Zero).Hash);
+
+        var nanBoth = new Complex(double.NaN, double.NaN);
+        VerifyDeterminism(nanBoth);
+        VerifyDeterminism(negZeroBoth);
+
+        var nanInReal = new Complex(double.NaN, 1.0);
+        var nanInImag = new Complex(1.0, double.NaN);
+        VerifySensitivity(nanInReal, nanInImag);
+
+        var posInfReal = new Complex(double.PositiveInfinity, 1.0);
+        var negInfReal = new Complex(double.NegativeInfinity, 1.0);
+        VerifySensitivity(posInfReal, negInfReal);
+    }
+
+    [Fact]
     public void ChiHash_Enums_ProducesConsistentResults()
     {
         VerifyDeterminism(TestEnum.Value1);

@@ -70,6 +70,13 @@ public class ChiHashDeterminismTests
         new ChiHash().Add(complex1).Hash.Should().Be(-286954189);
         new ChiHash().Add(complex2).Hash.Should().Be(44345189);
 
+        new ChiHash().Add(new Complex(double.NaN, 1.0)).Hash
+            .Should().Be(new ChiHash().Add(new Complex(Math.Sqrt(-1.0), 1.0)).Hash);
+        new ChiHash().Add(new Complex(-0.0, -0.0)).Hash
+            .Should().Be(new ChiHash().Add(Complex.Zero).Hash);
+        new ChiHash().Add(new Complex(double.PositiveInfinity, double.NegativeInfinity)).Hash
+            .Should().Be(new ChiHash().Add(new Complex(double.PositiveInfinity, double.NegativeInfinity)).Hash);
+
         new ChiHash().Add(TestEnum.Value1).Hash.Should().Be(1915432565);
         new ChiHash().Add(TestEnum.Value2).Hash.Should().Be(-1080233084);
         new ChiHash().Add(TestByteEnum.A).Hash.Should().Be(326026363);
