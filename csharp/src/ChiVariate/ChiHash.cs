@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: MIT
 // See LICENSE file for full terms
 
+using System.Numerics;
 using System.Runtime.CompilerServices;
 using ChiVariate.Internal;
 
@@ -62,27 +63,10 @@ public ref struct ChiHash
     public int Hash { get; private set; }
 
     /// <summary>
-    ///     Adds a string value to the hash calculation.
+    ///     Adds a string to the hash.
     /// </summary>
-    /// <param name="value">The string to add to the hash. Null values are treated as empty strings.</param>
-    /// <returns>A new ChiHash instance with the string incorporated into the hash calculation.</returns>
-    /// <remarks>
-    ///     <para>
-    ///         This method returns a new ChiHash instance. It is recommended to always use the returned value:
-    ///     </para>
-    ///     <code>
-    /// // Recommended - fluent style
-    /// var hash = new ChiHash().Add(value1).Add(value2).Hash;
-    ///  
-    /// // Correct - with reassignment  
-    /// var builder = new ChiHash();
-    /// builder = builder.Add(value);
-    ///  
-    /// // Discouraged - class-like usage
-    /// var builder = new ChiHash();
-    /// builder.Add(value);
-    /// </code>
-    /// </remarks>
+    /// <param name="value">The value to add. Null is treated as an empty string.</param>
+    /// <returns>The current instance for chaining.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public ChiHash Add(string? value)
     {
@@ -91,29 +75,276 @@ public ref struct ChiHash
     }
 
     /// <summary>
-    ///     Adds a value of any supported type to the hash calculation.
+    ///     Adds an unsigned 8-bit integer to the hash.
     /// </summary>
-    /// <typeparam name="T">The type of value to add.</typeparam>
-    /// <param name="value">
-    ///     The value to add to the hash. Supports standard numeric types, bool, enums,
-    ///     Guid, Complex, DateTime, DateTimeOffset, and TimeSpan.
-    /// </param>
-    /// <returns>A new ChiHash instance with the value incorporated into the hash calculation.</returns>
-    /// <inheritdoc cref="Add(string)" />
+    /// <param name="value">The value to add.</param>
+    /// <returns>The current instance for chaining.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public ChiHash Add<T>(T value)
+    public ChiHash Add(byte value)
     {
         Hash = ChiHash32.HashValue(value, Hash);
         return this;
     }
 
     /// <summary>
-    ///     Adds a span of values supported by <see cref="Add{T}(T)" /> to the hash calculation.
+    ///     Adds a signed 8-bit integer to the hash.
     /// </summary>
-    /// <typeparam name="T">The type of values to add.</typeparam>
-    /// <param name="values">The span of values to add to the hash.</param>
-    /// <returns>A new ChiHash instance with all values incorporated into the hash calculation.</returns>
-    /// <inheritdoc cref="Add(string)" />
+    /// <param name="value">The value to add.</param>
+    /// <returns>The current instance for chaining.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public ChiHash Add(sbyte value)
+    {
+        Hash = ChiHash32.HashValue(value, Hash);
+        return this;
+    }
+
+    /// <summary>
+    ///     Adds a signed 16-bit integer to the hash.
+    /// </summary>
+    /// <param name="value">The value to add.</param>
+    /// <returns>The current instance for chaining.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public ChiHash Add(short value)
+    {
+        Hash = ChiHash32.HashValue(value, Hash);
+        return this;
+    }
+
+    /// <summary>
+    ///     Adds an unsigned 16-bit integer to the hash.
+    /// </summary>
+    /// <param name="value">The value to add.</param>
+    /// <returns>The current instance for chaining.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public ChiHash Add(ushort value)
+    {
+        Hash = ChiHash32.HashValue(value, Hash);
+        return this;
+    }
+
+    /// <summary>
+    ///     Adds a Unicode character to the hash.
+    /// </summary>
+    /// <param name="value">The value to add.</param>
+    /// <returns>The current instance for chaining.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public ChiHash Add(char value)
+    {
+        Hash = ChiHash32.HashValue(value, Hash);
+        return this;
+    }
+
+    /// <summary>
+    ///     Adds a signed 32-bit integer to the hash.
+    /// </summary>
+    /// <param name="value">The value to add.</param>
+    /// <returns>The current instance for chaining.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public ChiHash Add(int value)
+    {
+        Hash = ChiHash32.HashValue(value, Hash);
+        return this;
+    }
+
+    /// <summary>
+    ///     Adds an unsigned 32-bit integer to the hash.
+    /// </summary>
+    /// <param name="value">The value to add.</param>
+    /// <returns>The current instance for chaining.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public ChiHash Add(uint value)
+    {
+        Hash = ChiHash32.HashValue(value, Hash);
+        return this;
+    }
+
+    /// <summary>
+    ///     Adds a signed 64-bit integer to the hash.
+    /// </summary>
+    /// <param name="value">The value to add.</param>
+    /// <returns>The current instance for chaining.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public ChiHash Add(long value)
+    {
+        Hash = ChiHash32.HashValue(value, Hash);
+        return this;
+    }
+
+    /// <summary>
+    ///     Adds an unsigned 64-bit integer to the hash.
+    /// </summary>
+    /// <param name="value">The value to add.</param>
+    /// <returns>The current instance for chaining.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public ChiHash Add(ulong value)
+    {
+        Hash = ChiHash32.HashValue(value, Hash);
+        return this;
+    }
+
+    /// <summary>
+    ///     Adds a signed 128-bit integer to the hash.
+    /// </summary>
+    /// <param name="value">The value to add.</param>
+    /// <returns>The current instance for chaining.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public ChiHash Add(Int128 value)
+    {
+        Hash = ChiHash32.HashValue(value, Hash);
+        return this;
+    }
+
+    /// <summary>
+    ///     Adds an unsigned 128-bit integer to the hash.
+    /// </summary>
+    /// <param name="value">The value to add.</param>
+    /// <returns>The current instance for chaining.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public ChiHash Add(UInt128 value)
+    {
+        Hash = ChiHash32.HashValue(value, Hash);
+        return this;
+    }
+
+    /// <summary>
+    ///     Adds a single-precision floating-point value to the hash.
+    /// </summary>
+    /// <param name="value">The value to add.</param>
+    /// <returns>The current instance for chaining.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public ChiHash Add(float value)
+    {
+        Hash = ChiHash32.HashValue(value, Hash);
+        return this;
+    }
+
+    /// <summary>
+    ///     Adds a double-precision floating-point value to the hash.
+    /// </summary>
+    /// <param name="value">The value to add.</param>
+    /// <returns>The current instance for chaining.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public ChiHash Add(double value)
+    {
+        Hash = ChiHash32.HashValue(value, Hash);
+        return this;
+    }
+
+    /// <summary>
+    ///     Adds a half-precision floating-point value to the hash.
+    /// </summary>
+    /// <param name="value">The value to add.</param>
+    /// <returns>The current instance for chaining.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public ChiHash Add(Half value)
+    {
+        Hash = ChiHash32.HashValue(value, Hash);
+        return this;
+    }
+
+    /// <summary>
+    ///     Adds a decimal value to the hash.
+    /// </summary>
+    /// <param name="value">The value to add.</param>
+    /// <returns>The current instance for chaining.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public ChiHash Add(decimal value)
+    {
+        Hash = ChiHash32.HashValue(value, Hash);
+        return this;
+    }
+
+    /// <summary>
+    ///     Adds a boolean value to the hash.
+    /// </summary>
+    /// <param name="value">The value to add.</param>
+    /// <returns>The current instance for chaining.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public ChiHash Add(bool value)
+    {
+        Hash = ChiHash32.HashValue(value, Hash);
+        return this;
+    }
+
+    /// <summary>
+    ///     Adds a GUID to the hash.
+    /// </summary>
+    /// <param name="value">The value to add.</param>
+    /// <returns>The current instance for chaining.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public ChiHash Add(Guid value)
+    {
+        Hash = ChiHash32.HashValue(value, Hash);
+        return this;
+    }
+
+    /// <summary>
+    ///     Adds a complex number to the hash.
+    /// </summary>
+    /// <param name="value">The value to add.</param>
+    /// <returns>The current instance for chaining.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public ChiHash Add(Complex value)
+    {
+        Hash = ChiHash32.HashValue(value, Hash);
+        return this;
+    }
+
+    /// <summary>
+    ///     Adds a date and time value to the hash.
+    /// </summary>
+    /// <param name="value">The value to add.</param>
+    /// <returns>The current instance for chaining.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public ChiHash Add(DateTime value)
+    {
+        Hash = ChiHash32.HashValue(value, Hash);
+        return this;
+    }
+
+    /// <summary>
+    ///     Adds a date, time, and offset value to the hash.
+    /// </summary>
+    /// <param name="value">The value to add.</param>
+    /// <returns>The current instance for chaining.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public ChiHash Add(DateTimeOffset value)
+    {
+        Hash = ChiHash32.HashValue(value, Hash);
+        return this;
+    }
+
+    /// <summary>
+    ///     Adds a time interval to the hash.
+    /// </summary>
+    /// <param name="value">The value to add.</param>
+    /// <returns>The current instance for chaining.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public ChiHash Add(TimeSpan value)
+    {
+        Hash = ChiHash32.HashValue(value, Hash);
+        return this;
+    }
+
+    /// <summary>
+    ///     Adds an enum value to the hash.
+    /// </summary>
+    /// <typeparam name="T">The enum type.</typeparam>
+    /// <param name="value">The value to add.</param>
+    /// <returns>The current instance for chaining.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public ChiHash Add<T>(T value) where T : struct, Enum
+    {
+        Hash = ChiHash32.HashValue(value, Hash);
+        return this;
+    }
+
+    /// <summary>
+    ///     Adds a span of values to the hash.
+    /// </summary>
+    /// <typeparam name="T">The type of values in the span.</typeparam>
+    /// <param name="values">The values to add.</param>
+    /// <returns>The current instance for chaining.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public ChiHash Add<T>(scoped ReadOnlySpan<T> values)
     {
@@ -123,12 +354,11 @@ public ref struct ChiHash
     }
 
     /// <summary>
-    ///     Adds a span of values supported by <see cref="Add{T}(T)" /> to the hash calculation.
+    ///     Adds a span of values to the hash.
     /// </summary>
-    /// <typeparam name="T">The type of values to add.</typeparam>
-    /// <param name="values">The span of values to add to the hash.</param>
-    /// <returns>A new ChiHash instance with all values incorporated into the hash calculation.</returns>
-    /// <inheritdoc cref="Add(string)" />
+    /// <typeparam name="T">The type of values in the span.</typeparam>
+    /// <param name="values">The values to add.</param>
+    /// <returns>The current instance for chaining.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public ChiHash Add<T>(scoped Span<T> values)
     {

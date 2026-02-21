@@ -1,5 +1,6 @@
 using System.Numerics;
 using AwesomeAssertions;
+using ChiVariate.Internal;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -448,15 +449,15 @@ public class ChiHashReproducibilityTests(ITestOutputHelper testOutputHelper)
 
     private static void VerifyDeterminism<T>(T input)
     {
-        var hash1 = new ChiHash().Add(input).Hash;
-        var hash2 = new ChiHash().Add(input).Hash;
+        var hash1 = ChiHash32.HashValue(input, 0);
+        var hash2 = ChiHash32.HashValue(input, 0);
         hash2.Should().Be(hash1);
     }
 
     private static void VerifySensitivity<T>(T input1, T input2)
     {
-        var hash1 = new ChiHash().Add(input1).Hash;
-        var hash2 = new ChiHash().Add(input2).Hash;
+        var hash1 = ChiHash32.HashValue(input1, 0);
+        var hash2 = ChiHash32.HashValue(input2, 0);
         hash2.Should().NotBe(hash1);
     }
 
