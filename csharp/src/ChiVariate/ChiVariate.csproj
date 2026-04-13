@@ -1,9 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
-        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <GeneratePackageOnBuild Condition="'$(Configuration)' == 'Release'">true</GeneratePackageOnBuild>
 
         <PackageId>ChiVariate</PackageId>
-        <Version>1.0.0</Version>
+        <Version>2.0.0-alpha.1</Version>
         <Authors>Janusz Pelc</Authors>
         <Description>
             Deterministic, data-oriented random engine seamlessly bridging expressive everyday randomness and statistically rigorous, domain-specific simulations.
