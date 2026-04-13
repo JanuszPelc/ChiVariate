@@ -1,8 +1,6 @@
 # Contributing to ChiVariate
 
-This project is a passion project maintained by a single developer with limited time for general maintenance tasks.
-
-However, **performance optimizations** and **documentation improvements** are a top priority and will receive prompt and focused support.
+This project is maintained by a single developer. Review and response times may vary.
 
 Priority contribution areas include:
 - **Bug reports and correctness issues** - pointing out statistical or implementation errors, ideally with suggested fixes
@@ -13,7 +11,7 @@ Priority contribution areas include:
 
 **Note:** The library intentionally focuses on essential, widely-used distributions. More esoteric distribution requests will generally not be accepted, as the library's extensible design allows users to implement custom distributions using the existing `IChiRngSource<T>` infrastructure.
 
-For other types of contributions (e.g. API design changes, major refactors, general feature requests), please understand that review and response times may vary significantly. If you're considering any substantial change, please open an issue first to discuss the approach before submitting a pull request.
+For other types of contributions (e.g. API design changes, major refactors, general feature requests), please open an issue first to discuss the approach before submitting a pull request.
 
 ## Performance Contributions
 
