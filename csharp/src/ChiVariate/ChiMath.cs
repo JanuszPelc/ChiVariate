@@ -220,44 +220,6 @@ public static class ChiMath
     }
 
     /// <summary>
-    ///     Returns the tangent of the specified angle.
-    /// </summary>
-    /// <param name="x">An angle, measured in radians.</param>
-    /// <typeparam name="T">The floating-point type.</typeparam>
-    /// <returns>The tangent of <paramref name="x" />.</returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static T Tan<T>(T x)
-        where T : IFloatingPoint<T>
-    {
-        if (typeof(T) == typeof(double))
-        {
-            var tan = Math.Tan(Unsafe.As<T, double>(ref x));
-            return Unsafe.As<double, T>(ref tan);
-        }
-
-        if (typeof(T) == typeof(float))
-        {
-            var tan = MathF.Tan(Unsafe.As<T, float>(ref x));
-            return Unsafe.As<float, T>(ref tan);
-        }
-
-        if (typeof(T) == typeof(decimal))
-        {
-            var tan = ChiDecimalMath.Tan(Unsafe.As<T, decimal>(ref x));
-            return Unsafe.As<decimal, T>(ref tan);
-        }
-
-        if (typeof(T) == typeof(ChiFixed))
-        {
-            var result = ChiFixed.Tan(Unsafe.As<T, ChiFixed>(ref x));
-            return Unsafe.As<ChiFixed, T>(ref result);
-        }
-
-        var fallbackDouble = Math.Tan(double.CreateChecked(x));
-        return T.CreateChecked(fallbackDouble);
-    }
-
-    /// <summary>
     ///     Returns the sine of the specified angle.
     /// </summary>
     /// <param name="x">An angle, measured in radians.</param>
@@ -330,6 +292,44 @@ public static class ChiMath
         }
 
         var fallbackDouble = Math.Cos(double.CreateChecked(x));
+        return T.CreateChecked(fallbackDouble);
+    }
+
+    /// <summary>
+    ///     Returns the tangent of the specified angle.
+    /// </summary>
+    /// <param name="x">An angle, measured in radians.</param>
+    /// <typeparam name="T">The floating-point type.</typeparam>
+    /// <returns>The tangent of <paramref name="x" />.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static T Tan<T>(T x)
+        where T : IFloatingPoint<T>
+    {
+        if (typeof(T) == typeof(double))
+        {
+            var tan = Math.Tan(Unsafe.As<T, double>(ref x));
+            return Unsafe.As<double, T>(ref tan);
+        }
+
+        if (typeof(T) == typeof(float))
+        {
+            var tan = MathF.Tan(Unsafe.As<T, float>(ref x));
+            return Unsafe.As<float, T>(ref tan);
+        }
+
+        if (typeof(T) == typeof(decimal))
+        {
+            var tan = ChiDecimalMath.Tan(Unsafe.As<T, decimal>(ref x));
+            return Unsafe.As<decimal, T>(ref tan);
+        }
+
+        if (typeof(T) == typeof(ChiFixed))
+        {
+            var result = ChiFixed.Tan(Unsafe.As<T, ChiFixed>(ref x));
+            return Unsafe.As<ChiFixed, T>(ref result);
+        }
+
+        var fallbackDouble = Math.Tan(double.CreateChecked(x));
         return T.CreateChecked(fallbackDouble);
     }
 
@@ -528,44 +528,32 @@ public static class ChiMath
 
         private static T GetLn2()
         {
-            if (typeof(T) == typeof(decimal))
-                return T.CreateChecked(0.693147180559945309417232121458176568075500134360255254120680m);
-            return T.CreateChecked(Math.Log(2.0));
+            return T.CreateChecked(0.693147180559945309417232121458176568075500134360255254120680m);
         }
 
         private static T GetLn10()
         {
-            if (typeof(T) == typeof(decimal))
-                return T.CreateChecked(2.302585092994045684017991454684364207601101488628772976033m);
-            return T.CreateChecked(Math.Log(10.0));
+            return T.CreateChecked(2.302585092994045684017991454684364207601101488628772976033m);
         }
 
         private static T GetSqrtTwoHalf()
         {
-            if (typeof(T) == typeof(decimal))
-                return T.CreateChecked(0.707106781186547524400844362104849039284835937688474036588m);
-            return T.CreateChecked(Math.Sqrt(2.0) / 2.0);
+            return T.CreateChecked(0.707106781186547524400844362104849039284835937688474036588m);
         }
 
         private static T GetSqrtThreeThird()
         {
-            if (typeof(T) == typeof(decimal))
-                return T.CreateChecked(0.577350269189625764509148780501957455647601751270126876018m);
-            return T.CreateChecked(Math.Sqrt(3.0) / 3.0);
+            return T.CreateChecked(0.577350269189625764509148780501957455647601751270126876018m);
         }
 
         private static T GetSqrtThreeHalf()
         {
-            if (typeof(T) == typeof(decimal))
-                return T.CreateChecked(0.866025403784438646763723170752936183471402626905190314027m);
-            return T.CreateChecked(Math.Sqrt(3.0) / 2.0);
+            return T.CreateChecked(0.866025403784438646763723170752936183471402626905190314027m);
         }
 
         private static T GetPhi()
         {
-            if (typeof(T) == typeof(decimal))
-                return T.CreateChecked(1.6180339887498948482045868343656381177203091798057628621354m);
-            return T.CreateChecked((1.0 + Math.Sqrt(5.0)) / 2.0);
+            return T.CreateChecked(1.6180339887498948482045868343656381177203091798057628621354m);
         }
     }
 }

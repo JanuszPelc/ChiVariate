@@ -92,25 +92,6 @@ public class SmokeTests
         result.Should().Be(false);
     }
 
-    [Fact]
-    public void NextAngleRadians_ReturnsExpectedValue()
-    {
-        var rng = new ChiRng(Seed);
-
-        var result = rng.Chance().NextAngleRadians();
-
-        result.Should().BeApproximately(5.15925f, 0.0001f);
-    }
-
-    [Fact]
-    public void NextAngleDegrees_ReturnsExpectedValue()
-    {
-        var rng = new ChiRng(Seed);
-
-        var result = rng.Chance().NextAngleDegrees();
-
-        result.Should().BeApproximately(295.60376f, 0.001f);
-    }
 
     [Fact]
     public void PickItem_WithWeights_ReturnsExpectedItem()

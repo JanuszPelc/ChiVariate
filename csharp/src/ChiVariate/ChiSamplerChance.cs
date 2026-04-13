@@ -323,24 +323,6 @@ public readonly ref struct ChiSamplerChance<TRng>(ref TRng rng)
     {
         return _rng.Bernoulli(probability).Sample() > 0;
     }
-
-    /// <summary>
-    ///     Returns a random angle between 0 and 2π radians.
-    /// </summary>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public float NextAngleRadians()
-    {
-        return NextSingle() * (2.0f * MathF.PI);
-    }
-
-    /// <summary>
-    ///     Returns a random angle between 0 and 360 degrees.
-    /// </summary>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public float NextAngleDegrees()
-    {
-        return NextSingle() * 360.0f;
-    }
 }
 
 /// <summary>
