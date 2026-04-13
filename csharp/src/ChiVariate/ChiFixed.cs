@@ -212,12 +212,12 @@ public readonly struct ChiFixed(long raw) : IFloatingPointIeee754<ChiFixed>, IMi
     }
 
     /// <summary>
-    ///     Converts a fraction (numerator, denominator) to ChiFixed.
+    ///     Creates a ChiFixed value from a fraction (numerator / denominator).
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static explicit operator ChiFixed((int numerator, int denominator) v)
+    public static ChiFixed Fraction(int numerator, int denominator)
     {
-        return new ChiFixed((long)v.numerator << FractionalBits) / new ChiFixed((long)v.denominator << FractionalBits);
+        return new ChiFixed((long)numerator << FractionalBits) / new ChiFixed((long)denominator << FractionalBits);
     }
 
     #endregion

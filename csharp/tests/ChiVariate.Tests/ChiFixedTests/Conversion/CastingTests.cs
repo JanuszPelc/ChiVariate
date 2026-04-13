@@ -13,7 +13,7 @@ public class CastingTests
     public void CastingMethods_EquivalentValues_AreEqual()
     {
         var fromDecimal = (ChiFixed)0.33333333333333m;
-        var fromRational = (ChiFixed)(1, 3);
+        var fromRational = ChiFixed.Fraction(1, 3);
         var fromString = ChiFixed.Parse("0.33333333333333");
 
         fromRational.Should().Be(fromDecimal);
@@ -245,7 +245,7 @@ public class CastingTests
     [Fact]
     public void RationalToChiFixed_OneThird_ReturnsApproximateValue()
     {
-        var result = (ChiFixed)(1, 3);
+        var result = ChiFixed.Fraction(1, 3);
 
         var resultStr = result.ToString();
         resultStr.Should().StartWith("0.33333333");
@@ -254,7 +254,7 @@ public class CastingTests
     [Fact]
     public void RationalToChiFixed_OneHalf_ReturnsExactValue()
     {
-        var result = (ChiFixed)(1, 2);
+        var result = ChiFixed.Fraction(1, 2);
 
         result.Should().Be((ChiFixed)0.5m);
     }
@@ -262,7 +262,7 @@ public class CastingTests
     [Fact]
     public void RationalToChiFixed_ZeroDenominator_ThrowsDivideByZero()
     {
-        var act = () => (ChiFixed)(1, 0);
+        var act = () => ChiFixed.Fraction(1, 0);
         act.Should().Throw<DivideByZeroException>();
     }
 
@@ -276,7 +276,7 @@ public class CastingTests
         int denominator,
         decimal expected)
     {
-        var result = (ChiFixed)(numerator, denominator);
+        var result = ChiFixed.Fraction(numerator, denominator);
         var expectedChiFixed = (ChiFixed)expected;
 
         result.Should().Be(expectedChiFixed);
@@ -285,7 +285,7 @@ public class CastingTests
     [Fact]
     public void RationalToChiFixed_LargeNumerator_HandlesCorrectly()
     {
-        var result = (ChiFixed)(8000000, 1);
+        var result = ChiFixed.Fraction(8000000, 1);
         var expected = (ChiFixed)8000000m;
 
         result.Should().Be(expected);
@@ -294,7 +294,7 @@ public class CastingTests
     [Fact]
     public void RationalToChiFixed_VeryLargeDenominator_HandlesCorrectly()
     {
-        var result = (ChiFixed)(1, 1000000000);
+        var result = ChiFixed.Fraction(1, 1000000000);
 
         (result > ChiFixed.Zero).Should().BeTrue();
         (result < (ChiFixed)0.001m).Should().BeTrue();
@@ -308,7 +308,7 @@ public class CastingTests
         var numerator = largeValue;
         var denominator = largeValue * 2;
 
-        var result = (ChiFixed)(numerator, denominator);
+        var result = ChiFixed.Fraction(numerator, denominator);
         var expected = (ChiFixed)0.5m;
 
         result.Should().Be(expected);
@@ -318,7 +318,7 @@ public class CastingTests
     public void RationalToChiFixed_EqualLargeValues_ReturnsOne()
     {
         const int value = 5000000;
-        var result = (ChiFixed)(value, value);
+        var result = ChiFixed.Fraction(value, value);
 
         result.Should().Be(ChiFixed.One);
     }
@@ -327,7 +327,7 @@ public class CastingTests
     public void RationalToChiFixed_NegativeLargeValues_HandlesCorrectly()
     {
         const int value = 5000000;
-        var result = (ChiFixed)(-value, value);
+        var result = ChiFixed.Fraction(-value, value);
 
         result.Should().Be(-ChiFixed.One);
     }
@@ -348,7 +348,7 @@ public class CastingTests
 
         foreach (var (numerator, denominator) in testCases)
         {
-            var result = (ChiFixed)(numerator, denominator);
+            var result = ChiFixed.Fraction(numerator, denominator);
             var expectedDecimal = (decimal)numerator / denominator;
             var resultDecimal = (decimal)result;
 

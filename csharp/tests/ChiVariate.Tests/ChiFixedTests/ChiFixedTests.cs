@@ -214,7 +214,7 @@ public class ChiFixedTests(ITestOutputHelper testOutputHelper)
     public void FactoryMethods_EquivalentValues_AreProduced()
     {
         var fromDecimal = (ChiFixed)0.5m;
-        var fromRational = (ChiFixed)(1, 2);
+        var fromRational = ChiFixed.Fraction(1, 2);
         var fromString = ChiFixed.Parse("0.5");
 
         fromRational.Should().Be(fromDecimal);
@@ -225,7 +225,7 @@ public class ChiFixedTests(ITestOutputHelper testOutputHelper)
     [Fact]
     public void ToString_OneSeventh_ShowsExpectedApproximation()
     {
-        var oneSeventh = (ChiFixed)(1, 7);
+        var oneSeventh = ChiFixed.Fraction(1, 7);
 
         var result = oneSeventh.ToString();
 
@@ -245,7 +245,7 @@ public class ChiFixedTests(ITestOutputHelper testOutputHelper)
         for (var numerator = 1; numerator <= maxValue; numerator++)
         for (var denominator = 1; denominator <= maxValue; denominator++)
         {
-            var original = (ChiFixed)(numerator, denominator);
+            var original = ChiFixed.Fraction(numerator, denominator);
             var str = original.ToString();
             var parsed = ChiFixed.Parse(str);
 
