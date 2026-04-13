@@ -44,7 +44,7 @@ public ref struct ChiSamplerWishart<TRng, T>
         _choleskyFactor = scaleMatrix.Peek().Cholesky();
         _choleskyFactorTranspose = _choleskyFactor.Peek().Transpose();
 
-        _gammaParamsForChiSq = ChiVector.Unsafe.Uninitialized<(T, T)>(_dimension);
+        _gammaParamsForChiSq = ChiVector.CreateUninitialized<(T, T)>(_dimension);
         var span = _gammaParamsForChiSq.Span;
         for (var i = 0; i < _dimension; i++)
         {

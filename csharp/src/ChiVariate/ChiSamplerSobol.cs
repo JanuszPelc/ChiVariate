@@ -49,7 +49,7 @@ public ref struct ChiSamplerSobol<TRng, T>
 
     private static ChiVector<uint> InitializeDirectionNumbers(ref TRng rng, int dimensions, ChiSequenceMode mode)
     {
-        var directionNumbers = ChiVector.Unsafe.Uninitialized<uint>(dimensions * MaxBits);
+        var directionNumbers = ChiVector.CreateUninitialized<uint>(dimensions * MaxBits);
         var directionNumbersSpan = directionNumbers.Span;
 
         for (var i = 0; i < dimensions; i++)
@@ -97,7 +97,7 @@ public ref struct ChiSamplerSobol<TRng, T>
         for (var i = 0; i < _dimensions; i++)
             currentPointSpan[i] ^= dirNumSpan[i * MaxBits + c];
 
-        var result = ChiVector.Unsafe.Uninitialized<T>(_dimensions);
+        var result = ChiVector.CreateUninitialized<T>(_dimensions);
         var resultSpan = result.Span;
 
         for (var i = 0; i < _dimensions; i++)
@@ -215,7 +215,7 @@ internal static class ChiSamplerSobolCache
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static ChiVector<uint> GetDirectionNumbers(int dimension)
     {
-        var result = ChiVector.Unsafe.Uninitialized<uint>(MaxBits);
+        var result = ChiVector.CreateUninitialized<uint>(MaxBits);
         var resultSpan = result.Span;
 
         for (var i = 0; i < MaxBits; i++) resultSpan[i] = DirectionNumbers[dimension, i];

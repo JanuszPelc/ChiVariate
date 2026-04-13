@@ -26,7 +26,7 @@ public static class ChiVector
     public static ChiVector<T> Full<T>(int length, T value)
         where T : unmanaged
     {
-        var vector = Unsafe.Uninitialized<T>(length);
+        var vector = CreateUninitialized<T>(length);
         vector.Span.Fill(value);
         return vector;
     }
@@ -40,7 +40,7 @@ public static class ChiVector
     public static ChiVector<T> Zeros<T>(int length)
         where T : unmanaged
     {
-        var vector = Unsafe.Uninitialized<T>(length);
+        var vector = CreateUninitialized<T>(length);
         vector.Span.Clear();
         return vector;
     }
@@ -54,54 +54,47 @@ public static class ChiVector
     public static ChiVector<T> With<T>(scoped ReadOnlySpan<T> sourceSpan)
         where T : unmanaged
     {
-        var vector = Unsafe.Uninitialized<T>(sourceSpan.Length);
+        var vector = CreateUninitialized<T>(sourceSpan.Length);
         sourceSpan.CopyTo(vector.Span);
         return vector;
     }
 
     /// <summary>
-    ///     Provides access to advanced, performance-oriented factory methods that require the caller
-    ///     to adhere to specific safety contracts to avoid undefined behavior.
+    ///     [Advanced] Creates a vector without initializing its contents, returning a buffer that
+    ///     may contain arbitrary garbage data from previous memory operations.
     /// </summary>
-    public static class Unsafe
+    /// <param name="length">The number of elements in the vector.</param>
+    /// <typeparam name="T">The unmanaged type of the vector elements.</typeparam>
+    /// <returns>
+    ///     A new <see cref="ChiVector{T}" /> with uninitialized backing memory.
+    /// </returns>
+    /// <remarks>
+    ///     <para>
+    ///         <b>Warning:</b> This method is a high-performance feature for advanced scenarios.
+    ///         The caller assumes full responsibility for initializing every element of the returned vector
+    ///         before any read operations are performed. Failure to do so will result in reading
+    ///         uninitialized memory, leading to unpredictable and erroneous behavior.
+    ///     </para>
+    ///     <para>
+    ///         Use this method only when you can guarantee that the entire content of the vector will be
+    ///         unconditionally overwritten immediately after creation. For all other cases, prefer safer factory
+    ///         methods like <see cref="ChiVector.Zeros{T}" />.
+    ///     </para>
+    /// </remarks>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static ChiVector<T> CreateUninitialized<T>(int length) where T : unmanaged
     {
-        /// <summary>
-        ///     [Advanced] Creates a vector without initializing its contents, returning a buffer that
-        ///     may contain arbitrary garbage data from previous memory operations.
-        /// </summary>
-        /// <param name="length">The number of elements in the vector.</param>
-        /// <typeparam name="T">The unmanaged type of the vector elements.</typeparam>
-        /// <returns>
-        ///     A new <see cref="ChiVector{T}" /> with uninitialized backing memory.
-        /// </returns>
-        /// <remarks>
-        ///     <para>
-        ///         <b>Warning:</b> This method is a high-performance feature for advanced scenarios.
-        ///         The caller assumes full responsibility for initializing every element of the returned vector
-        ///         before any read operations are performed. Failure to do so will result in reading
-        ///         uninitialized memory, leading to unpredictable and erroneous behavior.
-        ///     </para>
-        ///     <para>
-        ///         Use this method only when you can guarantee that the entire content of the vector will be
-        ///         unconditionally overwritten immediately after creation. For all other cases, prefer safer factory
-        ///         methods like <see cref="ChiVector.Zeros{T}" />.
-        ///     </para>
-        /// </remarks>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static ChiVector<T> Uninitialized<T>(int length) where T : unmanaged
-        {
-            ArgumentOutOfRangeException.ThrowIfNegativeOrZero(length);
+        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(length);
 
-            var vector = default(ChiVector<T>) with
-            {
-                Length = length,
-                IsValid = true,
-                HeapData = length > ChiVector<T>.MaxInlineLength
-                    ? ChiArrayPool<T>.Rent(length, false)
-                    : null
-            };
-            return vector;
-        }
+        var vector = default(ChiVector<T>) with
+        {
+            Length = length,
+            IsValid = true,
+            HeapData = length > ChiVector<T>.MaxInlineLength
+                ? ChiArrayPool<T>.Rent(length, false)
+                : null
+        };
+        return vector;
     }
 
     #endregion

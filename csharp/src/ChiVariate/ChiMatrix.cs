@@ -27,7 +27,7 @@ public static class ChiMatrix
     public static ChiMatrix<T> Full<T>(int rows, int columns, T value)
         where T : unmanaged, IFloatingPoint<T>
     {
-        var matrix = Unsafe.Uninitialized<T>(rows, columns);
+        var matrix = CreateUninitialized<T>(rows, columns);
         matrix.Span.Fill(value);
         return matrix;
     }
@@ -54,7 +54,7 @@ public static class ChiMatrix
     public static ChiMatrix<T> Full<T>(int rows, int columns, Func<int, T> value)
         where T : unmanaged, IFloatingPoint<T>
     {
-        var matrix = Unsafe.Uninitialized<T>(rows, columns);
+        var matrix = CreateUninitialized<T>(rows, columns);
         var flatView = matrix.Span;
 
         for (var i = 0; i < matrix.Length; i++)
@@ -86,7 +86,7 @@ public static class ChiMatrix
     public static ChiMatrix<T> Full<T, TArg>(int rows, int columns, TArg arg, Func<TArg, int, T> value)
         where T : unmanaged, IFloatingPoint<T>
     {
-        var matrix = Unsafe.Uninitialized<T>(rows, columns);
+        var matrix = CreateUninitialized<T>(rows, columns);
         var flatView = matrix.Span;
 
         for (var i = 0; i < matrix.Length; i++)
@@ -116,7 +116,7 @@ public static class ChiMatrix
     public static ChiMatrix<T> Full<T>(int rows, int columns, Func<int, int, T> value)
         where T : unmanaged, IFloatingPoint<T>
     {
-        var matrix = Unsafe.Uninitialized<T>(rows, columns);
+        var matrix = CreateUninitialized<T>(rows, columns);
         var flatView = matrix.Span;
 
         var i = 0;
@@ -150,7 +150,7 @@ public static class ChiMatrix
     public static ChiMatrix<T> Full<T, TArg>(int rows, int columns, TArg arg, Func<TArg, int, int, T> value)
         where T : unmanaged, IFloatingPoint<T>
     {
-        var matrix = Unsafe.Uninitialized<T>(rows, columns);
+        var matrix = CreateUninitialized<T>(rows, columns);
         var flatView = matrix.Span;
 
         var i = 0;
@@ -318,7 +318,7 @@ public static class ChiMatrix
 
         var rows = sourceArray.GetLength(0);
         var columns = sourceArray.GetLength(1);
-        var result = Unsafe.Uninitialized<T>(rows, columns);
+        var result = CreateUninitialized<T>(rows, columns);
 
         sourceSpan.CopyTo(result.Span);
 
@@ -339,7 +339,7 @@ public static class ChiMatrix
     public static ChiMatrix<T> With<T>(scoped ReadOnlySpan<T> sourceSpan)
         where T : unmanaged, IFloatingPoint<T>
     {
-        var result = Unsafe.Uninitialized<T>(sourceSpan.Length, 1);
+        var result = CreateUninitialized<T>(sourceSpan.Length, 1);
         sourceSpan.CopyTo(result.Span);
         return result;
     }
@@ -358,7 +358,7 @@ public static class ChiMatrix
     public static ChiMatrix<T> WithTransposed<T>(scoped ReadOnlySpan<T> sourceSpan)
         where T : unmanaged, IFloatingPoint<T>
     {
-        var result = Unsafe.Uninitialized<T>(1, sourceSpan.Length);
+        var result = CreateUninitialized<T>(1, sourceSpan.Length);
         sourceSpan.CopyTo(result.Span);
         return result;
     }
@@ -384,7 +384,7 @@ public static class ChiMatrix
         if (cols == 0) throw new ArgumentException("Matrix rows cannot be empty.", nameof(row0));
         if (row1.Length != cols) throw new ArgumentException("All rows must have the same length.");
 
-        var matrix = Unsafe.Uninitialized<T>(2, cols);
+        var matrix = CreateUninitialized<T>(2, cols);
         var span = matrix.Span;
 
         row0.CopyTo(span.Slice(0 * cols, cols));
@@ -417,7 +417,7 @@ public static class ChiMatrix
         if (row1.Length != cols || row2.Length != cols)
             throw new ArgumentException("All rows must have the same length.");
 
-        var matrix = Unsafe.Uninitialized<T>(3, cols);
+        var matrix = CreateUninitialized<T>(3, cols);
         var span = matrix.Span;
 
         row0.CopyTo(span.Slice(0 * cols, cols));
@@ -454,7 +454,7 @@ public static class ChiMatrix
         if (row1.Length != cols || row2.Length != cols || row3.Length != cols)
             throw new ArgumentException("All rows must have the same length.");
 
-        var matrix = Unsafe.Uninitialized<T>(4, cols);
+        var matrix = CreateUninitialized<T>(4, cols);
         var span = matrix.Span;
 
         row0.CopyTo(span.Slice(0 * cols, cols));
@@ -494,7 +494,7 @@ public static class ChiMatrix
         if (row1.Length != cols || row2.Length != cols || row3.Length != cols || row4.Length != cols)
             throw new ArgumentException("All rows must have the same length.");
 
-        var matrix = Unsafe.Uninitialized<T>(5, cols);
+        var matrix = CreateUninitialized<T>(5, cols);
         var span = matrix.Span;
 
         row0.CopyTo(span.Slice(0 * cols, cols));
@@ -507,53 +507,46 @@ public static class ChiMatrix
     }
 
     /// <summary>
-    ///     Provides access to advanced, performance-oriented factory methods that require the caller
-    ///     to adhere to specific safety contracts to avoid undefined behavior.
+    ///     [Advanced] Creates a matrix without initializing its contents, returning a buffer that
+    ///     may contain arbitrary garbage data from previous memory operations.
     /// </summary>
-    public static class Unsafe
+    /// <param name="rows">The number of rows in the matrix.</param>
+    /// <param name="columns">The number of columns in the matrix.</param>
+    /// <typeparam name="T">The floating-point type of the matrix elements.</typeparam>
+    /// <returns>
+    ///     A new <see cref="ChiMatrix{T}" /> with uninitialized backing memory.
+    /// </returns>
+    /// <remarks>
+    ///     <para>
+    ///         <b>Warning:</b> This method is a high-performance feature for advanced scenarios.
+    ///         The caller assumes full responsibility for initializing every element of the returned matrix
+    ///         before any read operations are performed. Failure to do so will result in reading
+    ///         uninitialized memory, leading to unpredictable and erroneous behavior.
+    ///     </para>
+    ///     <para>
+    ///         Use this method only when you can guarantee that the entire content of the matrix will be
+    ///         unconditionally overwritten immediately after creation. For all other cases, prefer safer factory
+    ///         methods like <see cref="ChiMatrix.Zeros{T}" />.
+    ///     </para>
+    /// </remarks>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static ChiMatrix<T> CreateUninitialized<T>(int rows, int columns) where T : unmanaged, IFloatingPoint<T>
     {
-        /// <summary>
-        ///     [Advanced] Creates a matrix without initializing its contents, returning a buffer that
-        ///     may contain arbitrary garbage data from previous memory operations.
-        /// </summary>
-        /// <param name="rows">The number of rows in the matrix.</param>
-        /// <param name="columns">The number of columns in the matrix.</param>
-        /// <typeparam name="T">The floating-point type of the matrix elements.</typeparam>
-        /// <returns>
-        ///     A new <see cref="ChiMatrix{T}" /> with uninitialized backing memory.
-        /// </returns>
-        /// <remarks>
-        ///     <para>
-        ///         <b>Warning:</b> This method is a high-performance feature for advanced scenarios.
-        ///         The caller assumes full responsibility for initializing every element of the returned matrix
-        ///         before any read operations are performed. Failure to do so will result in reading
-        ///         uninitialized memory, leading to unpredictable and erroneous behavior.
-        ///     </para>
-        ///     <para>
-        ///         Use this method only when you can guarantee that the entire content of the matrix will be
-        ///         unconditionally overwritten immediately after creation. For all other cases, prefer safer factory
-        ///         methods like <see cref="ChiMatrix.Zeros{T}" />.
-        ///     </para>
-        /// </remarks>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static ChiMatrix<T> Uninitialized<T>(int rows, int columns) where T : unmanaged, IFloatingPoint<T>
-        {
-            ArgumentOutOfRangeException.ThrowIfLessThanOrEqual(rows, 0);
-            ArgumentOutOfRangeException.ThrowIfLessThanOrEqual(columns, 0);
+        ArgumentOutOfRangeException.ThrowIfLessThanOrEqual(rows, 0);
+        ArgumentOutOfRangeException.ThrowIfLessThanOrEqual(columns, 0);
 
-            var length = rows * columns;
-            var matrix = default(ChiMatrix<T>) with
-            {
-                RowCount = rows,
-                ColumnCount = columns,
-                Length = rows * columns,
-                IsValid = true,
-                HeapData = length > ChiMatrix<T>.MaxInlineLength
-                    ? ChiArrayPool<T>.Rent(length, false)
-                    : null
-            };
-            return matrix;
-        }
+        var length = rows * columns;
+        var matrix = default(ChiMatrix<T>) with
+        {
+            RowCount = rows,
+            ColumnCount = columns,
+            Length = rows * columns,
+            IsValid = true,
+            HeapData = length > ChiMatrix<T>.MaxInlineLength
+                ? ChiArrayPool<T>.Rent(length, false)
+                : null
+        };
+        return matrix;
     }
 }
 
@@ -1101,7 +1094,7 @@ public readonly ref struct ChiMatrixOp<T>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static ChiMatrix<T> AddScalarToMatrix(ChiMatrix<T> matrix, T scalar)
     {
-        var result = ChiMatrix.Unsafe.Uninitialized<T>(matrix.RowCount, matrix.ColumnCount);
+        var result = ChiMatrix.CreateUninitialized<T>(matrix.RowCount, matrix.ColumnCount);
         var spanM = matrix.Span;
         var spanR = result.Span;
 
@@ -1135,7 +1128,7 @@ public readonly ref struct ChiMatrixOp<T>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static ChiMatrix<T> AddElementWise(ChiMatrix<T> a, ChiMatrix<T> b)
     {
-        var result = ChiMatrix.Unsafe.Uninitialized<T>(a.RowCount, a.ColumnCount);
+        var result = ChiMatrix.CreateUninitialized<T>(a.RowCount, a.ColumnCount);
         var spanA = a.Span;
         var spanB = b.Span;
         var spanR = result.Span;
@@ -1175,7 +1168,7 @@ public readonly ref struct ChiMatrixOp<T>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static ChiMatrix<T> SubtractMatrixFromScalar(T scalar, ChiMatrix<T> matrix)
     {
-        var result = ChiMatrix.Unsafe.Uninitialized<T>(matrix.RowCount, matrix.ColumnCount);
+        var result = ChiMatrix.CreateUninitialized<T>(matrix.RowCount, matrix.ColumnCount);
         var spanM = matrix.Span;
         var spanR = result.Span;
 
@@ -1209,7 +1202,7 @@ public readonly ref struct ChiMatrixOp<T>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static ChiMatrix<T> SubtractElementWise(ChiMatrix<T> a, ChiMatrix<T> b)
     {
-        var result = ChiMatrix.Unsafe.Uninitialized<T>(a.RowCount, a.ColumnCount);
+        var result = ChiMatrix.CreateUninitialized<T>(a.RowCount, a.ColumnCount);
         var spanA = a.Span;
         var spanB = b.Span;
         var spanR = result.Span;
@@ -1249,7 +1242,7 @@ public readonly ref struct ChiMatrixOp<T>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static ChiMatrix<T> MultiplyMatrixByScalar(ChiMatrix<T> matrix, T scalar)
     {
-        var result = ChiMatrix.Unsafe.Uninitialized<T>(matrix.RowCount, matrix.ColumnCount);
+        var result = ChiMatrix.CreateUninitialized<T>(matrix.RowCount, matrix.ColumnCount);
         var spanM = matrix.Span;
         var spanR = result.Span;
 
@@ -1280,7 +1273,7 @@ public readonly ref struct ChiMatrixOp<T>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static ChiMatrix<T> MultiplyElementWise(ChiMatrix<T> a, ChiMatrix<T> b)
     {
-        var result = ChiMatrix.Unsafe.Uninitialized<T>(a.RowCount, a.ColumnCount);
+        var result = ChiMatrix.CreateUninitialized<T>(a.RowCount, a.ColumnCount);
         var spanA = a.Span;
         var spanB = b.Span;
         var spanR = result.Span;
@@ -1313,7 +1306,7 @@ public readonly ref struct ChiMatrixOp<T>
     private static ChiMatrix<T> MultiplyMatrixMatrix(ChiMatrix<T> a, ChiMatrix<T> b)
     {
         using var bT = Transpose(b);
-        var result = ChiMatrix.Unsafe.Uninitialized<T>(a.RowCount, b.ColumnCount);
+        var result = ChiMatrix.CreateUninitialized<T>(a.RowCount, b.ColumnCount);
 
         for (var i = 0; i < result.RowCount; i++)
         for (var j = 0; j < result.ColumnCount; j++)
@@ -1357,7 +1350,7 @@ public readonly ref struct ChiMatrixOp<T>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static ChiMatrix<T> Transpose(ChiMatrix<T> matrix)
     {
-        var result = ChiMatrix.Unsafe.Uninitialized<T>(matrix.ColumnCount, matrix.RowCount);
+        var result = ChiMatrix.CreateUninitialized<T>(matrix.ColumnCount, matrix.RowCount);
 
         for (var i = 0; i < matrix.RowCount; i++)
         for (var j = 0; j < matrix.ColumnCount; j++)
@@ -1370,7 +1363,7 @@ public readonly ref struct ChiMatrixOp<T>
     private static ChiMatrix<T> Cholesky(ChiMatrix<T> matrix)
     {
         var n = matrix.RowCount;
-        var l = ChiMatrix.Unsafe.Uninitialized<T>(n, n);
+        var l = ChiMatrix.CreateUninitialized<T>(n, n);
 
         for (var i = 0; i < n; i++)
         for (var j = 0; j <= i; j++)

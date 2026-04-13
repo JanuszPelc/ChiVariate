@@ -41,7 +41,7 @@ public readonly ref struct ChiSamplerDirichlet<TRng, T>
     public ChiVector<T> Sample()
     {
         var k = _alpha.Length;
-        var result = ChiVector.Unsafe.Uninitialized<T>(k);
+        var result = ChiVector.CreateUninitialized<T>(k);
         var vector = result.Span;
 
         var sum = T.Zero;

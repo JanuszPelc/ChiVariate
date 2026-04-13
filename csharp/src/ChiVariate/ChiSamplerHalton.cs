@@ -41,7 +41,7 @@ public ref struct ChiSamplerHalton<TRng, T>
 
         if (mode == ChiSequenceMode.Randomized)
         {
-            _offset = ChiVector.Unsafe.Uninitialized<T>(dimensions);
+            _offset = ChiVector.CreateUninitialized<T>(dimensions);
             var span = _offset.Span;
             for (var i = 0; i < dimensions; i++)
                 span[i] = ChiRealProvider.Next<TRng, T>(ref rng);
@@ -62,7 +62,7 @@ public ref struct ChiSamplerHalton<TRng, T>
     public ChiVector<T> Sample()
     {
         _index++;
-        var point = ChiVector.Unsafe.Uninitialized<T>(_dimensions);
+        var point = ChiVector.CreateUninitialized<T>(_dimensions);
         var span = point.Span;
         var offsetSpan = _offset.Span;
 

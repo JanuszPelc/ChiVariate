@@ -46,8 +46,8 @@ public ref struct ChiSamplerCategorical<TRng, T>
 
         _isUniform = false;
 
-        _probVector = ChiVector.Unsafe.Uninitialized<T>(Count);
-        _aliasVector = ChiVector.Unsafe.Uninitialized<int>(Count);
+        _probVector = ChiVector.CreateUninitialized<T>(Count);
+        _aliasVector = ChiVector.CreateUninitialized<int>(Count);
 
         var n = T.CreateChecked(Count);
         var sum = T.Zero;
@@ -67,8 +67,8 @@ public ref struct ChiSamplerCategorical<TRng, T>
         for (var i = 0; i < Count; i++)
             probSpan[i] = weights[i] * n / sum;
 
-        using var small = ChiVector.Unsafe.Uninitialized<int>(Count);
-        using var large = ChiVector.Unsafe.Uninitialized<int>(Count);
+        using var small = ChiVector.CreateUninitialized<int>(Count);
+        using var large = ChiVector.CreateUninitialized<int>(Count);
 
         var (smallCount, largeCount) = BuildAliasTables(probSpan, aliasSpan, large.Span, small.Span, Count);
 
