@@ -11,7 +11,7 @@ public class SampleTests
     private const int SampleCount = 50_000;
 
     [Fact]
-    public void Sample_ProducesDistributionsWithCorrectMeanCounts()
+    public void Sample_AcrossProbabilityVector_MatchesMultinomialDistribution()
     {
         ReadOnlySpan<double> probabilities = [0.1, 0.2, 0.3, 0.4];
         const int numTrials = 20;
@@ -31,7 +31,7 @@ public class SampleTests
     }
 
     [Fact]
-    public void Sample_SumOfCounts_AlwaysEqualsNumTrials()
+    public void Sample_SumOfCounts_EqualsNumTrials()
     {
         var probabilities = new[] { 0.1, 0.2, 0.7 };
         const int numTrials = 100;

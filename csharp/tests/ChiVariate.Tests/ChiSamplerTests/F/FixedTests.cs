@@ -19,7 +19,7 @@ public class FixedTests(ITestOutputHelper testOutputHelper)
     [InlineData(5, 10)] // Test variance for d2 >= 10
     [InlineData(10, 20)] // Well-behaved case
     [InlineData(20, 30)] // Less skewed
-    public void Sample_WithVariousDoF_ProducesFDistribution(int d1, int d2)
+    public void Sample_AcrossDoF_MatchesFDistribution(int d1, int d2)
     {
         var df1 = (ChiFixed)d1;
         var df2 = (ChiFixed)d2;

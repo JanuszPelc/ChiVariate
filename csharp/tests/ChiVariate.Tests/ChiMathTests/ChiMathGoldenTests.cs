@@ -42,7 +42,7 @@ public class ChiMathGoldenTests
     }
 
     [Fact]
-    public void PhiConjugate_Double_ReturnsCorrectValue()
+    public void PhiConjugate_Double_ReturnsGoldenRatioConjugate()
     {
         var phiConj = ChiMath.Const<double>.PhiConjugate;
 
@@ -126,9 +126,9 @@ public class ChiMathGoldenTests
     #region Golden Sequence with Seed
 
     [Fact]
-    public void Golden_WithSeed_OffsetsSequence()
+    public void Golden_WithSeedAtIndexZero_ReturnsSeed()
     {
-        var seed = 0.3;
+        const double seed = 0.3;
         var result = ChiMath.Golden(0, seed);
 
         result.Should().BeApproximately(0.3, 1e-14);
@@ -148,7 +148,7 @@ public class ChiMathGoldenTests
     }
 
     [Fact]
-    public void Golden_DifferentSeeds_ProduceDifferentValues()
+    public void Golden_DifferentSeeds_ProducesDifferentValues()
     {
         var result1 = ChiMath.Golden(5, 0.0);
         var result2 = ChiMath.Golden(5, 0.5);

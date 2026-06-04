@@ -17,7 +17,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     [InlineData(2)] // Is an Exponential distribution
     [InlineData(5)] // Skewed right
     [InlineData(10)] // Becoming more symmetric
-    public void Sample_ProducesDistributionWithCorrectStatistics(int degreesOfFreedom)
+    public void Sample_AcrossDegreesOfFreedom_MatchesChiSquaredDistribution(int degreesOfFreedom)
     {
         var rng = new ChiRng(ChiSeed.Scramble("ChiSquared", degreesOfFreedom));
 
@@ -42,7 +42,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     [Theory]
     [InlineData(0)]
     [InlineData(-1)]
-    public void ChiSquared_WithInvalidDof_ThrowsArgumentOutOfRangeException(int degreesOfFreedom)
+    public void ChiSquared_WithInvalidDegreesOfFreedom_ThrowsArgumentOutOfRangeException(int degreesOfFreedom)
     {
         var rng = new ChiRng(0);
 
@@ -54,7 +54,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     [Theory]
     [InlineData("2")]
     [InlineData("5")]
-    public void Sample_Decimal_ProducesDistributionWithCorrectStatistics(string degreesOfFreedomStr)
+    public void Sample_Decimal_MatchesChiSquaredDistribution(string degreesOfFreedomStr)
     {
         var degreesOfFreedom = decimal.Parse(degreesOfFreedomStr, CultureInfo.InvariantCulture);
         var intDof = (int)degreesOfFreedom;

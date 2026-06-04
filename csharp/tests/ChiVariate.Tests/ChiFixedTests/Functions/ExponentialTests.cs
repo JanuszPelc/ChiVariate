@@ -35,7 +35,7 @@ public class ExponentialTests
     [InlineData("2", "7.389056099")]
     [InlineData("0.5", "1.648721271")]
     [InlineData("0.1", "1.105170918")]
-    public void Exp_PositiveValues_ReturnsCorrectValue(string inputStr, string expectedStr)
+    public void Exp_PositiveValues_ReturnsExpectedResult(string inputStr, string expectedStr)
     {
         var input = (ChiFixed)decimal.Parse(inputStr, CultureInfo.InvariantCulture);
         var expected = (ChiFixed)decimal.Parse(expectedStr, CultureInfo.InvariantCulture);
@@ -47,7 +47,7 @@ public class ExponentialTests
     [InlineData("-1", "0.367879441")]
     [InlineData("-2", "0.135335283")]
     [InlineData("-0.5", "0.606530660")]
-    public void Exp_NegativeValues_ReturnsCorrectValue(string inputStr, string expectedStr)
+    public void Exp_NegativeValues_ReturnsExpectedResult(string inputStr, string expectedStr)
     {
         var input = (ChiFixed)decimal.Parse(inputStr, CultureInfo.InvariantCulture);
         var expected = (ChiFixed)decimal.Parse(expectedStr, CultureInfo.InvariantCulture);
@@ -58,7 +58,7 @@ public class ExponentialTests
     [Theory]
     [InlineData("5", "148.413159103")]
     [InlineData("10", "22026.465794807")]
-    public void Exp_LargerValues_ReturnsCorrectValue(string inputStr, string expectedStr)
+    public void Exp_LargerValues_ReturnsExpectedResult(string inputStr, string expectedStr)
     {
         var input = (ChiFixed)decimal.Parse(inputStr, CultureInfo.InvariantCulture);
         var expected = (ChiFixed)decimal.Parse(expectedStr, CultureInfo.InvariantCulture);
@@ -70,7 +70,7 @@ public class ExponentialTests
     [InlineData("29")]
     [InlineData("50")]
     [InlineData("100")]
-    public void Exp_LargePositiveValue_ReturnsSaturatedValue(string inputStr)
+    public void Exp_LargePositiveValue_ReturnsInfinityOrLargeValue(string inputStr)
     {
         var input = (ChiFixed)decimal.Parse(inputStr, CultureInfo.InvariantCulture);
         var result = ChiFixed.Exp(input);
@@ -113,7 +113,7 @@ public class ExponentialTests
     [InlineData("4", "16")]
     [InlineData("5", "32")]
     [InlineData("10", "1024")]
-    public void Exp2_IntegerPowers_ReturnsCorrectValue(string inputStr, string expectedStr)
+    public void Exp2_IntegerPowers_ReturnsExpectedResult(string inputStr, string expectedStr)
     {
         var input = (ChiFixed)decimal.Parse(inputStr, CultureInfo.InvariantCulture);
         var expected = (ChiFixed)decimal.Parse(expectedStr, CultureInfo.InvariantCulture);
@@ -126,7 +126,7 @@ public class ExponentialTests
     [InlineData("-2", "0.25")]
     [InlineData("-3", "0.125")]
     [InlineData("-10", "0.0009765625")]
-    public void Exp2_NegativeIntegerPowers_ReturnsCorrectValue(string inputStr, string expectedStr)
+    public void Exp2_NegativeIntegerPowers_ReturnsExpectedResult(string inputStr, string expectedStr)
     {
         var input = (ChiFixed)decimal.Parse(inputStr, CultureInfo.InvariantCulture);
         var expected = (ChiFixed)decimal.Parse(expectedStr, CultureInfo.InvariantCulture);
@@ -138,7 +138,7 @@ public class ExponentialTests
     [InlineData("0.5", "1.414213562")]
     [InlineData("1.5", "2.828427125")]
     [InlineData("2.5", "5.656854249")]
-    public void Exp2_FractionalPowers_ReturnsCorrectValue(string inputStr, string expectedStr)
+    public void Exp2_FractionalPowers_ReturnsExpectedResult(string inputStr, string expectedStr)
     {
         var input = (ChiFixed)decimal.Parse(inputStr, CultureInfo.InvariantCulture);
         var expected = (ChiFixed)decimal.Parse(expectedStr, CultureInfo.InvariantCulture);
@@ -149,7 +149,7 @@ public class ExponentialTests
     [Theory]
     [InlineData("-0.5", "0.707106781")]
     [InlineData("-1.5", "0.353553391")]
-    public void Exp2_NegativeFractionalPowers_ReturnsCorrectValue(string inputStr, string expectedStr)
+    public void Exp2_NegativeFractionalPowers_ReturnsExpectedResult(string inputStr, string expectedStr)
     {
         var input = (ChiFixed)decimal.Parse(inputStr, CultureInfo.InvariantCulture);
         var expected = (ChiFixed)decimal.Parse(expectedStr, CultureInfo.InvariantCulture);
@@ -173,7 +173,7 @@ public class ExponentialTests
     [InlineData("2", "100")]
     [InlineData("3", "1000")]
     [InlineData("4", "10000")]
-    public void Exp10_IntegerPowers_ReturnsCorrectValue(string inputStr, string expectedStr)
+    public void Exp10_IntegerPowers_ReturnsExpectedResult(string inputStr, string expectedStr)
     {
         var input = (ChiFixed)decimal.Parse(inputStr, CultureInfo.InvariantCulture);
         var expected = (ChiFixed)decimal.Parse(expectedStr, CultureInfo.InvariantCulture);
@@ -186,7 +186,7 @@ public class ExponentialTests
     [InlineData("-2", "0.01")]
     [InlineData("-3", "0.001")]
     [InlineData("-4", "0.0001")]
-    public void Exp10_NegativeIntegerPowers_ReturnsCorrectValue(string inputStr, string expectedStr)
+    public void Exp10_NegativeIntegerPowers_ReturnsExpectedResult(string inputStr, string expectedStr)
     {
         var input = (ChiFixed)decimal.Parse(inputStr, CultureInfo.InvariantCulture);
         var expected = (ChiFixed)decimal.Parse(expectedStr, CultureInfo.InvariantCulture);
@@ -198,7 +198,7 @@ public class ExponentialTests
     [InlineData("0.5", "3.162277660")]
     [InlineData("1.5", "31.622776602")]
     [InlineData("0.25", "1.778279410")]
-    public void Exp10_FractionalPowers_ReturnsCorrectValue(string inputStr, string expectedStr)
+    public void Exp10_FractionalPowers_ReturnsExpectedResult(string inputStr, string expectedStr)
     {
         var input = (ChiFixed)decimal.Parse(inputStr, CultureInfo.InvariantCulture);
         var expected = (ChiFixed)decimal.Parse(expectedStr, CultureInfo.InvariantCulture);
@@ -209,7 +209,7 @@ public class ExponentialTests
     [Theory]
     [InlineData("-0.5", "0.316227766")]
     [InlineData("-1.5", "0.031622777")]
-    public void Exp10_NegativeFractionalPowers_ReturnsCorrectValue(string inputStr, string expectedStr)
+    public void Exp10_NegativeFractionalPowers_ReturnsExpectedResult(string inputStr, string expectedStr)
     {
         var input = (ChiFixed)decimal.Parse(inputStr, CultureInfo.InvariantCulture);
         var expected = (ChiFixed)decimal.Parse(expectedStr, CultureInfo.InvariantCulture);
@@ -220,7 +220,7 @@ public class ExponentialTests
     [Theory]
     [InlineData("0.1", "1.258925412")]
     [InlineData("0.01", "1.023292992")]
-    public void Exp10_SmallFractionalPowers_ReturnsCorrectValue(string inputStr, string expectedStr)
+    public void Exp10_SmallFractionalPowers_ReturnsExpectedResult(string inputStr, string expectedStr)
     {
         var input = (ChiFixed)decimal.Parse(inputStr, CultureInfo.InvariantCulture);
         var expected = (ChiFixed)decimal.Parse(expectedStr, CultureInfo.InvariantCulture);

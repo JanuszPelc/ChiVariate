@@ -12,7 +12,7 @@ public class SpatialSquareTests(ITestOutputHelper testOutputHelper)
     private const int SampleCount = 100_000;
 
     [Fact]
-    public void PointInSquare_SamplesAreWithinBounds()
+    public void Sample_InSquare_StaysWithinBounds()
     {
         const float extents = 10.0f;
         var rng = new ChiRng(ChiSeed.Scramble("PointInSquareBounds"));
@@ -27,7 +27,7 @@ public class SpatialSquareTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void PointInSquare_DistributionIsSpatiallyUniform()
+    public void Sample_InSquare_IsSpatiallyUniform()
     {
         const float extents = 1.0f;
         var rng = new ChiRng(ChiSeed.Scramble("PointInSquareUniformity"));
@@ -50,7 +50,7 @@ public class SpatialSquareTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void PointOnSquare_SamplesAreOnThePerimeter()
+    public void Sample_OnSquare_LiesOnPerimeter()
     {
         const float extents = 5.0f;
         var rng = new ChiRng(ChiSeed.Scramble("PointOnSquareBounds"));
@@ -69,7 +69,7 @@ public class SpatialSquareTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void PointOnSquare_DistributionIsSpatiallyUniform()
+    public void Sample_OnSquare_DistributesEvenlyAcrossEdges()
     {
         const float extents = 1.0f;
         var rng = new ChiRng(ChiSeed.Scramble("PointOnSquareUniformity"));
@@ -110,7 +110,7 @@ public class SpatialSquareTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void PointSquare_WithInvalidExtents_ThrowsArgumentOutOfRangeException()
+    public void InSquare_WithInvalidExtents_ThrowsArgumentOutOfRangeException()
     {
         var rng = new ChiRng();
         var act = () => { rng.Spatial().InSquare(-1.0f); };

@@ -18,7 +18,7 @@ public class FixedTests(ITestOutputHelper testOutputHelper)
     [InlineData(0.0, 0.25)] // Tightly clustered near 1
     [InlineData(1.0, 0.5)] // Shifted, less skewed
     [InlineData(0.0, 1.0)] // Standard Log-Normal
-    public void Sample_WithVariousParameters_ProducesLogNormalDistribution(double mu, double sigma)
+    public void Sample_AcrossMuAndSigma_MatchesLogNormalDistribution(double mu, double sigma)
     {
         var m = (ChiFixed)(decimal)mu;
         var s = (ChiFixed)(decimal)sigma;
@@ -38,7 +38,7 @@ public class FixedTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void Sample_StandardLogNormal_HasCorrectMeanAndMode()
+    public void Sample_StandardLogNormal_ReturnsExpectedMean()
     {
         // LogNormal(0, 1) has mean = e^0.5 ≈ 1.649, mode = e^-1 ≈ 0.368
         var mu = ChiFixed.Zero;

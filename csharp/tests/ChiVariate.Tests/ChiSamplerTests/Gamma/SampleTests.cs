@@ -16,7 +16,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     [InlineData(0.5, 2.0)]
     [InlineData(1.0, 2.0)]
     [InlineData(9.0, 2.0)]
-    public void Sample_ProducesDistributionWithCorrectStatistics(double shape, double scale)
+    public void Sample_AcrossShapeAndScale_MatchesGammaDistribution(double shape, double scale)
     {
         var rng = new ChiRng(ChiSeed.Scramble("Gamma", shape * 100 + scale));
         var expectedMean = shape * scale;
@@ -35,7 +35,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void Gamma_MatchesEquivalentExponentialDistribution()
+    public void Sample_WhenShapeIsOne_MatchesExponential()
     {
         const double scale = 2.0;
         const double rateLambda = 1.0 / scale;
@@ -69,7 +69,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     [InlineData(-1.0, 1.0)]
     [InlineData(1.0, 0.0)]
     [InlineData(1.0, -1.0)]
-    public void Gamma_WithInvalidParameters_ThrowsArgumentOutOfRangeException(double shape, double scale)
+    public void Sample_WithInvalidParameters_ThrowsArgumentOutOfRangeException(double shape, double scale)
     {
         var rng = new ChiRng(0);
 
@@ -81,7 +81,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     [Theory]
     [InlineData("9.0", "2.0")] // Good, well-behaved case
     [InlineData("0.5", "2.0")] // Shape < 1 case
-    public void Sample_Decimal_ProducesDistributionWithCorrectStatistics(string shapeStr, string scaleStr)
+    public void Sample_Decimal_MatchesGammaDistribution(string shapeStr, string scaleStr)
     {
         var shape = decimal.Parse(shapeStr, CultureInfo.InvariantCulture);
         var scale = decimal.Parse(scaleStr, CultureInfo.InvariantCulture);
@@ -102,7 +102,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     [Theory]
     [InlineData("Deterministic")]
     [InlineData("Randomized")]
-    public void Snapshot_WithRestoredState_ProducesIdenticalSamples(string seed)
+    public void Sample_WithRestoredSnapshot_ProducesIdenticalSamples(string seed)
     {
         var rng = seed == "Randomized" ? new ChiRng() : new ChiRng(seed);
         var warmupCount = rng.Chance().PickBetween(100, 1000);

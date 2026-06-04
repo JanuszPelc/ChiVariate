@@ -17,7 +17,7 @@ public class FixedTests(ITestOutputHelper testOutputHelper)
     [InlineData(0.0, 1.0)] // Standard Logistic
     [InlineData(5.0, 2.0)] // Shifted and scaled
     [InlineData(-10.0, 0.5)] // Shifted and narrow
-    public void Sample_WithVariousParameters_ProducesLogisticDistribution(double location, double scale)
+    public void Sample_AcrossLocationAndScale_ProducesLogisticDistribution(double location, double scale)
     {
         var loc = (ChiFixed)(decimal)location;
         var sc = (ChiFixed)(decimal)scale;
@@ -36,7 +36,7 @@ public class FixedTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void Sample_StandardLogistic_HasMeanAtZero()
+    public void Sample_StandardLogistic_ProducesMeanNearZero()
     {
         var location = ChiFixed.Zero;
         var scale = ChiFixed.One;

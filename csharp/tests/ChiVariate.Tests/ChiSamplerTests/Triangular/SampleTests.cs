@@ -18,7 +18,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     [InlineData(0.0, 10.0, 8.0)] // Right-skewed
     [InlineData(-10.0, 10.0, 0.0)] // Symmetric around zero
     [InlineData(50.0, 60.0, 51.0)] // Narrow and shifted
-    public void Sample_ProducesDistributionWithCorrectProperties(double min, double max, double mode)
+    public void Sample_AcrossMinMaxAndMode_MatchesTriangularDistribution(double min, double max, double mode)
     {
         var rng = new ChiRng(ChiSeed.Scramble("Triangular", mode));
         var histogram = new Histogram(min, max, 100);
@@ -38,7 +38,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     [InlineData(0, 10, -1)] // mode < min
     [InlineData(0, 10, 11)] // mode > max
     [InlineData(5, 5, 5)] // min = max
-    public void Triangular_WithInvalidParameters_ThrowsException(double min, double max, double mode)
+    public void Triangular_WithInvalidParameters_ThrowsArgumentException(double min, double max, double mode)
     {
         var rng = new ChiRng(0);
 
@@ -68,7 +68,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     [Theory]
     [InlineData("0.0", "10.0", "2.0")] // Left-skewed
     [InlineData("-10.0", "10.0", "0.0")] // Symmetric around zero
-    public void Sample_Decimal_ProducesDistributionWithCorrectProperties(string minStr, string maxStr, string modeStr)
+    public void Sample_Decimal_MatchesTriangularDistribution(string minStr, string maxStr, string modeStr)
     {
         var min = decimal.Parse(minStr, CultureInfo.InvariantCulture);
         var max = decimal.Parse(maxStr, CultureInfo.InvariantCulture);

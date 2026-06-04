@@ -35,7 +35,7 @@ public class ComparisonOpsTests
     }
 
     [Fact]
-    public void Equality_Reflexive_ValueEqualsItself()
+    public void Equality_Reflexive_ReturnsTrue()
     {
         var value = (ChiFixed)3.14m;
 
@@ -43,7 +43,7 @@ public class ComparisonOpsTests
     }
 
     [Fact]
-    public void Equality_Symmetric_OrderDoesNotMatter()
+    public void Equality_Symmetric_ReturnsSameResultRegardlessOfOrder()
     {
         var a = (ChiFixed)2.5m;
         var b = (ChiFixed)2.5m;
@@ -52,7 +52,7 @@ public class ComparisonOpsTests
     }
 
     [Fact]
-    public void Equality_Transitive_ChainedEquality()
+    public void Equality_Transitive_ReturnsTrue()
     {
         var a = (ChiFixed)5m;
         var b = (ChiFixed)5m;
@@ -203,7 +203,7 @@ public class ComparisonOpsTests
     }
 
     [Fact]
-    public void Comparison_NegativeAndPositive_CorrectOrdering()
+    public void Comparison_NegativeAndPositive_OrdersByValue()
     {
         var negative = (ChiFixed)(-5m);
         var positive = (ChiFixed)5m;
@@ -215,7 +215,7 @@ public class ComparisonOpsTests
     }
 
     [Fact]
-    public void Comparison_NegativeValues_CorrectOrdering()
+    public void Comparison_NegativeValues_OrdersByValue()
     {
         var moreNegative = (ChiFixed)(-10m);
         var lessNegative = (ChiFixed)(-5m);
@@ -225,7 +225,7 @@ public class ComparisonOpsTests
     }
 
     [Fact]
-    public void Comparison_ZeroWithPositiveAndNegative_CorrectOrdering()
+    public void Comparison_ZeroWithPositiveAndNegative_OrdersByValue()
     {
         var negative = (ChiFixed)(-1m);
         var positive = (ChiFixed)1m;
@@ -237,7 +237,7 @@ public class ComparisonOpsTests
     }
 
     [Fact]
-    public void Transitivity_LessThanChain_Holds()
+    public void LessThan_Transitive_ReturnsTrue()
     {
         var a = (ChiFixed)1m;
         var b = (ChiFixed)2m;
@@ -249,7 +249,7 @@ public class ComparisonOpsTests
     }
 
     [Fact]
-    public void Antisymmetry_EqualValues_HoldsTrue()
+    public void LessThanOrEqual_Antisymmetric_ReturnsTrueBothDirections()
     {
         var a = (ChiFixed)5m;
         var b = (ChiFixed)5m;

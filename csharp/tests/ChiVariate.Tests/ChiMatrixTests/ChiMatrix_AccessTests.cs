@@ -16,7 +16,7 @@ public class ChiMatrix_AccessTests
     [InlineData(5, 25)]
     [InlineData(6, 36)]
     [InlineData(7, 49)]
-    public void Matrix_CreateSquareOnes_HasCorrectLength(int dimension, int expected)
+    public void Ones_SquareDimensions_HasLengthEqualToElementCount(int dimension, int expected)
     {
         var matrix = ChiMatrix.Ones<double>(dimension, dimension);
 
@@ -26,7 +26,7 @@ public class ChiMatrix_AccessTests
     }
 
     [Fact]
-    public void Indexer_Read3x3Matrix_ReturnsCorrectValues()
+    public void Indexer_Read_ReturnsRowMajorValues()
     {
         var matrix = ChiMatrix.Zeros<double>(3, 3);
         var span = matrix.Span;
@@ -63,7 +63,7 @@ public class ChiMatrix_AccessTests
     }
 
     [Fact]
-    public void Matrix_SpanWrite_ReflectsInIndexer()
+    public void Span_Write_ReflectsInIndexer()
     {
         var matrix = ChiMatrix.Zeros<double>(2, 3);
         var span = matrix.Span;
@@ -84,7 +84,7 @@ public class ChiMatrix_AccessTests
     }
 
     [Fact]
-    public void Matrix_MultipleSpanAccess_ReferencesSameMemory()
+    public void Span_MultipleAccess_ReferencesSameMemory()
     {
         var matrix = ChiMatrix.Zeros<double>(2, 2);
 
@@ -98,7 +98,7 @@ public class ChiMatrix_AccessTests
     }
 
     [Fact]
-    public void Matrix_CreateSquareFloat_SpanHasCorrectValues()
+    public void Indexer_Float_ReflectsInSpan()
     {
         var matrix = ChiMatrix.Zeros<float>(2, 2);
 
@@ -115,7 +115,7 @@ public class ChiMatrix_AccessTests
     }
 
     [Fact]
-    public void Matrix_CreateSquareDecimal_SpanHasCorrectValues()
+    public void Indexer_Decimal_ReflectsInSpan()
     {
         var matrix = ChiMatrix.Zeros<decimal>(2, 2);
 
@@ -132,7 +132,7 @@ public class ChiMatrix_AccessTests
     }
 
     [Fact]
-    public void Matrix_RowMajorOrdering_MapsCorrectly()
+    public void Indexer_Write_StoresInRowMajorOrder()
     {
         var matrix = ChiMatrix.Zeros<double>(3, 4);
 
@@ -149,7 +149,7 @@ public class ChiMatrix_AccessTests
     }
 
     [Fact]
-    public void Matrix_CreateFull_HasCorrectValues()
+    public void Full_FillValue_SetsAllElements()
     {
         var matrix = ChiMatrix.Full(3, 3, 42.0);
         var span = matrix.Span;
@@ -159,7 +159,7 @@ public class ChiMatrix_AccessTests
     }
 
     [Fact]
-    public void Matrix_CreateVector_SpanHasCorrectValues()
+    public void Indexer_RowVector_ReflectsInSpan()
     {
         var row = ChiMatrix.Zeros<double>(1, 5);
 
@@ -175,7 +175,7 @@ public class ChiMatrix_AccessTests
     }
 
     [Fact]
-    public void Matrix_CreateColumn_SpanHasCorrectValues()
+    public void Indexer_ColumnVector_ReflectsInSpan()
     {
         var column = ChiMatrix.Zeros<double>(4, 1);
 
@@ -190,7 +190,7 @@ public class ChiMatrix_AccessTests
     }
 
     [Fact]
-    public void Matrix_MaxInlineLength_AllowsFullAccess()
+    public void Indexer_MaxInlineSize_AllowsFullAccess()
     {
         var matrix = ChiMatrix.Zeros<double>(5, 5);
 
@@ -207,7 +207,7 @@ public class ChiMatrix_AccessTests
     [InlineData(-1, 1)]
     [InlineData(1, -1)]
     [InlineData(0, 0)]
-    public void Matrix_CreateInvalid_ThrowsArgumentOutOfRange(int rows, int cols)
+    public void Zeros_InvalidDimensions_ThrowsArgumentOutOfRange(int rows, int cols)
     {
         var action = () => ChiMatrix.Zeros<double>(rows, cols);
         action.Should().Throw<ArgumentOutOfRangeException>();
@@ -230,7 +230,7 @@ public class ChiMatrix_AccessTests
     }
 
     [Fact]
-    public void Matrix_HeapBacked_AccessAfterDisposeThrows()
+    public void Span_HeapBackedAfterDispose_ThrowsObjectDisposed()
     {
         var matrix = ChiMatrix.Zeros<double>(10, 10);
         matrix.DebugInfo().IsHeapBacked.Should().BeTrue();
@@ -243,7 +243,7 @@ public class ChiMatrix_AccessTests
     }
 
     [Fact]
-    public void Matrix_InlineBacked_AccessAfterDisposeDoesNotThrow()
+    public void Span_InlineBackedAfterDispose_DoesNotThrow()
     {
         var matrix = ChiMatrix.Zeros<double>(2, 2);
         matrix.DebugInfo().IsHeapBacked.Should().BeFalse();
@@ -256,7 +256,7 @@ public class ChiMatrix_AccessTests
     }
 
     [Fact]
-    public void Matrix_CreateIdentity_HasDiagonalOnes()
+    public void Eye_Dimension_HasOnesOnDiagonalZerosElsewhere()
     {
         var identity = ChiMatrix.Eye<double>(3);
 
@@ -273,7 +273,7 @@ public class ChiMatrix_AccessTests
     }
 
     [Fact]
-    public void Matrix_CreateDiagonal_HasExpectedValues()
+    public void Diagonal_FromVector_PlacesValuesOnDiagonal()
     {
         var matrix = ChiMatrix.Diagonal([3.0, 2.0, 1.0]);
 
@@ -287,7 +287,7 @@ public class ChiMatrix_AccessTests
     }
 
     [Fact]
-    public void Matrix_Hilbert_CreatesCorrectMatrix()
+    public void Hilbert_Size_MatchesClosedFormValues()
     {
         const int size = 4;
 
@@ -307,7 +307,7 @@ public class ChiMatrix_AccessTests
     }
 
     [Fact]
-    public void Matrix_Toeplitz_CreatesCorrectSymmetricMatrix()
+    public void Toeplitz_FromFirstRow_MatchesConstantDiagonals()
     {
         var firstRow = new double[] { 5, 2, 1 };
 
@@ -338,7 +338,7 @@ public class ChiMatrix_AccessTests
     }
 
     [Fact]
-    public void Matrix_Vandermonde_CreatesCorrectSquareMatrix()
+    public void Vandermonde_SquareDefault_MatchesPowerValues()
     {
         var vector = new double[] { 1, 2, 3 };
 
@@ -370,7 +370,7 @@ public class ChiMatrix_AccessTests
     }
 
     [Fact]
-    public void Matrix_Vandermonde_CreatesCorrectRectangularMatrix()
+    public void Vandermonde_RectangularColumns_MatchesPowerValues()
     {
         var vector = new[] { 2.0, 4 };
 

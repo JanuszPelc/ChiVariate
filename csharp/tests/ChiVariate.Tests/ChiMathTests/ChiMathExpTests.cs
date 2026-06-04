@@ -15,7 +15,7 @@ public class ChiMathExpTests
     [InlineData(-1.0f, 0.367879f)]
     [InlineData(2.0f, 7.389056f)]
     [InlineData(0.693147f, 2.0f)]
-    public void Exp_FloatBasicCases_ReturnsExpectedResults(float input, float expected)
+    public void Exp_Float_ReturnsExpectedResults(float input, float expected)
     {
         var result = ChiMath.Exp(input);
 
@@ -56,7 +56,7 @@ public class ChiMathExpTests
     [InlineData(-2.0, 0.1353352832366127)]
     [InlineData(0.6931471805599453, 2.0)]
     [InlineData(2.302585092994046, 10.0)]
-    public void Exp_DoubleBasicCases_ReturnsExpectedResults(double input, double expected)
+    public void Exp_Double_ReturnsExpectedResults(double input, double expected)
     {
         var result = ChiMath.Exp(input);
 
@@ -78,7 +78,7 @@ public class ChiMathExpTests
     [InlineData(-0.001)]
     [InlineData(-0.01)]
     [InlineData(-0.1)]
-    public void Exp_DoubleSmallValues_ReturnsAccurateResults(double input)
+    public void Exp_DoubleSmallValues_MatchesSystemMath(double input)
     {
         var result = ChiMath.Exp(input);
 
@@ -121,7 +121,7 @@ public class ChiMathExpTests
     [InlineData("2", "7.38905609893065022723042746057500781318031557055184732408713")]
     [InlineData("0.693147180559945309417232121458176568075500134360255254120680", "2")]
     [InlineData("2.302585092994045684017991454684364207601101488628772976033", "10")]
-    public void Exp_DecimalBasicCases_ReturnsExpectedResults(string inputStr, string expectedStr)
+    public void Exp_Decimal_ReturnsExpectedResults(string inputStr, string expectedStr)
     {
         var input = decimal.Parse(inputStr, CultureInfo.InvariantCulture);
         var expected = decimal.Parse(expectedStr, CultureInfo.InvariantCulture);
@@ -146,7 +146,7 @@ public class ChiMathExpTests
     [InlineData("-0.001")]
     [InlineData("-0.01")]
     [InlineData("-0.1")]
-    public void Exp_DecimalSmallValues_ReturnsAccurateResults(string inputStr)
+    public void Exp_DecimalSmallValues_ReturnsPositiveResult(string inputStr)
     {
         var input = decimal.Parse(inputStr, CultureInfo.InvariantCulture);
 
@@ -195,7 +195,7 @@ public class ChiMathExpTests
     [InlineData("-1", "0.367879441171442")]
     [InlineData("2", "7.38905609893065")]
     [InlineData("0.693147180559945", "2")]
-    public void Exp_ChiFixedBasicCases_ReturnsExpectedResults(string inputStr, string expectedStr)
+    public void Exp_ChiFixed_ReturnsExpectedResults(string inputStr, string expectedStr)
     {
         var input = (ChiFixed)decimal.Parse(inputStr, CultureInfo.InvariantCulture);
         var expected = (ChiFixed)decimal.Parse(expectedStr, CultureInfo.InvariantCulture);
@@ -218,7 +218,7 @@ public class ChiMathExpTests
     [InlineData("1.5")]
     [InlineData("-0.5")]
     [InlineData("-1.5")]
-    public void Exp_ChiFixedArbitrary_ReturnsPositive(string inputStr)
+    public void Exp_ChiFixedMixedSignValues_ReturnsPositiveResult(string inputStr)
     {
         var input = (ChiFixed)decimal.Parse(inputStr, CultureInfo.InvariantCulture);
 

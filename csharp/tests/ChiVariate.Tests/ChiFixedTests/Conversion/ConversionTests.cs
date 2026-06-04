@@ -8,7 +8,7 @@ namespace ChiVariate.Tests.ChiFixedTests.Conversion;
 public class ConversionTests
 {
     [Fact]
-    public void TryConvertFromChecked_Byte_Success()
+    public void TryConvertFromChecked_Byte_ReturnsExpectedValue()
     {
         var success = ChiFixed.TryConvertFromChecked<byte>(42, out var result);
 
@@ -17,7 +17,7 @@ public class ConversionTests
     }
 
     [Fact]
-    public void TryConvertFromChecked_SByte_Success()
+    public void TryConvertFromChecked_SByte_ReturnsExpectedValue()
     {
         var success = ChiFixed.TryConvertFromChecked<sbyte>(-42, out var result);
 
@@ -26,7 +26,7 @@ public class ConversionTests
     }
 
     [Fact]
-    public void TryConvertFromChecked_Short_Success()
+    public void TryConvertFromChecked_Short_ReturnsExpectedValue()
     {
         var success = ChiFixed.TryConvertFromChecked<short>(1000, out var result);
 
@@ -35,7 +35,7 @@ public class ConversionTests
     }
 
     [Fact]
-    public void TryConvertFromChecked_UShort_Success()
+    public void TryConvertFromChecked_UShort_ReturnsExpectedValue()
     {
         var success = ChiFixed.TryConvertFromChecked<ushort>(1000, out var result);
 
@@ -44,7 +44,7 @@ public class ConversionTests
     }
 
     [Fact]
-    public void TryConvertFromChecked_Int_Success()
+    public void TryConvertFromChecked_Int_ReturnsExpectedValue()
     {
         var success = ChiFixed.TryConvertFromChecked(12345, out var result);
 
@@ -53,7 +53,7 @@ public class ConversionTests
     }
 
     [Fact]
-    public void TryConvertFromChecked_UInt_Success()
+    public void TryConvertFromChecked_UInt_ReturnsExpectedValue()
     {
         var success = ChiFixed.TryConvertFromChecked(12345u, out var result);
 
@@ -62,7 +62,7 @@ public class ConversionTests
     }
 
     [Fact]
-    public void TryConvertFromChecked_LongWithinRange_Success()
+    public void TryConvertFromChecked_LongWithinRange_ReturnsExpectedValue()
     {
         var success = ChiFixed.TryConvertFromChecked(1000L, out var result);
 
@@ -71,7 +71,7 @@ public class ConversionTests
     }
 
     [Fact]
-    public void TryConvertFromChecked_LongTooLarge_Fails()
+    public void TryConvertFromChecked_LongTooLarge_ReturnsFalse()
     {
         var success = ChiFixed.TryConvertFromChecked(long.MaxValue, out _);
 
@@ -79,7 +79,7 @@ public class ConversionTests
     }
 
     [Fact]
-    public void TryConvertFromChecked_LongTooSmall_Fails()
+    public void TryConvertFromChecked_LongTooSmall_ReturnsFalse()
     {
         var success = ChiFixed.TryConvertFromChecked(long.MinValue, out _);
 
@@ -87,7 +87,7 @@ public class ConversionTests
     }
 
     [Fact]
-    public void TryConvertFromChecked_ULongWithinRange_Success()
+    public void TryConvertFromChecked_ULongWithinRange_ReturnsExpectedValue()
     {
         var success = ChiFixed.TryConvertFromChecked(1000UL, out var result);
 
@@ -96,7 +96,7 @@ public class ConversionTests
     }
 
     [Fact]
-    public void TryConvertFromChecked_ULongTooLarge_Fails()
+    public void TryConvertFromChecked_ULongTooLarge_ReturnsFalse()
     {
         var success = ChiFixed.TryConvertFromChecked(ulong.MaxValue, out _);
 
@@ -104,7 +104,7 @@ public class ConversionTests
     }
 
     [Fact]
-    public void TryConvertFromChecked_Float_Success()
+    public void TryConvertFromChecked_Float_ReturnsExpectedValue()
     {
         var success = ChiFixed.TryConvertFromChecked(42.5f, out var result);
 
@@ -113,7 +113,7 @@ public class ConversionTests
     }
 
     [Fact]
-    public void TryConvertFromChecked_Double_Success()
+    public void TryConvertFromChecked_Double_ReturnsExpectedValue()
     {
         var success = ChiFixed.TryConvertFromChecked(42.5, out var result);
 
@@ -122,7 +122,7 @@ public class ConversionTests
     }
 
     [Fact]
-    public void TryConvertFromChecked_Decimal_Success()
+    public void TryConvertFromChecked_Decimal_ReturnsExpectedValue()
     {
         var success = ChiFixed.TryConvertFromChecked(123.456m, out var result);
 
@@ -131,7 +131,7 @@ public class ConversionTests
     }
 
     [Fact]
-    public void TryConvertFromChecked_Half_Success()
+    public void TryConvertFromChecked_Half_ReturnsExpectedValue()
     {
         var success = ChiFixed.TryConvertFromChecked((Half)42.5, out var result);
 
@@ -140,7 +140,7 @@ public class ConversionTests
     }
 
     [Fact]
-    public void TryConvertFromChecked_ChiFixed_Success()
+    public void TryConvertFromChecked_ChiFixed_ReturnsExpectedValue()
     {
         var original = (ChiFixed)42.5m;
         var success = ChiFixed.TryConvertFromChecked(original, out var result);
@@ -177,7 +177,7 @@ public class ConversionTests
     }
 
     [Fact]
-    public void TryConvertFromTruncating_LongTooLarge_Truncates()
+    public void TryConvertFromTruncating_LongTooLarge_ReturnsTrue()
     {
         var success = ChiFixed.TryConvertFromTruncating(long.MaxValue, out _);
 
@@ -185,7 +185,7 @@ public class ConversionTests
     }
 
     [Fact]
-    public void TryConvertToChecked_Byte_Success()
+    public void TryConvertToChecked_Byte_ReturnsExpectedValue()
     {
         var value = (ChiFixed)42m;
         var success = ChiFixed.TryConvertToChecked(value, out byte result);
@@ -195,7 +195,7 @@ public class ConversionTests
     }
 
     [Fact]
-    public void TryConvertToChecked_ByteNegative_Fails()
+    public void TryConvertToChecked_ByteNegative_ReturnsFalse()
     {
         var value = (ChiFixed)(-1m);
         var success = ChiFixed.TryConvertToChecked(value, out byte _);
@@ -204,7 +204,7 @@ public class ConversionTests
     }
 
     [Fact]
-    public void TryConvertToChecked_ByteTooLarge_Fails()
+    public void TryConvertToChecked_ByteTooLarge_ReturnsFalse()
     {
         var value = (ChiFixed)300m;
         var success = ChiFixed.TryConvertToChecked(value, out byte _);
@@ -213,7 +213,7 @@ public class ConversionTests
     }
 
     [Fact]
-    public void TryConvertToChecked_SByte_Success()
+    public void TryConvertToChecked_SByte_ReturnsExpectedValue()
     {
         var value = (ChiFixed)(-42m);
         var success = ChiFixed.TryConvertToChecked(value, out sbyte result);
@@ -223,7 +223,7 @@ public class ConversionTests
     }
 
     [Fact]
-    public void TryConvertToChecked_SByteTooLarge_Fails()
+    public void TryConvertToChecked_SByteTooLarge_ReturnsFalse()
     {
         var value = (ChiFixed)200m;
         var success = ChiFixed.TryConvertToChecked(value, out sbyte _);
@@ -232,7 +232,7 @@ public class ConversionTests
     }
 
     [Fact]
-    public void TryConvertToChecked_SByteTooSmall_Fails()
+    public void TryConvertToChecked_SByteTooSmall_ReturnsFalse()
     {
         var value = (ChiFixed)(-200m);
         var success = ChiFixed.TryConvertToChecked(value, out sbyte _);
@@ -241,7 +241,7 @@ public class ConversionTests
     }
 
     [Fact]
-    public void TryConvertToChecked_Int_Success()
+    public void TryConvertToChecked_Int_ReturnsExpectedValue()
     {
         var value = (ChiFixed)12345m;
         var success = ChiFixed.TryConvertToChecked(value, out int result);
@@ -261,7 +261,7 @@ public class ConversionTests
     }
 
     [Fact]
-    public void TryConvertToChecked_Long_Success()
+    public void TryConvertToChecked_Long_ReturnsExpectedValue()
     {
         var value = (ChiFixed)12345m;
         var success = ChiFixed.TryConvertToChecked(value, out long result);
@@ -271,7 +271,7 @@ public class ConversionTests
     }
 
     [Fact]
-    public void TryConvertToChecked_ULong_Success()
+    public void TryConvertToChecked_ULong_ReturnsExpectedValue()
     {
         var value = (ChiFixed)12345m;
         var success = ChiFixed.TryConvertToChecked(value, out ulong result);
@@ -281,7 +281,7 @@ public class ConversionTests
     }
 
     [Fact]
-    public void TryConvertToChecked_ULongNegative_Fails()
+    public void TryConvertToChecked_ULongNegative_ReturnsFalse()
     {
         var value = (ChiFixed)(-1m);
         var success = ChiFixed.TryConvertToChecked(value, out ulong _);
@@ -290,7 +290,7 @@ public class ConversionTests
     }
 
     [Fact]
-    public void TryConvertToChecked_Float_Success()
+    public void TryConvertToChecked_Float_ReturnsExpectedValue()
     {
         var value = (ChiFixed)42.5m;
         var success = ChiFixed.TryConvertToChecked(value, out float result);
@@ -300,7 +300,7 @@ public class ConversionTests
     }
 
     [Fact]
-    public void TryConvertToChecked_Double_Success()
+    public void TryConvertToChecked_Double_ReturnsExpectedValue()
     {
         var value = (ChiFixed)42.5m;
         var success = ChiFixed.TryConvertToChecked(value, out double result);
@@ -310,7 +310,7 @@ public class ConversionTests
     }
 
     [Fact]
-    public void TryConvertToChecked_Decimal_Success()
+    public void TryConvertToChecked_Decimal_ReturnsExpectedValue()
     {
         var value = (ChiFixed)42.5m;
         var success = ChiFixed.TryConvertToChecked(value, out decimal result);
@@ -320,7 +320,7 @@ public class ConversionTests
     }
 
     [Fact]
-    public void TryConvertToChecked_Half_Success()
+    public void TryConvertToChecked_Half_ReturnsExpectedValue()
     {
         var value = (ChiFixed)42.5m;
         var success = ChiFixed.TryConvertToChecked(value, out Half result);
@@ -330,7 +330,7 @@ public class ConversionTests
     }
 
     [Fact]
-    public void TryConvertToChecked_ChiFixed_Success()
+    public void TryConvertToChecked_ChiFixed_ReturnsExpectedValue()
     {
         var value = (ChiFixed)42.5m;
         var success = ChiFixed.TryConvertToChecked(value, out ChiFixed result);

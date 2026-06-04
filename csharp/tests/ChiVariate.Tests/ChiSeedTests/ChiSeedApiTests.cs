@@ -18,7 +18,7 @@ public class ChiSeedApiTests
     [InlineData(-987654321098765L)]
     [InlineData(long.MaxValue)]
     [InlineData(long.MinValue)]
-    public void Scramble_GivenSameInput_ReturnsSameOutput(long value)
+    public void Scramble_LongSameInputTwice_ReturnsSameOutput(long value)
     {
         var scrambled1 = ChiSeed.Scramble(value);
         var scrambled2 = ChiSeed.Scramble(value);
@@ -33,7 +33,7 @@ public class ChiSeedApiTests
     [InlineData(long.MaxValue, long.MaxValue - 1)]
     [InlineData(long.MinValue, long.MinValue + 1)]
     [InlineData(0L, -1L)]
-    public void Scramble_GivenDifferentInputs_ReturnsDifferentOutputs(long value1, long value2)
+    public void Scramble_LongDistinctInputs_ReturnsDifferentOutputs(long value1, long value2)
     {
         value1.Should().NotBe(value2);
 
@@ -112,7 +112,7 @@ public class ChiSeedApiTests
     }
 
     [Fact]
-    public void Scramble_StringGivenEmptyInput_ReturnsDeterministicOutput()
+    public void Scramble_StringGivenEmptyInput_ReturnsSameNonZeroOutput()
     {
         const string emptyString = "";
 
@@ -132,7 +132,7 @@ public class ChiSeedApiTests
     [InlineData("\t\n\r ", 6552475925946505334L)] // Whitespace variations
     [InlineData("你好世界", 3950144026336539582L)] // Non-ASCII BMP
     [InlineData("👍", -7582485440326701622L)] // Supplementary character
-    public void ChiMix64_GivenStringInput_ReturnsDeterministicOutput(string input, long expected)
+    public void MixValue_GivenStringInput_ReturnsExpectedResult(string input, long expected)
     {
         if (input == "--null--") input = null!;
         var scrambled = ChiMix64.MixValue(ChiMix64.InitialValue, input);
@@ -141,7 +141,7 @@ public class ChiSeedApiTests
     }
 
     [Fact]
-    public void Scramble_GivenSupportedValues_ReturnsDeterministicSeeds()
+    public void Scramble_AcrossSupportedTypes_ReturnsExpectedSeeds()
     {
         const string? nullString = null;
 

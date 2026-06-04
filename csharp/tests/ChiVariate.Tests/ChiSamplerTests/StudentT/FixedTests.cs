@@ -18,7 +18,7 @@ public class FixedTests(ITestOutputHelper testOutputHelper)
     [InlineData(3.0)] // Has defined variance, heavy tails
     [InlineData(5.0)] // Moderate tails
     [InlineData(30.0)] // Approaches Normal(0, 1)
-    public void Sample_WithVariousDoF_ProducesStudentTDistribution(double degreesOfFreedom)
+    public void Sample_AcrossDegreesOfFreedom_MatchesStudentTDistribution(double degreesOfFreedom)
     {
         var df = (ChiFixed)(decimal)degreesOfFreedom;
 
@@ -37,7 +37,7 @@ public class FixedTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void Sample_LargeDoF_ApproachesStandardNormal()
+    public void Sample_AtLargeDegreesOfFreedom_ApproachesStandardNormal()
     {
         // StudentT(30) should be very close to Normal(0, 1)
         var df = (ChiFixed)30m;

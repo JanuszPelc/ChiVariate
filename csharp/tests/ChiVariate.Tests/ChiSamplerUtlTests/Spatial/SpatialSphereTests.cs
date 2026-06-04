@@ -12,7 +12,7 @@ public class SpatialSphereTests(ITestOutputHelper testOutputHelper)
     private const int SampleCount = 100_000;
 
     [Fact]
-    public void PointOnSphere_SamplesAreCorrectlyNormalized()
+    public void Sample_OnSphere_HasMagnitudeEqualToRadius()
     {
         const float radius = 5.0f;
         var rng = new ChiRng(ChiSeed.Scramble("PointOnSphereNormalization"));
@@ -28,7 +28,7 @@ public class SpatialSphereTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void PointOnSphere_DistributionIsSpatiallyUniform()
+    public void Sample_OnSphere_IsSpatiallyUniform()
     {
         var rng = new ChiRng(ChiSeed.Scramble("PointOnSphereUniformity"));
         var sampler = rng.Spatial().OnSphere(1.0);
@@ -64,7 +64,7 @@ public class SpatialSphereTests(ITestOutputHelper testOutputHelper)
 
 
     [Fact]
-    public void PointInSphere_SamplesAreWithinBounds()
+    public void Sample_InSphere_IsWithinRadius()
     {
         const float radius = 10.0f;
         var rng = new ChiRng(ChiSeed.Scramble("PointInSphereBounds"));
@@ -83,7 +83,7 @@ public class SpatialSphereTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void PointInSphere_DistributionIsSpatiallyUniform()
+    public void Sample_InSphere_IsSpatiallyUniform()
     {
         var rng = new ChiRng(ChiSeed.Scramble("PointInSphereUniformity"));
         var sampler = rng.Spatial().InSphere(1.0f);
@@ -123,7 +123,7 @@ public class SpatialSphereTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void PointSphere_WithInvalidRadius_ThrowsArgumentOutOfRangeException()
+    public void InSphere_WithInvalidRadius_ThrowsArgumentOutOfRangeException()
     {
         var rng = new ChiRng();
         var act = () => { rng.Spatial().InSphere(-1.0f); };

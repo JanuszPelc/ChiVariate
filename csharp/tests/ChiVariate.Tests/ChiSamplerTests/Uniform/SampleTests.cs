@@ -48,7 +48,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void Sample_Always_StaysWithinBounds()
+    public void Sample_AcrossBoundedRange_StaysWithinBounds()
     {
         var rng = new ChiRng("BoundedUniform_BoundsCheck");
         const double min = 10.0;

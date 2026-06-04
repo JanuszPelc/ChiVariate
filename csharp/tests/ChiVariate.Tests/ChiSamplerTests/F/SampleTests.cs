@@ -15,7 +15,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     [InlineData(5, 10)] // Test variance for d2 >= 10
     [InlineData(10, 20)]
     [InlineData(20, 30)]
-    public void Sample_ProducesDistributionWithCorrectStatistics(int d1, int d2)
+    public void Sample_AcrossDegreesOfFreedom_MatchesFDistribution(int d1, int d2)
     {
         var rng = new ChiRng(ChiSeed.Scramble("F-dist", new ChiHash().Add(d1).Add(d2).Hash));
         var sampler = rng.F(d1, (double)d2);
@@ -41,7 +41,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void Sample_WithSmallDof_ProducesCorrectMean()
+    public void Sample_WithSmallDof_MatchesTheoreticalMean()
     {
         const int d1 = 5, d2 = 5;
         var rng = new ChiRng(ChiSeed.Scramble("F-dist", new ChiHash().Add(d1).Add(d2).Hash));
@@ -75,7 +75,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void Sample_Decimal_ProducesCorrectStatistics()
+    public void Sample_Decimal_MatchesFDistribution()
     {
         const decimal d1 = 5.0m;
         const decimal d2 = 10.0m;

@@ -12,7 +12,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     private const int SampleCount = 1000;
 
     [Fact]
-    public void CanonicalSequence_WithFixedSeed_IsBitForBitDeterministic()
+    public void Sample_CanonicalWithFixedSeed_IsBitForBitDeterministic()
     {
         var rng1 = new ChiRng("TestSeed");
         var rng2 = new ChiRng("TestSeed");
@@ -30,7 +30,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void RandomizedSequence_WithFixedRngSeed_IsBitForBitDeterministic()
+    public void Sample_RandomizedWithFixedRngSeed_IsBitForBitDeterministic()
     {
         var rng1 = new ChiRng("RandomSeedForHalton");
         var rng2 = new ChiRng(rng1.Snapshot());
@@ -49,7 +49,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void RandomizedSequence_WithDifferentRngSeeds_ProducesDifferentSequences()
+    public void Sample_RandomizedWithDifferentRngSeeds_ProducesDifferentSequences()
     {
         var rng1 = new ChiRng("SeedA");
         var rng2 = new ChiRng("SeedB");
@@ -65,7 +65,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void RandomizedHalton_FromSameRng_ProducesDifferentSequencesThanCanonical()
+    public void Sample_RandomizedVsCanonical_ProducesDifferentSequences()
     {
         const int sampleCount = 1000;
         const int dimensions = 3;
@@ -107,7 +107,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void CanonicalHalton_2D_FirstFewPoints_MatchKnownValues()
+    public void Sample_Canonical2D_MatchesKnownValues()
     {
         var expectedPoints = new[]
         {
@@ -132,7 +132,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void HaltonSequence_Marginals_ShowExcellentUniformity()
+    public void Sample_Marginals_AreUniformlyDistributed()
     {
         const int dimensions = 2;
         const int samples = 10_000;
@@ -166,7 +166,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void Halton_HighDimensional_ShowsPrecisionDifferencesInPrimeBasedFractions()
+    public void Sample_HighDimensionalDoubleVsDecimal_RevealsPrecisionDifferences()
     {
         const int dimensions = 50; // First 50 primes: 2,3,5,7,11,13,17,19,23,29...
         const int sampleCount = 100;
@@ -243,7 +243,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void Halton_CachedDimensions_PerformBetterThanUncached()
+    public void Sample_CachedAndUncachedDimensions_ReturnsCorrectLength()
     {
         var rng = new ChiRng();
 
@@ -261,7 +261,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void Halton_HighDimensions_MaintainsQuality()
+    public void Sample_Across1024Dimensions_ReturnsValuesInUnitInterval()
     {
         var rng = new ChiRng();
         var sampler = rng.Halton(1024, ChiSequenceMode.Canonical).OfType<double>();

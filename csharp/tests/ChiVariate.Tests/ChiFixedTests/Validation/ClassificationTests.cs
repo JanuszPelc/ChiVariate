@@ -8,7 +8,7 @@ namespace ChiVariate.Tests.ChiFixedTests.Validation;
 public class ClassificationTests
 {
     [Fact]
-    public void IsCanonical_VariousValues_ReturnsTrue()
+    public void IsCanonical_AnyValue_ReturnsTrue()
     {
         ChiFixed.IsCanonical(ChiFixed.Zero).Should().BeTrue();
         ChiFixed.IsCanonical(ChiFixed.One).Should().BeTrue();
@@ -18,7 +18,7 @@ public class ClassificationTests
     }
 
     [Fact]
-    public void IsComplexNumber_VariousValues_ReturnsFalse()
+    public void IsComplexNumber_AnyValue_ReturnsFalse()
     {
         ChiFixed.IsComplexNumber(ChiFixed.Zero).Should().BeFalse();
         ChiFixed.IsComplexNumber(ChiFixed.One).Should().BeFalse();
@@ -57,7 +57,7 @@ public class ClassificationTests
     }
 
     [Fact]
-    public void IsImaginaryNumber_VariousValues_ReturnsFalse()
+    public void IsImaginaryNumber_AnyValue_ReturnsFalse()
     {
         ChiFixed.IsImaginaryNumber(ChiFixed.Zero).Should().BeFalse();
         ChiFixed.IsImaginaryNumber(ChiFixed.One).Should().BeFalse();
@@ -189,7 +189,7 @@ public class ClassificationTests
     }
 
     [Fact]
-    public void IsSubnormal_VariousValues_ReturnsFalse()
+    public void IsSubnormal_AnyValue_ReturnsFalse()
     {
         ChiFixed.IsSubnormal(ChiFixed.Zero).Should().BeFalse();
         ChiFixed.IsSubnormal(ChiFixed.One).Should().BeFalse();
@@ -211,13 +211,13 @@ public class ClassificationTests
     }
 
     [Fact]
-    public void NegativeZero_IsZero_ReturnsTrue()
+    public void IsZero_NegativeZero_ReturnsTrue()
     {
         ChiFixed.IsZero(ChiFixed.NegativeZero).Should().BeTrue();
     }
 
     [Fact]
-    public void NegativeZero_IsNegative_ReturnsFalse()
+    public void IsNegative_NegativeZero_ReturnsFalse()
     {
         ChiFixed.IsNegative(ChiFixed.NegativeZero).Should().BeFalse();
     }

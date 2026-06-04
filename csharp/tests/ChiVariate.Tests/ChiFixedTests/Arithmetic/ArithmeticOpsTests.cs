@@ -149,7 +149,7 @@ public class ArithmeticOpsTests
     }
 
     [Fact]
-    public void ComplexExpression_CombinedOperations_ReturnsCorrectResult()
+    public void Operators_ChainedExpression_ReturnsExpectedResult()
     {
         var a = (ChiFixed)10m;
         var b = (ChiFixed)5m;
@@ -161,7 +161,7 @@ public class ArithmeticOpsTests
     }
 
     [Fact]
-    public void DistributiveProperty_MultiplicationOverAddition_Holds()
+    public void Multiplication_DistributesOverAddition_ProducesEqualResults()
     {
         var a = (ChiFixed)3m;
         var b = (ChiFixed)4m;
@@ -240,7 +240,7 @@ public class ArithmeticOpsTests
     }
 
     [Fact]
-    public void Modulo_MatchesFloatingPointBehavior_OnCommonCases()
+    public void Modulo_OnCommonCases_MatchesDecimalRemainder()
     {
         var testCases = new[]
         {
@@ -260,7 +260,7 @@ public class ArithmeticOpsTests
     }
 
     [Fact]
-    public void Modulo_Property_RemainderEquality()
+    public void Modulo_WithTruncatedQuotient_ReconstructsDividend()
     {
         var a = (ChiFixed)17.5m;
         var b = (ChiFixed)5m;

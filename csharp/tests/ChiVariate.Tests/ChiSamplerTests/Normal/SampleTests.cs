@@ -46,7 +46,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void Sample_ShiftedDistribution_IsCorrectlyCentered()
+    public void Sample_ShiftedDistribution_IsCentered()
     {
         const double expectedMean = 50.0;
         const double expectedStdDev = 1.0;
@@ -64,7 +64,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void Sample_WiderDistribution_HasCorrectSpread()
+    public void Sample_WiderDistribution_HasExpectedSpread()
     {
         const double expectedMean = 0.0;
         const double expectedStdDev = 15.0;

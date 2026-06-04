@@ -13,13 +13,13 @@ public class NextTests(ITestOutputHelper testOutputHelper)
     private const int SampleCount = 200_000;
 
     [Fact]
-    public void NextDouble_WithBounds_ProducesUniformDistribution()
+    public void Sample_Double_ProducesUniformDistribution()
     {
         RunFloatingPointDistributionTest<double, BoundedDoubleSampler>(new BoundedDoubleSampler());
     }
 
     [Fact]
-    public void NextSingle_WithBounds_ProducesUniformDistribution()
+    public void Sample_Single_ProducesUniformDistribution()
     {
         var rng = new ChiRng($"{nameof(Single)}_bounded");
         var histogram = new Histogram(0.0, 1.0, 10);
@@ -64,43 +64,43 @@ public class NextTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void Next_ForByte_ProducesUniformDistribution()
+    public void Sample_Byte_ProducesUniformDistribution()
     {
         RunIntegerDistributionTest<byte, ByteSampler>(new ByteSampler());
     }
 
     [Fact]
-    public void Next_ForInt_ProducesUniformDistribution()
+    public void Next_Int_ProducesUniformDistribution()
     {
         RunIntegerDistributionTest<int, IntSampler>(new IntSampler());
     }
 
     [Fact]
-    public void Next_ForLong_ProducesUniformDistribution()
+    public void Sample_Long_ProducesUniformDistribution()
     {
         RunIntegerDistributionTest<long, LongSampler>(new LongSampler());
     }
 
     [Fact]
-    public void Next_ForInt128_ProducesUniformDistribution()
+    public void Sample_Int128_ProducesUniformDistribution()
     {
         RunIntegerDistributionTest<Int128, Int128Sampler>(new Int128Sampler());
     }
 
     [Fact]
-    public void Next_ForUShort_ProducesUniformDistribution()
+    public void Sample_UShort_ProducesUniformDistribution()
     {
         RunIntegerDistributionTest<ushort, UShortSampler>(new UShortSampler());
     }
 
     [Fact]
-    public void Next_ForUInt_ProducesUniformDistribution()
+    public void Sample_UInt_ProducesUniformDistribution()
     {
         RunIntegerDistributionTest<uint, UIntSampler>(new UIntSampler());
     }
 
     [Fact]
-    public void Next_ForULong_ProducesUniformDistribution()
+    public void Sample_ULong_ProducesUniformDistribution()
     {
         RunIntegerDistributionTest<ulong, ULongSampler>(new ULongSampler());
     }

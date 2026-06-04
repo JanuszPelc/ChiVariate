@@ -14,7 +14,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     [Theory]
     [InlineData(20, 0.5)]
     [InlineData(100, 0.2)]
-    public void Sample_ProducesDistributionWithCorrectStatistics(int numTrials, double probability)
+    public void Sample_AcrossTrialsAndProbability_MatchesBinomialDistribution(int numTrials, double probability)
     {
         var rng = new ChiRng(ChiSeed.Scramble("Binomial", numTrials * 100 + probability));
         var expectedMean = numTrials * probability;
@@ -32,7 +32,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void Sample_WithZeroTrials_AlwaysReturnsZero()
+    public void Sample_WithZeroTrials_ReturnsZero()
     {
         var rng = new ChiRng(0);
         var result = rng.Binomial(0L, 0.5).Sample();

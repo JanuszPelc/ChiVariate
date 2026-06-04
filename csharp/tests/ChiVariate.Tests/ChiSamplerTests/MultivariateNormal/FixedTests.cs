@@ -14,7 +14,7 @@ public class FixedTests(ITestOutputHelper testOutputHelper)
     private const int SampleCount = 20_000;
 
     [Fact]
-    public void Sample_2D_WithPositiveCorrelation_IsCorrect()
+    public void Sample_PositiveCorrelation2D_MatchesDistribution()
     {
         var mean = ChiMatrix.With([(ChiFixed)5m, (ChiFixed)(-10m)]);
         var covariance = ChiMatrix.With(new[,]
@@ -37,7 +37,7 @@ public class FixedTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void Sample_2D_WithNegativeCorrelation_IsCorrect()
+    public void Sample_NegativeCorrelation2D_MatchesDistribution()
     {
         var mean = ChiMatrix.With([(ChiFixed)0m, (ChiFixed)0m]);
         var covariance = ChiMatrix.With(new[,]
@@ -60,7 +60,7 @@ public class FixedTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void Sample_3D_Uncorrelated_IsCorrect()
+    public void Sample_Uncorrelated3D_MatchesDistribution()
     {
         var mean = ChiMatrix.With([(ChiFixed)10m, (ChiFixed)20m, (ChiFixed)30m]);
         var covariance = ChiMatrix.With(
@@ -86,7 +86,7 @@ public class FixedTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void Sample_MarginalDistributions_AreCorrectlyNormal()
+    public void Sample_MarginalDistributions_MatchExpectedNormals()
     {
         var mean = ChiMatrix.With([(ChiFixed)10m, (ChiFixed)20m, (ChiFixed)30m]);
         var covariance = ChiMatrix.With(new[,]
@@ -111,7 +111,7 @@ public class FixedTests(ITestOutputHelper testOutputHelper)
             histogramX3.AddSample(double.CreateChecked(destination[2]));
         }
 
-        const string methodName = nameof(Sample_MarginalDistributions_AreCorrectlyNormal);
+        const string methodName = nameof(Sample_MarginalDistributions_MatchExpectedNormals);
 
         histogramX1.DebugPrint(testOutputHelper, $"{methodName} - Marginal Distribution for X1 (ChiFixed)");
         histogramX1.AssertIsNormal(10.0, 1.0, 0.15);

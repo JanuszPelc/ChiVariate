@@ -42,7 +42,7 @@ public class LogarithmicTests
     [InlineData("3", "1.098612289")]
     [InlineData("10", "2.302585093")]
     [InlineData("0.5", "-0.693147181")]
-    public void Log_PositiveValues_ReturnsCorrectValue(string inputStr, string expectedStr)
+    public void Log_PositiveValues_ReturnsExpectedResult(string inputStr, string expectedStr)
     {
         var input = (ChiFixed)decimal.Parse(inputStr, CultureInfo.InvariantCulture);
         var expected = (ChiFixed)decimal.Parse(expectedStr, CultureInfo.InvariantCulture);
@@ -54,7 +54,7 @@ public class LogarithmicTests
     [InlineData("7.389056099", "2")]
     [InlineData("20.085536923", "3")]
     [InlineData("0.367879441", "-1")]
-    public void Log_PowersOfE_ReturnsCorrectValue(string inputStr, string expectedStr)
+    public void Log_PowersOfE_ReturnsExpectedResult(string inputStr, string expectedStr)
     {
         var input = (ChiFixed)decimal.Parse(inputStr, CultureInfo.InvariantCulture);
         var expected = (ChiFixed)decimal.Parse(expectedStr, CultureInfo.InvariantCulture);
@@ -65,7 +65,7 @@ public class LogarithmicTests
     [Theory]
     [InlineData("0.1", "-2.302585093")]
     [InlineData("0.01", "-4.605170186")]
-    public void Log_SmallValues_ReturnsCorrectValue(string inputStr, string expectedStr)
+    public void Log_SmallValues_ReturnsExpectedResult(string inputStr, string expectedStr)
     {
         var input = (ChiFixed)decimal.Parse(inputStr, CultureInfo.InvariantCulture);
         var expected = (ChiFixed)decimal.Parse(expectedStr, CultureInfo.InvariantCulture);
@@ -76,7 +76,7 @@ public class LogarithmicTests
     [Theory]
     [InlineData("100", "4.605170186")]
     [InlineData("1000", "6.907755279")]
-    public void Log_LargeValues_ReturnsCorrectValue(string inputStr, string expectedStr)
+    public void Log_LargeValues_ReturnsExpectedResult(string inputStr, string expectedStr)
     {
         var input = (ChiFixed)decimal.Parse(inputStr, CultureInfo.InvariantCulture);
         var expected = (ChiFixed)decimal.Parse(expectedStr, CultureInfo.InvariantCulture);
@@ -88,7 +88,7 @@ public class LogarithmicTests
     [InlineData("0")]
     [InlineData("-1")]
     [InlineData("-10")]
-    public void Log_NonPositiveValue_ThrowsException(string inputStr)
+    public void Log_NonPositiveValue_ThrowsArgumentException(string inputStr)
     {
         var value = (ChiFixed)decimal.Parse(inputStr, CultureInfo.InvariantCulture);
         var act = () => ChiFixed.Log(value);
@@ -113,7 +113,7 @@ public class LogarithmicTests
     [InlineData("16", "4")]
     [InlineData("32", "5")]
     [InlineData("1024", "10")]
-    public void Log2_PowersOfTwo_ReturnsCorrectValue(string inputStr, string expectedStr)
+    public void Log2_PowersOfTwo_ReturnsExpectedResult(string inputStr, string expectedStr)
     {
         var input = (ChiFixed)decimal.Parse(inputStr, CultureInfo.InvariantCulture);
         var expected = (ChiFixed)decimal.Parse(expectedStr, CultureInfo.InvariantCulture);
@@ -126,7 +126,7 @@ public class LogarithmicTests
     [InlineData("0.25", "-2")]
     [InlineData("0.125", "-3")]
     [InlineData("0.0625", "-4")]
-    public void Log2_NegativePowersOfTwo_ReturnsCorrectValue(string inputStr, string expectedStr)
+    public void Log2_NegativePowersOfTwo_ReturnsExpectedResult(string inputStr, string expectedStr)
     {
         var input = (ChiFixed)decimal.Parse(inputStr, CultureInfo.InvariantCulture);
         var expected = (ChiFixed)decimal.Parse(expectedStr, CultureInfo.InvariantCulture);
@@ -138,7 +138,7 @@ public class LogarithmicTests
     [InlineData("3", "1.584962501")]
     [InlineData("5", "2.321928095")]
     [InlineData("10", "3.321928095")]
-    public void Log2_NonPowersOfTwo_ReturnsCorrectValue(string inputStr, string expectedStr)
+    public void Log2_NonPowersOfTwo_ReturnsExpectedResult(string inputStr, string expectedStr)
     {
         var input = (ChiFixed)decimal.Parse(inputStr, CultureInfo.InvariantCulture);
         var expected = (ChiFixed)decimal.Parse(expectedStr, CultureInfo.InvariantCulture);
@@ -149,7 +149,7 @@ public class LogarithmicTests
     [Theory]
     [InlineData("1.414213562", "0.5")]
     [InlineData("2.828427125", "1.5")]
-    public void Log2_FractionalResults_ReturnsCorrectValue(string inputStr, string expectedStr)
+    public void Log2_FractionalResults_ReturnsExpectedResult(string inputStr, string expectedStr)
     {
         var input = (ChiFixed)decimal.Parse(inputStr, CultureInfo.InvariantCulture);
         var expected = (ChiFixed)decimal.Parse(expectedStr, CultureInfo.InvariantCulture);
@@ -161,7 +161,7 @@ public class LogarithmicTests
     [InlineData("0")]
     [InlineData("-1")]
     [InlineData("-10")]
-    public void Log2_NonPositiveValue_ThrowsException(string inputStr)
+    public void Log2_NonPositiveValue_ThrowsArgumentException(string inputStr)
     {
         var value = (ChiFixed)decimal.Parse(inputStr, CultureInfo.InvariantCulture);
         var act = () => ChiFixed.Log2(value);
@@ -184,7 +184,7 @@ public class LogarithmicTests
     [InlineData("100", "2")]
     [InlineData("1000", "3")]
     [InlineData("10000", "4")]
-    public void Log10_PowersOfTen_ReturnsCorrectValue(string inputStr, string expectedStr)
+    public void Log10_PowersOfTen_ReturnsExpectedResult(string inputStr, string expectedStr)
     {
         var input = (ChiFixed)decimal.Parse(inputStr, CultureInfo.InvariantCulture);
         var expected = (ChiFixed)decimal.Parse(expectedStr, CultureInfo.InvariantCulture);
@@ -197,7 +197,7 @@ public class LogarithmicTests
     [InlineData("0.01", "-2")]
     [InlineData("0.001", "-3")]
     [InlineData("0.0001", "-4")]
-    public void Log10_NegativePowersOfTen_ReturnsCorrectValue(string inputStr, string expectedStr)
+    public void Log10_NegativePowersOfTen_ReturnsExpectedResult(string inputStr, string expectedStr)
     {
         var input = (ChiFixed)decimal.Parse(inputStr, CultureInfo.InvariantCulture);
         var expected = (ChiFixed)decimal.Parse(expectedStr, CultureInfo.InvariantCulture);
@@ -209,7 +209,7 @@ public class LogarithmicTests
     [InlineData("2", "0.301029996")]
     [InlineData("5", "0.698970004")]
     [InlineData("50", "1.698970004")]
-    public void Log10_NonPowersOfTen_ReturnsCorrectValue(string inputStr, string expectedStr)
+    public void Log10_NonPowersOfTen_ReturnsExpectedResult(string inputStr, string expectedStr)
     {
         var input = (ChiFixed)decimal.Parse(inputStr, CultureInfo.InvariantCulture);
         var expected = (ChiFixed)decimal.Parse(expectedStr, CultureInfo.InvariantCulture);
@@ -220,7 +220,7 @@ public class LogarithmicTests
     [Theory]
     [InlineData("3.162277660", "0.5")]
     [InlineData("31.622776602", "1.5")]
-    public void Log10_FractionalResults_ReturnsCorrectValue(string inputStr, string expectedStr)
+    public void Log10_FractionalResults_ReturnsExpectedResult(string inputStr, string expectedStr)
     {
         var input = (ChiFixed)decimal.Parse(inputStr, CultureInfo.InvariantCulture);
         var expected = (ChiFixed)decimal.Parse(expectedStr, CultureInfo.InvariantCulture);
@@ -232,7 +232,7 @@ public class LogarithmicTests
     [InlineData("0")]
     [InlineData("-1")]
     [InlineData("-10")]
-    public void Log10_NonPositiveValue_ThrowsException(string inputStr)
+    public void Log10_NonPositiveValue_ThrowsArgumentException(string inputStr)
     {
         var value = (ChiFixed)decimal.Parse(inputStr, CultureInfo.InvariantCulture);
         var act = () => ChiFixed.Log10(value);
@@ -248,7 +248,7 @@ public class LogarithmicTests
     [InlineData("27", "3", "3")]
     [InlineData("25", "5", "2")]
     [InlineData("125", "5", "3")]
-    public void Log_CustomBase_ReturnsCorrectValue(string inputStr, string baseStr, string expectedStr)
+    public void Log_CustomBase_ReturnsExpectedResult(string inputStr, string baseStr, string expectedStr)
     {
         var input = (ChiFixed)decimal.Parse(inputStr, CultureInfo.InvariantCulture);
         var baseValue = (ChiFixed)decimal.Parse(baseStr, CultureInfo.InvariantCulture);
@@ -283,7 +283,7 @@ public class LogarithmicTests
     [Theory]
     [InlineData("0")]
     [InlineData("-1")]
-    public void Log_InvalidBase_ThrowsException(string baseStr)
+    public void Log_NonPositiveBase_ThrowsArgumentException(string baseStr)
     {
         var input = (ChiFixed)10m;
         var baseValue = (ChiFixed)decimal.Parse(baseStr, CultureInfo.InvariantCulture);
@@ -292,7 +292,7 @@ public class LogarithmicTests
     }
 
     [Fact]
-    public void Log_BaseOne_ThrowsException()
+    public void Log_BaseOne_ThrowsArgumentException()
     {
         var input = (ChiFixed)10m;
         var baseValue = ChiFixed.One;
@@ -304,7 +304,7 @@ public class LogarithmicTests
     [InlineData("0", "2")]
     [InlineData("-1", "2")]
     [InlineData("-10", "10")]
-    public void Log_NonPositiveInput_ThrowsException(string inputStr, string baseStr)
+    public void Log_NonPositiveInput_ThrowsArgumentException(string inputStr, string baseStr)
     {
         var input = (ChiFixed)decimal.Parse(inputStr, CultureInfo.InvariantCulture);
         var baseValue = (ChiFixed)decimal.Parse(baseStr, CultureInfo.InvariantCulture);
@@ -315,7 +315,7 @@ public class LogarithmicTests
     [Theory]
     [InlineData("16", "4", "2")]
     [InlineData("81", "3", "4")]
-    public void Log_CustomBase_FractionalValues(string inputStr, string baseStr, string expectedStr)
+    public void Log_PerfectPowerBase_ReturnsExpectedResult(string inputStr, string baseStr, string expectedStr)
     {
         var input = (ChiFixed)decimal.Parse(inputStr, CultureInfo.InvariantCulture);
         var baseValue = (ChiFixed)decimal.Parse(baseStr, CultureInfo.InvariantCulture);
@@ -411,7 +411,7 @@ public class LogarithmicTests
     [InlineData("8", 3)]
     [InlineData("16", 4)]
     [InlineData("1024", 10)]
-    public void ILogB_PowersOfTwo_ReturnsCorrectExponent(string inputStr, int expected)
+    public void ILogB_PowersOfTwo_ReturnsExponent(string inputStr, int expected)
     {
         var input = (ChiFixed)decimal.Parse(inputStr, CultureInfo.InvariantCulture);
         var result = ChiFixed.ILogB(input);

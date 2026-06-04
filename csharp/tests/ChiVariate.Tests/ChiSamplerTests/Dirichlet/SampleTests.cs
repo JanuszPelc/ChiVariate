@@ -12,7 +12,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     private const int SampleCount = 20_000;
 
     [Fact]
-    public void Sample_Symmetric_IsCorrect()
+    public void Sample_Symmetric_MatchesDirichletDistribution()
     {
         // Symmetric case, all components should have the same mean.
         var alpha = new[] { 1.0, 1.0, 1.0 }; // Expected means: [1/3, 1/3, 1/3]
@@ -26,7 +26,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void Sample_Asymmetric_IsCorrect()
+    public void Sample_Asymmetric_MatchesDirichletDistribution()
     {
         // Asymmetric case, means should be proportional to alpha values.
         var alpha = new[] { 5.0, 10.0, 15.0 }; // Total=30, Expected means: [5/30, 10/30, 15/30]
@@ -76,7 +76,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void Sample_Decimal_IsCorrect()
+    public void Sample_Decimal_MatchesDirichletDistribution()
     {
         var alpha = new[] { 5.0m, 10.0m, 15.0m }; // Asymmetric case
         var rng = new ChiRng("Dirichlet_Decimal_Asymmetric");

@@ -12,7 +12,7 @@ public class SpatialCubeTests(ITestOutputHelper testOutputHelper)
     private const int SampleCount = 150_000;
 
     [Fact]
-    public void PointInCube_SamplesAreWithinBounds()
+    public void Sample_InCube_StaysWithinBounds()
     {
         const float extents = 10.0f;
         var rng = new ChiRng(ChiSeed.Scramble("PointInCubeBounds"));
@@ -28,7 +28,7 @@ public class SpatialCubeTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void PointInCube_DistributionIsSpatiallyUniform()
+    public void Sample_InCube_IsSpatiallyUniform()
     {
         // For a cube, uniform spatial distribution means the X, Y, and Z
         // components should all be independent uniform distributions.
@@ -58,7 +58,7 @@ public class SpatialCubeTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void PointOnCube_SamplesAreOnTheSurface()
+    public void Sample_OnCube_LiesOnSurface()
     {
         const float extents = 5.0f;
         var rng = new ChiRng(ChiSeed.Scramble("PointOnCubeBounds"));
@@ -80,7 +80,7 @@ public class SpatialCubeTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void PointOnCube_DistributionIsSpatiallyUniform()
+    public void Sample_OnCube_IsSpatiallyUniform()
     {
         // A uniform distribution on the surface means each of the six faces
         // should receive approximately the same number of points.
@@ -122,7 +122,7 @@ public class SpatialCubeTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void PointCube_WithInvalidExtents_ThrowsArgumentOutOfRangeException()
+    public void InCube_WithInvalidExtents_ThrowsArgumentOutOfRangeException()
     {
         var rng = new ChiRng();
         var act = () => { rng.Spatial().InCube(-1.0f); };

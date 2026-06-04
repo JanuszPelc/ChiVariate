@@ -14,7 +14,7 @@ public class FixedTests(ITestOutputHelper testOutputHelper)
     [InlineData(0.10)]
     [InlineData(0.25)]
     [InlineData(0.50)]
-    public void Sample_WithFixedProbability_HasCorrectSuccessRate(double probability)
+    public void Sample_WithFixedProbability_MatchesBaseProbability(double probability)
     {
         var baseProbability = (ChiFixed)(decimal)probability;
         var increment = ChiFixed.Zero;
@@ -58,7 +58,7 @@ public class FixedTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void Sample_HardCap_GuaranteesSuccessWithChiFixed()
+    public void Sample_WithHardCap_GuaranteesSuccess()
     {
         var baseProbability = (ChiFixed)0.001m;
         var increment = ChiFixed.Zero;
@@ -80,7 +80,7 @@ public class FixedTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void Sample_CurrentProbability_WorksWithChiFixed()
+    public void CurrentProbability_AfterSoftThreshold_Increases()
     {
         var baseProbability = (ChiFixed)0.01m;
         var increment = (ChiFixed)0.05m;
@@ -104,7 +104,7 @@ public class FixedTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void Sample_FailureCount_WorksWithChiFixed()
+    public void FailureCount_OnFailedSamples_Increments()
     {
         var baseProbability = ChiFixed.Zero;
         var increment = ChiFixed.Zero;
@@ -122,7 +122,7 @@ public class FixedTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void Sample_ExtremeProbabilities_WorkCorrectly()
+    public void Sample_ExtremeProbabilities_ReturnsExpectedResult()
     {
         var rng = new ChiRng("PityExtremeFixed");
 

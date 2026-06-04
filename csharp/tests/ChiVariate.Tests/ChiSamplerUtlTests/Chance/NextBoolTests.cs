@@ -14,7 +14,7 @@ public class NextBoolTests
     [InlineData(0.50)]
     [InlineData(0.75)]
     [InlineData(0.90)]
-    public void NextBool_WithProbability_ReturnsTrueAtCorrectFrequency(double probability)
+    public void NextBool_AcrossProbabilities_ReturnsTrueMatchingProbability(double probability)
     {
         var rng = new ChiRng((long)(probability * 100));
         var trueCount = 0;

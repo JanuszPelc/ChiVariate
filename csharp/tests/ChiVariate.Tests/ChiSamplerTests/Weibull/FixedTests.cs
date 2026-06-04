@@ -16,7 +16,7 @@ public class FixedTests(ITestOutputHelper testOutputHelper)
     [Theory]
     [InlineData(2.0, 5.0)] // k>1, increasing failure rate (Rayleigh-like)
     [InlineData(5.0, 10.0)] // k>>1, bell-shaped (approaching Normal)
-    public void Sample_WithVariousParameters_ProducesWeibullDistribution(double shape, double scale)
+    public void Sample_AcrossShapeAndScale_MatchesWeibullDistribution(double shape, double scale)
     {
         var sh = (ChiFixed)(decimal)shape;
         var sc = (ChiFixed)(decimal)scale;
@@ -33,7 +33,7 @@ public class FixedTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void Sample_ShapeTwo_HasRayleighLikeShape()
+    public void Sample_ShapeGreaterThanOne_ProducesPositiveMode()
     {
         // Weibull(2, scale) is related to Rayleigh
         var shape = (ChiFixed)2m;

@@ -12,7 +12,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     private const int SampleCount = 100_000;
 
     [Fact]
-    public void Sample_WithSimpleWeights_ProducesCorrectDistribution()
+    public void Sample_WithSimpleWeights_MatchesCategoricalDistribution()
     {
         var probabilities = new[] { 0.1f, 0.6f, 0.3f };
         var rng = new ChiRng("Categorical_Simple");
@@ -29,7 +29,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void Sample_WithManyCategories_ProducesCorrectDistribution()
+    public void Sample_WithManyCategories_MatchesCategoricalDistribution()
     {
         var probabilities = new[] { 0.05, 0.1, 0.15, 0.2, 0.25, 0.15, 0.1 }; // Sums to 1.0
         var rng = new ChiRng("Categorical_Many");
@@ -47,7 +47,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void Categorical_WithSingleCategory_AlwaysReturnsZero()
+    public void Sample_WithSingleCategory_AlwaysReturnsZero()
     {
         var probabilities = new[] { 1.0 };
         var rng = new ChiRng(0);

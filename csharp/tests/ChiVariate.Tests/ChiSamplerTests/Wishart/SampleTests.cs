@@ -12,7 +12,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     private const int SampleCount = 10_000;
 
     [Fact]
-    public void Sample_2D_IsCorrect()
+    public void Sample_Dim2_MatchesWishartDistribution()
     {
         const int degreesOfFreedom = 5;
         var scaleMatrix = ChiMatrix.With(new[,]
@@ -31,7 +31,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void Sample_3D_WithIdentityScale_IsCorrect()
+    public void Sample_Dim3IdentityScale_MatchesWishartDistribution()
     {
         const int degreesOfFreedom = 10;
         var scaleMatrix = ChiMatrix.With(new[,]
@@ -86,7 +86,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void Sample_Decimal_IsCorrect()
+    public void Sample_Decimal_MatchesWishartDistribution()
     {
         const int degreesOfFreedom = 5;
         var scaleMatrix = ChiMatrix.With(new[,]

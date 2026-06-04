@@ -42,7 +42,7 @@ public class ChiMatrix_AlgebraTests
     [Theory]
     [InlineData(10, 20, 15)] // A(10x20) * (B(20x15) + C(20x15))
     [InlineData(50, 50, 50)] // Large square matrices
-    public void DistributiveProperty_HoldsForLargeMatrices_Double(int m, int n, int p)
+    public void Multiply_Double_DistributesOverAddition(int m, int n, int p)
     {
         var a = CreateAndFill<double>(m, n);
         var b = CreateAndFill<double>(n, p);
@@ -62,7 +62,7 @@ public class ChiMatrix_AlgebraTests
 
     [Theory]
     [InlineData(8, 12, 10)]
-    public void DistributiveProperty_HoldsForLargeMatrices_Decimal(int m, int n, int p)
+    public void Multiply_Decimal_DistributesOverAddition(int m, int n, int p)
     {
         var a = CreateAndFill<decimal>(m, n);
         var b = CreateAndFill<decimal>(n, p);
@@ -81,7 +81,7 @@ public class ChiMatrix_AlgebraTests
     }
 
     [Fact]
-    public void ToArray_OnLargeHeapMatrix_AllowsCorrectLinqAggregation()
+    public void ToArray_OnLargeHeapMatrix_ReturnsIndependentCopy()
     {
         const int rows = 100;
         const int cols = 100;

@@ -16,7 +16,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     [InlineData(0.0, 1.0)] // Standard Gumbel
     [InlineData(5.0, 2.0)] // Shifted and scaled
     [InlineData(-10.0, 0.5)] // Shifted and narrow
-    public void Sample_ProducesDistributionWithCorrectStatistics(double location, double scale)
+    public void Sample_AcrossLocationAndScale_MatchesGumbelDistribution(double location, double scale)
     {
         var rng = new ChiRng(ChiSeed.Scramble("Gumbel", new ChiHash().Add(location).Add(scale).Hash));
         var sampler = rng.Gumbel(location, scale);
@@ -43,7 +43,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void Sample_Decimal_ProducesCorrectStatistics()
+    public void Sample_Decimal_MatchesGumbelDistribution()
     {
         const decimal location = 5.0m;
         const decimal scale = 2.0m;

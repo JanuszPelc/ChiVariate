@@ -10,28 +10,28 @@ namespace ChiVariate.Tests.ChiFixedTests.Validation;
 public class BinaryRepresentationTests
 {
     [Fact]
-    public void GetExponentByteCount_Called_ReturnsZero()
+    public void GetExponentByteCount_Default_ReturnsZero()
     {
         var value = ChiFixed.One;
         value.GetExponentByteCount().Should().Be(0);
     }
 
     [Fact]
-    public void GetExponentShortestBitLength_Called_ReturnsZero()
+    public void GetExponentShortestBitLength_Default_ReturnsZero()
     {
         var value = ChiFixed.One;
         value.GetExponentShortestBitLength().Should().Be(0);
     }
 
     [Fact]
-    public void GetSignificandBitLength_Called_Returns63()
+    public void GetSignificandBitLength_Default_Returns63()
     {
         var value = ChiFixed.One;
         value.GetSignificandBitLength().Should().Be(63);
     }
 
     [Fact]
-    public void GetSignificandByteCount_Called_Returns8()
+    public void GetSignificandByteCount_Default_Returns8()
     {
         var value = ChiFixed.One;
         value.GetSignificandByteCount().Should().Be(8);
@@ -178,7 +178,7 @@ public class BinaryRepresentationTests
     }
 
     [Fact]
-    public void ScaleB_LargePositiveN_ReturnsInfinity()
+    public void ScaleB_LargePositiveN_ReturnsPositiveInfinity()
     {
         var value = ChiFixed.One;
         var result = ChiFixed.ScaleB(value, 64);
@@ -202,7 +202,7 @@ public class BinaryRepresentationTests
     }
 
     [Fact]
-    public void ScaleB_Overflow_ReturnsInfinity()
+    public void ScaleB_Overflow_ReturnsPositiveInfinity()
     {
         var value = ChiFixed.MaxValue;
         var result = ChiFixed.ScaleB(value, 1);
@@ -215,7 +215,7 @@ public class BinaryRepresentationTests
     [InlineData("2", 3, "16")]
     [InlineData("0.5", 1, "1")]
     [InlineData("4", -2, "1")]
-    public void ScaleB_VariousValues_ReturnsCorrectResult(string inputStr, int n, string expectedStr)
+    public void ScaleB_VariousValues_ReturnsExpectedResult(string inputStr, int n, string expectedStr)
     {
         var input = (ChiFixed)decimal.Parse(inputStr, CultureInfo.InvariantCulture);
         var expected = (ChiFixed)decimal.Parse(expectedStr, CultureInfo.InvariantCulture);

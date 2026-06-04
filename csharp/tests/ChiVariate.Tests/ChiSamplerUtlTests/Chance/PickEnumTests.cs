@@ -11,7 +11,7 @@ public class PickEnumTests
     private const int SampleCount = 100_000;
 
     [Fact]
-    public void PickEnum_ForSimpleEnum_OnlyReturnsDefinedValues()
+    public void PickEnum_SimpleEnum_OnlyReturnsDefinedValues()
     {
         var rng = new ChiRng(123);
         var definedValues = Enum.GetValues<TestColor>();
@@ -24,7 +24,7 @@ public class PickEnumTests
     }
 
     [Fact]
-    public void PickEnum_ForSimpleEnum_ProducesUniformDistribution()
+    public void PickEnum_SimpleEnum_ProducesUniformDistribution()
     {
         var rng = new ChiRng(456);
         var definedValues = Enum.GetValues<TestColor>();
@@ -49,7 +49,7 @@ public class PickEnumTests
     }
 
     [Fact]
-    public void PickEnum_ForFlagsEnum_OnlyReturnsSingleDefinedFlags()
+    public void PickEnum_FlagsEnum_OnlyReturnsSingleDefinedFlags()
     {
         var rng = new ChiRng(789);
         var definedValues = Enum.GetValues<TestFlags>();

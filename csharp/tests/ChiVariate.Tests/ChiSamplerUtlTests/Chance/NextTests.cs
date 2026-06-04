@@ -20,62 +20,62 @@ public class NextTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void Next_ForByte_ProducesUniformDistribution()
+    public void Next_Byte_ProducesUniformDistribution()
     {
         RunIntegerDistributionTest<byte, ByteSampler>(new ByteSampler());
     }
 
     [Fact]
-    public void Next_ForInt_ProducesUniformDistribution()
+    public void Next_Int_ProducesUniformDistribution()
     {
         RunIntegerDistributionTest<int, IntSampler>(new IntSampler());
     }
 
     [Fact]
-    public void Next_ForLong_ProducesUniformDistribution()
+    public void Next_Long_ProducesUniformDistribution()
     {
         RunIntegerDistributionTest<long, LongSampler>(new LongSampler());
     }
 
     [Fact]
-    public void Next_ForInt128_ProducesUniformDistribution()
+    public void Next_Int128_ProducesUniformDistribution()
     {
         RunIntegerDistributionTest<Int128, Int128Sampler>(new Int128Sampler());
     }
 
     [Fact]
-    public void Next_ForUShort_ProducesUniformDistribution()
+    public void Next_UShort_ProducesUniformDistribution()
     {
         RunIntegerDistributionTest<ushort, UShortSampler>(new UShortSampler());
     }
 
     [Fact]
-    public void Next_ForUInt_ProducesUniformDistribution()
+    public void Next_UInt_ProducesUniformDistribution()
     {
         RunIntegerDistributionTest<uint, UIntSampler>(new UIntSampler());
     }
 
     [Fact]
-    public void Next_ForULong_ProducesUniformDistribution()
+    public void Next_ULong_ProducesUniformDistribution()
     {
         RunIntegerDistributionTest<ulong, ULongSampler>(new ULongSampler());
     }
 
     [Fact]
-    public void NextDouble_CalledRepeatedly_ProducesUniformDistribution()
+    public void NextDouble_OverUnitInterval_ProducesUniformDistribution()
     {
         RunFloatingPointDistributionTest<double, DoubleSampler>(new DoubleSampler());
     }
 
 
     [Fact]
-    public void NextSingle_CalledRepeatedly_ProducesUniformDistribution()
+    public void NextSingle_OverUnitInterval_ProducesUniformDistribution()
     {
         RunFloatingPointDistributionTest<double, SingleSampler>(new SingleSampler());
     }
 
     [Fact]
-    public void NextFixed_CalledRepeatedly_ProducesUniformDistribution()
+    public void NextFixed_OverUnitInterval_ProducesUniformDistribution()
     {
         RunFloatingPointDistributionTest<double, FixedSampler>(new FixedSampler());
     }

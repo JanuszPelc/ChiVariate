@@ -245,7 +245,7 @@ public class HyperbolicTests
     [InlineData("0")]
     [InlineData("0.5")]
     [InlineData("-1")]
-    public void Acosh_ValueLessThanOne_ThrowsException(string inputStr)
+    public void Acosh_ValueLessThanOne_ThrowsArgumentException(string inputStr)
     {
         var value = (ChiFixed)decimal.Parse(inputStr, CultureInfo.InvariantCulture);
         var act = () => ChiFixed.Acosh(value);
@@ -294,7 +294,7 @@ public class HyperbolicTests
     [InlineData("1.5")]
     [InlineData("-1.5")]
     [InlineData("2")]
-    public void Atanh_OutOfRange_ThrowsException(string inputStr)
+    public void Atanh_OutOfRange_ThrowsArgumentException(string inputStr)
     {
         var value = (ChiFixed)decimal.Parse(inputStr, CultureInfo.InvariantCulture);
         var act = () => ChiFixed.Atanh(value);
@@ -395,7 +395,7 @@ public class HyperbolicTests
     [InlineData("2")]
     [InlineData("0.5")]
     [InlineData("-1")]
-    public void HyperbolicIdentity_CoshSquaredMinusSinhSquared_EqualsOne(string inputStr)
+    public void CoshAndSinh_PythagoreanIdentity_EqualsOne(string inputStr)
     {
         var input = (ChiFixed)decimal.Parse(inputStr, CultureInfo.InvariantCulture);
         var sinh = ChiFixed.Sinh(input);

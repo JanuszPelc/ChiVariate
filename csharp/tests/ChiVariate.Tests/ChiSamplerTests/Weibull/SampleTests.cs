@@ -17,7 +17,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     [InlineData(0.5, 5.0)] // k<1, decreasing failure rate (L-shape)
     [InlineData(2.0, 5.0)] // k>1, increasing failure rate (Rayleigh-like)
     [InlineData(5.0, 10.0)] // k>>1, bell-shaped (approaching Normal)
-    public void Sample_ProducesDistributionWithCorrectShape(double shape, double scale)
+    public void Sample_AcrossShapeAndScale_MatchesWeibullDistribution(double shape, double scale)
     {
         var rng = new ChiRng(ChiSeed.Scramble("Weibull", new ChiHash().Add(shape).Add(scale).Hash));
         var maxBound = scale * 10;
@@ -66,7 +66,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     [Theory]
     [InlineData("2.0", "5.0")] // k>1, increasing failure rate
     [InlineData("5.0", "10.0")] // k>>1, bell-shaped
-    public void Sample_Decimal_ProducesDistributionWithCorrectShape(string shapeStr, string scaleStr)
+    public void Sample_Decimal_MatchesWeibullDistribution(string shapeStr, string scaleStr)
     {
         var shape = decimal.Parse(shapeStr, CultureInfo.InvariantCulture);
         var scale = decimal.Parse(scaleStr, CultureInfo.InvariantCulture);

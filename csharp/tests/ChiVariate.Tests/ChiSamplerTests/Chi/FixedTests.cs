@@ -37,7 +37,7 @@ public class FixedTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void Sample_With2DoF_ProducesRayleighLikeDistribution()
+    public void Sample_With2DegreesOfFreedom_MatchesRayleighMean()
     {
         // Chi(2) is equivalent to Rayleigh(1)
         var k = (ChiFixed)2;

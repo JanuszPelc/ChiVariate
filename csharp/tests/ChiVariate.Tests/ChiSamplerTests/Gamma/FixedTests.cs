@@ -18,7 +18,7 @@ public class FixedTests(ITestOutputHelper testOutputHelper)
     [InlineData(0.5, 2.0)] // Shape < 1, uses transformation
     [InlineData(2.0, 2.0)] // Shape = 2, small integer
     [InlineData(9.0, 2.0)] // Shape > 1, well-behaved case
-    public void Sample_WithVariousShapes_ProducesGammaDistribution(double shape, double scale)
+    public void Sample_AcrossShapeValues_MatchesGammaDistribution(double shape, double scale)
     {
         var s = (ChiFixed)(decimal)shape;
         var sc = (ChiFixed)(decimal)scale;
@@ -37,7 +37,7 @@ public class FixedTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void Sample_LargeShape_ApproachesNormalBehavior()
+    public void Sample_LargeShape_MeanIsWithinExpectedRange()
     {
         // For large shape, Gamma approaches Normal distribution
         var shape = (ChiFixed)20m;

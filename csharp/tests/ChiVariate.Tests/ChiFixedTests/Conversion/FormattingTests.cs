@@ -134,7 +134,7 @@ public class FormattingTests
     }
 
     [Fact]
-    public void TryFormat_WithFormatF3_FormatsCorrectly()
+    public void TryFormat_WithFormatF3_WritesThreeDecimals()
     {
         var value = (ChiFixed)3.14m;
         Span<char> buffer = stackalloc char[100];
@@ -186,7 +186,7 @@ public class FormattingTests
     }
 
     [Fact]
-    public void ToString_GeneralFormat_WorksWithNonEnglishCurrentCulture()
+    public void TryFormat_InvariantCultureUnderNonEnglishCurrentCulture_UsesDotDecimalSeparator()
     {
         var originalCulture = CultureInfo.CurrentCulture;
         try

@@ -13,7 +13,7 @@ public class ChiMatrix_MultiplyTests
     // ====================================================================
 
     [Fact]
-    public void Multiply_MatrixByScalar_ReturnsCorrectResult()
+    public void Multiply_MatrixByScalar_ReturnsScaledMatrix()
     {
         var matrix = ChiMatrix.Full<double>(2, 2, (row, column) => 1 + row * 2 + column);
         var scalar = ChiMatrix.Scalar(2.0);
@@ -29,7 +29,7 @@ public class ChiMatrix_MultiplyTests
     }
 
     [Fact]
-    public void Multiply_ScalarByMatrix_ReturnsCorrectResult()
+    public void Multiply_ScalarByMatrix_ReturnsScaledMatrix()
     {
         var matrix = ChiMatrix.Zeros<double>(2, 2);
         matrix[0, 0] = 1;
@@ -54,7 +54,7 @@ public class ChiMatrix_MultiplyTests
     // ====================================================================
 
     [Fact]
-    public void HadamardProduct_ElementWise_ReturnsCorrectResult()
+    public void Hadamard_ElementWise_ReturnsElementWiseProducts()
     {
         var a = ChiMatrix.Zeros<double>(2, 2);
         a[0, 0] = 1;
@@ -79,7 +79,7 @@ public class ChiMatrix_MultiplyTests
     }
 
     [Fact]
-    public void HadamardProduct_IncompatibleDimensions_ThrowsInvalidOperationException()
+    public void Hadamard_IncompatibleDimensions_ThrowsInvalidOperationException()
     {
         var a = ChiMatrix.Zeros<double>(2, 3);
         var b = ChiMatrix.Zeros<double>(2, 2);
@@ -95,7 +95,7 @@ public class ChiMatrix_MultiplyTests
     // ====================================================================
 
     [Fact]
-    public void Multiply_DotProduct_ReturnsCorrectScalar()
+    public void Multiply_DotProduct_ReturnsScalar()
     {
         var rowVector = ChiMatrix.Zeros<double>(1, 3);
         rowVector[0, 0] = 1;
@@ -118,7 +118,7 @@ public class ChiMatrix_MultiplyTests
     // ====================================================================
 
     [Fact]
-    public void Multiply_MatrixMatrix_ReturnsCorrectResult()
+    public void Multiply_MatrixMatrix_ReturnsMatrixProduct()
     {
         // A (2x3)
         var a = ChiMatrix.Zeros<double>(2, 3);
@@ -150,7 +150,7 @@ public class ChiMatrix_MultiplyTests
     }
 
     [Fact]
-    public void Multiply_MatrixColVector_ReturnsCorrectResult()
+    public void Multiply_MatrixColVector_ReturnsColumnVector()
     {
         // A (2x3)
         var a = ChiMatrix.Full(2, 3, static i => (Half)(i + 1));
@@ -169,7 +169,7 @@ public class ChiMatrix_MultiplyTests
     }
 
     [Fact]
-    public void Multiply_RowVectorMatrix_ReturnsCorrectResult()
+    public void Multiply_RowVectorMatrix_ReturnsRowVector()
     {
         var a = ChiMatrix.WithTransposed([3.0m, 4]); // A (1x2 row vector)
         var b = ChiMatrix.With([1.0m, 2, 3], [5, 6, 7]); // B (2x3 matrix)

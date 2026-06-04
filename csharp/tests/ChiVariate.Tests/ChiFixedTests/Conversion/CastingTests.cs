@@ -202,7 +202,7 @@ public class CastingTests
     [InlineData(123.456)]
     [InlineData(-42.75)]
     [InlineData(3.141592653589)]
-    public void ChiFixedToDecimal_VariousValues_ConvertsCorrectly(decimal expected)
+    public void ChiFixedToDecimal_VariousValues_PreservesValue(decimal expected)
     {
         var fixedValue = (ChiFixed)expected;
         var result = (decimal)fixedValue;
@@ -283,7 +283,7 @@ public class CastingTests
     }
 
     [Fact]
-    public void RationalToChiFixed_LargeNumerator_HandlesCorrectly()
+    public void RationalToChiFixed_LargeNumerator_ReturnsExpectedValue()
     {
         var result = ChiFixed.Fraction(8000000, 1);
         var expected = (ChiFixed)8000000m;
@@ -292,7 +292,7 @@ public class CastingTests
     }
 
     [Fact]
-    public void RationalToChiFixed_VeryLargeDenominator_HandlesCorrectly()
+    public void RationalToChiFixed_VeryLargeDenominator_ReturnsSmallPositiveValue()
     {
         var result = ChiFixed.Fraction(1, 1000000000);
 
@@ -301,7 +301,7 @@ public class CastingTests
     }
 
     [Fact]
-    public void RationalToChiFixed_LargeNumeratorAndDenominator_ProducesCorrectRatio()
+    public void RationalToChiFixed_LargeNumeratorAndDenominator_ReturnsOneHalf()
     {
         var maxAsDecimal = (decimal)ChiFixed.MaxValue;
         var largeValue = (int)(maxAsDecimal / 2) - 1000;
@@ -324,7 +324,7 @@ public class CastingTests
     }
 
     [Fact]
-    public void RationalToChiFixed_NegativeLargeValues_HandlesCorrectly()
+    public void RationalToChiFixed_NegativeLargeValues_ReturnsNegativeOne()
     {
         const int value = 5000000;
         var result = ChiFixed.Fraction(-value, value);
@@ -333,7 +333,7 @@ public class CastingTests
     }
 
     [Fact]
-    public void RationalToChiFixed_LargeNumerators_ProducesValidResults()
+    public void RationalToChiFixed_LargeNumerators_ReturnsExpectedValue()
     {
         var maxAsDecimal = (decimal)ChiFixed.MaxValue;
         var largeValue = (int)maxAsDecimal - 1000;

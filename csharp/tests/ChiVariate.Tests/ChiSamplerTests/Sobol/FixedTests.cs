@@ -15,7 +15,7 @@ public class FixedTests(ITestOutputHelper testOutputHelper)
     private const int SampleCount = 10_000;
 
     [Fact]
-    public void CanonicalSequence_WithChiFixed_IsBitForBitDeterministic()
+    public void Sample_CanonicalSequence_IsBitForBitDeterministic()
     {
         var rng1 = new ChiRng("SobolFixedSeed");
         var rng2 = new ChiRng(rng1.Snapshot());
@@ -33,7 +33,7 @@ public class FixedTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void RandomizedSequence_WithChiFixed_IsBitForBitDeterministic()
+    public void Sample_RandomizedSequence_IsBitForBitDeterministic()
     {
         var rng1 = new ChiRng("RandomSobolFixed");
         var rng2 = new ChiRng("RandomSobolFixed");
@@ -52,7 +52,7 @@ public class FixedTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void CanonicalSobol_1D_FirstFewPoints_MatchKnownValues()
+    public void Sample_Canonical1D_MatchesKnownValues()
     {
         var expectedValues = new[]
         {
@@ -76,7 +76,7 @@ public class FixedTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void CanonicalSobol_2D_FirstFewPoints_MatchKnownValues()
+    public void Sample_Canonical2D_MatchesKnownValues()
     {
         var expectedPoints = new[]
         {
@@ -103,7 +103,7 @@ public class FixedTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void SobolSequence_WithChiFixed_Marginals_ShowExcellentUniformity()
+    public void Sample_Marginals_AreUniform()
     {
         const int dimensions = 2;
         const int bins = 10;
@@ -140,7 +140,7 @@ public class FixedTests(ITestOutputHelper testOutputHelper)
     [Theory]
     [InlineData(50)]
     [InlineData(100)]
-    public void Sobol_HighDimensions_WithChiFixed_MaintainsValidRange(int dimensions)
+    public void Sample_HighDimensions_MaintainsValidRange(int dimensions)
     {
         var rng = new ChiRng();
         var sampler = rng.Sobol(dimensions).OfType<ChiFixed>();

@@ -51,7 +51,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void Sample_Decimal_Reciprocal_MatchesCorrespondingGamma()
+    public void Sample_DecimalReciprocal_MatchesCorrespondingGamma()
     {
         const decimal shape = 3.0m;
         const decimal scale = 5.0m;

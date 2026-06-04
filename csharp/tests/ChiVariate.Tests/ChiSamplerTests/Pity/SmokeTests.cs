@@ -24,7 +24,7 @@ public class SmokeTests(ITestOutputHelper output)
     }
 
     [Fact]
-    public void GenshinWishSystem_SimulatePulls_ShowsPityMechanics()
+    public void Sample_WithSoftAndHardPity_StaysWithinHardPityLimit()
     {
         // Simulates Genshin Impact's 5-star wish system:
         // - 0.6% base rate
@@ -64,7 +64,7 @@ public class SmokeTests(ITestOutputHelper output)
     }
 
     [Fact]
-    public void Dota2SkullBasher_SimulateProcs_ShowsAntiStreakBehavior()
+    public void Sample_WithProgressiveProbability_BoundsLongestFailureStreak()
     {
         // Simulates Dota 2's Skull Basher bash mechanic:
         // - 25% proc chance (displayed)
@@ -105,7 +105,7 @@ public class SmokeTests(ITestOutputHelper output)
     }
 
     [Fact]
-    public void LegendaryLootDrop_SimulateRuns_GuaranteesBadLuckProtection()
+    public void Sample_WithHardPityCeiling_NeverExceedsHardPityLimit()
     {
         // Simulates a dungeon with legendary drop:
         // - 5% base drop rate
@@ -142,7 +142,7 @@ public class SmokeTests(ITestOutputHelper output)
     }
 
     [Fact]
-    public void CriticalHitSystem_FairerThanPureBernoulli()
+    public void Sample_ComparedToBernoulli_ProducesShorterFailureStreaks()
     {
         // Compare PRD critical hits vs pure Bernoulli
         // Both target 20% crit rate, but PRD should have less variance
@@ -192,7 +192,7 @@ public class SmokeTests(ITestOutputHelper output)
     }
 
     [Fact]
-    public void GachaSystem_ShowsProgressivePity()
+    public void Sample_WhileTrackingProbabilityState_DoesNotThrow()
     {
         // Track how probability increases over pulls
 

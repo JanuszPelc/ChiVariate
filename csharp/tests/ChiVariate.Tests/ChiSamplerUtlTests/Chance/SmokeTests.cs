@@ -61,7 +61,7 @@ public class SmokeTests
     }
 
     [Fact]
-    public void Shuffle_Called_ProducesExpectedOrder()
+    public void Shuffle_OverSpan_ProducesExpectedOrder()
     {
         var rng = new ChiRng(Seed);
         var items = new[] { "A", "B", "C", "D", "E" };
@@ -72,7 +72,7 @@ public class SmokeTests
     }
 
     [Fact]
-    public void PickItem_Called_ReturnsExpectedItem()
+    public void PickItem_FromSpan_ReturnsExpectedItem()
     {
         var rng = new ChiRng(Seed);
         var choices = new[] { 10, 20, 30, 40, 50 };
@@ -83,7 +83,7 @@ public class SmokeTests
     }
 
     [Fact]
-    public void NextBool_Called_ReturnsExpectedValue()
+    public void NextBool_WithProbability_ReturnsExpectedValue()
     {
         var rng = new ChiRng(Seed);
 
@@ -126,7 +126,7 @@ public class SmokeTests
     }
 
     [Fact]
-    public void FlipCoin_ReturnsExpectedValue()
+    public void FlipCoin_Default_ReturnsExpectedValue()
     {
         var rng = new ChiRng(Seed);
 
@@ -136,7 +136,7 @@ public class SmokeTests
     }
 
     [Fact]
-    public void OneIn_ReturnsExpectedValue()
+    public void OneIn_WithOdds_ReturnsExpectedValue()
     {
         var rng = new ChiRng(Seed);
 
@@ -146,7 +146,7 @@ public class SmokeTests
     }
 
     [Fact]
-    public void NextFixed_ReturnsExpectedValue()
+    public void NextFixed_Default_ReturnsExpectedValue()
     {
         var rng = new ChiRng(Seed);
 

@@ -32,7 +32,7 @@ public class NumericTests
     }
 
     [Fact]
-    public void Round_NegativeDigits_ThrowsException()
+    public void Round_NegativeDigits_ThrowsArgumentOutOfRangeException()
     {
         var act = () => ChiFixed.Round((ChiFixed)1.23m, -1, MidpointRounding.ToEven);
         act.Should().Throw<ArgumentOutOfRangeException>();
@@ -48,7 +48,7 @@ public class NumericTests
     [InlineData("-2.75", "-3")]
     [InlineData("-2.25", "-2")]
     [InlineData("0", "0")]
-    public void Round_DigitsZero_ToEven(string input, string expected)
+    public void Round_DigitsZeroToEven_ReturnsExpectedResult(string input, string expected)
     {
         PerformRoundingTest(input, 0, MidpointRounding.ToEven, expected);
     }
@@ -60,7 +60,7 @@ public class NumericTests
     [InlineData("-2.5", "-3")]
     [InlineData("-3.5", "-4")]
     [InlineData("-2.25", "-2")]
-    public void Round_DigitsZero_AwayFromZero(string input, string expected)
+    public void Round_DigitsZeroAwayFromZero_ReturnsExpectedResult(string input, string expected)
     {
         PerformRoundingTest(input, 0, MidpointRounding.AwayFromZero, expected);
     }
@@ -70,7 +70,7 @@ public class NumericTests
     [InlineData("2.25", "2")]
     [InlineData("-2.75", "-2")]
     [InlineData("-2.25", "-2")]
-    public void Round_DigitsZero_ToZero(string input, string expected)
+    public void Round_DigitsZeroToZero_ReturnsExpectedResult(string input, string expected)
     {
         PerformRoundingTest(input, 0, MidpointRounding.ToZero, expected);
     }
@@ -80,7 +80,7 @@ public class NumericTests
     [InlineData("2.25", "2")]
     [InlineData("-2.75", "-3")]
     [InlineData("-2.25", "-3")]
-    public void Round_DigitsZero_ToNegativeInfinity(string input, string expected)
+    public void Round_DigitsZeroToNegativeInfinity_ReturnsExpectedResult(string input, string expected)
     {
         PerformRoundingTest(input, 0, MidpointRounding.ToNegativeInfinity, expected);
     }
@@ -90,7 +90,7 @@ public class NumericTests
     [InlineData("2.25", "3")]
     [InlineData("-2.75", "-2")]
     [InlineData("-2.25", "-2")]
-    public void Round_DigitsZero_ToPositiveInfinity(string input, string expected)
+    public void Round_DigitsZeroToPositiveInfinity_ReturnsExpectedResult(string input, string expected)
     {
         PerformRoundingTest(input, 0, MidpointRounding.ToPositiveInfinity, expected);
     }
@@ -98,7 +98,7 @@ public class NumericTests
     [Theory]
     [InlineData("1.125", 2, "1.12")]
     [InlineData("2.375", 2, "2.38")]
-    public void Round_PositiveDigits_ToEven(string input, int digits, string expected)
+    public void Round_PositiveDigitsToEven_ReturnsExpectedResult(string input, int digits, string expected)
     {
         PerformRoundingTest(input, digits, MidpointRounding.ToEven, expected);
     }
@@ -106,7 +106,7 @@ public class NumericTests
     [Theory]
     [InlineData("1.125", 2, "1.13")]
     [InlineData("-1.125", 2, "-1.13")]
-    public void Round_PositiveDigits_AwayFromZero(string input, int digits, string expected)
+    public void Round_PositiveDigitsAwayFromZero_ReturnsExpectedResult(string input, int digits, string expected)
     {
         PerformRoundingTest(input, digits, MidpointRounding.AwayFromZero, expected);
     }
@@ -114,7 +114,7 @@ public class NumericTests
     [Theory]
     [InlineData("1.129", 2, "1.12")]
     [InlineData("-1.129", 2, "-1.12")]
-    public void Round_PositiveDigits_ToZero(string input, int digits, string expected)
+    public void Round_PositiveDigitsToZero_ReturnsExpectedResult(string input, int digits, string expected)
     {
         PerformRoundingTest(input, digits, MidpointRounding.ToZero, expected);
     }
@@ -122,7 +122,7 @@ public class NumericTests
     [Theory]
     [InlineData("1.129", 2, "1.12")]
     [InlineData("-1.121", 2, "-1.13")]
-    public void Round_PositiveDigits_ToNegativeInfinity(string input, int digits, string expected)
+    public void Round_PositiveDigitsToNegativeInfinity_ReturnsExpectedResult(string input, int digits, string expected)
     {
         PerformRoundingTest(input, digits, MidpointRounding.ToNegativeInfinity, expected);
     }
@@ -130,13 +130,13 @@ public class NumericTests
     [Theory]
     [InlineData("1.121", 2, "1.13")]
     [InlineData("-1.129", 2, "-1.12")]
-    public void Round_PositiveDigits_ToPositiveInfinity(string input, int digits, string expected)
+    public void Round_PositiveDigitsToPositiveInfinity_ReturnsExpectedResult(string input, int digits, string expected)
     {
         PerformRoundingTest(input, digits, MidpointRounding.ToPositiveInfinity, expected);
     }
 
     [Fact]
-    public void Round_MaxDigits_DoesNotThrow()
+    public void Round_MaxDigits_PreservesValue()
     {
         var value = (ChiFixed)3.141592653589m;
         var result = ChiFixed.Round(value, 12, MidpointRounding.ToEven);
@@ -151,7 +151,7 @@ public class NumericTests
     [InlineData("1.56", 1, "1.6")]
     [InlineData("-1.25", 1, "-1.2")]
     [InlineData("-1.75", 1, "-1.8")]
-    public void Round_Digits1_ToEven(string input, int digits, string expected)
+    public void Round_Digits1ToEven_ReturnsExpectedResult(string input, int digits, string expected)
     {
         PerformRoundingTest(input, digits, MidpointRounding.ToEven, expected);
     }
@@ -162,7 +162,7 @@ public class NumericTests
     [InlineData("1.236328125", 3, "1.236")]
     [InlineData("-1.234375", 3, "-1.234")]
     [InlineData("-1.2359375", 3, "-1.236")]
-    public void Round_Digits3_ToEven(string input, int digits, string expected)
+    public void Round_Digits3ToEven_ReturnsExpectedResult(string input, int digits, string expected)
     {
         PerformRoundingTest(input, digits, MidpointRounding.ToEven, expected);
     }
@@ -171,7 +171,7 @@ public class NumericTests
     [InlineData("1.1234375", 5, "1.12344")]
     [InlineData("1.123466796875", 5, "1.12347")]
     [InlineData("-1.1234375", 5, "-1.12344")]
-    public void Round_Digits5_ToEven(string input, int digits, string expected)
+    public void Round_Digits5ToEven_ReturnsExpectedResult(string input, int digits, string expected)
     {
         PerformRoundingTest(input, digits, MidpointRounding.ToEven, expected);
     }
@@ -179,7 +179,7 @@ public class NumericTests
     [Theory]
     [InlineData("1.123456787109375", 8, "1.12345679")]
     [InlineData("1.123456695556640625", 8, "1.1234567")]
-    public void Round_Digits8_ToEven(string input, int digits, string expected)
+    public void Round_Digits8ToEven_ReturnsExpectedResult(string input, int digits, string expected)
     {
         PerformRoundingTest(input, digits, MidpointRounding.ToEven, expected);
     }
@@ -190,7 +190,7 @@ public class NumericTests
     [InlineData("-12345.6875", 2, "-12345.69")]
     [InlineData("99999.99609375", 2, "100000")]
     [InlineData("-99999.99609375", 2, "-100000")]
-    public void Round_LargeNumbers_ToEven(string input, int digits, string expected)
+    public void Round_LargeNumbersToEven_ReturnsExpectedResult(string input, int digits, string expected)
     {
         PerformRoundingTest(input, digits, MidpointRounding.ToEven, expected);
     }
@@ -201,7 +201,7 @@ public class NumericTests
     [InlineData("0.00140380", 4, "0.0014")]
     [InlineData("-0.00122070", 4, "-0.0012")]
     [InlineData("-0.00138092041", 4, "-0.0014")]
-    public void Round_SmallNumbers_ToEven(string input, int digits, string expected)
+    public void Round_SmallNumbersToEven_ReturnsExpectedResult(string input, int digits, string expected)
     {
         PerformRoundingTest(input, digits, MidpointRounding.ToEven, expected);
     }
@@ -212,7 +212,7 @@ public class NumericTests
     [InlineData("0.99609375", 2, "1")]
     [InlineData("-9.99609375", 2, "-10")]
     [InlineData("-0.99609375", 2, "-1")]
-    public void Round_CarryToNextInteger_ToEven(string input, int digits, string expected)
+    public void Round_CarryToNextIntegerToEven_ReturnsExpectedResult(string input, int digits, string expected)
     {
         PerformRoundingTest(input, digits, MidpointRounding.ToEven, expected);
     }
@@ -242,7 +242,7 @@ public class NumericTests
     [InlineData("1.36", 1, "1.4")]
     [InlineData("-1.25", 1, "-1.3")]
     [InlineData("-1.36", 1, "-1.4")]
-    public void Round_Digits1_AwayFromZero(string input, int digits, string expected)
+    public void Round_Digits1AwayFromZero_ReturnsExpectedResult(string input, int digits, string expected)
     {
         PerformRoundingTest(input, digits, MidpointRounding.AwayFromZero, expected);
     }
@@ -252,7 +252,7 @@ public class NumericTests
     [InlineData("1.2359375", 3, "1.236")]
     [InlineData("-1.234375", 3, "-1.234")]
     [InlineData("-1.2359375", 3, "-1.236")]
-    public void Round_Digits3_AwayFromZero(string input, int digits, string expected)
+    public void Round_Digits3AwayFromZero_ReturnsExpectedResult(string input, int digits, string expected)
     {
         PerformRoundingTest(input, digits, MidpointRounding.AwayFromZero, expected);
     }
@@ -262,7 +262,7 @@ public class NumericTests
     [InlineData("1.36", 1, "1.3")]
     [InlineData("-1.26", 1, "-1.2")]
     [InlineData("-1.36", 1, "-1.3")]
-    public void Round_Digits1_ToZero(string input, int digits, string expected)
+    public void Round_Digits1ToZero_ReturnsExpectedResult(string input, int digits, string expected)
     {
         PerformRoundingTest(input, digits, MidpointRounding.ToZero, expected);
     }
@@ -272,7 +272,7 @@ public class NumericTests
     [InlineData("1.36", 1, "1.3")]
     [InlineData("-1.21", 1, "-1.3")]
     [InlineData("-1.36", 1, "-1.4")]
-    public void Round_Digits1_ToNegativeInfinity(string input, int digits, string expected)
+    public void Round_Digits1ToNegativeInfinity_ReturnsExpectedResult(string input, int digits, string expected)
     {
         PerformRoundingTest(input, digits, MidpointRounding.ToNegativeInfinity, expected);
     }
@@ -282,7 +282,7 @@ public class NumericTests
     [InlineData("1.36", 1, "1.4")]
     [InlineData("-1.26", 1, "-1.2")]
     [InlineData("-1.36", 1, "-1.3")]
-    public void Round_Digits1_ToPositiveInfinity(string input, int digits, string expected)
+    public void Round_Digits1ToPositiveInfinity_ReturnsExpectedResult(string input, int digits, string expected)
     {
         PerformRoundingTest(input, digits, MidpointRounding.ToPositiveInfinity, expected);
     }
@@ -293,13 +293,13 @@ public class NumericTests
     [InlineData("0.000976", 3, "0.001")]
     [InlineData("-0.000122", 3, "0")]
     [InlineData("-0.000976", 3, "-0.001")]
-    public void Round_VerySmallFractions_ToEven(string input, int digits, string expected)
+    public void Round_VerySmallFractionsToEven_ReturnsExpectedResult(string input, int digits, string expected)
     {
         PerformRoundingTest(input, digits, MidpointRounding.ToEven, expected);
     }
 
     [Fact]
-    public void Round_Pi_VariousDigits()
+    public void Round_PiAcrossDigitCounts_ReturnsExpectedResult()
     {
         var pi = ChiFixed.Pi;
         PerformRoundingTestFromChiFixed(pi, 0, MidpointRounding.ToEven, "3");
@@ -353,7 +353,7 @@ public class NumericTests
     [InlineData("0", "0")]
     [InlineData("1", "1")]
     [InlineData("-1", "-1")]
-    public void Round_NoParameters_UsesAwayFromZero(string input, string expected)
+    public void Round_NoParameters_RoundsHalfAwayFromZero(string input, string expected)
     {
         var inputChiFixed = (ChiFixed)decimal.Parse(input, CultureInfo.InvariantCulture);
         var expectedChiFixed = (ChiFixed)decimal.Parse(expected, CultureInfo.InvariantCulture);
@@ -375,7 +375,7 @@ public class NumericTests
     [InlineData("0", "0")]
     [InlineData("0.5", "0")]
     [InlineData("-0.5", "-1")]
-    public void Floor_VariousInputs_ReturnsCorrectValue(string input, string expected)
+    public void Floor_VariousInputs_ReturnsExpectedResult(string input, string expected)
     {
         var inputChiFixed = (ChiFixed)decimal.Parse(input, CultureInfo.InvariantCulture);
         var expectedChiFixed = (ChiFixed)decimal.Parse(expected, CultureInfo.InvariantCulture);
@@ -397,7 +397,7 @@ public class NumericTests
     [InlineData("0", "0")]
     [InlineData("0.5", "1")]
     [InlineData("-0.5", "0")]
-    public void Ceiling_VariousInputs_ReturnsCorrectValue(string input, string expected)
+    public void Ceiling_VariousInputs_ReturnsExpectedResult(string input, string expected)
     {
         var inputChiFixed = (ChiFixed)decimal.Parse(input, CultureInfo.InvariantCulture);
         var expectedChiFixed = (ChiFixed)decimal.Parse(expected, CultureInfo.InvariantCulture);
@@ -419,7 +419,7 @@ public class NumericTests
     [InlineData("0", "0")]
     [InlineData("0.5", "0")]
     [InlineData("-0.5", "0")]
-    public void Truncate_VariousInputs_ReturnsCorrectValue(string input, string expected)
+    public void Truncate_VariousInputs_ReturnsExpectedResult(string input, string expected)
     {
         var inputChiFixed = (ChiFixed)decimal.Parse(input, CultureInfo.InvariantCulture);
         var expectedChiFixed = (ChiFixed)decimal.Parse(expected, CultureInfo.InvariantCulture);
@@ -457,7 +457,7 @@ public class NumericTests
     [InlineData("0", "100", "0.75", "75")]
     [InlineData("-50", "50", "0.5", "0")]
     [InlineData("10", "20", "0.3", "13")]
-    public void Lerp_VariousAmounts_ReturnsCorrectValue(string v1, string v2, string amount, string expected)
+    public void Lerp_VariousAmounts_ReturnsExpectedResult(string v1, string v2, string amount, string expected)
     {
         var value1 = (ChiFixed)decimal.Parse(v1, CultureInfo.InvariantCulture);
         var value2 = (ChiFixed)decimal.Parse(v2, CultureInfo.InvariantCulture);
@@ -487,7 +487,7 @@ public class NumericTests
     #region FusedMultiplyAdd Tests
 
     [Fact]
-    public void FusedMultiplyAdd_SimpleValues_ReturnsCorrectResult()
+    public void FusedMultiplyAdd_SimpleValues_ReturnsExpectedResult()
     {
         var result = ChiFixed.FusedMultiplyAdd((ChiFixed)2m, (ChiFixed)3m, (ChiFixed)4m);
         result.Should().Be((ChiFixed)10m);
@@ -508,7 +508,7 @@ public class NumericTests
     }
 
     [Fact]
-    public void FusedMultiplyAdd_NegativeValues_ReturnsCorrectResult()
+    public void FusedMultiplyAdd_NegativeValues_ReturnsExpectedResult()
     {
         var result = ChiFixed.FusedMultiplyAdd((ChiFixed)(-2m), (ChiFixed)3m, (ChiFixed)10m);
         result.Should().Be((ChiFixed)4m);
@@ -517,7 +517,7 @@ public class NumericTests
     [Theory]
     [InlineData("1.5", "2.5", "0.25", "4")]
     [InlineData("0.1", "0.2", "0.3", "0.32")]
-    public void FusedMultiplyAdd_FractionalValues_ReturnsCorrectResult(string left, string right, string addend,
+    public void FusedMultiplyAdd_FractionalValues_ReturnsExpectedResult(string left, string right, string addend,
         string expected)
     {
         var leftChiFixed = (ChiFixed)decimal.Parse(left, CultureInfo.InvariantCulture);
@@ -552,7 +552,7 @@ public class NumericTests
     [InlineData("8", "3", "-1")]
     [InlineData("10", "4", "2")]
     [InlineData("11", "4", "-1")]
-    public void Ieee754Remainder_VariousValues_ReturnsCorrectRemainder(string left, string right, string expected)
+    public void Ieee754Remainder_VariousValues_ReturnsExpectedResult(string left, string right, string expected)
     {
         var leftChiFixed = (ChiFixed)decimal.Parse(left, CultureInfo.InvariantCulture);
         var rightChiFixed = (ChiFixed)decimal.Parse(right, CultureInfo.InvariantCulture);
@@ -563,7 +563,7 @@ public class NumericTests
     }
 
     [Fact]
-    public void Ieee754Remainder_NegativeLeft_ReturnsCorrectRemainder()
+    public void Ieee754Remainder_NegativeLeft_ReturnsExpectedResult()
     {
         var result = ChiFixed.Ieee754Remainder((ChiFixed)(-7m), (ChiFixed)3m);
         var difference = Math.Abs(ToDecimal(result) - -1m);

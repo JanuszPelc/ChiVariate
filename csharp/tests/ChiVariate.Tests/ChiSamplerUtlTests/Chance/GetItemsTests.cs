@@ -10,7 +10,7 @@ public class GetItemsTests
     private readonly string[] _choices = ["A", "B", "C", "D", "E"];
 
     [Fact]
-    public void GetItems_Called_ReturnsCorrectNumberOfItems()
+    public void GetItems_OverSourceItems_ReturnsRequestedCount()
     {
         var rng = new ChiRng(1);
         const int count = 10;
@@ -22,7 +22,7 @@ public class GetItemsTests
     }
 
     [Fact]
-    public void GetItems_Called_ReturnsOnlyItemsFromSource()
+    public void GetItems_OverSourceItems_ReturnsOnlyItemsFromSource()
     {
         var rng = new ChiRng(2);
         const int count = 100;
@@ -35,7 +35,7 @@ public class GetItemsTests
     }
 
     [Fact]
-    public void GetItemsPreferUnique_WhenCountIsLessThanChoices_ReturnsAllUniqueItems()
+    public void GetItemsAvoidDuplicates_WhenCountIsLessThanChoices_ReturnsAllUniqueItems()
     {
         var rng = new ChiRng(3);
         const int count = 3;
@@ -65,7 +65,7 @@ public class GetItemsTests
     }
 
     [Fact]
-    public void GetItemsAvoidDuplicates_WhenCountIsGreaterThanChoices_ReturnsCorrectNumberOfItems()
+    public void GetItemsAvoidDuplicates_WhenCountIsGreaterThanChoices_ReturnsRequestedCount()
     {
         var rng = new ChiRng(5);
         var count = _choices.Length + 3;

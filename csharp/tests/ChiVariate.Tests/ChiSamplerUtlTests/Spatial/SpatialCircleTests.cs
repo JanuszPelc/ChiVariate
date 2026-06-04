@@ -12,7 +12,7 @@ public class SpatialCircleTests(ITestOutputHelper testOutputHelper)
     private const int SampleCount = 100_000;
 
     [Fact]
-    public void PointOnCircle_SamplesAreCorrectlyNormalized()
+    public void Sample_OnCircle_ProducesPointsAtRadius()
     {
         const float radius = 15.0f;
         var rng = new ChiRng(ChiSeed.Scramble("PointOnCircleNormalization"));
@@ -28,7 +28,7 @@ public class SpatialCircleTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void PointOnCircle_DistributionIsSpatiallyUniform()
+    public void Sample_OnCircle_IsCenteredAtOrigin()
     {
         var rng = new ChiRng(ChiSeed.Scramble("PointOnCircleUniformity"));
         var sampler = rng.Spatial().OnCircle(1.0);
@@ -48,7 +48,7 @@ public class SpatialCircleTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void PointInCircle_SamplesAreWithinBounds()
+    public void Sample_InCircle_ProducesPointsWithinRadius()
     {
         const float radius = 25.0f;
         var rng = new ChiRng(ChiSeed.Scramble("PointInCircleBounds"));
@@ -66,7 +66,7 @@ public class SpatialCircleTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void PointInCircle_DistributionIsSpatiallyUniform()
+    public void Sample_InCircle_ProducesUniformDiskMeanRadius()
     {
         var rng = new ChiRng(ChiSeed.Scramble("PointInCircleUniformity"));
         var sampler = rng.Spatial().InCircle(1.0f); // Unit circle
@@ -104,7 +104,7 @@ public class SpatialCircleTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void PointCircle_WithInvalidRadius_ThrowsArgumentOutOfRangeException()
+    public void InCircle_WithInvalidRadius_ThrowsArgumentOutOfRangeException()
     {
         var rng = new ChiRng();
         var act = () => { rng.Spatial().InCircle(-1.0f); };

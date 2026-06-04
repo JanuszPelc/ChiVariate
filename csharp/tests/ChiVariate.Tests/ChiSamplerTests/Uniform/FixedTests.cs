@@ -47,7 +47,7 @@ public class FixedTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void Sample_AlwaysStaysWithinBounds()
+    public void Sample_OverBoundedRange_StaysWithinBounds()
     {
         var min = (ChiFixed)10m;
         var max = (ChiFixed)20m;

@@ -17,7 +17,7 @@ public class FixedTests(ITestOutputHelper testOutputHelper)
     [InlineData(1.0, 2.0)] // Finite mean, infinite variance
     [InlineData(10.0, 3.0)] // Finite mean and variance
     [InlineData(1.0, 3.0)] // Classic power-law
-    public void Sample_WithVariousParameters_ProducesParetoDistribution(double scale, double shape)
+    public void Sample_AcrossScaleAndShape_MatchesParetoDistribution(double scale, double shape)
     {
         var sc = (ChiFixed)(decimal)scale;
         var sh = (ChiFixed)(decimal)shape;
@@ -34,7 +34,7 @@ public class FixedTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void Sample_AlwaysAboveScale()
+    public void Sample_AcrossManySamples_ReturnsValuesAtLeastScale()
     {
         var scale = (ChiFixed)5m;
         var shape = (ChiFixed)2m;

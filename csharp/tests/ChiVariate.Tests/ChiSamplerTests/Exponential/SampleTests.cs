@@ -12,7 +12,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     private const int SampleCount = 100_000;
 
     [Fact]
-    public void Sample_WithRateOne_ProducesExpectedMean()
+    public void Sample_WithRateOne_MatchesExponentialDistribution()
     {
         const double rateLambda = 1.0;
         const double expectedMean = 1.0 / rateLambda;
@@ -30,7 +30,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void Sample_WithDifferentRate_ProducesExpectedMean()
+    public void Sample_WithRateOneHalf_MatchesExponentialDistribution()
     {
         const double rateLambda = 0.5;
         const double expectedMean = 1.0 / rateLambda;
@@ -60,7 +60,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void Sample_Decimal_ProducesExpectedMean()
+    public void Sample_Decimal_MatchesExponentialDistribution()
     {
         const decimal rateLambda = 1.0m;
         const double expectedMean = 1.0 / (double)rateLambda;

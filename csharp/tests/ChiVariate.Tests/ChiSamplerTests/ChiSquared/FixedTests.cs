@@ -36,7 +36,7 @@ public class FixedTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void Sample_WithLargeDegreesOfFreedom_ApproachesNormal()
+    public void Sample_WithLargeDegreesOfFreedom_MatchesTheoreticalMeanAndStdDev()
     {
         // For large k, Chi-squared(k) approaches Normal(k, sqrt(2k))
         var k = (ChiFixed)30;

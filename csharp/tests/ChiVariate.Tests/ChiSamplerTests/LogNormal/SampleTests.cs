@@ -16,7 +16,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     [InlineData(0.0, 1.0)] // Standard Log-Normal
     [InlineData(1.0, 0.5)] // Shifted, less skewed
     [InlineData(0.0, 0.25)] // Tightly clustered near 1
-    public void Sample_ProducesDistributionWithCorrectStatistics(double mu, double sigma)
+    public void Sample_AcrossMuAndSigma_MatchesLogNormalDistribution(double mu, double sigma)
     {
         var rng = new ChiRng(ChiSeed.Scramble("LogNormal", new ChiHash().Add(mu).Add(sigma).Hash));
 
@@ -53,7 +53,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     [Theory]
     [InlineData("1.0", "0.5")] // Shifted, less skewed
     [InlineData("0.0", "0.25")] // Tightly clustered near 1
-    public void Sample_Decimal_ProducesDistributionWithCorrectStatistics(string muStr, string sigmaStr)
+    public void Sample_Decimal_MatchesLogNormalDistribution(string muStr, string sigmaStr)
     {
         var mu = decimal.Parse(muStr, CultureInfo.InvariantCulture);
         var sigma = decimal.Parse(sigmaStr, CultureInfo.InvariantCulture);

@@ -13,7 +13,7 @@ public class ChiMathSqrtTests
     [InlineData(4.0f, 2.0f)]
     [InlineData(9.0f, 3.0f)]
     [InlineData(16.0f, 4.0f)]
-    public void Sqrt_FloatPerfectSquares_ReturnsExactResults(float input, float expected)
+    public void Sqrt_FloatPerfectSquares_ReturnsExpectedResult(float input, float expected)
     {
         var result = ChiMath.Sqrt(input);
 
@@ -32,7 +32,7 @@ public class ChiMathSqrtTests
     [InlineData(100.0, 10.0)]
     [InlineData(0.25, 0.5)]
     [InlineData(0.04, 0.2)]
-    public void Sqrt_DoublePerfectSquares_ReturnsExactResults(double input, double expected)
+    public void Sqrt_DoublePerfectSquares_ReturnsExpectedResult(double input, double expected)
     {
         var result = ChiMath.Sqrt(input);
 
@@ -44,7 +44,7 @@ public class ChiMathSqrtTests
     [InlineData(3.0, 1.732050807568877)]
     [InlineData(5.0, 2.236067977499790)]
     [InlineData(10.0, 3.162277660168380)]
-    public void Sqrt_DoubleIrrational_ReturnsAccurateApproximations(double input, double expected)
+    public void Sqrt_DoubleIrrational_ReturnsExpectedResult(double input, double expected)
     {
         var result = ChiMath.Sqrt(input);
 
@@ -78,7 +78,7 @@ public class ChiMathSqrtTests
     [InlineData("25", "5")]
     [InlineData("100", "10")]
     [InlineData("0.25", "0.5")]
-    public void Sqrt_DecimalPerfectSquares_ReturnsExactResults(string inputStr, string expectedStr)
+    public void Sqrt_DecimalPerfectSquares_ReturnsExpectedResult(string inputStr, string expectedStr)
     {
         var input = decimal.Parse(inputStr, CultureInfo.InvariantCulture);
         var expected = decimal.Parse(expectedStr, CultureInfo.InvariantCulture);
@@ -133,7 +133,7 @@ public class ChiMathSqrtTests
     }
 
     [Fact]
-    public void Sqrt_DecimalVeryLarge_Converges()
+    public void Sqrt_DecimalVeryLarge_DoesNotTimeOut()
     {
         var input = decimal.MaxValue / 1000;
 
@@ -153,7 +153,7 @@ public class ChiMathSqrtTests
     [InlineData("25", "5")]
     [InlineData("100", "10")]
     [InlineData("0.25", "0.5")]
-    public void Sqrt_ChiFixedPerfectSquares_ReturnsExactResults(string inputStr, string expectedStr)
+    public void Sqrt_ChiFixedPerfectSquares_ReturnsExpectedResult(string inputStr, string expectedStr)
     {
         var input = (ChiFixed)decimal.Parse(inputStr, CultureInfo.InvariantCulture);
         var expected = (ChiFixed)decimal.Parse(expectedStr, CultureInfo.InvariantCulture);
@@ -205,7 +205,7 @@ public class ChiMathSqrtTests
     [InlineData(1000000.0)]
     [InlineData(0.000001)]
     [InlineData(1.0)]
-    public void Sqrt_DoubleAnyValue_Converges(double input)
+    public void Sqrt_DoubleAcrossMagnitudes_MatchesSystemMathSqrt(double input)
     {
         var result = ChiMath.Sqrt(input);
 
@@ -214,7 +214,7 @@ public class ChiMathSqrtTests
     }
 
     [Fact]
-    public void Sqrt_AllTypes_UsesTypeSpecificPrecision()
+    public void Sqrt_AllTypes_ReturnsExpectedResult()
     {
         var doubleResult = ChiMath.Sqrt(2.0);
         var floatResult = ChiMath.Sqrt(2.0f);

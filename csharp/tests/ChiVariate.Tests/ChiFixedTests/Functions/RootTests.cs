@@ -44,7 +44,7 @@ public class RootTests
     [InlineData("25", "5")]
     [InlineData("100", "10")]
     [InlineData("144", "12")]
-    public void Sqrt_PerfectSquares_ReturnsCorrectValue(string inputStr, string expectedStr)
+    public void Sqrt_PerfectSquares_ReturnsExpectedResult(string inputStr, string expectedStr)
     {
         var input = (ChiFixed)decimal.Parse(inputStr, CultureInfo.InvariantCulture);
         var expected = (ChiFixed)decimal.Parse(expectedStr, CultureInfo.InvariantCulture);
@@ -57,7 +57,7 @@ public class RootTests
     [InlineData("3", "1.732050808")]
     [InlineData("5", "2.236067977")]
     [InlineData("10", "3.162277660")]
-    public void Sqrt_NonPerfectSquares_ReturnsCorrectValue(string inputStr, string expectedStr)
+    public void Sqrt_NonPerfectSquares_ReturnsExpectedResult(string inputStr, string expectedStr)
     {
         var input = (ChiFixed)decimal.Parse(inputStr, CultureInfo.InvariantCulture);
         var expected = (ChiFixed)decimal.Parse(expectedStr, CultureInfo.InvariantCulture);
@@ -70,7 +70,7 @@ public class RootTests
     [InlineData("0.01", "0.1")]
     [InlineData("0.04", "0.2")]
     [InlineData("1.44", "1.2")]
-    public void Sqrt_DecimalValues_ReturnsCorrectValue(string inputStr, string expectedStr)
+    public void Sqrt_DecimalValues_ReturnsExpectedResult(string inputStr, string expectedStr)
     {
         var input = (ChiFixed)decimal.Parse(inputStr, CultureInfo.InvariantCulture);
         var expected = (ChiFixed)decimal.Parse(expectedStr, CultureInfo.InvariantCulture);
@@ -81,7 +81,7 @@ public class RootTests
     [Theory]
     [InlineData("0.0001", "0.01")]
     [InlineData("0.000001", "0.001")]
-    public void Sqrt_VerySmallValues_ReturnsCorrectValue(string inputStr, string expectedStr)
+    public void Sqrt_VerySmallValues_ReturnsExpectedResult(string inputStr, string expectedStr)
     {
         var input = (ChiFixed)decimal.Parse(inputStr, CultureInfo.InvariantCulture);
         var expected = (ChiFixed)decimal.Parse(expectedStr, CultureInfo.InvariantCulture);
@@ -90,7 +90,7 @@ public class RootTests
     }
 
     [Fact]
-    public void Sqrt_NegativeValue_ThrowsException()
+    public void Sqrt_NegativeValue_ThrowsArgumentException()
     {
         var value = (ChiFixed)(-4.0m);
         var act = () => ChiFixed.Sqrt(value);
@@ -128,7 +128,7 @@ public class RootTests
     [InlineData("64", "4")]
     [InlineData("125", "5")]
     [InlineData("1000", "10")]
-    public void Cbrt_PerfectCubes_ReturnsCorrectValue(string inputStr, string expectedStr)
+    public void Cbrt_PerfectCubes_ReturnsExpectedResult(string inputStr, string expectedStr)
     {
         var input = (ChiFixed)decimal.Parse(inputStr, CultureInfo.InvariantCulture);
         var expected = (ChiFixed)decimal.Parse(expectedStr, CultureInfo.InvariantCulture);
@@ -141,7 +141,7 @@ public class RootTests
     [InlineData("-27", "-3")]
     [InlineData("-64", "-4")]
     [InlineData("-125", "-5")]
-    public void Cbrt_NegativePerfectCubes_ReturnsCorrectValue(string inputStr, string expectedStr)
+    public void Cbrt_NegativePerfectCubes_ReturnsExpectedResult(string inputStr, string expectedStr)
     {
         var input = (ChiFixed)decimal.Parse(inputStr, CultureInfo.InvariantCulture);
         var expected = (ChiFixed)decimal.Parse(expectedStr, CultureInfo.InvariantCulture);
@@ -153,7 +153,7 @@ public class RootTests
     [InlineData("2", "1.259921050")]
     [InlineData("10", "2.154434690")]
     [InlineData("100", "4.641588834")]
-    public void Cbrt_NonPerfectCubes_ReturnsCorrectValue(string inputStr, string expectedStr)
+    public void Cbrt_NonPerfectCubes_ReturnsExpectedResult(string inputStr, string expectedStr)
     {
         var input = (ChiFixed)decimal.Parse(inputStr, CultureInfo.InvariantCulture);
         var expected = (ChiFixed)decimal.Parse(expectedStr, CultureInfo.InvariantCulture);
@@ -165,7 +165,7 @@ public class RootTests
     [InlineData("0.125", "0.5")]
     [InlineData("0.001", "0.1")]
     [InlineData("0.008", "0.2")]
-    public void Cbrt_DecimalValues_ReturnsCorrectValue(string inputStr, string expectedStr)
+    public void Cbrt_DecimalValues_ReturnsExpectedResult(string inputStr, string expectedStr)
     {
         var input = (ChiFixed)decimal.Parse(inputStr, CultureInfo.InvariantCulture);
         var expected = (ChiFixed)decimal.Parse(expectedStr, CultureInfo.InvariantCulture);
@@ -182,7 +182,7 @@ public class RootTests
     [InlineData("5", "12", "13")]
     [InlineData("8", "15", "17")]
     [InlineData("7", "24", "25")]
-    public void Hypot_PythagoreanTriples_ReturnsCorrectValue(string xStr, string yStr, string expectedStr)
+    public void Hypot_PythagoreanTriples_ReturnsExpectedResult(string xStr, string yStr, string expectedStr)
     {
         var x = (ChiFixed)decimal.Parse(xStr, CultureInfo.InvariantCulture);
         var y = (ChiFixed)decimal.Parse(yStr, CultureInfo.InvariantCulture);
@@ -195,7 +195,7 @@ public class RootTests
     [InlineData("0", "5", "5")]
     [InlineData("5", "0", "5")]
     [InlineData("0", "0", "0")]
-    public void Hypot_WithZero_ReturnsCorrectValue(string xStr, string yStr, string expectedStr)
+    public void Hypot_WithZero_ReturnsExpectedResult(string xStr, string yStr, string expectedStr)
     {
         var x = (ChiFixed)decimal.Parse(xStr, CultureInfo.InvariantCulture);
         var y = (ChiFixed)decimal.Parse(yStr, CultureInfo.InvariantCulture);
@@ -208,7 +208,7 @@ public class RootTests
     [InlineData("1", "1", "1.414213562")]
     [InlineData("3", "3", "4.242640687")]
     [InlineData("5", "5", "7.071067812")]
-    public void Hypot_EqualValues_ReturnsCorrectValue(string xStr, string yStr, string expectedStr)
+    public void Hypot_EqualValues_ReturnsExpectedResult(string xStr, string yStr, string expectedStr)
     {
         var x = (ChiFixed)decimal.Parse(xStr, CultureInfo.InvariantCulture);
         var y = (ChiFixed)decimal.Parse(yStr, CultureInfo.InvariantCulture);
@@ -220,7 +220,7 @@ public class RootTests
     [Theory]
     [InlineData("0.3", "0.4", "0.5")]
     [InlineData("1.5", "2.0", "2.5")]
-    public void Hypot_DecimalValues_ReturnsCorrectValue(string xStr, string yStr, string expectedStr)
+    public void Hypot_DecimalValues_ReturnsExpectedResult(string xStr, string yStr, string expectedStr)
     {
         var x = (ChiFixed)decimal.Parse(xStr, CultureInfo.InvariantCulture);
         var y = (ChiFixed)decimal.Parse(yStr, CultureInfo.InvariantCulture);
@@ -233,7 +233,7 @@ public class RootTests
     [InlineData("-3", "4", "5")]
     [InlineData("3", "-4", "5")]
     [InlineData("-3", "-4", "5")]
-    public void Hypot_NegativeValues_ReturnsCorrectValue(string xStr, string yStr, string expectedStr)
+    public void Hypot_NegativeValues_ReturnsExpectedResult(string xStr, string yStr, string expectedStr)
     {
         var x = (ChiFixed)decimal.Parse(xStr, CultureInfo.InvariantCulture);
         var y = (ChiFixed)decimal.Parse(yStr, CultureInfo.InvariantCulture);
@@ -244,7 +244,7 @@ public class RootTests
 
     [Theory]
     [InlineData("10000", "10000", "14142.135623730950488")]
-    public void Hypot_LargeValues_ReturnsCorrectValue(string xStr, string yStr, string expectedStr)
+    public void Hypot_LargeValues_ReturnsExpectedResult(string xStr, string yStr, string expectedStr)
     {
         var x = (ChiFixed)decimal.Parse(xStr, CultureInfo.InvariantCulture);
         var y = (ChiFixed)decimal.Parse(yStr, CultureInfo.InvariantCulture);
@@ -256,7 +256,7 @@ public class RootTests
     [Theory]
     [InlineData("100000", "100000", 3)]
     [InlineData("1000000", "1000000", 30)]
-    public void Hypot_VeryLargeValues_HasPrecisionDrift(string xStr, string yStr, long maxUlps)
+    public void Hypot_VeryLargeValues_StaysWithinUlpTolerance(string xStr, string yStr, long maxUlps)
     {
         var x = (ChiFixed)decimal.Parse(xStr, CultureInfo.InvariantCulture);
         var y = (ChiFixed)decimal.Parse(yStr, CultureInfo.InvariantCulture);
@@ -284,7 +284,7 @@ public class RootTests
     #region RootN Tests
 
     [Fact]
-    public void RootN_N0_ThrowsException()
+    public void RootN_N0_ThrowsArgumentException()
     {
         var value = (ChiFixed)16.0m;
         var act = () => ChiFixed.RootN(value, 0);
@@ -336,7 +336,7 @@ public class RootTests
     [InlineData("81", 4, "3")]
     [InlineData("32", 5, "2")]
     [InlineData("243", 5, "3")]
-    public void RootN_HigherRoots_ReturnsCorrectValue(string inputStr, int n, string expectedStr)
+    public void RootN_HigherRoots_ReturnsExpectedResult(string inputStr, int n, string expectedStr)
     {
         var input = (ChiFixed)decimal.Parse(inputStr, CultureInfo.InvariantCulture);
         var expected = (ChiFixed)decimal.Parse(expectedStr, CultureInfo.InvariantCulture);
@@ -347,7 +347,7 @@ public class RootTests
     [Theory]
     [InlineData("2", 4, "1.189207115")]
     [InlineData("10", 5, "1.584893192")]
-    public void RootN_NonPerfectRoots_ReturnsCorrectValue(string inputStr, int n, string expectedStr)
+    public void RootN_NonPerfectRoots_ReturnsExpectedResult(string inputStr, int n, string expectedStr)
     {
         var input = (ChiFixed)decimal.Parse(inputStr, CultureInfo.InvariantCulture);
         var expected = (ChiFixed)decimal.Parse(expectedStr, CultureInfo.InvariantCulture);
@@ -358,7 +358,7 @@ public class RootTests
     [Theory]
     [InlineData("0.0625", 4, "0.5")]
     [InlineData("0.00032", 5, "0.2")]
-    public void RootN_DecimalValues_ReturnsCorrectValue(string inputStr, int n, string expectedStr)
+    public void RootN_DecimalValues_ReturnsExpectedResult(string inputStr, int n, string expectedStr)
     {
         var input = (ChiFixed)decimal.Parse(inputStr, CultureInfo.InvariantCulture);
         var expected = (ChiFixed)decimal.Parse(expectedStr, CultureInfo.InvariantCulture);
@@ -369,7 +369,7 @@ public class RootTests
     [Theory]
     [InlineData("-32", 5, "-2")]
     [InlineData("-243", 5, "-3")]
-    public void RootN_NegativeValueOddRoot_ReturnsCorrectValue(string inputStr, int n, string expectedStr)
+    public void RootN_NegativeValueOddRoot_ReturnsExpectedResult(string inputStr, int n, string expectedStr)
     {
         var input = (ChiFixed)decimal.Parse(inputStr, CultureInfo.InvariantCulture);
         var expected = (ChiFixed)decimal.Parse(expectedStr, CultureInfo.InvariantCulture);
@@ -378,7 +378,7 @@ public class RootTests
     }
 
     [Fact]
-    public void RootN_NegativeValueEvenRoot_ThrowsException()
+    public void RootN_NegativeValueEvenRoot_ThrowsArgumentException()
     {
         var value = (ChiFixed)(-16.0m);
         var act = () => ChiFixed.RootN(value, 4);
@@ -442,7 +442,7 @@ public class RootTests
     [InlineData("16", "0.25")]
     [InlineData("25", "0.2")]
     [InlineData("100", "0.1")]
-    public void ReciprocalSqrtEstimate_PerfectSquares_ReturnsCorrectValue(string inputStr, string expectedStr)
+    public void ReciprocalSqrtEstimate_PerfectSquares_ReturnsExpectedResult(string inputStr, string expectedStr)
     {
         var input = (ChiFixed)decimal.Parse(inputStr, CultureInfo.InvariantCulture);
         var expected = (ChiFixed)decimal.Parse(expectedStr, CultureInfo.InvariantCulture);
@@ -453,7 +453,7 @@ public class RootTests
     [Theory]
     [InlineData("2", "0.707106781")]
     [InlineData("0.25", "2")]
-    public void ReciprocalSqrtEstimate_NonPerfectSquares_ReturnsCorrectValue(string inputStr, string expectedStr)
+    public void ReciprocalSqrtEstimate_NonPerfectSquares_ReturnsExpectedResult(string inputStr, string expectedStr)
     {
         var input = (ChiFixed)decimal.Parse(inputStr, CultureInfo.InvariantCulture);
         var expected = (ChiFixed)decimal.Parse(expectedStr, CultureInfo.InvariantCulture);

@@ -47,7 +47,7 @@ public class PowerTests
     [InlineData("3", "2", "9")]
     [InlineData("10", "2", "100")]
     [InlineData("5", "3", "125")]
-    public void Pow_PositiveIntegerExponents_ReturnsCorrectValue(string baseStr, string expStr, string expectedStr)
+    public void Pow_PositiveIntegerExponents_ReturnsExpectedResult(string baseStr, string expStr, string expectedStr)
     {
         var baseVal = (ChiFixed)decimal.Parse(baseStr, CultureInfo.InvariantCulture);
         var exponent = (ChiFixed)decimal.Parse(expStr, CultureInfo.InvariantCulture);
@@ -61,7 +61,7 @@ public class PowerTests
     [InlineData("2", "-2", "0.25")]
     [InlineData("10", "-1", "0.1")]
     [InlineData("5", "-2", "0.04")]
-    public void Pow_NegativeIntegerExponents_ReturnsCorrectValue(string baseStr, string expStr, string expectedStr)
+    public void Pow_NegativeIntegerExponents_ReturnsExpectedResult(string baseStr, string expStr, string expectedStr)
     {
         var baseVal = (ChiFixed)decimal.Parse(baseStr, CultureInfo.InvariantCulture);
         var exponent = (ChiFixed)decimal.Parse(expStr, CultureInfo.InvariantCulture);
@@ -75,7 +75,7 @@ public class PowerTests
     [InlineData("9", "0.5", "3")]
     [InlineData("8", "0.333333333", "2")]
     [InlineData("27", "0.333333333", "3")]
-    public void Pow_FractionalExponents_ReturnsCorrectValue(string baseStr, string expStr, string expectedStr)
+    public void Pow_FractionalExponents_ReturnsExpectedResult(string baseStr, string expStr, string expectedStr)
     {
         var baseVal = (ChiFixed)decimal.Parse(baseStr, CultureInfo.InvariantCulture);
         var exponent = (ChiFixed)decimal.Parse(expStr, CultureInfo.InvariantCulture);
@@ -89,7 +89,7 @@ public class PowerTests
     [InlineData("-2", "2", "4")]
     [InlineData("-3", "3", "-27")]
     [InlineData("-5", "2", "25")]
-    public void Pow_NegativeBaseIntegerExponent_ReturnsCorrectValue(string baseStr, string expStr, string expectedStr)
+    public void Pow_NegativeBaseIntegerExponent_ReturnsExpectedResult(string baseStr, string expStr, string expectedStr)
     {
         var baseVal = (ChiFixed)decimal.Parse(baseStr, CultureInfo.InvariantCulture);
         var exponent = (ChiFixed)decimal.Parse(expStr, CultureInfo.InvariantCulture);
@@ -99,7 +99,7 @@ public class PowerTests
     }
 
     [Fact]
-    public void Pow_NegativeBaseFractionalExponent_ThrowsException()
+    public void Pow_NegativeBaseFractionalExponent_ThrowsArgumentException()
     {
         var baseVal = (ChiFixed)(-4.0m);
         var exponent = (ChiFixed)0.5m;
@@ -110,7 +110,7 @@ public class PowerTests
     [Theory]
     [InlineData("2", "10", "1024")]
     [InlineData("3", "5", "243")]
-    public void Pow_LargerExponents_ReturnsCorrectValue(string baseStr, string expStr, string expectedStr)
+    public void Pow_LargerExponents_ReturnsExpectedResult(string baseStr, string expStr, string expectedStr)
     {
         var baseVal = (ChiFixed)decimal.Parse(baseStr, CultureInfo.InvariantCulture);
         var exponent = (ChiFixed)decimal.Parse(expStr, CultureInfo.InvariantCulture);
@@ -123,7 +123,7 @@ public class PowerTests
     [InlineData("2.5", "2", "6.25")]
     [InlineData("1.5", "3", "3.375")]
     [InlineData("0.5", "2", "0.25")]
-    public void Pow_DecimalBase_ReturnsCorrectValue(string baseStr, string expStr, string expectedStr)
+    public void Pow_DecimalBase_ReturnsExpectedResult(string baseStr, string expStr, string expectedStr)
     {
         var baseVal = (ChiFixed)decimal.Parse(baseStr, CultureInfo.InvariantCulture);
         var exponent = (ChiFixed)decimal.Parse(expStr, CultureInfo.InvariantCulture);
@@ -135,7 +135,7 @@ public class PowerTests
     [Theory]
     [InlineData("2", "0.5", "1.414213562")]
     [InlineData("10", "0.5", "3.162277660")]
-    public void Pow_SquareRoot_ReturnsCorrectValue(string baseStr, string expStr, string expectedStr)
+    public void Pow_SquareRoot_ReturnsExpectedResult(string baseStr, string expStr, string expectedStr)
     {
         var baseVal = (ChiFixed)decimal.Parse(baseStr, CultureInfo.InvariantCulture);
         var exponent = (ChiFixed)decimal.Parse(expStr, CultureInfo.InvariantCulture);
@@ -147,7 +147,7 @@ public class PowerTests
     [Theory]
     [InlineData("8", "0.333333333", "2")]
     [InlineData("27", "0.333333333", "3")]
-    public void Pow_CubeRoot_ReturnsCorrectValue(string baseStr, string expStr, string expectedStr)
+    public void Pow_CubeRoot_ReturnsExpectedResult(string baseStr, string expStr, string expectedStr)
     {
         var baseVal = (ChiFixed)decimal.Parse(baseStr, CultureInfo.InvariantCulture);
         var exponent = (ChiFixed)decimal.Parse(expStr, CultureInfo.InvariantCulture);

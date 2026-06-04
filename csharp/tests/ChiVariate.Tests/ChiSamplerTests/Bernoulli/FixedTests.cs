@@ -18,7 +18,7 @@ public class FixedTests(ITestOutputHelper testOutputHelper)
     [InlineData(0.25)]
     [InlineData(0.50)]
     [InlineData(0.75)]
-    public void Sample_WithFixedProbability_HasCorrectSuccessRate(double probability)
+    public void Sample_WithFixedProbability_MatchesConfiguredProbability(double probability)
     {
         var p = (ChiFixed)(decimal)probability;
 
@@ -64,7 +64,7 @@ public class FixedTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void Sample_ExtremeProbabilities_WorkCorrectly()
+    public void Sample_ExtremeProbabilities_ProduceCertainOutcomes()
     {
         var rng = new ChiRng("BernoulliExtremeFixed");
 

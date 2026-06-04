@@ -16,7 +16,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     [InlineData(1.0)]
     [InlineData(5.0)]
     [InlineData(0.5)]
-    public void Sample_WithCorrectProperties_ProducesDistribution(double sigma)
+    public void Sample_AcrossScale_MatchesRayleighDistribution(double sigma)
     {
         var rng = new ChiRng(ChiSeed.Scramble("Rayleigh", sigma));
         var histogram = new Histogram(0, sigma * 6, 100);
@@ -64,7 +64,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     [Theory]
     [InlineData("1.0")]
     [InlineData("5.0")]
-    public void Sample_Decimal_WithCorrectProperties_ProducesDistribution(string sigmaStr)
+    public void Sample_DecimalAcrossScale_MatchesRayleighDistribution(string sigmaStr)
     {
         var sigma = decimal.Parse(sigmaStr, CultureInfo.InvariantCulture);
         var rng = new ChiRng(ChiSeed.Scramble("RayleighDecimal", (long)(sigma * 10)));

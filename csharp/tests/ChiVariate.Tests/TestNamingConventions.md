@@ -22,8 +22,11 @@ already supplies that context: in `Gamma/SampleTests` the unit is `Sample`, not
 
 - Prefer the **method or member**: `Sin`, `Lerp`, `Indexer`, `Eye`, `Sample`.
 - **Fluent chains** (`rng.Prime(min,max).Sample()`): name the call whose behavior
-  you're asserting — usually the **producer** (`Sample_…`). Switch to the builder
-  only when *construction itself* is the subject: `Prime_WithNegativeRange_Throws`.
+  you're asserting — usually the **producer** (`Sample_…`). Use the **builder** when
+  *construction* is the subject — **including argument-validation tests**: if bad
+  arguments make the factory throw, it's `Gamma_WithInvalidParameters_Throws` even
+  when the test writes `.Sample()` (the factory rejects them before sampling). Judge
+  by where the exception actually fires, not by what's typed.
 - When a class tests many members of one type, name each by its real member
   (`Eye_…`, `Hilbert_…`, `Indexer_…`), not the type (`Matrix_…`).
 - A whole-component quality test with no single method may use the component
@@ -37,10 +40,15 @@ General, not granular — never enumerate `[InlineData]` values.
   **input space** instead: `Sample_AcrossShapeAndScale_…`,
   `NextDouble_OverUnitInterval_…`. Avoid empty filler (`CalledRepeatedly`,
   `Always`). For a genuinely nullary test, a neutral `Default` beats a fake.
-- Include a **type** only when the type *is* the variation — written bare, with
-  framework casing: `Next_Int_…`, `Sample_UInt128_…` (not `ForInt`, not `Uint128`).
+- Include a **type** only when the type *is* the variation — written **bare**, with
+  framework casing, and **drop connector words**: `Sample_UInt128_…`, never
+  `Sample_ForUInt128_…`; `Next_Int_…`, never `Next_ForInt_…`. (Casing follows the
+  BCL: `UInt128`, not `Uint128`.) And don't tag a type the **class** already
+  fixes — a `FixedTests` class that does `OfType<ChiFixed>()` shouldn't repeat
+  `ChiFixed` in the scenario.
 - **Descriptive domain terms are welcome** (`SpecialAngles`, `AllQuadrants`,
   `TwinPrimes`, `Goldbach`, `LoremIpsum`). Only third-party brands/IP are out.
+  Abbreviate consistently or not at all — `DegreesOfFreedom` or `DoF`, never `Dof`.
 
 ## 3. ExpectedBehavior — the observable result
 

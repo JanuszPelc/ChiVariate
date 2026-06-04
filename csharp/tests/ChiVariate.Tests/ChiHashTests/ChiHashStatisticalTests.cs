@@ -154,7 +154,7 @@ public class ChiHashStatisticalTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void ChiHash_AvalancheEffect_SmallInputChangesCauseLargeHashChanges()
+    public void ChiHash_SingleBitInputFlip_FlipsAboutHalfTheOutputBits()
     {
         var bitDifferences = new List<int>();
         const int testCount = 10_000;
@@ -187,7 +187,7 @@ public class ChiHashStatisticalTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void ChiHash_StringAvalanche_SmallStringChangesCauseLargeHashChanges()
+    public void ChiHash_SlightStringChange_FlipsAboutHalfTheOutputBits()
     {
         var rng = new ChiRng("string-avalanche-test");
         var bitDifferences = new List<int>();
@@ -218,7 +218,7 @@ public class ChiHashStatisticalTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void ChiHash_OrderSensitivity_DifferentOrdersProduceDifferentDistributions()
+    public void ChiHash_ReorderedInputs_ProduceUncorrelatedLowCollisionHashes()
     {
         var rng = new ChiRng("order-sensitivity-test");
         var histogram1 = new Histogram(int.MinValue, int.MaxValue, 60);

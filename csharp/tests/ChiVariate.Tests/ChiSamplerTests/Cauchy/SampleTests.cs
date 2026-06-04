@@ -16,7 +16,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     [InlineData(0.0, 1.0)] // Standard Cauchy
     [InlineData(10.0, 5.0)] // Shifted and scaled
     [InlineData(0.0, 0.2)] // Narrower peak
-    public void Sample_ProducesDistributionWithCorrectMedian(double location, double scale)
+    public void Sample_AcrossLocationAndScale_MatchesCauchyDistribution(double location, double scale)
     {
         var rng = new ChiRng(ChiSeed.Scramble("Cauchy", new ChiHash().Add(location).Add(scale).Hash));
         var histogramRange = 10 * scale;
@@ -50,7 +50,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     [Theory]
     [InlineData("0.0", "1.0")] // Standard Cauchy
     [InlineData("10.0", "5.0")] // Shifted and scaled
-    public void Sample_Decimal_ProducesDistributionWithCorrectMedian(string locationStr, string scaleStr)
+    public void Sample_Decimal_MatchesCauchyDistribution(string locationStr, string scaleStr)
     {
         var location = decimal.Parse(locationStr, CultureInfo.InvariantCulture);
         var scale = decimal.Parse(scaleStr, CultureInfo.InvariantCulture);

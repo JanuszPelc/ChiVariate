@@ -15,7 +15,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     [InlineData(0.5)] // Expected mean = 2
     [InlineData(0.25)] // Expected mean = 4
     [InlineData(0.1)] // Expected mean = 10
-    public void Sample_ProducesDistributionWithCorrectMean(double probability)
+    public void Sample_AcrossProbabilities_MatchesGeometricDistribution(double probability)
     {
         var rng = new ChiRng(ChiSeed.Scramble("Geometric", probability));
         var expectedMean = 1.0 / probability;
@@ -33,7 +33,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void Geometric_WithProbabilityOne_AlwaysReturnsOne()
+    public void Sample_WithProbabilityOne_ReturnsOne()
     {
         var rng = new ChiRng(0);
         for (var i = 0; i < 100; i++) rng.Geometric(1.0).Sample().Should().Be(1);

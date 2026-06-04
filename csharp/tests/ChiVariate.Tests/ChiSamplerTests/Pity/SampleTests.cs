@@ -15,7 +15,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     [InlineData(0.10, 0.0, 0, 0)]
     [InlineData(0.25, 0.0, 0, 0)]
     [InlineData(0.50, 0.0, 0, 0)]
-    public void Sample_WithNoEscalation_HasCorrectMean(
+    public void Sample_WithNoEscalation_HasMeanMatchingBaseProbability(
         double baseProbability, double increment, int softThreshold, int hardCap)
     {
         var rng = new ChiRng(ChiSeed.Scramble("PityNoEscalation", baseProbability));
@@ -166,7 +166,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void SampleCount_ReturnsCorrectEnumerable()
+    public void Sample_WithCount_ReturnsRequestedNumberOfSamples()
     {
         var rng = new ChiRng(ChiSeed.Scramble("PitySampleCount", 42));
         var pity = rng.Pity(0.5, 0.0);
@@ -231,7 +231,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     [Theory]
     [InlineData(0.10, 0.05, 0, 50)]
     [InlineData(0.05, 0.03, 10, 100)]
-    public void Sample_TrialsUntilSuccess_ShowsPRDDistribution(
+    public void Sample_TrialsUntilSuccess_MatchesPityDistribution(
         double baseProbability, double increment, int softThreshold, int hardCap)
     {
         const int trials = 50_000;
@@ -259,7 +259,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     [Theory]
     [InlineData(20)]
     [InlineData(50)]
-    public void Sample_WithHardCap_HistogramShowsNothingBeyondCap(int hardCap)
+    public void Sample_WithHardCap_ProducesNoSamplesBeyondCap(int hardCap)
     {
         const int trials = 10_000;
         var rng = new ChiRng(ChiSeed.Scramble("PityHardCapHistogram", hardCap));

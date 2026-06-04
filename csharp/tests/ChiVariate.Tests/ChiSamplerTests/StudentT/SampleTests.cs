@@ -16,7 +16,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     [InlineData(3.0)] // Has defined variance
     [InlineData(5.0)]
     [InlineData(30.0)] // Should look very similar to Normal(0,1)
-    public void Sample_ProducesDistributionWithCorrectStatistics(double degreesOfFreedom)
+    public void Sample_AcrossDegreesOfFreedom_MatchesStudentTDistribution(double degreesOfFreedom)
     {
         var rng = new ChiRng($"StudentT_v={degreesOfFreedom}");
 
@@ -75,7 +75,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     [Theory]
     [InlineData("3.0")] // Has defined variance
     [InlineData("5.0")]
-    public void Sample_Decimal_ProducesDistributionWithCorrectStatistics(string degreesOfFreedomStr)
+    public void Sample_Decimal_MatchesStudentTDistribution(string degreesOfFreedomStr)
     {
         var degreesOfFreedom = decimal.Parse(degreesOfFreedomStr, CultureInfo.InvariantCulture);
         var rng = new ChiRng(ChiSeed.Scramble("StudentTDecimal", (long)degreesOfFreedom));

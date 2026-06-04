@@ -12,7 +12,7 @@ public class InfrastructureTests
     private const int SampleCount = 100_000;
 
     [Fact]
-    public void SkewedSampler_WithGoodRng_FailsUniformityTest()
+    public void AssertIsUniform_WithSkewedDistribution_ThrowsXunitException()
     {
         var rng = new ChiRng(42);
         var histogram = new Histogram(0.0, 1.0, 10);

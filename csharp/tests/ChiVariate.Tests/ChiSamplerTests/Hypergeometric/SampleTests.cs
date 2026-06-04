@@ -16,7 +16,8 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     [InlineData(100, 20, 10)] // Drawing 10 marbles from a bag of 100 with 20 red ones
     [InlineData(50, 40, 10)] // High probability of success
     [InlineData(50, 5, 20)] // Low probability of success
-    public void Sample_ProducesDistributionWithCorrectStatistics(int populationSize, int numSuccesses, int sampleSize)
+    public void Sample_AcrossPopulationAndSampleParameters_MatchesHypergeometricDistribution(int populationSize,
+        int numSuccesses, int sampleSize)
     {
         var rng = new ChiRng(ChiSeed.Scramble("Hypergeometric", populationSize));
 

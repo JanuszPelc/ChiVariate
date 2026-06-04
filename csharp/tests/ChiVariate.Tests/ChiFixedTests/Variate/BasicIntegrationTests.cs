@@ -9,7 +9,7 @@ namespace ChiVariate.Tests.ChiFixedTests.Variate;
 public class BasicIntegrationTests
 {
     [Fact]
-    public void ChiRealProvider_NextChiFixed_ProducesValueInUnitInterval()
+    public void Next_Default_ReturnsValueInUnitInterval()
     {
         var rng = new ChiRng(42);
 
@@ -20,7 +20,7 @@ public class BasicIntegrationTests
     }
 
     [Fact]
-    public void ChiRealProvider_NextChiFixed_ProducesDistinctValues()
+    public void Next_SuccessiveCalls_ReturnsDistinctValues()
     {
         var rng = new ChiRng(42);
 
@@ -34,7 +34,7 @@ public class BasicIntegrationTests
     }
 
     [Fact]
-    public void ChiRealProvider_NextChiFixed_IsDeterministic()
+    public void Next_SameSeed_ReturnsIdenticalSequence()
     {
         var rng1 = new ChiRng(12345);
         var rng2 = new ChiRng(12345);
@@ -49,7 +49,7 @@ public class BasicIntegrationTests
     }
 
     [Fact]
-    public void ChiRealProvider_NextChiFixed_ExcludeMin_NeverReturnsZero()
+    public void Next_ExcludeMin_NeverReturnsZero()
     {
         var rng = new ChiRng(42);
 
@@ -63,7 +63,7 @@ public class BasicIntegrationTests
     }
 
     [Fact]
-    public void ChiRealProvider_NextChiFixed_UsesBitwiseInjection()
+    public void Next_OverManySamples_PopulatesLowFractionalBits()
     {
         var rng = new ChiRng(42);
 

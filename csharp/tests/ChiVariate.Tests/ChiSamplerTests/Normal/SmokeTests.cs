@@ -10,7 +10,7 @@ public class SmokeTests
     private const int Seed = 1337;
 
     [Fact]
-    public void Next_DefaultDouble_ReturnsExpectedValue()
+    public void Sample_StandardNormalDouble_ReturnsExpectedValue()
     {
         var rng = new ChiRng(Seed);
 
@@ -20,7 +20,7 @@ public class SmokeTests
     }
 
     [Fact]
-    public void Next_ConfiguredFloat_ReturnsExpectedValue()
+    public void Sample_Float_ReturnsExpectedValue()
     {
         var rng = new ChiRng(Seed);
 

@@ -18,7 +18,7 @@ public class FixedTests(ITestOutputHelper testOutputHelper)
     [InlineData(2.0, 5.0)] // Skewed right (mode near 0.2)
     [InlineData(5.0, 2.0)] // Skewed left (mode near 0.8)
     [InlineData(5.0, 5.0)] // Symmetric bell-shaped (mode at 0.5)
-    public void Sample_WithFloatParameters_ProducesBetaDistribution(double alpha, double beta)
+    public void Sample_AcrossShapeParameters_MatchesBetaDistribution(double alpha, double beta)
     {
         var a = (ChiFixed)(decimal)alpha;
         var b = (ChiFixed)(decimal)beta;
@@ -35,7 +35,7 @@ public class FixedTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void Sample_UniformCase_ProducesUniformDistribution()
+    public void Sample_UniformCase_MatchesUniformDistribution()
     {
         // Beta(1, 1) is the uniform distribution on [0, 1]
         var a = ChiFixed.One;

@@ -18,7 +18,7 @@ public class FixedTests(ITestOutputHelper testOutputHelper)
     [InlineData(0.0, 10.0, 2.0)] // Left-skewed
     [InlineData(0.0, 10.0, 8.0)] // Right-skewed
     [InlineData(-10.0, 10.0, 0.0)] // Symmetric around zero
-    public void Sample_WithVariousParameters_ProducesTriangularDistribution(double min, double max, double mode)
+    public void Sample_AcrossModePositions_ProducesTriangularDistribution(double min, double max, double mode)
     {
         var mn = (ChiFixed)(decimal)min;
         var mx = (ChiFixed)(decimal)max;

@@ -16,7 +16,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     [InlineData(1.0, 1.16)] // Classic 80/20 rule shape (alpha ≈ 1.16)
     [InlineData(1.0, 2.0)] // Finite mean, infinite variance
     [InlineData(10.0, 3.0)] // Finite mean and variance
-    public void Sample_ProducesDistributionWithCorrectShape(double scale, double shape)
+    public void Sample_AcrossScaleAndShape_MatchesParetoDistribution(double scale, double shape)
     {
         var rng = new ChiRng(ChiSeed.Scramble("Pareto", new ChiHash().Add(scale).Add(shape).Hash));
         var maxBound = scale * 10;
@@ -65,7 +65,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     [Theory]
     [InlineData("10.0", "3.0")] // Finite mean and variance
     [InlineData("1.0", "2.1")] // Finite mean, infinite variance
-    public void Sample_Decimal_ProducesDistributionWithCorrectShape(string scaleStr, string shapeStr)
+    public void Sample_Decimal_MatchesParetoDistribution(string scaleStr, string shapeStr)
     {
         var scale = decimal.Parse(scaleStr, CultureInfo.InvariantCulture);
         var shape = decimal.Parse(shapeStr, CultureInfo.InvariantCulture);

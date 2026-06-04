@@ -15,19 +15,19 @@ public class ChiFixedTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void Constants_One_HasCorrectValue()
+    public void Constants_One_RawEqualsScaleFactor()
     {
         ChiFixed.One.Raw.Should().Be(ChiFixed.ScaleFactor);
     }
 
     [Fact]
-    public void Constants_NegativeOne_HasCorrectValue()
+    public void Constants_NegativeOne_EqualsNegatedOne()
     {
         ChiFixed.NegativeOne.Should().Be(-(ChiFixed)1m);
     }
 
     [Fact]
-    public void Constants_Epsilon_HasValueOne()
+    public void Constants_Epsilon_RawIsOne()
     {
         ChiFixed.Epsilon.Raw.Should().Be(1L);
     }
@@ -61,7 +61,7 @@ public class ChiFixedTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void ToString_WholeNumber_NoDecimalPoint()
+    public void ToString_WholeNumber_OmitsDecimalPoint()
     {
         var value = (ChiFixed)42m;
 
@@ -81,7 +81,7 @@ public class ChiFixedTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void ToString_NegativeValue_HasMinusSign()
+    public void ToString_NegativeValue_IncludesMinusSign()
     {
         var value = (ChiFixed)(-42.5m);
 
@@ -112,7 +112,7 @@ public class ChiFixedTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void Equality_StructEquality_UsesRawValue()
+    public void Equals_ByRawValue_ReturnsExpectedResult()
     {
         var a = new ChiFixed(12345);
         var b = new ChiFixed(12345);
@@ -123,7 +123,7 @@ public class ChiFixedTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void GetHashCode_EqualValues_SameHashCode()
+    public void GetHashCode_EqualValues_ReturnsSameHashCode()
     {
         var a = (ChiFixed)42m;
         var b = (ChiFixed)42m;
@@ -132,7 +132,7 @@ public class ChiFixedTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void GetHashCode_DifferentValues_LikelyDifferentHashCode()
+    public void GetHashCode_DifferentValues_ReturnsDifferentHashCode()
     {
         var a = (ChiFixed)42m;
         var b = (ChiFixed)43m;
@@ -141,7 +141,7 @@ public class ChiFixedTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void RawProperty_Accessed_ReturnsUnderlyingValue()
+    public void Raw_AfterConstruction_ReturnsUnderlyingValue()
     {
         const long rawValue = 12345678L;
         var value = new ChiFixed(rawValue);
@@ -159,7 +159,7 @@ public class ChiFixedTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void Precision_VerySmallValue_RepresentableAboveEpsilon()
+    public void Precision_Epsilon_IsGreaterThanZero()
     {
         var epsilon = ChiFixed.Epsilon;
         var zero = ChiFixed.Zero;
@@ -169,7 +169,7 @@ public class ChiFixedTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void Precision_EpsilonAddition_IncrementsBySmallestAmount()
+    public void Precision_RawIncrement_IncreasesByOne()
     {
         var value = (ChiFixed)1m;
         var incremented = new ChiFixed(value.Raw + 1);
@@ -179,7 +179,7 @@ public class ChiFixedTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void Integration_ParseAndToString_RoundTrip()
+    public void Parse_RoundTrip_PreservesValue()
     {
         const string input = "12.5";
 
@@ -191,7 +191,7 @@ public class ChiFixedTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void Integration_ArithmeticWithConstants_WorksCorrectly()
+    public void Addition_OnePlusOne_ReturnsTwo()
     {
         var result = ChiFixed.One + ChiFixed.One;
 
@@ -199,7 +199,7 @@ public class ChiFixedTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void Integration_ComplexExpression_ProducesExpectedResult()
+    public void Arithmetic_ChainedExpression_ReturnsExpectedResult()
     {
         var a = (ChiFixed)10.5m;
         var b = (ChiFixed)2.5m;
@@ -211,7 +211,7 @@ public class ChiFixedTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void FactoryMethods_EquivalentValues_AreProduced()
+    public void FactoryMethods_SameValueDifferentSources_ProduceEqualResults()
     {
         var fromDecimal = (ChiFixed)0.5m;
         var fromRational = ChiFixed.Fraction(1, 2);
@@ -282,7 +282,7 @@ public class ChiFixedTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void WarmUp_Called_ReturnsPerTableTimings()
+    public void WarmUp_Default_ReturnsPerTableTimings()
     {
         var timings = ChiFixed.WarmUp();
 

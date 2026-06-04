@@ -17,7 +17,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     [InlineData(0.50)]
     [InlineData(0.75)]
     [InlineData(0.99)]
-    public void Sample_WithFixedProbability_HasCorrectMean(double probability)
+    public void Sample_WithFixedProbability_MatchesProbability(double probability)
     {
         var rng = new ChiRng(ChiSeed.Scramble("BernoulliFixed", probability));
         var successCount = 0;
@@ -71,7 +71,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     [Theory]
     [InlineData("0.25")]
     [InlineData("0.75")]
-    public void Sample_Decimal_ProducesDistributionWithCorrectMean(string probabilityStr)
+    public void Sample_Decimal_MatchesProbability(string probabilityStr)
     {
         var probability = decimal.Parse(probabilityStr, CultureInfo.InvariantCulture);
         var rng = new ChiRng(ChiSeed.Scramble("BernoulliDecimal", (double)probability));

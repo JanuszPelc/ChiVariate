@@ -13,7 +13,7 @@ namespace ChiVariate.Tests.ChiHashTests;
 public class ChiHashDeterminismTests
 {
     [Fact]
-    public void ChiHash_SpecificInputs_ProducesExpectedHashValues()
+    public void Add_AcrossManyTypes_ProducesExpectedHashes()
     {
         new ChiHash().Add((byte)42).Hash.Should().Be(965500275);
         new ChiHash().Add((sbyte)-42).Hash.Should().Be(-115445778);

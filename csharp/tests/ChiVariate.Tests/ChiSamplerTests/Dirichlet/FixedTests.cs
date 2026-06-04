@@ -15,7 +15,7 @@ public class FixedTests(ITestOutputHelper testOutputHelper)
     private const int SampleCount = 20_000;
 
     [Fact]
-    public void Sample_Symmetric_IsCorrect()
+    public void Sample_Symmetric_MatchesDirichletDistribution()
     {
         var alpha = new[] { (ChiFixed)1m, (ChiFixed)1m, (ChiFixed)1m };
         var rng = new ChiRng("Dirichlet_Fixed_Symmetric");
@@ -31,7 +31,7 @@ public class FixedTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void Sample_Asymmetric_IsCorrect()
+    public void Sample_Asymmetric_MatchesDirichletDistribution()
     {
         var alpha = new[] { (ChiFixed)5m, (ChiFixed)10m, (ChiFixed)15m };
         var rng = new ChiRng("Dirichlet_Fixed_Asymmetric");
@@ -87,7 +87,7 @@ public class FixedTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void Sample_HighConcentration_ProducesConcentratedOutput()
+    public void Sample_HighConcentration_ProducesValuesNearMean()
     {
         // High alpha values should produce samples close to the mean
         var alpha = new[] { (ChiFixed)100m, (ChiFixed)100m, (ChiFixed)100m };

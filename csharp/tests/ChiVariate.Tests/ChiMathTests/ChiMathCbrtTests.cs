@@ -270,7 +270,7 @@ public class ChiMathCbrtTests
     [InlineData("3")]
     [InlineData("5")]
     [InlineData("0.5")]
-    public void Cbrt_PowThirdEquivalence_ReturnsEquivalentResults(string inputStr)
+    public void Cbrt_ComparedToPowOneThird_MatchesResult(string inputStr)
     {
         var input = decimal.Parse(inputStr, CultureInfo.InvariantCulture);
         var oneThird = 1m / 3m;
@@ -285,7 +285,7 @@ public class ChiMathCbrtTests
     [InlineData("2", "3")]
     [InlineData("5", "7")]
     [InlineData("0.5", "2")]
-    public void Cbrt_ProductRule_CbrtProductEqualsCbrtProduct(string aStr, string bStr)
+    public void Cbrt_OfProduct_EqualsProductOfCbrts(string aStr, string bStr)
     {
         var a = decimal.Parse(aStr, CultureInfo.InvariantCulture);
         var b = decimal.Parse(bStr, CultureInfo.InvariantCulture);

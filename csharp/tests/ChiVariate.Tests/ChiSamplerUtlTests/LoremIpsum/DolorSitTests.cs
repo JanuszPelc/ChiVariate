@@ -105,7 +105,7 @@ public class DolorSitTests(ITestOutputHelper testOutputHelper)
     [InlineData(1)]
     [InlineData(3)]
     [InlineData(5)]
-    public void DolorSit_ReturnsCorrectNumberOfParagraphs(int paragraphCount)
+    public void DolorSit_WithParagraphCount_ReturnsMatchingParagraphCount(int paragraphCount)
     {
         var rng = new ChiRng(paragraphCount);
 
@@ -149,7 +149,7 @@ public class DolorSitTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void DolorSit_WithSingleCustomWord_StillProducesOutput()
+    public void DolorSit_WithSingleCustomWord_ContainsWordAndScrambledForm()
     {
         var rng = new ChiRng(999);
 
@@ -162,7 +162,7 @@ public class DolorSitTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void DolorSit_ChaosProgression_HasGradualChanges()
+    public void DolorSit_ChaosProgression_SimilarityDecreasesAsChaosIncreases()
     {
         var previousText = string.Empty;
         var similarities = new List<double>();
@@ -226,7 +226,7 @@ public class DolorSitTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void DolorSit_WordLimit_HasConsistentAccuracyAcrossRange()
+    public void DolorSit_AcrossWordLimitRange_MaintainsConsistentAccuracy()
     {
         var accuracies = new List<double>();
         var rng = new ChiRng(42);

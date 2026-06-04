@@ -40,7 +40,7 @@ public class MagnitudeTests
     }
 
     [Fact]
-    public void MaxMagnitude_BothZero_ReturnsPositiveZero()
+    public void MaxMagnitude_BothZero_ReturnsZero()
     {
         var result = ChiFixed.MaxMagnitude(ChiFixed.Zero, ChiFixed.Zero);
 
@@ -104,7 +104,7 @@ public class MagnitudeTests
     }
 
     [Fact]
-    public void MinMagnitude_BothZero_ReturnsNegativeZero()
+    public void MinMagnitude_BothZero_ReturnsZero()
     {
         var result = ChiFixed.MinMagnitude(ChiFixed.Zero, ChiFixed.Zero);
 

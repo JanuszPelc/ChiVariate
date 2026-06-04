@@ -100,7 +100,7 @@ public class ChiHashReproducibilityTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void ChiHash_NumericTypes_ProducesConsistentResults()
+    public void ChiHash_NumericTypes_IsDeterministic()
     {
         VerifyDeterminism(12345);
         VerifyDeterminism(54321U);
@@ -121,7 +121,7 @@ public class ChiHashReproducibilityTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void ChiHash_DifferentNumericValues_ProduceDifferentHashes()
+    public void ChiHash_DifferentNumericValues_ProducesDifferentHashes()
     {
         VerifySensitivity(1, 2);
         VerifySensitivity(10L, -10L);
@@ -137,7 +137,7 @@ public class ChiHashReproducibilityTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void ChiHash_StringInputs_ProducesConsistentResults()
+    public void ChiHash_StringInputs_IsDeterministic()
     {
         VerifyStringDeterminism("");
         VerifyStringDeterminism("hello");
@@ -158,7 +158,7 @@ public class ChiHashReproducibilityTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void ChiHash_SpecialTypes_ProducesConsistentResults()
+    public void ChiHash_SpecialTypes_IsDeterministicAndSensitive()
     {
         VerifyDeterminism(true);
         VerifyDeterminism(false);
@@ -231,7 +231,7 @@ public class ChiHashReproducibilityTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void ChiHash_Enums_ProducesConsistentResults()
+    public void ChiHash_Enums_IsDeterministicAndSensitive()
     {
         VerifyDeterminism(TestEnum.Value1);
         VerifyDeterminism(TestEnum.Value2);
@@ -247,7 +247,7 @@ public class ChiHashReproducibilityTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void ChiHash_SpanInputs_ProducesConsistentResults()
+    public void ChiHash_SpanInputs_MatchesAcrossOverloads()
     {
         var intArray = new[] { 1, 2, 3, 4, 5 };
         var intArray2 = new[] { 1, 2, 3, 4, 6 };
@@ -265,7 +265,7 @@ public class ChiHashReproducibilityTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void ChiHash_MixedTypes_ProducesConsistentResults()
+    public void ChiHash_MixedTypes_ProducesSameOutput()
     {
         var guid = Guid.Parse("12345678-1234-5678-9abc-123456789abc");
         var dateTime = new DateTime(2023, 12, 25, 15, 30, 45, DateTimeKind.Utc);
@@ -328,7 +328,7 @@ public class ChiHashReproducibilityTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void ChiHash_FloatingPointEdgeCases_OutputBitPatterns()
+    public void ChiHash_FloatingPointEdgeCases_CanonicalizesNaNAndNegativeZero()
     {
         testOutputHelper.WriteLine("=== FLOAT (32-bit) EDGE CASES ===");
 
@@ -429,7 +429,7 @@ public class ChiHashReproducibilityTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void ChiHash_EmptyState_HasConsistentInitialValue()
+    public void ChiHash_EmptyState_IsZero()
     {
         var hash1 = new ChiHash().Hash;
         var hash2 = new ChiHash().Hash;
@@ -439,7 +439,7 @@ public class ChiHashReproducibilityTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void ChiHash_Seed_StaysTheSameAcrossApplicationRuns()
+    public void ChiHash_Seed_ReturnsConstantValue()
     {
         var seed1 = ChiHash.Seed;
         var seed2 = ChiHash.Seed;

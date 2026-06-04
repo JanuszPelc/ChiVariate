@@ -8,7 +8,7 @@ namespace ChiVariate.Tests.ChiMathTests;
 public class ChiMathEpsilonTests
 {
     [Fact]
-    public void Epsilon_ChiFixed_ReturnsAppropriateValue()
+    public void Epsilon_ChiFixed_ReturnsExpectedValue()
     {
         var epsilon = ChiMath.Const<ChiFixed>.Epsilon;
 
@@ -16,7 +16,7 @@ public class ChiMathEpsilonTests
     }
 
     [Fact]
-    public void Epsilon_Double_ReturnsAppropriateValue()
+    public void Epsilon_Double_ReturnsExpectedValue()
     {
         var epsilon = ChiMath.Const<double>.Epsilon;
 
@@ -24,7 +24,7 @@ public class ChiMathEpsilonTests
     }
 
     [Fact]
-    public void Epsilon_Float_ReturnsAppropriateValue()
+    public void Epsilon_Float_ReturnsExpectedValue()
     {
         var epsilon = ChiMath.Const<float>.Epsilon;
 
@@ -32,7 +32,7 @@ public class ChiMathEpsilonTests
     }
 
     [Fact]
-    public void Epsilon_Decimal_ReturnsAppropriateValue()
+    public void Epsilon_Decimal_ReturnsExpectedValue()
     {
         var epsilon = ChiMath.Const<decimal>.Epsilon;
 

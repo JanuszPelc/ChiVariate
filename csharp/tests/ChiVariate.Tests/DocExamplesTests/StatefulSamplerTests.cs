@@ -20,7 +20,7 @@ public class StatefulSamplerTests(ITestOutputHelper testOutputHelper)
     [InlineData(0.0)] // No correlation (should be independent)
     [InlineData(1.0)] // Perfect positive correlation
     [InlineData(-1.0)] // Perfect negative correlation
-    public void Sample_ProducesCorrectlyCorrelatedStandardNormalMarginals(double correlation)
+    public void Sample_AcrossCorrelations_ProducesStandardNormalMarginalsWithTargetCorrelation(double correlation)
     {
         var rng = new ChiRng(ChiSeed.Scramble("CorrelatedNormals", correlation));
         var sampler = rng.CorrelatedNormals(correlation);
@@ -51,7 +51,7 @@ public class StatefulSamplerTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void Sample_Decimal_ProducesCorrectCorrelation()
+    public void Sample_Decimal_MatchesTargetCorrelation()
     {
         const decimal correlation = 0.6m;
         var rng = new ChiRng(ChiSeed.Scramble("CorrelatedNormalsDecimal", (double)correlation));

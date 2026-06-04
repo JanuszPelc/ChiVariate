@@ -35,7 +35,7 @@ file record DummyRandomNumberGenerator;
 public class MainReadmeTests(ITestOutputHelper testOutputHelper)
 {
     [Fact]
-    private void CompilationTest()
+    private void ReadmeSnippets_OnExecution_DoNotThrow()
     {
         {
             // --- example code begin --- 
@@ -91,7 +91,7 @@ public class MainReadmeTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void ChiRng_DirichletSampling_OutputsNormalizedVector()
+    public void Sample_Dirichlet_ReturnsNormalizedProbabilityVector()
     {
         // --- example code begin ---
         // Generate a 3-outcome probability vector using the Dirichlet distribution
@@ -107,7 +107,7 @@ public class MainReadmeTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void GammaSampler_WithFixedSeed_GeneratesStableAggregate()
+    public void Sample_GammaWithFixedSeed_ProducesStableAggregate()
     {
         EstimateTotalLiability(2.5f, 10_000).Should()
             .BeGreaterThan(24_000_000).And
@@ -137,7 +137,7 @@ public class MainReadmeTests(ITestOutputHelper testOutputHelper)
     // --- example code end ---
 
     [Fact]
-    public void WishartSampling_InHierarchicalModel_ReflectsPriorCovariance()
+    public void Sample_WishartInHierarchicalModel_MatchesScaledPriorCovariance()
     {
         const int sampleCount = 10_000;
         const int degreesOfFreedom = 10;
@@ -212,10 +212,10 @@ public class MainReadmeTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void FinancialSimulation_WithDecimal_ProducesLogNormalDistribution()
+    public void Sample_LogNormalWithDecimal_ProducesNormallyDistributedLogPrices()
     {
         var prices = new List<decimal>();
-        var testRng = new ChiRng(nameof(FinancialSimulation_WithDecimal_ProducesLogNormalDistribution));
+        var testRng = new ChiRng(nameof(Sample_LogNormalWithDecimal_ProducesNormallyDistributedLogPrices));
 
         const int testNumPaths = 50_000;
 
@@ -283,7 +283,7 @@ public class MainReadmeTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void PrimeSampler_ReadmeExample_GeneratesLargePrimesAsDocumented()
+    public void Sample_PrimeAcrossLargeRange_ReturnsUniquePrimesWithinRange()
     {
         var rng = new ChiRng("ReadmeExample");
 
@@ -322,7 +322,7 @@ public class MainReadmeTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void ParticleSystem_WithDifferentChaos_ProducesStatisticallyDifferentResults()
+    public void Sample_CauchyAcrossChaosLevels_HigherChaosProducesWiderSpread()
     {
         const int particleCount = 20_000;
         const float deltaTime = 0.1f;

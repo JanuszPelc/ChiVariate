@@ -77,7 +77,7 @@ public class UnaryOperatorsTests
     [InlineData("10.5", "11.5")]
     [InlineData("-5.5", "-4.5")]
     [InlineData("0.9", "1.9")]
-    public void Increment_FromVariousValues_ReturnsCorrectValue(string input, string expected)
+    public void Increment_FromVariousValues_ReturnsExpectedResult(string input, string expected)
     {
         var value = ChiFixed.Parse(input);
         var expectedValue = ChiFixed.Parse(expected);
@@ -96,7 +96,7 @@ public class UnaryOperatorsTests
     [InlineData("10.5", "9.5")]
     [InlineData("-5.5", "-6.5")]
     [InlineData("0.1", "-0.9")]
-    public void Decrement_FromVariousValues_ReturnsCorrectValue(string input, string expected)
+    public void Decrement_FromVariousValues_ReturnsExpectedResult(string input, string expected)
     {
         var value = ChiFixed.Parse(input);
         var expectedValue = ChiFixed.Parse(expected);

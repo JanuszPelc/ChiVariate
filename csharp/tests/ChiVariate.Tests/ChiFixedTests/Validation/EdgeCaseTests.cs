@@ -49,7 +49,7 @@ public class EdgeCaseTests
     }
 
     [Fact]
-    public void Multiplication_LargeValues_WrapsCorrectly()
+    public void Multiplication_LargeValues_DoesNotReturnZero()
     {
         var large1 = (ChiFixed)1000000m;
         var large2 = (ChiFixed)1000000m;
@@ -59,7 +59,7 @@ public class EdgeCaseTests
     }
 
     [Fact]
-    public void Negate_MinValue_Wraps()
+    public void Negate_MinValue_ReturnsMinValue()
     {
         var result = -ChiFixed.MinValue;
 
@@ -67,7 +67,7 @@ public class EdgeCaseTests
     }
 
     [Fact]
-    public void Abs_MinValue_WrapsToMinValue()
+    public void Abs_MinValue_ReturnsMinValue()
     {
         var result = ChiFixed.Abs(ChiFixed.MinValue);
 
@@ -136,7 +136,7 @@ public class EdgeCaseTests
     }
 
     [Fact]
-    public void MaxValue_Compared_IsSymmetricWithMinValue()
+    public void MaxValue_RelativeToMinValue_IsOffsetByOne()
     {
         ChiFixed.MaxValue.Raw.Should().Be(-ChiFixed.MinValue.Raw - 1);
     }
@@ -237,7 +237,7 @@ public class EdgeCaseTests
     }
 
     [Fact]
-    public void Round_NearHalf_RoundsCorrectly()
+    public void Round_MidpointValue_RoundsToNearestEven()
     {
         var nearHalf = (ChiFixed)1.5m;
         var result = ChiFixed.Round(nearHalf, 0, MidpointRounding.ToEven);
@@ -286,7 +286,7 @@ public class EdgeCaseTests
     }
 
     [Fact]
-    public void DecimalCast_VeryLargeValue_IsConsistent()
+    public void DecimalCast_VeryLargeValue_ProducesDeterministicResult()
     {
         const decimal largeDecimal = 12345678901234567890m;
         var result1 = (ChiFixed)largeDecimal;
@@ -296,7 +296,7 @@ public class EdgeCaseTests
     }
 
     [Fact]
-    public void DecimalCast_BeyondMaxValue_Behavior()
+    public void DecimalCast_BeyondMaxValue_ProducesDeterministicResult()
     {
         var beyondMax = (decimal)ChiFixed.MaxValue * 10m;
         var result = (ChiFixed)beyondMax;
@@ -306,7 +306,7 @@ public class EdgeCaseTests
     }
 
     [Fact]
-    public void DecimalCast_BeyondMinValue_Behavior()
+    public void DecimalCast_BeyondMinValue_ProducesDeterministicResult()
     {
         var beyondMin = (decimal)ChiFixed.MinValue * 10m;
         var result = (ChiFixed)beyondMin;
@@ -347,7 +347,7 @@ public class EdgeCaseTests
     [Theory]
     [InlineData("12345678901234567890")]
     [InlineData("99999999999999999999")]
-    public void CreateChecked_VeryLargeDecimal_Behavior(string decimalStr)
+    public void CreateChecked_VeryLargeDecimal_ProducesDeterministicResult(string decimalStr)
     {
         var value = decimal.Parse(decimalStr);
         var result = ChiFixed.CreateChecked(value);
@@ -360,7 +360,7 @@ public class EdgeCaseTests
     [Theory]
     [InlineData("-12345678901234567890")]
     [InlineData("-99999999999999999999")]
-    public void CreateChecked_VeryLargeNegativeDecimal_Behavior(string decimalStr)
+    public void CreateChecked_VeryLargeNegativeDecimal_ProducesDeterministicResult(string decimalStr)
     {
         var value = decimal.Parse(decimalStr);
         var result = ChiFixed.CreateChecked(value);
@@ -399,7 +399,7 @@ public class EdgeCaseTests
     [Theory]
     [InlineData("12345678901234567890")]
     [InlineData("99999999999999999999")]
-    public void CreateTruncating_VeryLargeDecimal_ProducesResult(string decimalStr)
+    public void CreateTruncating_VeryLargeDecimal_DoesNotThrow(string decimalStr)
     {
         var value = decimal.Parse(decimalStr);
         var act = () => ChiFixed.CreateTruncating(value);
@@ -410,7 +410,7 @@ public class EdgeCaseTests
     [Theory]
     [InlineData("-12345678901234567890")]
     [InlineData("-99999999999999999999")]
-    public void CreateTruncating_VeryLargeNegativeDecimal_ProducesResult(string decimalStr)
+    public void CreateTruncating_VeryLargeNegativeDecimal_DoesNotThrow(string decimalStr)
     {
         var value = decimal.Parse(decimalStr);
         var act = () => ChiFixed.CreateTruncating(value);
@@ -419,14 +419,14 @@ public class EdgeCaseTests
     }
 
     [Fact]
-    public void CreateChecked_DecimalMaxValue_DoesNotThrowOrProducesResult()
+    public void CreateChecked_DecimalMaxValue_DoesNotThrow()
     {
         var act = () => ChiFixed.CreateChecked(decimal.MaxValue);
         act.Should().NotThrow();
     }
 
     [Fact]
-    public void CreateSaturating_DecimalMaxValue_Succeeds()
+    public void CreateSaturating_DecimalMaxValue_DoesNotThrow()
     {
         var act = () => ChiFixed.CreateSaturating(decimal.MaxValue);
 
@@ -434,7 +434,7 @@ public class EdgeCaseTests
     }
 
     [Fact]
-    public void CreateTruncating_DecimalMaxValue_Succeeds()
+    public void CreateTruncating_DecimalMaxValue_DoesNotThrow()
     {
         var act = () => ChiFixed.CreateTruncating(decimal.MaxValue);
 
@@ -442,7 +442,7 @@ public class EdgeCaseTests
     }
 
     [Fact]
-    public void CreateFromMethods_SameValue_ConsistentWithDirectCast()
+    public void CreateFromMethods_InRangeDecimal_MatchesDirectCast()
     {
         const decimal testValue = 123.456m;
 

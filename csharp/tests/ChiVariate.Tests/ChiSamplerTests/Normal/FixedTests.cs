@@ -27,7 +27,7 @@ public class FixedTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void Sample_ShiftedDistribution_IsCorrectlyCentered()
+    public void Sample_ShiftedDistribution_IsCenteredOnMean()
     {
         var mean = (ChiFixed)50;
         var stdDev = ChiFixed.One;
@@ -43,7 +43,7 @@ public class FixedTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void Sample_WiderDistribution_HasCorrectSpread()
+    public void Sample_WiderDistribution_MatchesStandardDeviation()
     {
         var mean = ChiFixed.Zero;
         var stdDev = (ChiFixed)15;

@@ -33,7 +33,7 @@ public class FixedTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void Sample_RateOne_HasMeanOfOne()
+    public void Sample_RateOne_ProducesExponentialDistributionWithMeanOne()
     {
         var rate = ChiFixed.One;
 

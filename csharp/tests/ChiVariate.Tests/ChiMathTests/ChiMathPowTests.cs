@@ -13,7 +13,7 @@ public class ChiMathPowTests
     [InlineData(2.0f, 3.0f, 8.0f)]
     [InlineData(10.0f, 2.0f, 100.0f)]
     [InlineData(0.5f, 3.0f, 0.125f)]
-    public void Pow_FloatBasicCases_ReturnsExpectedResults(float baseVal, float exponent, float expected)
+    public void Pow_Float_ReturnsExpectedResult(float baseVal, float exponent, float expected)
     {
         var result = ChiMath.Pow(baseVal, exponent);
 
@@ -30,7 +30,7 @@ public class ChiMathPowTests
     [InlineData(0.5, 3.0, 0.125)]
     [InlineData(4.0, 0.5, 2.0)]
     [InlineData(27.0, 1.0 / 3.0, 3.0)]
-    public void Pow_DoubleBasicCases_ReturnsExpectedResults(double baseVal, double exponent, double expected)
+    public void Pow_Double_ReturnsExpectedResult(double baseVal, double exponent, double expected)
     {
         var result = ChiMath.Pow(baseVal, exponent);
 
@@ -42,7 +42,7 @@ public class ChiMathPowTests
     [InlineData(0.0, 5.0, 0.0)]
     [InlineData(1.0, 999.999, 1.0)]
     [InlineData(100.0, 1.0, 100.0)]
-    public void Pow_DoubleSpecialExponents_ReturnsExpectedResults(double baseVal, double exponent, double expected)
+    public void Pow_DoubleSpecialExponents_ReturnsExpectedResult(double baseVal, double exponent, double expected)
     {
         var result = ChiMath.Pow(baseVal, exponent);
 
@@ -53,7 +53,7 @@ public class ChiMathPowTests
     [InlineData(-2.0, 3.0, -8.0)]
     [InlineData(-3.0, 2.0, 9.0)]
     [InlineData(-4.0, 4.0, 256.0)]
-    public void Pow_DoubleNegativeBase_ReturnsExpectedResults(double baseVal, double exponent, double expected)
+    public void Pow_DoubleNegativeBase_ReturnsExpectedResult(double baseVal, double exponent, double expected)
     {
         var result = ChiMath.Pow(baseVal, exponent);
 
@@ -69,7 +69,7 @@ public class ChiMathPowTests
     [InlineData("10", "2", "100")]
     [InlineData("0.5", "3", "0.125")]
     [InlineData("4", "0.5", "2")]
-    public void Pow_DecimalBasicCases_ReturnsExpectedResults(string baseStr, string expStr, string expectedStr)
+    public void Pow_Decimal_ReturnsExpectedResult(string baseStr, string expStr, string expectedStr)
     {
         var baseVal = decimal.Parse(baseStr, CultureInfo.InvariantCulture);
         var exponent = decimal.Parse(expStr, CultureInfo.InvariantCulture);
@@ -85,7 +85,7 @@ public class ChiMathPowTests
     [InlineData("0", "5", "0")]
     [InlineData("1", "999.999", "1")]
     [InlineData("100", "1", "100")]
-    public void Pow_DecimalSpecialExponents_ReturnsExpectedResults(string baseStr, string expStr, string expectedStr)
+    public void Pow_DecimalSpecialExponents_ReturnsExpectedResult(string baseStr, string expStr, string expectedStr)
     {
         var baseVal = decimal.Parse(baseStr, CultureInfo.InvariantCulture);
         var exponent = decimal.Parse(expStr, CultureInfo.InvariantCulture);
@@ -101,7 +101,7 @@ public class ChiMathPowTests
     [InlineData("-3", "2", "9")]
     [InlineData("-4", "4", "256")]
     [InlineData("-5", "1", "-5")]
-    public void Pow_DecimalNegativeBase_ReturnsExpectedResults(string baseStr, string expStr, string expectedStr)
+    public void Pow_DecimalNegativeBase_ReturnsExpectedResult(string baseStr, string expStr, string expectedStr)
     {
         var baseVal = decimal.Parse(baseStr, CultureInfo.InvariantCulture);
         var exponent = decimal.Parse(expStr, CultureInfo.InvariantCulture);
@@ -116,7 +116,7 @@ public class ChiMathPowTests
     [InlineData("2", "10")]
     [InlineData("3", "5")]
     [InlineData("1.5", "20")]
-    public void Pow_DecimalLargeExponents_DoesNotOverflow(string baseStr, string expStr)
+    public void Pow_DecimalLargeExponents_DoesNotThrow(string baseStr, string expStr)
     {
         var baseVal = decimal.Parse(baseStr, CultureInfo.InvariantCulture);
         var exponent = decimal.Parse(expStr, CultureInfo.InvariantCulture);
@@ -127,7 +127,7 @@ public class ChiMathPowTests
     }
 
     [Fact]
-    public void Pow_DecimalZeroToNegative_ThrowsDivideByZero()
+    public void Pow_DecimalZeroToNegative_ThrowsDivideByZeroException()
     {
         var act = () => ChiMath.Pow(0m, -1m);
 
@@ -180,7 +180,7 @@ public class ChiMathPowTests
     [InlineData("10", "2", "100")]
     [InlineData("0.5", "3", "0.125")]
     [InlineData("4", "0.5", "2")]
-    public void Pow_ChiFixedBasicCases_ReturnsExpectedResults(string baseStr, string expStr, string expectedStr)
+    public void Pow_ChiFixed_ReturnsExpectedResult(string baseStr, string expStr, string expectedStr)
     {
         var baseVal = (ChiFixed)decimal.Parse(baseStr, CultureInfo.InvariantCulture);
         var exponent = (ChiFixed)decimal.Parse(expStr, CultureInfo.InvariantCulture);
@@ -196,7 +196,7 @@ public class ChiMathPowTests
     [InlineData("0", "5", "0")]
     [InlineData("1", "999", "1")]
     [InlineData("100", "1", "100")]
-    public void Pow_ChiFixedSpecialExponents_ReturnsExpectedResults(string baseStr, string expStr, string expectedStr)
+    public void Pow_ChiFixedSpecialExponents_ReturnsExpectedResult(string baseStr, string expStr, string expectedStr)
     {
         var baseVal = (ChiFixed)decimal.Parse(baseStr, CultureInfo.InvariantCulture);
         var exponent = (ChiFixed)decimal.Parse(expStr, CultureInfo.InvariantCulture);
@@ -211,7 +211,7 @@ public class ChiMathPowTests
     [InlineData("-2", "3", "-8")]
     [InlineData("-3", "2", "9")]
     [InlineData("-4", "4", "256")]
-    public void Pow_ChiFixedNegativeBase_ReturnsExpectedResults(string baseStr, string expStr, string expectedStr)
+    public void Pow_ChiFixedNegativeBase_ReturnsExpectedResult(string baseStr, string expStr, string expectedStr)
     {
         var baseVal = (ChiFixed)decimal.Parse(baseStr, CultureInfo.InvariantCulture);
         var exponent = (ChiFixed)decimal.Parse(expStr, CultureInfo.InvariantCulture);
@@ -241,7 +241,7 @@ public class ChiMathPowTests
     [InlineData("0.5235987755982988730771072305466", "0.5")]
     [InlineData("0.7853981633974483096156608458199", "0.7071067811865475244008443621048")]
     [InlineData("-1.5707963267948966192313216916398", "-1")]
-    public void Sin_DecimalKnownValues_ReturnsExpectedResults(string angleStr, string expectedStr)
+    public void Sin_DecimalKnownValues_ReturnsExpectedResult(string angleStr, string expectedStr)
     {
         var angle = decimal.Parse(angleStr, CultureInfo.InvariantCulture);
         var expected = decimal.Parse(expectedStr, CultureInfo.InvariantCulture);
@@ -258,7 +258,7 @@ public class ChiMathPowTests
     [InlineData("1.0471975511965977461542144610932", "0.5")]
     [InlineData("0.7853981633974483096156608458199", "0.7071067811865475244008443621048")]
     [InlineData("-1.5707963267948966192313216916398", "0")]
-    public void Cos_DecimalKnownValues_ReturnsExpectedResults(string angleStr, string expectedStr)
+    public void Cos_DecimalKnownValues_ReturnsExpectedResult(string angleStr, string expectedStr)
     {
         var angle = decimal.Parse(angleStr, CultureInfo.InvariantCulture);
         var expected = decimal.Parse(expectedStr, CultureInfo.InvariantCulture);
@@ -274,7 +274,7 @@ public class ChiMathPowTests
     [InlineData("0.5235987755982988730771072305466", "0.5773502691896257645091487805019")]
     [InlineData("1.0471975511965977461542144610932", "1.7320508075688772935274463415059")]
     [InlineData("-0.7853981633974483096156608458199", "-1")]
-    public void Tan_DecimalKnownValues_ReturnsExpectedResults(string angleStr, string expectedStr)
+    public void Tan_DecimalKnownValues_ReturnsExpectedResult(string angleStr, string expectedStr)
     {
         var angle = decimal.Parse(angleStr, CultureInfo.InvariantCulture);
         var expected = decimal.Parse(expectedStr, CultureInfo.InvariantCulture);
@@ -399,7 +399,7 @@ public class ChiMathPowTests
     [InlineData("1.5707963267948966", "1")]
     [InlineData("3.1415926535897932", "0")]
     [InlineData("0.5235987755982989", "0.5")]
-    public void Sin_ChiFixedKnownValues_ReturnsExpectedResults(string angleStr, string expectedStr)
+    public void Sin_ChiFixedKnownValues_ReturnsExpectedResult(string angleStr, string expectedStr)
     {
         var angle = (ChiFixed)decimal.Parse(angleStr, CultureInfo.InvariantCulture);
         var expected = (ChiFixed)decimal.Parse(expectedStr, CultureInfo.InvariantCulture);
@@ -414,7 +414,7 @@ public class ChiMathPowTests
     [InlineData("1.5707963267948966", "0")]
     [InlineData("3.1415926535897932", "-1")]
     [InlineData("1.0471975511965977", "0.5")]
-    public void Cos_ChiFixedKnownValues_ReturnsExpectedResults(string angleStr, string expectedStr)
+    public void Cos_ChiFixedKnownValues_ReturnsExpectedResult(string angleStr, string expectedStr)
     {
         var angle = (ChiFixed)decimal.Parse(angleStr, CultureInfo.InvariantCulture);
         var expected = (ChiFixed)decimal.Parse(expectedStr, CultureInfo.InvariantCulture);
@@ -428,7 +428,7 @@ public class ChiMathPowTests
     [InlineData("0", "0")]
     [InlineData("0.7853981633974483", "1")]
     [InlineData("-0.7853981633974483", "-1")]
-    public void Tan_ChiFixedKnownValues_ReturnsExpectedResults(string angleStr, string expectedStr)
+    public void Tan_ChiFixedKnownValues_ReturnsExpectedResult(string angleStr, string expectedStr)
     {
         var angle = (ChiFixed)decimal.Parse(angleStr, CultureInfo.InvariantCulture);
         var expected = (ChiFixed)decimal.Parse(expectedStr, CultureInfo.InvariantCulture);
@@ -463,7 +463,7 @@ public class ChiMathPowTests
     [InlineData(double.PositiveInfinity, 1.0)]
     [InlineData(double.NegativeInfinity, 1.0)]
     [InlineData(double.NaN, 1.0)]
-    public void Pow_DoubleEdgeCases_HandlesSpecialValues(double baseVal, double exponent)
+    public void Pow_DoubleSpecialValues_DoesNotThrowArgumentException(double baseVal, double exponent)
     {
         var act = () => ChiMath.Pow(baseVal, exponent);
 
@@ -473,7 +473,7 @@ public class ChiMathPowTests
     [Theory]
     [InlineData("0.0000000000000000000000001", "2")]
     [InlineData("999999999999999999999999", "0.0001")]
-    public void Pow_DecimalExtremeValues_DoesNotThrow(string baseStr, string expStr)
+    public void Pow_DecimalExtremeValues_DoesNotThrowArgumentException(string baseStr, string expStr)
     {
         var baseVal = decimal.Parse(baseStr, CultureInfo.InvariantCulture);
         var exponent = decimal.Parse(expStr, CultureInfo.InvariantCulture);

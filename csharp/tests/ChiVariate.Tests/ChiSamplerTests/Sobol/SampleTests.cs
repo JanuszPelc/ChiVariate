@@ -12,7 +12,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     private const int SampleCount = 100_000;
 
     [Fact]
-    public void CanonicalSequence_WithFixedSeed_IsBitForBitDeterministic()
+    public void Sample_CanonicalWithFixedSeed_IsBitForBitDeterministic()
     {
         var rng1 = new ChiRng("TestSeed");
         var rng2 = new ChiRng(rng1.Snapshot());
@@ -30,7 +30,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void RandomizedSequence_WithFixedRngSeed_IsBitForBitDeterministic()
+    public void Sample_RandomizedWithFixedRngSeed_IsBitForBitDeterministic()
     {
         var rng1 = new ChiRng("RandomSeedForSobol");
         var rng2 = new ChiRng("RandomSeedForSobol");
@@ -49,7 +49,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void RandomizedSequence_WithDifferentRngSeeds_ProducesDifferentSequences()
+    public void Sample_RandomizedWithDifferentRngSeeds_ProducesDifferentSequences()
     {
         var rng1 = new ChiRng("Seed");
         var rng2 = new ChiRng("Different Seed");
@@ -70,7 +70,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void CanonicalSobol_1D_FirstFewPoints_MatchKnownValues()
+    public void Sample_Canonical1D_MatchesKnownFirstPoints()
     {
         var expectedValues = new[]
         {
@@ -94,7 +94,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void CanonicalSobol_2D_FirstFewPoints_MatchKnownValues()
+    public void Sample_Canonical2D_MatchesKnownFirstPoints()
     {
         var expectedPoints = new[]
         {
@@ -124,7 +124,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     [Theory]
     [InlineData(ChiSequenceMode.Canonical, 0.001)]
     [InlineData(ChiSequenceMode.Randomized, 0.1)]
-    public void SobolSequence_Marginals_ShowCorrectUniformity(ChiSequenceMode mode, double tolerance)
+    public void Sample_AcrossManyDimensions_ProducesUniformMarginals(ChiSequenceMode mode, double tolerance)
     {
         const int dimensions = 1024;
         const int samples = 25_000;
@@ -160,7 +160,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void RandomizedSobol_FromSameRng_ProducesDifferentSequencesThanCanonical()
+    public void Sample_RandomizedFromSameSeedAsCanonical_ProducesDifferentSequence()
     {
         const int sampleCount = 1000;
         const int dimensions = 4;
@@ -205,7 +205,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void Sobol_HighDimensional_ShowsPrecisionDifferencesInComplexFractions()
+    public void Sample_HighDimensionalDoubleVsDecimal_ProducesDivergingValues()
     {
         const int dimensions = 50; // High dimensional stress test
         const int sampleCount = 100; // Fewer samples, but more complex ones
@@ -271,7 +271,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void Sobol_FirstPoints_MatchReferenceImplementation()
+    public void Sample_Canonical2D_MatchesReferenceImplementation()
     {
         var expected2D = new[,]
         {
@@ -298,7 +298,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void Sobol_DifferentScrambles_ProduceDifferentButValidSequences()
+    public void Sample_DifferentScrambles_ProduceDifferentSequences()
     {
         const int numSequences = 10;
         const int dimensions = 3;
@@ -325,7 +325,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     [InlineData(50)]
     [InlineData(100)]
     [InlineData(500)]
-    public void Sobol_HighDimensions_MaintainsValidRange(int dimensions)
+    public void Sample_HighDimensions_ProducesValuesInUnitInterval(int dimensions)
     {
         var rng = new ChiRng();
         var sampler = rng.Sobol(dimensions).OfType<double>();

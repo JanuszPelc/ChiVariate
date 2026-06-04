@@ -17,7 +17,7 @@ public class FixedPointEdgeCaseTests
     ///     This test generates enough samples to statistically hit such extreme values.
     /// </summary>
     [Fact]
-    public void Logistic_ChiFixed_DoesNotOverflow()
+    public void Sample_LogisticExtremeTail_ReturnsFiniteValues()
     {
         var rng = new ChiRng(42);
         var location = ChiFixed.Zero;
@@ -40,7 +40,7 @@ public class FixedPointEdgeCaseTests
     ///     causing log(x) to fail. This test generates enough samples to trigger such cases.
     /// </summary>
     [Fact]
-    public void Gamma_ChiFixed_DoesNotThrowOnUnderflow()
+    public void Sample_GammaUnderflowEdgeCase_ReturnsPositiveFiniteValues()
     {
         var rng = new ChiRng(42);
         var shape = (ChiFixed)2m;

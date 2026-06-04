@@ -15,7 +15,8 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     [InlineData(5, 0.5)] // Expected mean = 10
     [InlineData(10, 0.25)] // Expected mean = 40
     [InlineData(3, 0.8)] // Expected mean = 3.75
-    public void Sample_ProducesDistributionWithCorrectStatistics(int numSuccesses, double probability)
+    public void Sample_AcrossSuccessesAndProbability_MatchesNegativeBinomialDistribution(int numSuccesses,
+        double probability)
     {
         var rng = new ChiRng(
             ChiSeed.Scramble("NegativeBinomial", new ChiHash().Add(numSuccesses).Add(probability).Hash));
@@ -34,7 +35,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void NegativeBinomial_IsEquivalentToGeometric_WhenNumSuccessesIsOne()
+    public void Sample_WhenNumSuccessesIsOne_MatchesGeometric()
     {
         const double probability = 0.3;
         var negBinRng = new ChiRng(123);

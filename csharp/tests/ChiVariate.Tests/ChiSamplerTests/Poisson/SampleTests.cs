@@ -15,7 +15,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     [InlineData(0.5)]
     [InlineData(5.0)]
     [InlineData(20.0)]
-    public void Sample_WithCorrectMean_ProducesDistribution(double mean)
+    public void Sample_AcrossMeanValues_MatchesPoissonDistribution(double mean)
     {
         var rng = new ChiRng(ChiSeed.Scramble("Poisson", mean));
         var maxBound = (int)Math.Ceiling(mean + 5 * Math.Sqrt(mean));

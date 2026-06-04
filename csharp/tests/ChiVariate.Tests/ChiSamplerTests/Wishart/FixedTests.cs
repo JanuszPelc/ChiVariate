@@ -14,7 +14,7 @@ public class FixedTests(ITestOutputHelper testOutputHelper)
     private const int SampleCount = 5_000;
 
     [Fact]
-    public void Sample_2D_IsCorrect()
+    public void Sample_Dim2_MatchesWishartDistribution()
     {
         const int degreesOfFreedom = 5;
         var scaleMatrix = ChiMatrix.With(new[,]
@@ -41,7 +41,7 @@ public class FixedTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void Sample_3D_WithIdentityScale_IsCorrect()
+    public void Sample_Dim3IdentityScale_MatchesWishartDistribution()
     {
         const int degreesOfFreedom = 10;
         var scaleMatrix = ChiMatrix.With(new[,]
@@ -99,7 +99,7 @@ public class FixedTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void Sample_IsSymmetric()
+    public void Sample_Dim2_ProducesSymmetricMatrix()
     {
         const int degreesOfFreedom = 5;
         var scaleMatrix = ChiMatrix.With(new[,]

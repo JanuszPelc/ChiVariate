@@ -46,7 +46,7 @@ public class FixedTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void Sample_WellBehavedCase_HasCorrectMean()
+    public void Sample_WellBehavedCase_MatchesInverseGammaMean()
     {
         // InverseGamma(shape, scale) has mean = scale / (shape - 1) for shape > 1
         var shape = (ChiFixed)5m;

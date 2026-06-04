@@ -18,7 +18,7 @@ public class StatelessSamplerTests(ITestOutputHelper testOutputHelper)
     [InlineData(1.0)] // Standard scale
     [InlineData(0.5)] // Lower temperature/higher mass -> slower speeds
     [InlineData(10.0)] // Higher temperature/lower mass -> faster speeds
-    public void Sample_ProducesDistributionWithCorrectMean(double a)
+    public void Sample_AcrossScale_MatchesTheoreticalMean(double a)
     {
         var rng = new ChiRng(ChiSeed.Scramble("MaxwellBoltzmann", a));
         var sampler = rng.MaxwellBoltzmann(a);
@@ -38,7 +38,7 @@ public class StatelessSamplerTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void Sample_Decimal_ProducesCorrectStatistics()
+    public void Sample_Decimal_MatchesTheoreticalMeanAndMode()
     {
         const decimal a = 1.5m;
         var rng = new ChiRng(ChiSeed.Scramble("MaxwellBoltzmannDecimal", (double)a));
@@ -98,7 +98,7 @@ public class StatelessSamplerTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void CryptoRng_MultivariateNormalSampling_ProducesExpectedMarginals()
+    public void Sample_MultivariateNormal_ProducesExpectedMarginals()
     {
         var mean = ChiMatrix.With([10.0, 20.0, 30.0]);
         var covariance = ChiMatrix.With(
@@ -122,7 +122,7 @@ public class StatelessSamplerTests(ITestOutputHelper testOutputHelper)
             histogramX3.AddSample(destination[2]);
         }
 
-        const string methodName = nameof(CryptoRng_MultivariateNormalSampling_ProducesExpectedMarginals);
+        const string methodName = nameof(Sample_MultivariateNormal_ProducesExpectedMarginals);
 
         histogramX1.DebugPrint(testOutputHelper, $"{methodName} - Marginal Distribution for X1");
         histogramX1.AssertIsNormal(10.0, 1.0, 0.1);
@@ -135,7 +135,7 @@ public class StatelessSamplerTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void CustomCryptoRng_WithCustomMaxwellBoltzmannSampler_ProducesStatisticallyPlausibleResult()
+    public void Sample_WithCryptoRng_ProducesTotalEnergyInExpectedRange()
     {
         const double expectedMeanTotalEnergy = 675_000_000.0; // E = N * 0.5 * m * (3 * a^2)
         const double threeSigma = 95_000_000.0; // Derived from the variance of v^2

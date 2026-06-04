@@ -13,7 +13,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     private const int SmallSampleCount = 10_000;
 
     [Fact]
-    public void PrimeSampler_TwinPrimes_FollowExpectedDistribution()
+    public void Sample_TwinPrimes_FollowExpectedDistribution()
     {
         var rng = new ChiRng("TwinPrimes");
         var sampler = rng.Prime(1000L, 100_000L, 1);
@@ -39,7 +39,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void PrimeSampler_SophieGermainPrimes_AreDetected()
+    public void Sample_SophieGermainPrimes_AreDetected()
     {
         var rng = new ChiRng("SophieGermain");
         var sampler = rng.Prime(100L, 10_000L, 1);
@@ -63,7 +63,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     }
 
     // [Fact]
-    // public void PrimeSampler_DoublySafePrimes_AreDetected()
+    // public void Sample_DoublySafePrimes_AreDetected()
     // {
     //     var rng = new ChiRng("DoublySafe");
     //     var sampler = rng.Prime(ulong.MaxValue / 77, ulong.MaxValue / 2);
@@ -97,7 +97,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     // }
 
     [Fact]
-    public void PrimeSampler_DigitalRoot_ShowsCorrectDistribution()
+    public void Sample_DigitalRoots_ExcludeMultiplesOfThree()
     {
         var rng = new ChiRng("DigitalRoot");
         var sampler = rng.Prime(100L, 1_000_000L, 1);
@@ -133,7 +133,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void PrimeSampler_LastDigit_RespectsModularConstraints()
+    public void Sample_LastDigits_ExcludeEvensAndFive()
     {
         var rng = new ChiRng("LastDigit");
         var sampler = rng.Prime(100L, 1_000_000L, 1);
@@ -169,7 +169,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void PrimeSampler_SampledPrimes_ShowReasonableDistribution()
+    public void Sample_OverRange_CoversRangeWithCenteredAverage()
     {
         var rng = new ChiRng("PrimeDistribution");
         var sampler = rng.Prime(1_000L, 100_000L, 1);
@@ -198,7 +198,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void PrimeSampler_Goldbach_CanFindPairs()
+    public void Sample_Goldbach_ProducesPairsForMostEvenNumbers()
     {
         var rng = new ChiRng("Goldbach");
         var sampler = rng.Prime(2L, 10_000L, 1);
@@ -234,7 +234,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void PrimeSampler_LargePrimes_MaintainPrimality()
+    public void Sample_NearUInt32MaxValue_ReturnsPrimesWithinRange()
     {
         var rng = new ChiRng("LargePrimes");
         var sampler = rng.Prime(uint.MaxValue - 1000, uint.MaxValue, 1);
@@ -257,7 +257,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     [InlineData(2, 100, 2)]
     [InlineData(97, 100, 97)]
     [InlineData(2, 3, 2)]
-    public void PrimeSampler_SpecificRanges_ReturnsExpectedPrimes(long min, long max, long expectedPrime)
+    public void Sample_OverSmallRange_EventuallyReturnsExpectedPrime(long min, long max, long expectedPrime)
     {
         var rng = new ChiRng($"Specific_{min}_{max}");
         var sampler = rng.Prime(min, max, 0);
@@ -302,7 +302,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     [InlineData(1_000L, 5_000L)]
     [InlineData(1_000_000L, 1_010_000L)]
     [InlineData(0L, 100L)]
-    public void Sample_Always_ReturnsAPrimeWithinTheSpecifiedRange(long min, long max)
+    public void Sample_AcrossRanges_ReturnsPrimeWithinRange(long min, long max)
     {
         var rng = new ChiRng(ChiSeed.Scramble("PrimesContractTest", min + max));
         var sampler = rng.Prime(min, max, 1);
@@ -342,7 +342,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void Sample_ForUint32_IsDeterministic()
+    public void Sample_ForUInt32_IsDeterministic()
     {
         var rng = new ChiRng(42);
         var min = uint.MinValue;
@@ -354,7 +354,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void Sample_ForUint16_IsDeterministic()
+    public void Sample_ForUInt16_IsDeterministic()
     {
         var rng = new ChiRng(42);
         var min = ushort.MinValue;
@@ -379,7 +379,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     [InlineData(100, 10)] // min > max
     [InlineData(-1, 100)] // min is negative
     [InlineData(100, 200, -1)] // minEstimatePopulation is negative
-    public void Primes_WithInvalidParameters_ThrowsArgumentOutOfRangeException(int min, int max, int minPop = 256)
+    public void Prime_WithInvalidParameters_ThrowsArgumentOutOfRangeException(int min, int max, int minPop = 256)
     {
         var rng = new ChiRng();
         var act = () => { rng.Prime(min, max, minPop); };
@@ -388,7 +388,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void Primes_WithInsufficientEstimatedPopulation_ThrowsArgumentException()
+    public void Prime_WithInsufficientEstimatedPopulation_ThrowsArgumentException()
     {
         var rng = new ChiRng();
         var act = () => { rng.Prime(140, 180); };

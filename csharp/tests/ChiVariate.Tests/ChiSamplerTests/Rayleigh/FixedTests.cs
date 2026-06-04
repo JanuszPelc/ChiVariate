@@ -17,7 +17,7 @@ public class FixedTests(ITestOutputHelper testOutputHelper)
     [InlineData(0.5)]
     [InlineData(1.0)]
     [InlineData(5.0)]
-    public void Sample_WithVariousSigma_ProducesRayleighDistribution(double sigma)
+    public void Sample_AcrossSigma_ProducesRayleighDistribution(double sigma)
     {
         var s = (ChiFixed)(decimal)sigma;
 
@@ -32,7 +32,7 @@ public class FixedTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void Sample_SigmaOne_HasCorrectMean()
+    public void Sample_SigmaOne_MeanMatchesSqrtPiOver2()
     {
         // Rayleigh(1) has mean = sqrt(pi/2) ≈ 1.253
         var sigma = ChiFixed.One;

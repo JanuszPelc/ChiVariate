@@ -18,7 +18,7 @@ public class FixedTests(ITestOutputHelper testOutputHelper)
     [InlineData(0.0, 1.0)] // Standard Cauchy
     [InlineData(10.0, 5.0)] // Shifted and scaled
     [InlineData(0.0, 0.5)] // Narrower peak
-    public void Sample_WithVariousParameters_ProducesCauchyDistribution(double location, double scale)
+    public void Sample_AcrossLocationAndScale_ProducesCauchyDistribution(double location, double scale)
     {
         var loc = (ChiFixed)(decimal)location;
         var sc = (ChiFixed)(decimal)scale;

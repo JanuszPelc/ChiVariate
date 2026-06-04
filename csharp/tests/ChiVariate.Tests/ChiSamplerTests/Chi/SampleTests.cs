@@ -65,7 +65,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     [Theory]
     [InlineData("2")]
     [InlineData("5")]
-    public void Sample_Decimal_Squared_MatchesChiSquaredDistribution(string degreesOfFreedomStr)
+    public void Sample_DecimalSquared_MatchesChiSquaredDistribution(string degreesOfFreedomStr)
     {
         var degreesOfFreedom = decimal.Parse(degreesOfFreedomStr, CultureInfo.InvariantCulture);
         var intDof = (int)degreesOfFreedom;

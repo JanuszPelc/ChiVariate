@@ -18,7 +18,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     [InlineData(2.0, 5.0)] // Skewed right
     [InlineData(5.0, 2.0)] // Skewed left
     [InlineData(0.5, 0.5)] // U-shaped case
-    public void Sample_ProducesDistributionWithCorrectMean(double alpha, double beta)
+    public void Sample_AcrossAlphaAndBeta_MatchesBetaDistribution(double alpha, double beta)
     {
         var rng = new ChiRng(ChiSeed.Scramble("Beta", alpha * 100 + beta));
         var expectedMean = alpha / (alpha + beta);
@@ -54,7 +54,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     [Theory]
     [InlineData("2.0", "5.0")] // Skewed case
     [InlineData("0.5", "0.5")] // U-shaped case
-    public void Sample_Decimal_ProducesDistributionWithCorrectMean(string alphaStr, string betaStr)
+    public void Sample_Decimal_MatchesBetaDistribution(string alphaStr, string betaStr)
     {
         var alpha = decimal.Parse(alphaStr, CultureInfo.InvariantCulture);
         var beta = decimal.Parse(betaStr, CultureInfo.InvariantCulture);

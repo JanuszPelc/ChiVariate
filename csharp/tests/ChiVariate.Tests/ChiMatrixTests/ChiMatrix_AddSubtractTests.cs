@@ -15,7 +15,7 @@ public class ChiMatrix_AddSubtractTests
     // ====================================================================
 
     [Fact]
-    public void Add_MatrixAndMatrix_ReturnsCorrectResult()
+    public void Add_MatrixAndMatrix_ReturnsElementwiseSum()
     {
         var a = ChiMatrix.Zeros<double>(2, 2);
         a[0, 0] = 1;
@@ -40,7 +40,7 @@ public class ChiMatrix_AddSubtractTests
     }
 
     [Fact]
-    public void Add_MatrixAndScalar_ReturnsCorrectResult()
+    public void Add_MatrixAndScalar_ReturnsBroadcastSum()
     {
         var matrix = ChiMatrix.Zeros<double>(2, 2);
         matrix[0, 0] = 1;
@@ -59,7 +59,7 @@ public class ChiMatrix_AddSubtractTests
     }
 
     [Fact]
-    public void Add_ScalarAndMatrix_ReturnsCorrectResult()
+    public void Add_ScalarAndMatrix_ReturnsBroadcastSum()
     {
         var matrix = ChiMatrix.Zeros<double>(2, 2);
         matrix[0, 0] = 1;
@@ -82,7 +82,7 @@ public class ChiMatrix_AddSubtractTests
     // ====================================================================
 
     [Fact]
-    public void Subtract_MatrixAndMatrix_ReturnsCorrectResult()
+    public void Subtract_MatrixAndMatrix_ReturnsElementwiseDifference()
     {
         var a = ChiMatrix.Zeros<decimal>(2, 2);
         a[0, 0] = 10;
@@ -107,7 +107,7 @@ public class ChiMatrix_AddSubtractTests
     }
 
     [Fact]
-    public void Subtract_ScalarFromMatrix_ReturnsCorrectResult()
+    public void Subtract_ScalarFromMatrix_ReturnsBroadcastDifference()
     {
         var matrix = ChiMatrix.Zeros<decimal>(2, 2);
         matrix[0, 0] = 10;
@@ -126,7 +126,7 @@ public class ChiMatrix_AddSubtractTests
     }
 
     [Fact]
-    public void Subtract_MatrixFromScalar_ReturnsCorrectResult()
+    public void Subtract_MatrixFromScalar_ReturnsBroadcastDifference()
     {
         var matrix = ChiMatrix.Zeros<decimal>(2, 2);
         matrix[0, 0] = 1;

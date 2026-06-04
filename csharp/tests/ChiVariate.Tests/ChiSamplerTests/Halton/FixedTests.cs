@@ -15,7 +15,7 @@ public class FixedTests(ITestOutputHelper testOutputHelper)
     private const int SampleCount = 10_000;
 
     [Fact]
-    public void CanonicalSequence_WithChiFixed_IsBitForBitDeterministic()
+    public void Sample_CanonicalChiFixed_IsBitForBitDeterministic()
     {
         var rng1 = new ChiRng("HaltonFixedSeed");
         var rng2 = new ChiRng("HaltonFixedSeed");
@@ -33,7 +33,7 @@ public class FixedTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void RandomizedSequence_WithChiFixed_IsBitForBitDeterministic()
+    public void Sample_RandomizedChiFixed_IsBitForBitDeterministic()
     {
         var rng1 = new ChiRng("RandomHaltonFixed");
         var rng2 = new ChiRng(rng1.Snapshot());
@@ -52,7 +52,7 @@ public class FixedTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void Halton_2D_FirstFewPoints_AreInValidRange()
+    public void Sample_ChiFixed2D_ReturnsValuesInUnitInterval()
     {
         var rng = new ChiRng();
         var sampler = rng.Halton(2, ChiSequenceMode.Canonical).OfType<ChiFixed>();
@@ -69,7 +69,7 @@ public class FixedTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void HaltonSequence_WithChiFixed_Marginals_ShowExcellentUniformity()
+    public void Sample_ChiFixedMarginals_AreUniformlyDistributed()
     {
         const int dimensions = 2;
         const int bins = 50;
@@ -103,7 +103,7 @@ public class FixedTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void Halton_HighDimensions_WithChiFixed_MaintainsQuality()
+    public void Sample_ChiFixedHighDimensions_ReturnsNonZeroValuesInUnitInterval()
     {
         var rng = new ChiRng();
         var sampler = rng.Halton(100, ChiSequenceMode.Canonical).OfType<ChiFixed>();

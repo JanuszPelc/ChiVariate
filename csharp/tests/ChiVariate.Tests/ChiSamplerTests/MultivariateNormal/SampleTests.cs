@@ -14,7 +14,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     private const int SampleCount = 50_000;
 
     [Fact]
-    public void Sample_2D_WithPositiveCorrelation_IsCorrect()
+    public void Sample_PositiveCorrelation2D_MatchesMultivariateNormal()
     {
         // A 2D distribution where X and Y tend to move together.
         var mean = ChiMatrix.With([5.0, -10.0]);
@@ -37,7 +37,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void Sample_2D_WithNegativeCorrelation_IsCorrect()
+    public void Sample_NegativeCorrelation2D_MatchesMultivariateNormal()
     {
         // A 2D distribution where X and Y tend to move opposite.
         var mean = ChiMatrix.With([0.0, 0.0]);
@@ -60,7 +60,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void Sample_3D_Uncorrelated_IsCorrect()
+    public void Sample_Uncorrelated3D_MatchesMultivariateNormal()
     {
         var mean = ChiMatrix.With([10.0, 20.0, 30.0]);
         var covariance = ChiMatrix.With(
@@ -82,7 +82,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void Sample_WithInvalidMatrix_ThrowsException()
+    public void MultivariateNormal_WithNonPositiveDefiniteMatrix_ThrowsArgumentException()
     {
         var rng = new ChiRng();
         var mean = ChiMatrix.With([0.0]);
@@ -95,7 +95,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void Sample_MarginalDistributions_AreCorrectlyNormal()
+    public void Sample_MarginalDistributions_MatchNormalDistributions()
     {
         var mean = ChiMatrix.With([10.0, 20.0, 30.0]);
         var covariance = ChiMatrix.With(new[,]
@@ -121,7 +121,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
             histogramX3.AddSample(destination[2]);
         }
 
-        const string methodName = nameof(Sample_MarginalDistributions_AreCorrectlyNormal);
+        const string methodName = nameof(Sample_MarginalDistributions_MatchNormalDistributions);
 
         histogramX1.DebugPrint(testOutputHelper, $"{methodName} - Marginal Distribution for X1");
         histogramX1.AssertIsNormal(10.0, 1.0, 0.1);
@@ -134,7 +134,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void Sample_Decimal_IsCorrect()
+    public void Sample_Decimal_MatchesMultivariateNormal()
     {
         // A 2D distribution where X and Y tend to move together.
         var mean = ChiMatrix.With([5.0m, -10.0m]);

@@ -13,7 +13,7 @@ public class ChiMathLerpTests
     [InlineData(0.0f, 100.0f, 0, 10, 0.0f)]
     [InlineData(0.0f, 100.0f, 5, 10, 50.0f)]
     [InlineData(0.0f, 100.0f, 10, 10, 100.0f)]
-    public void Lerp_Float_ReturnsCorrectValue(
+    public void Lerp_Float_ReturnsExpectedResult(
         float origin, float target, int step, int totalSteps, float expected)
     {
         var result = ChiMath.Lerp(origin, target, step, totalSteps);
@@ -26,7 +26,7 @@ public class ChiMathLerpTests
     #region Basic Interpolation Tests
 
     [Fact]
-    public void Lerp_Double_StepZero_ReturnsOrigin()
+    public void Lerp_StepZero_ReturnsOrigin()
     {
         var result = ChiMath.Lerp(0.0, 100.0, 0, 10);
 
@@ -34,7 +34,7 @@ public class ChiMathLerpTests
     }
 
     [Fact]
-    public void Lerp_Double_StepEqualsTotalSteps_ReturnsTarget()
+    public void Lerp_StepEqualsTotalSteps_ReturnsTarget()
     {
         var result = ChiMath.Lerp(0.0, 100.0, 10, 10);
 
@@ -42,7 +42,7 @@ public class ChiMathLerpTests
     }
 
     [Fact]
-    public void Lerp_Double_MidPoint_ReturnsHalfway()
+    public void Lerp_MidPoint_ReturnsHalfway()
     {
         var result = ChiMath.Lerp(0.0, 100.0, 5, 10);
 
@@ -54,7 +54,7 @@ public class ChiMathLerpTests
     [InlineData(0.0, 100.0, 2, 10, 20.0)]
     [InlineData(0.0, 100.0, 7, 10, 70.0)]
     [InlineData(0.0, 100.0, 9, 10, 90.0)]
-    public void Lerp_Double_VariousSteps_ReturnsCorrectValue(
+    public void Lerp_VariousSteps_ReturnsExpectedResult(
         double origin, double target, int step, int totalSteps, double expected)
     {
         var result = ChiMath.Lerp(origin, target, step, totalSteps);
@@ -67,7 +67,7 @@ public class ChiMathLerpTests
     #region Bidirectional Tests
 
     [Fact]
-    public void Lerp_Double_TargetLessThanOrigin_WorksCorrectly()
+    public void Lerp_TargetLessThanOrigin_ReturnsHalfway()
     {
         var result = ChiMath.Lerp(100.0, 0.0, 5, 10);
 
@@ -79,7 +79,7 @@ public class ChiMathLerpTests
     [InlineData(100.0, 0.0, 2, 10, 80.0)]
     [InlineData(100.0, 0.0, 5, 10, 50.0)]
     [InlineData(100.0, 0.0, 10, 10, 0.0)]
-    public void Lerp_Double_Descending_ReturnsCorrectValue(
+    public void Lerp_Descending_ReturnsExpectedResult(
         double origin, double target, int step, int totalSteps, double expected)
     {
         var result = ChiMath.Lerp(origin, target, step, totalSteps);
@@ -88,7 +88,7 @@ public class ChiMathLerpTests
     }
 
     [Fact]
-    public void Lerp_NegativeValues_WorksCorrectly()
+    public void Lerp_NegativeValues_ReturnsZero()
     {
         var result = ChiMath.Lerp(-100.0, 100.0, 5, 10);
 
@@ -96,7 +96,7 @@ public class ChiMathLerpTests
     }
 
     [Fact]
-    public void Lerp_CrossingZero_WorksCorrectly()
+    public void Lerp_CrossingZero_ReturnsZero()
     {
         var result = ChiMath.Lerp(-50.0, 50.0, 5, 10);
 
@@ -140,7 +140,7 @@ public class ChiMathLerpTests
     }
 
     [Fact]
-    public void Lerp_SameOriginAndTarget_ReturnsValue()
+    public void Lerp_SameOriginAndTarget_ReturnsThatValue()
     {
         var result = ChiMath.Lerp(42.0, 42.0, 5, 10);
 
@@ -163,7 +163,7 @@ public class ChiMathLerpTests
     [InlineData(0, 100, 0, 10, 0)]
     [InlineData(0, 100, 5, 10, 50)]
     [InlineData(0, 100, 10, 10, 100)]
-    public void Lerp_Decimal_ReturnsCorrectValue(
+    public void Lerp_Decimal_ReturnsExpectedResult(
         int originInt, int targetInt, int step, int totalSteps, int expectedInt)
     {
         var origin = (decimal)originInt;
@@ -176,7 +176,7 @@ public class ChiMathLerpTests
     }
 
     [Fact]
-    public void Lerp_Decimal_FractionalResult_ReturnsCorrectValue()
+    public void Lerp_DecimalFraction_ReturnsExpectedResult()
     {
         var result = ChiMath.Lerp(0m, 100m, 1, 3);
 
@@ -191,7 +191,7 @@ public class ChiMathLerpTests
     [InlineData(0, 100, 0, 10, 0)]
     [InlineData(0, 100, 5, 10, 50)]
     [InlineData(0, 100, 10, 10, 100)]
-    public void Lerp_Int_ReturnsCorrectValue(
+    public void Lerp_Int_ReturnsExpectedResult(
         int origin, int target, int step, int totalSteps, int expected)
     {
         var result = ChiMath.Lerp(origin, target, step, totalSteps);
@@ -209,7 +209,7 @@ public class ChiMathLerpTests
     }
 
     [Fact]
-    public void Lerp_Long_LargeValues_ReturnsCorrectValue()
+    public void Lerp_LargeLongValues_ReturnsExpectedResult()
     {
         var result = ChiMath.Lerp(0L, 1_000_000_000L, 500, 1000);
 
@@ -221,7 +221,7 @@ public class ChiMathLerpTests
     #region ChiFixed Tests
 
     [Fact]
-    public void Lerp_ChiFixed_ReturnsCorrectValue()
+    public void Lerp_ChiFixed_ReturnsHalfway()
     {
         var origin = (ChiFixed)0m;
         var target = (ChiFixed)100m;
@@ -232,7 +232,7 @@ public class ChiMathLerpTests
     }
 
     [Fact]
-    public void Lerp_ChiFixed_FractionalResult_ReturnsCorrectValue()
+    public void Lerp_ChiFixedFraction_ReturnsExpectedResult()
     {
         var origin = (ChiFixed)0m;
         var target = (ChiFixed)100m;
@@ -243,7 +243,7 @@ public class ChiMathLerpTests
     }
 
     [Fact]
-    public void Lerp_ChiFixed_Bidirectional_WorksCorrectly()
+    public void Lerp_ChiFixedBidirectional_ReturnsHalfway()
     {
         var origin = (ChiFixed)100m;
         var target = (ChiFixed)0m;
@@ -258,7 +258,7 @@ public class ChiMathLerpTests
     #region Practical Use Cases
 
     [Fact]
-    public void Lerp_Animation_SmoothTransition()
+    public void Lerp_Animation_ProducesMonotonicSequence()
     {
         const double start = 0.0;
         const double end = 100.0;
@@ -276,7 +276,7 @@ public class ChiMathLerpTests
     }
 
     [Fact]
-    public void Lerp_ColorBlending_RedToBlue()
+    public void Lerp_ColorBlending_ReturnsHalfway()
     {
         // Simulate RGB color blending (R channel)
         const int redStart = 255;

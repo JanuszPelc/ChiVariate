@@ -16,7 +16,7 @@ public class SampleTests(ITestOutputHelper testOutputHelper)
     [InlineData(100, 1.0)] // Classic Zipf, larger N
     [InlineData(100, 1.5)] // More skewed
     [InlineData(50, 0.8)] // Less skewed
-    public void Sample_ProducesDistributionWithCorrectShape(int numElements, double exponent)
+    public void Sample_AcrossElementsAndExponent_MatchesZipfDistribution(int numElements, double exponent)
     {
         var rng = new ChiRng(ChiSeed.Scramble("Zipf", new ChiHash().Add(numElements).Add(exponent).Hash));
         var histogram = new Histogram(1, numElements + 1, numElements, true);
