@@ -29,7 +29,14 @@ public sealed class TestMethodNamingAnalyzer : DiagnosticAnalyzer
     private static readonly DiagnosticDescriptor NamingRule = new(
         "CV1001",
         "Test method naming convention",
-        "Test method '{0}' does not follow the [UnitOfWork]_[TestedScenario]_[ExpectedBehavior] convention (exactly 3 PascalCase segments separated by underscores)",
+        "Test method '{0}' must be named [UnitOfWork]_[TestedScenario]_[ExpectedBehavior]: " +
+        "exactly 3 PascalCase segments, each starting with a capital letter; " +
+        "UnitOfWork = the method or member under test, not the class; " +
+        "TestedScenario = the meaningful condition, general not granular (do not enumerate params; " +
+        "add a type only when it is the variation, written bare like 'UInt128'); " +
+        "ExpectedBehavior = a concrete assertion that starts with a verb (Returns/Throws/Produces/Matches/Is) and names " +
+        "the specific outcome, such as ReturnsZero or ThrowsArgumentException, never vague like 'IsCorrect' or 'Works'; " +
+        "derive the name from what the test body does, not the old name",
         "Naming",
         DiagnosticSeverity.Error,
         true,
