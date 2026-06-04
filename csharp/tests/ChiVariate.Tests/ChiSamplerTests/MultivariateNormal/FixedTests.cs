@@ -45,7 +45,7 @@ public class FixedTests(ITestOutputHelper testOutputHelper)
             { (ChiFixed)1m, (ChiFixed)(-0.6m) },
             { (ChiFixed)(-0.6m), (ChiFixed)1m }
         });
-        var rng = new ChiRng("MvNormal_Fixed_NegativeCorr");
+        var rng = new ChiRng("MvNormal_Fixed_NegativeCorrelation");
         var multivariateNormal = rng.MultivariateNormal(mean, covariance);
         var samples = new List<double[]>(SampleCount);
 
@@ -53,7 +53,7 @@ public class FixedTests(ITestOutputHelper testOutputHelper)
         {
             using var destination = multivariateNormal.Sample();
             var arr = destination.VectorToArray();
-            samples.Add(arr.Select(x => double.CreateChecked(x)).ToArray());
+            samples.Add(arr.Select(double.CreateChecked).ToArray());
         }
 
         samples.AssertIsMultivariateNormal([0.0, 0.0], new[,] { { 1.0, -0.6 }, { -0.6, 1.0 } }, 0.15);

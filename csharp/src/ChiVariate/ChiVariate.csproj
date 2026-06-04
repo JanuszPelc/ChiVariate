@@ -3,7 +3,7 @@
         <GeneratePackageOnBuild Condition="'$(Configuration)' == 'Release'">true</GeneratePackageOnBuild>
 
         <PackageId>ChiVariate</PackageId>
-        <Version>2.0.0-alpha.2</Version>
+        <Version>2.0.0-alpha.3</Version>
         <Authors>Janusz Pelc</Authors>
         <Description>
             Deterministic, data-oriented random engine seamlessly bridging expressive everyday randomness and statistically rigorous, domain-specific simulations.

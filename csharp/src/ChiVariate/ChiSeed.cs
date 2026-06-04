@@ -4,7 +4,6 @@
 using System.Buffers.Binary;
 using System.Diagnostics;
 using System.Globalization;
-using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using ChiVariate.Internal;
@@ -48,70 +47,245 @@ public static class ChiSeed
         }
     }
 
+    /// <inheritdoc cref="ScrambleSharedDoc" />
     /// <summary>
-    ///     Scrambles a 64-bit value into a reproducible and well-mixed 64-bit form.
+    ///     Produces a well-mixed 64-bit value by combining any number of values of the same type.
     /// </summary>
-    /// <param name="value">
-    ///     The <see cref="long" /> value to be scrambled.
-    /// </param>
-    /// <returns>
-    ///     A <see cref="long" /> representing a well-mixed value derived from the input value.
-    /// </returns>
+    /// <typeparam name="T">The type of values to combine.</typeparam>
+    /// <param name="args">The values to be incorporated into the calculation.</param>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static long Scramble<TNumber>(TNumber value)
-        where TNumber : unmanaged, INumberBase<TNumber>
+    [OverloadResolutionPriority(1)]
+    public static long Scramble<T>(params ReadOnlySpan<T> args)
     {
-        var selector = ChiMix64.MixValue(ChiMix64.InitialValue, value);
-        var index = ChiMix64.MixValue(BinaryPrimitives.ReverseEndianness(selector), value);
+        var state = ChiMix64.InitialValue;
+        foreach (var arg in args)
+            state = ChiMix64.MixValue(state, arg);
 
-        return Chi32.ApplyCascadingHashInterleave(selector, index);
+        return FinalizeScramble(state, args.Length);
     }
 
+    /// <inheritdoc cref="ScrambleSharedDoc" />
     /// <summary>
-    ///     Transforms a string into a reproducible and well-mixed 64-bit form.
+    ///     Produces a well-mixed 64-bit value by combining two values of independent types.
     /// </summary>
-    /// <param name="string">
-    ///     The <see cref="string" /> value to be scrambled.
-    /// </param>
-    /// <returns>
-    ///     A <see cref="long" /> representing a well-mixed value derived from the input string.
-    /// </returns>
-    /// <exception cref="ArgumentNullException">
-    ///     Thrown if <paramref name="string" /> is null.
-    /// </exception>
+    /// <typeparam name="T1">The type of the first value.</typeparam>
+    /// <typeparam name="T2">The type of the second value.</typeparam>
+    /// <param name="v1">The first value to be incorporated into the calculation.</param>
+    /// <param name="v2">The second value to be incorporated into the calculation.</param>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static long Scramble(string @string)
+    public static long Scramble<T1, T2>(T1 v1, T2 v2)
     {
-        ArgumentNullException.ThrowIfNull(@string);
+        var state = ChiMix64.InitialValue;
+        state = ChiMix64.MixValue(state, v1);
+        state = ChiMix64.MixValue(state, v2);
 
-        return Scramble(@string, @string.Length);
+        return FinalizeScramble(state, 2);
     }
 
+    /// <inheritdoc cref="ScrambleSharedDoc" />
     /// <summary>
-    ///     Produces a well-mixed 64-bit value by combining a scrambled string and a numeric input.
+    ///     Produces a well-mixed 64-bit value by combining three values of independent types.
     /// </summary>
-    /// <param name="string">The <see cref="string" /> value to be incorporated into the hash calculation.</param>
-    /// <param name="value">A numeric value of type <typeparamref name="TNumber" /> to contribute to the hash.</param>
-    /// <typeparam name="TNumber">The unmanaged numeric type implementing <see cref="System.Numerics.INumberBase{T}" />.</typeparam>
-    /// <returns>
-    ///     A <see cref="long" /> representing a well-mixed value derived from the input string.
-    /// </returns>
-    /// <exception cref="ArgumentNullException">
-    ///     Thrown if <paramref name="string" /> is null.
-    /// </exception>
+    /// <typeparam name="T1">The type of the first value.</typeparam>
+    /// <typeparam name="T2">The type of the second value.</typeparam>
+    /// <typeparam name="T3">The type of the third value.</typeparam>
+    /// <param name="v1">The first value to be incorporated into the calculation.</param>
+    /// <param name="v2">The second value to be incorporated into the calculation.</param>
+    /// <param name="v3">The third value to be incorporated into the calculation.</param>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static long Scramble<TNumber>(string @string, TNumber value)
-        where TNumber : unmanaged, INumberBase<TNumber>
+    public static long Scramble<T1, T2, T3>(T1 v1, T2 v2, T3 v3)
     {
-        ArgumentNullException.ThrowIfNull(@string);
+        var state = ChiMix64.InitialValue;
+        state = ChiMix64.MixValue(state, v1);
+        state = ChiMix64.MixValue(state, v2);
+        state = ChiMix64.MixValue(state, v3);
 
-        var selector = ChiMix64.MixValue(ChiMix64.InitialValue, value);
-        var index = ChiMix64.MixValue(selector, @string);
+        return FinalizeScramble(state, 3);
+    }
 
-        return Chi32.ApplyCascadingHashInterleave(selector, index);
+    /// <inheritdoc cref="ScrambleSharedDoc" />
+    /// <summary>
+    ///     Produces a well-mixed 64-bit value by combining four values of independent types.
+    /// </summary>
+    /// <typeparam name="T1">The type of the first value.</typeparam>
+    /// <typeparam name="T2">The type of the second value.</typeparam>
+    /// <typeparam name="T3">The type of the third value.</typeparam>
+    /// <typeparam name="T4">The type of the fourth value.</typeparam>
+    /// <param name="v1">The first value to be incorporated into the calculation.</param>
+    /// <param name="v2">The second value to be incorporated into the calculation.</param>
+    /// <param name="v3">The third value to be incorporated into the calculation.</param>
+    /// <param name="v4">The fourth value to be incorporated into the calculation.</param>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static long Scramble<T1, T2, T3, T4>(T1 v1, T2 v2, T3 v3, T4 v4)
+    {
+        var state = ChiMix64.InitialValue;
+        state = ChiMix64.MixValue(state, v1);
+        state = ChiMix64.MixValue(state, v2);
+        state = ChiMix64.MixValue(state, v3);
+        state = ChiMix64.MixValue(state, v4);
+
+        return FinalizeScramble(state, 4);
+    }
+
+    /// <inheritdoc cref="ScrambleSharedDoc" />
+    /// <summary>
+    ///     Produces a well-mixed 64-bit value by combining five values of independent types.
+    /// </summary>
+    /// <typeparam name="T1">The type of the first value.</typeparam>
+    /// <typeparam name="T2">The type of the second value.</typeparam>
+    /// <typeparam name="T3">The type of the third value.</typeparam>
+    /// <typeparam name="T4">The type of the fourth value.</typeparam>
+    /// <typeparam name="T5">The type of the fifth value.</typeparam>
+    /// <param name="v1">The first value to be incorporated into the calculation.</param>
+    /// <param name="v2">The second value to be incorporated into the calculation.</param>
+    /// <param name="v3">The third value to be incorporated into the calculation.</param>
+    /// <param name="v4">The fourth value to be incorporated into the calculation.</param>
+    /// <param name="v5">The fifth value to be incorporated into the calculation.</param>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static long Scramble<T1, T2, T3, T4, T5>(T1 v1, T2 v2, T3 v3, T4 v4, T5 v5)
+    {
+        var state = ChiMix64.InitialValue;
+        state = ChiMix64.MixValue(state, v1);
+        state = ChiMix64.MixValue(state, v2);
+        state = ChiMix64.MixValue(state, v3);
+        state = ChiMix64.MixValue(state, v4);
+        state = ChiMix64.MixValue(state, v5);
+
+        return FinalizeScramble(state, 5);
+    }
+
+    /// <inheritdoc cref="ScrambleSharedDoc" />
+    /// <summary>
+    ///     Produces a well-mixed 64-bit value by combining six values of independent types.
+    /// </summary>
+    /// <typeparam name="T1">The type of the first value.</typeparam>
+    /// <typeparam name="T2">The type of the second value.</typeparam>
+    /// <typeparam name="T3">The type of the third value.</typeparam>
+    /// <typeparam name="T4">The type of the fourth value.</typeparam>
+    /// <typeparam name="T5">The type of the fifth value.</typeparam>
+    /// <typeparam name="T6">The type of the sixth value.</typeparam>
+    /// <param name="v1">The first value to be incorporated into the calculation.</param>
+    /// <param name="v2">The second value to be incorporated into the calculation.</param>
+    /// <param name="v3">The third value to be incorporated into the calculation.</param>
+    /// <param name="v4">The fourth value to be incorporated into the calculation.</param>
+    /// <param name="v5">The fifth value to be incorporated into the calculation.</param>
+    /// <param name="v6">The sixth value to be incorporated into the calculation.</param>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static long Scramble<T1, T2, T3, T4, T5, T6>(T1 v1, T2 v2, T3 v3, T4 v4, T5 v5, T6 v6)
+    {
+        var state = ChiMix64.InitialValue;
+        state = ChiMix64.MixValue(state, v1);
+        state = ChiMix64.MixValue(state, v2);
+        state = ChiMix64.MixValue(state, v3);
+        state = ChiMix64.MixValue(state, v4);
+        state = ChiMix64.MixValue(state, v5);
+        state = ChiMix64.MixValue(state, v6);
+
+        return FinalizeScramble(state, 6);
+    }
+
+    /// <inheritdoc cref="ScrambleSharedDoc" />
+    /// <summary>
+    ///     Produces a well-mixed 64-bit value by combining seven values of independent types.
+    /// </summary>
+    /// <typeparam name="T1">The type of the first value.</typeparam>
+    /// <typeparam name="T2">The type of the second value.</typeparam>
+    /// <typeparam name="T3">The type of the third value.</typeparam>
+    /// <typeparam name="T4">The type of the fourth value.</typeparam>
+    /// <typeparam name="T5">The type of the fifth value.</typeparam>
+    /// <typeparam name="T6">The type of the sixth value.</typeparam>
+    /// <typeparam name="T7">The type of the seventh value.</typeparam>
+    /// <param name="v1">The first value to be incorporated into the calculation.</param>
+    /// <param name="v2">The second value to be incorporated into the calculation.</param>
+    /// <param name="v3">The third value to be incorporated into the calculation.</param>
+    /// <param name="v4">The fourth value to be incorporated into the calculation.</param>
+    /// <param name="v5">The fifth value to be incorporated into the calculation.</param>
+    /// <param name="v6">The sixth value to be incorporated into the calculation.</param>
+    /// <param name="v7">The seventh value to be incorporated into the calculation.</param>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static long Scramble<T1, T2, T3, T4, T5, T6, T7>(T1 v1, T2 v2, T3 v3, T4 v4, T5 v5, T6 v6, T7 v7)
+    {
+        var state = ChiMix64.InitialValue;
+        state = ChiMix64.MixValue(state, v1);
+        state = ChiMix64.MixValue(state, v2);
+        state = ChiMix64.MixValue(state, v3);
+        state = ChiMix64.MixValue(state, v4);
+        state = ChiMix64.MixValue(state, v5);
+        state = ChiMix64.MixValue(state, v6);
+        state = ChiMix64.MixValue(state, v7);
+
+        return FinalizeScramble(state, 7);
+    }
+
+    /// <inheritdoc cref="ScrambleSharedDoc" />
+    /// <summary>
+    ///     Produces a well-mixed 64-bit value by combining eight values of independent types.
+    /// </summary>
+    /// <typeparam name="T1">The type of the first value.</typeparam>
+    /// <typeparam name="T2">The type of the second value.</typeparam>
+    /// <typeparam name="T3">The type of the third value.</typeparam>
+    /// <typeparam name="T4">The type of the fourth value.</typeparam>
+    /// <typeparam name="T5">The type of the fifth value.</typeparam>
+    /// <typeparam name="T6">The type of the sixth value.</typeparam>
+    /// <typeparam name="T7">The type of the seventh value.</typeparam>
+    /// <typeparam name="T8">The type of the eighth value.</typeparam>
+    /// <param name="v1">The first value to be incorporated into the calculation.</param>
+    /// <param name="v2">The second value to be incorporated into the calculation.</param>
+    /// <param name="v3">The third value to be incorporated into the calculation.</param>
+    /// <param name="v4">The fourth value to be incorporated into the calculation.</param>
+    /// <param name="v5">The fifth value to be incorporated into the calculation.</param>
+    /// <param name="v6">The sixth value to be incorporated into the calculation.</param>
+    /// <param name="v7">The seventh value to be incorporated into the calculation.</param>
+    /// <param name="v8">The eighth value to be incorporated into the calculation.</param>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static long Scramble<T1, T2, T3, T4, T5, T6, T7, T8>(T1 v1, T2 v2, T3 v3, T4 v4, T5 v5, T6 v6, T7 v7, T8 v8)
+    {
+        var state = ChiMix64.InitialValue;
+        state = ChiMix64.MixValue(state, v1);
+        state = ChiMix64.MixValue(state, v2);
+        state = ChiMix64.MixValue(state, v3);
+        state = ChiMix64.MixValue(state, v4);
+        state = ChiMix64.MixValue(state, v5);
+        state = ChiMix64.MixValue(state, v6);
+        state = ChiMix64.MixValue(state, v7);
+        state = ChiMix64.MixValue(state, v8);
+
+        return FinalizeScramble(state, 8);
     }
 
     #region Private and boierplate
+
+    /// <returns>A <see cref="long" /> representing a well-mixed value derived from the input values. </returns>
+    /// <exception cref="NotSupportedException">
+    ///     Thrown when any value is of an unsupported type.
+    /// </exception>
+    /// <remarks>
+    ///     Supported types include all numeric types implementing
+    ///     <see cref="System.Numerics.INumberBase{T}" />, <see cref="string" />, <see cref="bool" />, enums,
+    ///     <see cref="System.Guid" />, <see cref="System.Numerics.Complex" />, <see cref="System.DateTime" />,
+    ///     <see cref="System.DateTimeOffset" />, and <see cref="System.TimeSpan" />.
+    ///     A null <see cref="string" /> is treated as empty.
+    /// </remarks>
+    // ReSharper disable once UnusedMember.Local
+    private static long ScrambleSharedDoc()
+    {
+        return 0;
+    }
+
+    /// <summary>
+    ///     Derives the final scrambled seed from the accumulated mix state and the number of combined values.
+    /// </summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private static long FinalizeScramble(long state, int count)
+    {
+        unchecked
+        {
+            const ulong mixingPrime = 0xDabbaDeeFecaFeed;
+            var mixedLength = (long)BinaryPrimitives.ReverseEndianness(~(ulong)count * mixingPrime);
+
+            return Chi32.ApplyCascadingHashInterleave(mixedLength, state);
+        }
+    }
 
     private static class Global
     {
