@@ -106,7 +106,7 @@ public static class ChiSeed
         ArgumentNullException.ThrowIfNull(@string);
 
         var selector = ChiMix64.MixValue(ChiMix64.InitialValue, value);
-        var index = ChiMix64.MixString(selector, @string);
+        var index = ChiMix64.MixValue(selector, @string);
 
         return Chi32.ApplyCascadingHashInterleave(selector, index);
     }
@@ -164,7 +164,7 @@ public static class ChiSeed
 
                 var listSeparator = CultureInfo.CurrentCulture.TextInfo.ListSeparator;
                 var finalizedString = string.Join(listSeparator, components);
-                return ChiMix64.MixString(ChiMix64.InitialValue, finalizedString);
+                return ChiMix64.MixValue(ChiMix64.InitialValue, finalizedString);
             }
         }
     }

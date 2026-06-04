@@ -132,6 +132,7 @@ public class ChiSeedApiTests
 
     [Theory]
     [InlineData("", 5091119643593974729L)] // Empty string
+    [InlineData("--null--", 5091119643593974729L)] // Null string
     [InlineData("test", -6718970030811709247L)]
     [InlineData("Hello, World!", -5048483389635163709L)]
     [InlineData("A moderately long string seed for testing determinism.", -8572949766761681549L)]
@@ -140,8 +141,8 @@ public class ChiSeedApiTests
     [InlineData("👍", -7582485440326701622L)] // Supplementary character
     public void ChiMix64_GivenStringInput_ReturnsDeterministicOutput(string input, long expected)
     {
-        if (string.IsNullOrEmpty(input)) input = null!;
-        var scrambled = ChiMix64.MixString(ChiMix64.InitialValue, input);
+        if (input == "--null--") input = null!;
+        var scrambled = ChiMix64.MixValue(ChiMix64.InitialValue, input);
 
         scrambled.Should().Be(expected);
     }

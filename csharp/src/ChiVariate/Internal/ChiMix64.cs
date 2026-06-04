@@ -34,71 +34,15 @@ internal static class ChiMix64
     {
         var currentMix = mix;
 
-        if (TryMixPrimitive(value, ref currentMix) || TryMixComplex(value, ref currentMix))
+        if (TryMixPrimitive(value, ref currentMix)
+            || TryMixComplex(value, ref currentMix)
+            || TryMixString(value, ref currentMix))
             return currentMix;
 
         throw new NotSupportedException(
             $"Type {typeof(T).Name} is not supported. " +
             $"Supported types: all numeric types implementing INumber<T>, string, bool, enums, " +
             $"Guid, Complex, DateTime, DateTimeOffset, TimeSpan.");
-    }
-
-    /// <summary>
-    ///     Mixes a string value into the current mix state.
-    /// </summary>
-    /// <param name="mix">The current mix state to update.</param>
-    /// <param name="value">The string to mix.</param>
-    /// <returns>The updated mix state.</returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static long MixString(long mix, string? value)
-    {
-        value ??= "";
-        var currentMix = mix;
-        const int maxStackAllocSize = 512;
-
-        var byteCount = Encoding.UTF8.GetByteCount(value);
-        byte[]? rentedArray = null;
-        var byteSpan = byteCount <= maxStackAllocSize
-            ? stackalloc byte[byteCount]
-            : RentArray(byteCount, out rentedArray);
-
-        try
-        {
-            Encoding.UTF8.GetBytes(value, byteSpan);
-
-            var longCount = byteSpan.Length & ~7;
-            var longSpan = MemoryMarshal.Cast<byte, long>(byteSpan[..longCount]);
-
-            if (!BitConverter.IsLittleEndian)
-                for (var index = 0; index < longSpan.Length; index++)
-                    longSpan[index] = BinaryPrimitives.ReverseEndianness(longSpan[index]);
-
-            foreach (var chunk in longSpan)
-                currentMix = UpdateMixValue(currentMix, chunk);
-
-            var orphanCount = byteSpan.Length & 7;
-            if (orphanCount > 0)
-            {
-                var tailBytes = byteSpan[^orphanCount..];
-                var lastChunk = 0L;
-                for (var i = 0; i < orphanCount; i++)
-                    lastChunk |= (long)tailBytes[i] << (i * 8);
-                currentMix = UpdateMixValue(currentMix, lastChunk);
-            }
-        }
-        finally
-        {
-            if (rentedArray != null) ArrayPool<byte>.Shared.Return(rentedArray);
-        }
-
-        return currentMix;
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static Span<byte> RentArray(int byteCount, out byte[] rentedArray)
-        {
-            rentedArray = ArrayPool<byte>.Shared.Rent(byteCount);
-            return rentedArray.AsSpan(0, byteCount);
-        }
     }
 
     /// <summary>
@@ -288,5 +232,61 @@ internal static class ChiMix64
         }
 
         return true;
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private static bool TryMixString<T>(T value, ref long mix)
+    {
+        if (typeof(T) != typeof(string))
+            return false;
+
+        var stringValue = Unsafe.As<T, string?>(ref value) ?? "";
+        var currentMix = mix;
+        const int maxStackAllocSize = 512;
+
+        var byteCount = Encoding.UTF8.GetByteCount(stringValue);
+        byte[]? rentedArray = null;
+        var byteSpan = byteCount <= maxStackAllocSize
+            ? stackalloc byte[byteCount]
+            : RentArray(byteCount, out rentedArray);
+
+        try
+        {
+            Encoding.UTF8.GetBytes(stringValue, byteSpan);
+
+            var longCount = byteSpan.Length & ~7;
+            var longSpan = MemoryMarshal.Cast<byte, long>(byteSpan[..longCount]);
+
+            if (!BitConverter.IsLittleEndian)
+                for (var index = 0; index < longSpan.Length; index++)
+                    longSpan[index] = BinaryPrimitives.ReverseEndianness(longSpan[index]);
+
+            foreach (var chunk in longSpan)
+                currentMix = UpdateMixValue(currentMix, chunk);
+
+            var orphanCount = byteSpan.Length & 7;
+            if (orphanCount > 0)
+            {
+                var tailBytes = byteSpan[^orphanCount..];
+                var lastChunk = 0L;
+                for (var i = 0; i < orphanCount; i++)
+                    lastChunk |= (long)tailBytes[i] << (i * 8);
+                currentMix = UpdateMixValue(currentMix, lastChunk);
+            }
+        }
+        finally
+        {
+            if (rentedArray != null) ArrayPool<byte>.Shared.Return(rentedArray);
+        }
+
+        mix = currentMix;
+        return true;
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        static Span<byte> RentArray(int byteCount, out byte[] rentedArray)
+        {
+            rentedArray = ArrayPool<byte>.Shared.Rent(byteCount);
+            return rentedArray.AsSpan(0, byteCount);
+        }
     }
 }
