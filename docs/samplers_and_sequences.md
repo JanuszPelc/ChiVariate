@@ -96,13 +96,19 @@ When to use ChiFixed:
 - Precision of ~9.6 decimal digits is sufficient
 - Values stay within the ±2 billion range (any int32 can be stored exactly)
 
-Performance characteristics:
-- Addition/subtraction: ~1.7x faster than `double`
-- Multiplication: ~1.3x slower than `double`
-- Division: ~6x slower than `double`
-- Trigonometric functions: ~2x faster than `double`
-- Square root: ~2.7x slower than `double`
-- Memory: 8 bytes (same as `double`)
+Performance characteristics (per-operation timings in nanoseconds, measured on Apple M1 Pro):
+
+| Operation     | `double` | `decimal` | `ChiFixed` |
+|:--------------|---------:|----------:|-----------:|
+| Memory        |  8 bytes |  16 bytes |    8 bytes |
+| Add           |      0.9 |      12.0 |        0.6 |
+| Subtract      |      0.9 |      12.0 |        0.7 |
+| Multiply      |      0.7 |       8.2 |        0.9 |
+| Divide        |      0.7 |      49.4 |        3.7 |
+| Modulo        |      3.7 |       5.8 |        0.8 |
+| Deterministic |       No |       Yes |        Yes |
+
+*Deterministic* is a whole-type property: bit-identical results across platforms and runtimes for every operation, including transcendentals.
 
 ```csharp
 // Generate deterministic random values in [0, 1)
