@@ -24,15 +24,15 @@ ChiVariate guarantees bit-for-bit reproducibility across platforms and .NET runt
 
 **Fully deterministic across all platforms:**
 - All integer distributions of any bit-size (8-bit through 128-bit)
-- All `decimal` distributions - ChiVariate implements its own decimal math library with no dependencies on platform-specific math functions
-- All `ChiFixed` distributions - a deterministic fixed-point type using pure integer arithmetic with lookup tables
+- All `decimal` distributions (ChiVariate implements its own decimal math library with no dependencies on platform-specific math functions)
+- All `ChiFixed` distributions (a deterministic fixed-point type using pure integer arithmetic with lookup tables)
 - Hashing, seeding, and core RNG state generation
 
 **Platform-dependent precision in last bits:**
 
-These differences are largely academic, as any tiny precision variations are dwarfed by the inherent randomness being modeled. `float` and `double` distributions may have minute precision differences in the least significant bit on exotic platforms, as they rely on the underlying runtime's math library (`System.Math.Log`, `System.Math.Sqrt`, etc.).
+`float` and `double` distributions may have minute precision differences in the least significant bit on exotic platforms, as they rely on the underlying runtime's math library (`System.Math.Log`, `System.Math.Sqrt`, etc.). These differences are largely academic, as any such variations are dwarfed by the inherent randomness being modeled.
 
-**Recommendation:** For applications requiring absolute cross-platform determinism, use `decimal` or `integer` types for critical calculations or validate your specific platform combinations during testing. For most use cases, the potential `float`/`double` variance is insignificant compared to the inherent randomness being modeled.
+**Recommendation:** For applications requiring absolute cross-platform determinism, use `decimal` or integer types for critical calculations, or validate your specific platform combinations during testing. For most use cases, the potential `float`/`double` variance is insignificant compared to the inherent randomness being modeled.
 
 ## Working with ChiMatrix
 

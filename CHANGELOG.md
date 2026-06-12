@@ -4,7 +4,7 @@
 
 - Add ChiFixed: fast, deterministic Q31.32 fixed-point type implementing the full IFloatingPointIeee754 interface
 - Add Pity sampler: PRD with escalating probability for fair-feeling randomness
-- Improve decimal math performance 10-14x for Normal/Exponential samplers via the Ziggurat algorithm
+- Improve decimal math performance by 10-14x for Normal/Exponential samplers via the Ziggurat algorithm
 
 ## v1.0.0 (Jul 14, 2025)
 

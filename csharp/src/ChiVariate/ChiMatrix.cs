@@ -569,7 +569,7 @@ public static class ChiMatrix
 ///         To use these operators safely, an operational view should first be obtained via
 ///         <see cref="ChiMatrixExtensions.Peek{T}" />.
 ///         This returns a temporary, stack-only <see cref="ChiMatrixOp{T}" /> that defines all arithmetic operators:
-///         <code>using var c = a.Value() * b.Value();</code>
+///         <code>using var c = a.Peek() * b.Peek();</code>
 ///     </para>
 ///     <para>
 ///         This pattern enforces compile-time safety: it prevents accidental operations on temporary
@@ -837,18 +837,18 @@ public struct ChiMatrix<T> : IDisposable, IEquatable<ChiMatrix<T>>
     }
 
     /// <summary>
-    ///     Determines whether the specified <see cref="ChiMatrix{T}" /> is equal to the current vector.
+    ///     Determines whether the specified <see cref="ChiMatrix{T}" /> is equal to the current matrix.
     /// </summary>
-    /// <param name="other">The vector to compare with the current vector.</param>
+    /// <param name="other">The matrix to compare with the current matrix.</param>
     public override bool Equals(object? other)
     {
         return other is ChiMatrix<T> matrix && Equals(matrix);
     }
 
     /// <summary>
-    ///     Determines whether the specified <see cref="ChiMatrix{T}" /> is equal to the current vector.
+    ///     Determines whether the specified <see cref="ChiMatrix{T}" /> is equal to the current matrix.
     /// </summary>
-    /// <param name="other">The vector to compare with the current vector.</param>
+    /// <param name="other">The matrix to compare with the current matrix.</param>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public bool Equals(ChiMatrix<T> other)
     {
@@ -1030,7 +1030,7 @@ public readonly ref struct ChiMatrixOp<T>
     /// <summary>
     ///     Computes the Cholesky decomposition of a symmetric, positive-definite matrix.
     /// </summary>
-    /// <returns>The lower triangular matrix L, such that L * L' = an original matrix.</returns>
+    /// <returns>The lower triangular matrix L, such that L * L' = the original matrix.</returns>
     /// <exception cref="InvalidOperationException">Thrown if the matrix is not square.</exception>
     /// <exception cref="ArgumentException">Thrown if the matrix is not positive-definite.</exception>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -1059,7 +1059,7 @@ public readonly ref struct ChiMatrixOp<T>
     /// </exception>
     /// <remarks>
     ///     The Hadamard product, or element-wise product, is an operation on two matrices of the same dimensions,
-    ///     resulting in another matrix of the same dimension where each element (i, j) is the product of
+    ///     resulting in another matrix of the same dimensions where each element (i, j) is the product of
     ///     elements (i, j) of the original two matrices.
     /// </remarks>
     public ChiMatrix<T> Hadamard(ChiMatrixOp<T> other)

@@ -87,7 +87,7 @@ public static class ChiSamplerGumbelExtensions
     /// <remarks>
     ///     <para>
     ///         <b>Use Cases:</b> Essential in risk management, engineering, and hydrology for modeling events like maximum
-    ///         floods or wind speeds. In Machine Learning, it is the foundation of the Gumbel-Max trick for training
+    ///         floods or wind speeds. In machine learning, it is the foundation of the Gumbel-Max trick for training
     ///         generative models to make differentiable discrete choices.
     ///     </para>
     ///     <para>

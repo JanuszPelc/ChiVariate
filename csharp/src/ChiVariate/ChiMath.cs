@@ -505,7 +505,7 @@ public static class ChiMath
         public static readonly T PhiConjugate = Phi - One;
 
         /// <summary>
-        ///     A smallest positive value, used for convergence checks.
+        ///     The smallest positive value, used for convergence checks.
         /// </summary>
         public static T Epsilon { get; } = GetEpsilon();
 

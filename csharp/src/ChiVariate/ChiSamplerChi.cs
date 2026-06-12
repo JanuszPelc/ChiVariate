@@ -70,7 +70,7 @@ public static class ChiSamplerChiExtensions
     /// <returns>A sampler that can be used to generate random values from the specified distribution.</returns>
     /// <remarks>
     ///     <para>
-    ///         <b>Use Cases:</b> Models the magnitude of multi-dimensional Gaussian noise. Useful for calculating signal
+    ///         <b>Use Cases:</b> Models the magnitude of multi-dimensional Gaussian noise. Useful for signal
     ///         strength from I/Q components, error distances in targeting systems, or the speed of a particle with random
     ///         velocity components.
     ///     </para>

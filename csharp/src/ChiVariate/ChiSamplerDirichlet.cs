@@ -148,7 +148,7 @@ file static class SharedDocumentation
     /// <remarks>
     ///     <para>
     ///         <b>Use Cases:</b> Generates a set of related proportions. Perfect for modeling topic mixtures in text analysis,
-    ///         population genetics, or creating believable resource allocation patterns in strategy games.
+    ///         population genetics, or believable resource allocation patterns in strategy games.
     ///     </para>
     ///     <para>
     ///         <b>Performance:</b> O(k) per sample, where k is the number of alpha parameters.

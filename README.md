@@ -22,7 +22,7 @@ If you're working on simulations, modeling, ML pipelines, or numerical methods a
 
 - Statistical rigor and cross-platform reproducibility
 - 96-bit decimal variate support for precision-critical financial modeling
-- A wide range of probability distributions (from Beta to Zipf)
+- Wide range of probability distributions (from Beta to Zipf)
 - Pluggable custom random generators with zero-cost, compile-time abstraction
 
 ## Getting started

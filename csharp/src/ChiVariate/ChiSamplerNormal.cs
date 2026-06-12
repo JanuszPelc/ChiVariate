@@ -83,7 +83,7 @@ public static class ChiSamplerNormalExtensions
     /// <remarks>
     ///     <para>
     ///         <b>Use Cases:</b> Models a vast range of phenomena, from measurement errors to test scores. Essential for
-    ///         generating realistic noise, statistical analysis, and any process involving the sum of many small, independent
+    ///         realistic noise generation, statistical analysis, and any process involving the sum of many small, independent
     ///         random effects.
     ///     </para>
     ///     <para>

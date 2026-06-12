@@ -3,13 +3,13 @@
 This project is maintained by a single developer. Review and response times may vary.
 
 Priority contribution areas include:
-- **Bug reports and correctness issues** - pointing out statistical or implementation errors, ideally with suggested fixes
+- **Bug reports and correctness issues**, ideally with suggested fixes for statistical or implementation errors
 - **Performance optimizations** for existing hot-path code, especially zero-allocation improvements  
 - **Platform-specific optimizations** for different .NET runtimes or hardware architectures
 - **Documentation improvements** for complex statistical concepts, API usage patterns, or benchmarking guides
 - **Testing enhancements** including edge case coverage or statistical validation tests
 
-**Note:** The library intentionally focuses on essential, widely-used distributions. More esoteric distribution requests will generally not be accepted, as the library's extensible design allows users to implement custom distributions using the existing `IChiRngSource<T>` infrastructure.
+**Note:** The library intentionally focuses on essential, widely used distributions. More esoteric distribution requests will generally not be accepted, as the library's extensible design allows users to implement custom distributions using the existing `IChiRngSource<T>` infrastructure.
 
 For other types of contributions (e.g. API design changes, major refactors, general feature requests), please open an issue first to discuss the approach before submitting a pull request.
 

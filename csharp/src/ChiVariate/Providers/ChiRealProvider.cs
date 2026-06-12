@@ -19,7 +19,7 @@ namespace ChiVariate.Providers;
 ///         <b>Why not just divide by MaxValue?</b>
 ///         Naive conversion like <c>randomInt / (double)uint.MaxValue</c> has issues:
 ///         <list type="bullet">
-///             <item>Loses precision: only uses 32 bits even though double has 53-bit mantissa</item>
+///             <item>Loses precision: only uses 32 bits even though double has a 53-bit mantissa</item>
 ///             <item>Non-uniform distribution: some floating-point values are more likely than others</item>
 ///             <item>Includes rounding artifacts from the division</item>
 ///         </list>

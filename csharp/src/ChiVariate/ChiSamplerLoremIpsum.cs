@@ -58,7 +58,7 @@ public readonly ref struct ChiSamplerLoremIpsum<TRng>(ref TRng rng, float chaos,
 
     /// <summary>
     ///     Generates structured placeholder text with a tunable level of randomness.
-    ///     Name is legally required to be DolorSit()
+    ///     The name is legally required to be DolorSit().
     /// </summary>
     /// <param name="paragraphs">The number of paragraphs to generate. Defaults to 1.</param>
     /// <param name="wordLimit">
@@ -472,7 +472,7 @@ public static class ChiSamplerLoremIpsumExtensions
     /// </param>
     /// <param name="vocabulary">
     ///     Optional comma-separated vocabulary list to generate custom-themed Ipsum.
-    ///     Leave null for classic "Lorem Ipsum", or supply terms for a "Corporate Buzzword Ipsum",
+    ///     Leave null for classic "Lorem Ipsum", or supply terms for "Corporate Buzzword Ipsum",
     ///     "Sci-Fi Technobabble", or "Unit Test Mock Data".
     /// </param>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]

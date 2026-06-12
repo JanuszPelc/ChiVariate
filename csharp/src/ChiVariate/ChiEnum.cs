@@ -67,7 +67,7 @@ public static class ChiEnum<TEnum> where TEnum : unmanaged, Enum
 public class ChiEnumWeightAttribute : Attribute
 {
     /// <summary>
-    ///     Initializes a new instance of the ChiRngWeightAttribute class.
+    ///     Initializes a new instance of the ChiEnumWeightAttribute class.
     /// </summary>
     /// <param name="weight">The weight value. Must be non-negative. Higher values increase selection probability.</param>
     public ChiEnumWeightAttribute(double weight)

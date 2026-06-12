@@ -9,14 +9,14 @@ The method `rng.Chance()` returns a struct that exposes a familiar interface for
 Familiar methods include:
 
 - `Next()`, `Next(max)`, and `Next(min, max)` for 32-bit integers in a max-exclusive range
-- `Next<T>()`, `Next<T>(max)`, and `Next<T>(min, max)` for any integer type up to 128-bit
+- `Next<T>()`, `Next<T>(max)`, and `Next<T>(min, max)` for any integer type up to 128 bits wide
 - `NextDouble()` and `NextSingle()` for floating-point values between 0 and 1
 - `Shuffle(span)` and `GetItems(...)` for working with collections
 
 It also provides expressive methods for intention-revealing code:
 
 - `PickEnum<T>()` for selecting a random enum value with zero allocations
-- `PickBetween<T>(min, max)` to pick any integer type in an inclusive range
+- `PickBetween<T>(min, max)` for picking any integer type in an inclusive range
 - `PickItem(items, weights)` for weighted selection from a collection
 - `RollDie(sides)` and `OneIn(chances)` for dice rolls and chance-based logic
 - `FlipCoin()` and `NextBool(probability)` for coin flips and Bernoulli trials
@@ -93,7 +93,7 @@ ChiVariate emphasizes correctness, reproducibility, and statistical reliability 
   - High-order bits are prioritized to eliminate low-bit artifacts common in simpler PRNGs.
   - Floating-point distributions use precision-aware mantissa bit-filling for `float`, `double`, `Half`, `decimal`, and `ChiFixed` values.
 
-These examples illustrate how ChiVariate, supported by helper types like ChiMatrix for linear algebra and ChiMath for generic math functions, supports deterministic, precision-critical simulations in domains like actuarial modeling and financial forecasting.
+The following examples illustrate how ChiVariate, backed by helper types like `ChiMatrix` for linear algebra and `ChiMath` for generic math functions, enables deterministic, precision-critical simulations in domains like actuarial modeling and financial forecasting.
 
 **Monte Carlo asset valuation with decimal precision:**
 
@@ -159,9 +159,9 @@ public static T EstimateTotalLiability<T>(T shape, int payoutCount)
 
 ## Low-overhead and predictable performance
 
-Many domains, including game development, simulations, and real-time systems, require predictable performance with minimal overhead. ChiVariate follows a pay-for-what-you-use model with emphasis on low-level efficiency.
+Many domains, including game development, simulations, and real-time systems, require predictable performance with minimal overhead. ChiVariate follows a pay-for-what-you-use model with an emphasis on low-level efficiency.
 
-- **Data-oriented structure**: the layout supports data-oriented patterns, making it suitable for systems where cache locality and memory layout are critical.
+- **Data-oriented structure**: the memory layout is designed for cache locality, making it suitable for systems where access patterns are critical.
 - **Zero heap allocations**: all core generators and distribution samplers avoid heap usage. Struct-based RNGs and samplers are passed by reference to eliminate GC pressure.
 - **Zero-cost abstraction**: `static abstract` dispatch and `ref struct` constraints allow distribution samplers to be optimized away entirely by the JIT, combining clean APIs with raw performance.
 - **Aggressive inlining**: performance-critical paths are marked for inlining to enable JIT flattening and eliminate function call overhead.

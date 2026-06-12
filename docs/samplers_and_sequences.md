@@ -6,7 +6,7 @@ ChiVariate provides specialized tools for general-purpose randomness tasks and u
 
 ### Chance
 
-> A toolkit for common, expressive randomization tasks, offering a non-allocating, statistically robust replacement for `System.Random`. Features expressive methods for common tasks like dice rolls (`RollDie`), coin flips (`FlipCoin`), random selections (`PickItem`), and shuffling (`Shuffle`).
+> A toolkit for common randomization tasks, offering a non-allocating, statistically robust replacement for `System.Random`. Provides expressive methods for dice rolls (`RollDie`), coin flips (`FlipCoin`), random selections (`PickItem`), and shuffling (`Shuffle`).
 >
 > *Complexity: Generally `O(1)`, except for collection methods like `Shuffle` (`O(n)`). Tier 1.*
 
@@ -30,7 +30,7 @@ while (gacha.Sample() == 0) { }
 >
 > *Complexity: `O(1)`. Tier 2.*
 
-ChiVariate includes robust support for uniform spatial sampling within or on the surface of common geometric primitives. The `rng.Spatial()` automatically applies the necessary mathematical corrections to avoid common pitfalls, such as central clustering in circles or polar bias on spheres.
+ChiVariate includes robust support for uniform spatial sampling within or on the surface of common geometric primitives. The `rng.Spatial()` method automatically applies the necessary mathematical corrections to avoid common pitfalls, such as central clustering in circles or polar bias on spheres.
 
 ```csharp
 // Generate a uniformly distributed point inside the unit square
@@ -42,11 +42,11 @@ var randomDirection = rng.Spatial().OnSphere(1.0f).Sample().AsVector3();
 
 ### Prime
 
-> Generates provably prime numbers from specified integer ranges up to 128-bit using deterministic Miller-Rabin testing and various optimization techniques. Ideal for number theory research, cryptographic experiments, and applications requiring mathematically guaranteed primes with uniform distribution.
+> Generates provably prime numbers up to 128 bits from specified integer ranges, using deterministic Miller-Rabin testing and various optimization techniques. Ideal for number theory research, cryptographic experiments, and applications requiring mathematically guaranteed primes with uniform distribution.
 >
 > *Complexity: `O(r/π(r) × √n)` expected, where r is range size, π(r) is prime density, and √n is primality test cost. Performance varies significantly with range density. Tier 5.*
 
-This specialized sampler uses various optimization techniques and deterministic Miller-Rabin testing to deliver mathematically rigorous primes suitable for cryptographic and security-adjacent research.
+This specialized sampler uses deterministic Miller-Rabin testing to deliver mathematically rigorous primes suitable for cryptographic and security-adjacent research.
 
 ```csharp
 // Generate a set of very large primes
@@ -56,21 +56,21 @@ var primes = rng.Prime(max / 2, max).Sample(100).ToList();
 
 ## Quasi-random sequences
 
-For applications requiring maximum uniformity rather than randomness, ChiVariate provides low-discrepancy sequences that generate points covering a sample space as evenly and uniformly as possible. These deterministic tools provide a powerful alternative to pseudo-random numbers when uniform coverage is the primary goal.
+For applications requiring maximum uniformity rather than randomness, ChiVariate provides low-discrepancy sequences that generate points covering a sample space as evenly as possible. These deterministic tools offer a powerful alternative to pseudo-random numbers when uniform coverage is the primary goal.
 
 ### Halton
 
 > A classic, fast-to-compute low-discrepancy sequence based on prime numbers. The go-to choice for lower-dimensional problems where simplicity and speed are key, providing excellent uniformity with minimal computational overhead.
 > 
-> *Complexity: O(d) setup cost and an amortized O(d) per sample, where d is the number of dimensions. Highly optimized for up to 10 dimensions. Tier 1.*
+> *Complexity: `O(d)` setup cost and an amortized `O(d)` cost per sample, where d is the number of dimensions. Highly optimized for up to 10 dimensions. Tier 1.*
 
 ### Sobol
 
 > A more sophisticated sequence with superior distribution properties, especially in higher dimensions. The preferred choice for demanding numerical integration tasks and applications requiring the highest uniformity across many dimensions.
 >
-> *Complexity: O(d) setup cost and an O(d) per sample, where d is the number of dimensions. Highly optimized for up to 10 dimensions. Tier 1.*
+> *Complexity: `O(d)` setup cost and an `O(d)` cost per sample, where d is the number of dimensions. Highly optimized for up to 10 dimensions. Tier 1.*
 
-Both canonical (pure deterministic) and randomized variants are supported, with randomization improving statistical properties while preserving uniform coverage. Common applications include quasi-Monte Carlo integration and uniform sampling in computer graphics.
+Both canonical (purely deterministic) and randomized variants are supported, with randomization improving statistical properties while preserving uniform coverage. Common applications include quasi-Monte Carlo integration and uniform sampling in computer graphics.
 
 ```csharp
 // Create a 4D Sobol sampler that produces vectors of doubles
@@ -82,7 +82,7 @@ var points = sobolSampler.Sample(100);
 
 ### ChiFixed
 
-> A Q31.32 fixed-point numeric type providing deterministic cross-platform results with ~9.6 decimal digit precision. Useful for simulations requiring bit-exact reproducibility across different machines, runtimes, and architectures.
+> A Q31.32 fixed-point numeric type providing deterministic cross-platform results with ~9.6 decimal digits of precision. Useful for simulations requiring bit-exact reproducibility across different machines, runtimes, and architectures.
 >
 > Range: approximately ±2 billion (any int32 value can be represented exactly). Precision: ~9.6 decimal digits.
 
@@ -126,7 +126,7 @@ var (sin, cos) = ChiFixed.SinCos(angle);
 
 Limitations:
 - Arithmetic overflow saturates to min/max values
-- Transcendental functions (sin, cos, exp, log) have ~0.1% error compared to double
+- Transcendental functions (sin, cos, exp, log) have ~0.1% error compared to `double`
 - NaN and Infinity are sentinel bit patterns, not IEEE 754 encodings
 
 For applications where `decimal`'s 96-bit precision is needed or values exceed ±2 billion, use `decimal` instead. For maximum floating-point performance without cross-platform determinism requirements, use `double`.

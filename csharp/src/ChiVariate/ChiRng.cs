@@ -20,7 +20,7 @@ namespace ChiVariate;
 public record struct ChiRng(long Seed, long Phase = 0) : IChiRngSource<ChiRng>
 {
     /// <summary>
-    ///     Initializes the <see cref="ChiRng" /> struct with randomly generated seed.
+    ///     Initializes the <see cref="ChiRng" /> struct with a randomly generated seed.
     /// </summary>
     public ChiRng() : this(ChiSeed.GenerateUnique())
     {

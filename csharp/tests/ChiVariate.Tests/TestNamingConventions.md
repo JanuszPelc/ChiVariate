@@ -21,7 +21,7 @@ already supplies that context: in `Gamma/SampleTests` the unit is `Sample`, not
 `Gamma` or `ChiRng`).
 
 - Prefer the **method or member**: `Sin`, `Lerp`, `Indexer`, `Eye`, `Sample`.
-- **Fluent chains** (`rng.Prime(min,max).Sample()`): name the call whose behavior
+- **Fluent chains** (`rng.Prime(min, max).Sample()`): name the call whose behavior
   you're asserting — usually the **producer** (`Sample_…`). Use the **builder** when
   *construction* is the subject — **including argument-validation tests**: if bad
   arguments make the factory throw, it's `Gamma_WithInvalidParameters_Throws` even

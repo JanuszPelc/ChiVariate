@@ -4,7 +4,7 @@ ChiVariate cleanly separates entropy generation from distribution logic using ze
 
 ## Custom entropy sources
 
-Any `struct` that implements `IChiRngSource<T>` can serve as a randomness backend. This includes pseudo-random generators, cryptographically secure sources, or hardware-based entropy.
+Any `struct` that implements `IChiRngSource<T>` can serve as a randomness backend. This includes pseudo-random generators, cryptographically secure sources, and hardware-based entropy.
 
 **Integrating a cryptographically strong random number generator:**
 

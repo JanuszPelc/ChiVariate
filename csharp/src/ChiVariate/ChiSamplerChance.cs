@@ -9,7 +9,7 @@ using ChiVariate.Providers;
 namespace ChiVariate;
 
 /// <summary>
-///     A sampler providing a toolkit for common, expressive randomization tasks.
+///     A sampler providing a toolkit for common randomization tasks.
 /// </summary>
 /// <remarks>
 ///     This struct is constructed by the <see cref="ChiSamplerChanceExtensions.Chance{TRng}" /> method.

@@ -269,7 +269,7 @@ public static class ChiSamplerHaltonExtensions
     ///         for many simulation tasks.
     ///     </para>
     ///     <para>
-    ///         <b>Performance:</b> O(d) setup cost and an amortized O(d) per sample, where d is the number of dimensions.
+    ///         <b>Performance:</b> O(d) setup cost and an amortized O(d) cost per sample, where d is the number of dimensions.
     ///     </para>
     /// </remarks>
     /// <example>

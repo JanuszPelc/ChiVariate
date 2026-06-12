@@ -24,7 +24,7 @@ public interface IChiRngSource<TRng>
     /// <returns>A 32-bit unsigned integer with a uniform distribution of bits.</returns>
     /// <remarks>
     ///     <para>
-    ///         <b>Warning:</b> This method provides raw, uniformly-distributed bits and should not be used directly
+    ///         <b>Warning:</b> This method provides raw, uniformly distributed bits and should not be used directly
     ///         for generating bounded random numbers, as this can lead to statistical bias (e.g., via a modulo operation).
     ///     </para>
     ///     <para>
@@ -41,7 +41,7 @@ public interface IChiRngSource<TRng>
     /// <returns>A 64-bit unsigned integer with a uniform distribution of bits.</returns>
     /// <remarks>
     ///     <para>
-    ///         <b>Warning:</b> This method provides raw, uniformly-distributed bits and should not be used directly
+    ///         <b>Warning:</b> This method provides raw, uniformly distributed bits and should not be used directly
     ///         for generating bounded random numbers, as this can lead to statistical bias (e.g., via a modulo operation).
     ///     </para>
     ///     <para>

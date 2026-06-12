@@ -1,6 +1,6 @@
 # Supported probability distributions
 
-The performance of each distribution is grouped into five tiers, based on its relative cost compared to the `Uniform (Continuous)` sampler for `double` precision (~30 ns per sample on Apple M1 Pro).
+Each distribution falls into one of five performance tiers, based on its relative cost compared to the `Uniform (Continuous)` sampler for `double` precision (~30 ns per sample on Apple M1 Pro).
 
 | Tier | Cost | Description |
 |:----:|:----:|-------------|
@@ -24,7 +24,7 @@ Distributions that produce integer-valued outcomes. Useful for modeling countabl
 
 ### Binomial
 
-> The number of successes in a fixed number of independent trials. Excels at counting scenarios like shots hitting a target, customers making purchases, or applications in quality control and A/B testing.
+> The number of successes in a fixed number of independent trials. Excels at counting scenarios like shots hitting a target or customers making purchases, with applications in quality control and A/B testing.
 >
 >  *Complexity: `O(n)`, where n is the number of trials. Tier 5.*
 
@@ -48,7 +48,7 @@ Distributions that produce integer-valued outcomes. Useful for modeling countabl
 
 ### Multinomial
 
-> The number of outcomes in each of several categories after a fixed number of independent trials. It generalizes the Binomial distribution to multiple categories and handles modeling dice rolls, sorting items into bins, or simulating survey results.
+> The number of outcomes in each of several categories after a fixed number of independent trials. It generalizes the Binomial distribution to multiple categories and is well-suited to modeling dice rolls, sorting items into bins, or simulating survey results.
 >
 >  *Complexity: `O(k+n)`, where k is the number of categories and n is the number of trials. Tier 5.*
 
@@ -94,7 +94,7 @@ Distributions that produce real-valued variates, including `float`, `double`, `H
 
 ### Chi
 
-> The magnitude (Euclidean distance from the origin) of `k` independent standard normal variables. Commonly applied to calculating signal strength from I/Q components, error distances in targeting systems, or the speed of a particle with random velocity components.
+> The magnitude (Euclidean distance from the origin) of `k` independent standard normal variables. Commonly applied to signal strength from I/Q components, error distances in targeting systems, or the speed of a particle with random velocity components.
 >
 >  *Complexity: Amortized `O(1)`. Tier 2.*
 
@@ -124,7 +124,7 @@ Distributions that produce real-valued variates, including `float`, `double`, `H
 
 ### Gumbel
 
-> An extreme value distribution used to model the maximum (or minimum) of a set of samples. The standard choice in risk management and engineering for events like maximum floods or wind speeds, and foundational to the Gumbel-Max trick in Machine Learning.
+> An extreme value distribution used to model the maximum (or minimum) of a set of samples. The standard choice in risk management and engineering for events like maximum floods or wind speeds, and foundational to the Gumbel-Max trick in machine learning.
 >
 >  *Complexity: `O(1)`. Tier 1.*
 

@@ -19,7 +19,7 @@ namespace ChiVariate;
 ///         networking protocols, procedural generation, and distributed systems.
 ///     </para>
 ///     <para>
-///         For hash table security and DoS protection, use ChiHash.Seed value
+///         For hash table security and DoS protection, use the ChiHash.Seed value
 ///         or a custom entropy source to introduce per-application randomization.
 ///     </para>
 ///     <para>

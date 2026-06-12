@@ -10,7 +10,7 @@ namespace ChiVariate.Providers;
 ///     An efficient sampler for standard normal variables that uses a standby value.
 /// </summary>
 /// <remarks>
-///     Since the Marsaglia polar method generates two independent normal variables at once,
+///     Since the Ziggurat sampler produces two independent normal variables per call,
 ///     this struct uses one immediately and holds the other in "standby" for the next call.
 ///     This amortizes the cost of generation over two calls.
 /// </remarks>
