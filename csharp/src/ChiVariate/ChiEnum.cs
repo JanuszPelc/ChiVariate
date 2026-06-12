@@ -104,7 +104,9 @@ file static class LocalCache
         private static (T[] values, double[] weights) ExtractValuesAndWeights<T>() where T : unmanaged, Enum
         {
             var enumType = typeof(T);
-            var fields = enumType.GetFields(BindingFlags.Public | BindingFlags.Static);
+            var fields = enumType
+                .GetFields(BindingFlags.Public | BindingFlags.Static)
+                .OrderBy(field => field.MetadataToken);
 
             var results = fields
                 .Select(field => new
