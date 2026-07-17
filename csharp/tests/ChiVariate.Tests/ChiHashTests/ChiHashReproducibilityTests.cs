@@ -271,7 +271,7 @@ public class ChiHashReproducibilityTests(ITestOutputHelper testOutputHelper)
         var dateTime = new DateTime(2023, 12, 25, 15, 30, 45, DateTimeKind.Utc);
 
         var hash1 = new ChiHash()
-            .Add(ChiHash.Seed)
+            .Add(ChiHash.Salt)
             .Add(42)
             .Add("hello")
             .Add(3.14159)
@@ -282,7 +282,7 @@ public class ChiHashReproducibilityTests(ITestOutputHelper testOutputHelper)
             .Hash;
 
         var hash2 = new ChiHash()
-            .Add(ChiHash.Seed)
+            .Add(ChiHash.Salt)
             .Add(42)
             .Add("hello")
             .Add(3.14159)
@@ -439,12 +439,12 @@ public class ChiHashReproducibilityTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void ChiHash_Seed_ReturnsConstantValue()
+    public void ChiHash_Salt_ReturnsConstantValue()
     {
-        var seed1 = ChiHash.Seed;
-        var seed2 = ChiHash.Seed;
+        var salt1 = ChiHash.Salt;
+        var salt2 = ChiHash.Salt;
 
-        seed2.Should().Be(seed1);
+        salt2.Should().Be(salt1);
     }
 
     private static void VerifyDeterminism<T>(T input)

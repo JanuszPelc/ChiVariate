@@ -3,7 +3,7 @@
         <GeneratePackageOnBuild Condition="'$(Configuration)' == 'Release'">true</GeneratePackageOnBuild>
 
         <PackageId>ChiVariate</PackageId>
-        <Version>2.0.0-alpha.4</Version>
+        <Version>2.0.0-alpha.5</Version>
         <Authors>Janusz Pelc</Authors>
         <Description>
             Deterministic, data-oriented random engine that scales from everyday randomness to statistically rigorous simulations. Also includes ChiFixed, a lightweight Q31.32 fixed-point type implementing the full IFloatingPointIeee754 interface, with cross-platform determinism across its entire math surface.

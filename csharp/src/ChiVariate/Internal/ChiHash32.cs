@@ -83,7 +83,7 @@ internal static class ChiHash32
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static int HashValue<T>(T value, int hash)
     {
-        if (TryHashPrimitive(value, ref hash) || TryHashComplex(value, ref hash))
+        if (TryHashPrimitive(value, ref hash) || TryHashComplex(value, ref hash) || TryHashString(value, ref hash))
             return hash;
 
         throw new NotSupportedException(
@@ -252,6 +252,16 @@ internal static class ChiHash32
             return false;
         }
 
+        return true;
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private static bool TryHashString<T>(T value, ref int hash)
+    {
+        if (typeof(T) != typeof(string))
+            return false;
+
+        hash = HashString(Unsafe.As<T, string?>(ref value) ?? "", hash);
         return true;
     }
 

@@ -132,10 +132,10 @@ public class ChiSeedApiTests
     [InlineData("\t\n\r ", 6552475925946505334L)] // Whitespace variations
     [InlineData("你好世界", 3950144026336539582L)] // Non-ASCII BMP
     [InlineData("👍", -7582485440326701622L)] // Supplementary character
-    public void MixValue_GivenStringInput_ReturnsExpectedResult(string input, long expected)
+    public void HashValue_GivenStringInput_ReturnsExpectedResult(string input, long expected)
     {
         if (input == "--null--") input = null!;
-        var scrambled = ChiMix64.MixValue(ChiMix64.InitialValue, input);
+        var scrambled = ChiHash64.HashValue(input, ChiHash64.InitialValue);
 
         scrambled.Should().Be(expected);
     }

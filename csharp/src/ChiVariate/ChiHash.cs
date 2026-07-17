@@ -19,10 +19,6 @@ namespace ChiVariate;
 ///         networking protocols, procedural generation, and distributed systems.
 ///     </para>
 ///     <para>
-///         For hash table security and DoS protection, use the ChiHash.Seed value
-///         or a custom entropy source to introduce per-application randomization.
-///     </para>
-///     <para>
 ///         This hashing algorithm is not cryptographically secure and should not be used for
 ///         security-sensitive purposes such as password hashing or digital signatures.
 ///     </para>
@@ -38,7 +34,7 @@ namespace ChiVariate;
 ///  
 /// // Security-conscious hashing
 /// var secureHash = new ChiHash()
-///     .Add(ChiHash.Seed)
+///     .Add(ChiHash.Salt)
 ///     .Add(data)
 ///     .Hash;
 /// </code>
@@ -46,15 +42,222 @@ namespace ChiVariate;
 public ref struct ChiHash
 {
     /// <summary>
-    ///     A pseudo-randomly generated seed value that remains constant for the lifetime
+    ///     An unpredictable salt value that remains constant for the lifetime
     ///     of the current application instance. Each application restart generates a new value.
     /// </summary>
     /// <remarks>
-    ///     This seed enables non-deterministic hashing for security purposes
+    ///     This salt enables non-deterministic hashing for security purposes
     ///     (e.g., DoS protection in hash tables) while maintaining consistency within
-    ///     the current application session.
+    ///     the current application instance.
     /// </remarks>
-    public static int Seed { get; } = new ChiHash().Add(ChiSeed.GetEntropy()).Hash;
+    public static int Salt { get; } = new ChiHash().Add(ChiSeed.GetEntropy()).Hash;
+
+    /// <inheritdoc cref="CombineSharedDoc" />
+    /// <summary>
+    ///     Produces a 32-bit hash code by combining any number of values of the same type.
+    /// </summary>
+    /// <typeparam name="T">The type of values to combine.</typeparam>
+    /// <param name="args">The values to be incorporated into the calculation.</param>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    [OverloadResolutionPriority(1)]
+    public static int Combine<T>(params ReadOnlySpan<T> args)
+    {
+        var hash = 0;
+        foreach (var arg in args)
+            hash = ChiHash32.HashValue(arg, hash);
+
+        return hash;
+    }
+
+    /// <inheritdoc cref="CombineSharedDoc" />
+    /// <summary>
+    ///     Produces a 32-bit hash code by combining two values of independent types.
+    /// </summary>
+    /// <typeparam name="T1">The type of the first value.</typeparam>
+    /// <typeparam name="T2">The type of the second value.</typeparam>
+    /// <param name="v1">The first value to be incorporated into the calculation.</param>
+    /// <param name="v2">The second value to be incorporated into the calculation.</param>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static int Combine<T1, T2>(T1 v1, T2 v2)
+    {
+        var hash = 0;
+        hash = ChiHash32.HashValue(v1, hash);
+        hash = ChiHash32.HashValue(v2, hash);
+
+        return hash;
+    }
+
+    /// <inheritdoc cref="CombineSharedDoc" />
+    /// <summary>
+    ///     Produces a 32-bit hash code by combining three values of independent types.
+    /// </summary>
+    /// <typeparam name="T1">The type of the first value.</typeparam>
+    /// <typeparam name="T2">The type of the second value.</typeparam>
+    /// <typeparam name="T3">The type of the third value.</typeparam>
+    /// <param name="v1">The first value to be incorporated into the calculation.</param>
+    /// <param name="v2">The second value to be incorporated into the calculation.</param>
+    /// <param name="v3">The third value to be incorporated into the calculation.</param>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static int Combine<T1, T2, T3>(T1 v1, T2 v2, T3 v3)
+    {
+        var hash = 0;
+        hash = ChiHash32.HashValue(v1, hash);
+        hash = ChiHash32.HashValue(v2, hash);
+        hash = ChiHash32.HashValue(v3, hash);
+
+        return hash;
+    }
+
+    /// <inheritdoc cref="CombineSharedDoc" />
+    /// <summary>
+    ///     Produces a 32-bit hash code by combining four values of independent types.
+    /// </summary>
+    /// <typeparam name="T1">The type of the first value.</typeparam>
+    /// <typeparam name="T2">The type of the second value.</typeparam>
+    /// <typeparam name="T3">The type of the third value.</typeparam>
+    /// <typeparam name="T4">The type of the fourth value.</typeparam>
+    /// <param name="v1">The first value to be incorporated into the calculation.</param>
+    /// <param name="v2">The second value to be incorporated into the calculation.</param>
+    /// <param name="v3">The third value to be incorporated into the calculation.</param>
+    /// <param name="v4">The fourth value to be incorporated into the calculation.</param>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static int Combine<T1, T2, T3, T4>(T1 v1, T2 v2, T3 v3, T4 v4)
+    {
+        var hash = 0;
+        hash = ChiHash32.HashValue(v1, hash);
+        hash = ChiHash32.HashValue(v2, hash);
+        hash = ChiHash32.HashValue(v3, hash);
+        hash = ChiHash32.HashValue(v4, hash);
+
+        return hash;
+    }
+
+    /// <inheritdoc cref="CombineSharedDoc" />
+    /// <summary>
+    ///     Produces a 32-bit hash code by combining five values of independent types.
+    /// </summary>
+    /// <typeparam name="T1">The type of the first value.</typeparam>
+    /// <typeparam name="T2">The type of the second value.</typeparam>
+    /// <typeparam name="T3">The type of the third value.</typeparam>
+    /// <typeparam name="T4">The type of the fourth value.</typeparam>
+    /// <typeparam name="T5">The type of the fifth value.</typeparam>
+    /// <param name="v1">The first value to be incorporated into the calculation.</param>
+    /// <param name="v2">The second value to be incorporated into the calculation.</param>
+    /// <param name="v3">The third value to be incorporated into the calculation.</param>
+    /// <param name="v4">The fourth value to be incorporated into the calculation.</param>
+    /// <param name="v5">The fifth value to be incorporated into the calculation.</param>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static int Combine<T1, T2, T3, T4, T5>(T1 v1, T2 v2, T3 v3, T4 v4, T5 v5)
+    {
+        var hash = 0;
+        hash = ChiHash32.HashValue(v1, hash);
+        hash = ChiHash32.HashValue(v2, hash);
+        hash = ChiHash32.HashValue(v3, hash);
+        hash = ChiHash32.HashValue(v4, hash);
+        hash = ChiHash32.HashValue(v5, hash);
+
+        return hash;
+    }
+
+    /// <inheritdoc cref="CombineSharedDoc" />
+    /// <summary>
+    ///     Produces a 32-bit hash code by combining six values of independent types.
+    /// </summary>
+    /// <typeparam name="T1">The type of the first value.</typeparam>
+    /// <typeparam name="T2">The type of the second value.</typeparam>
+    /// <typeparam name="T3">The type of the third value.</typeparam>
+    /// <typeparam name="T4">The type of the fourth value.</typeparam>
+    /// <typeparam name="T5">The type of the fifth value.</typeparam>
+    /// <typeparam name="T6">The type of the sixth value.</typeparam>
+    /// <param name="v1">The first value to be incorporated into the calculation.</param>
+    /// <param name="v2">The second value to be incorporated into the calculation.</param>
+    /// <param name="v3">The third value to be incorporated into the calculation.</param>
+    /// <param name="v4">The fourth value to be incorporated into the calculation.</param>
+    /// <param name="v5">The fifth value to be incorporated into the calculation.</param>
+    /// <param name="v6">The sixth value to be incorporated into the calculation.</param>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static int Combine<T1, T2, T3, T4, T5, T6>(T1 v1, T2 v2, T3 v3, T4 v4, T5 v5, T6 v6)
+    {
+        var hash = 0;
+        hash = ChiHash32.HashValue(v1, hash);
+        hash = ChiHash32.HashValue(v2, hash);
+        hash = ChiHash32.HashValue(v3, hash);
+        hash = ChiHash32.HashValue(v4, hash);
+        hash = ChiHash32.HashValue(v5, hash);
+        hash = ChiHash32.HashValue(v6, hash);
+
+        return hash;
+    }
+
+    /// <inheritdoc cref="CombineSharedDoc" />
+    /// <summary>
+    ///     Produces a 32-bit hash code by combining seven values of independent types.
+    /// </summary>
+    /// <typeparam name="T1">The type of the first value.</typeparam>
+    /// <typeparam name="T2">The type of the second value.</typeparam>
+    /// <typeparam name="T3">The type of the third value.</typeparam>
+    /// <typeparam name="T4">The type of the fourth value.</typeparam>
+    /// <typeparam name="T5">The type of the fifth value.</typeparam>
+    /// <typeparam name="T6">The type of the sixth value.</typeparam>
+    /// <typeparam name="T7">The type of the seventh value.</typeparam>
+    /// <param name="v1">The first value to be incorporated into the calculation.</param>
+    /// <param name="v2">The second value to be incorporated into the calculation.</param>
+    /// <param name="v3">The third value to be incorporated into the calculation.</param>
+    /// <param name="v4">The fourth value to be incorporated into the calculation.</param>
+    /// <param name="v5">The fifth value to be incorporated into the calculation.</param>
+    /// <param name="v6">The sixth value to be incorporated into the calculation.</param>
+    /// <param name="v7">The seventh value to be incorporated into the calculation.</param>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static int Combine<T1, T2, T3, T4, T5, T6, T7>(T1 v1, T2 v2, T3 v3, T4 v4, T5 v5, T6 v6, T7 v7)
+    {
+        var hash = 0;
+        hash = ChiHash32.HashValue(v1, hash);
+        hash = ChiHash32.HashValue(v2, hash);
+        hash = ChiHash32.HashValue(v3, hash);
+        hash = ChiHash32.HashValue(v4, hash);
+        hash = ChiHash32.HashValue(v5, hash);
+        hash = ChiHash32.HashValue(v6, hash);
+        hash = ChiHash32.HashValue(v7, hash);
+
+        return hash;
+    }
+
+    /// <inheritdoc cref="CombineSharedDoc" />
+    /// <summary>
+    ///     Produces a 32-bit hash code by combining eight values of independent types.
+    /// </summary>
+    /// <typeparam name="T1">The type of the first value.</typeparam>
+    /// <typeparam name="T2">The type of the second value.</typeparam>
+    /// <typeparam name="T3">The type of the third value.</typeparam>
+    /// <typeparam name="T4">The type of the fourth value.</typeparam>
+    /// <typeparam name="T5">The type of the fifth value.</typeparam>
+    /// <typeparam name="T6">The type of the sixth value.</typeparam>
+    /// <typeparam name="T7">The type of the seventh value.</typeparam>
+    /// <typeparam name="T8">The type of the eighth value.</typeparam>
+    /// <param name="v1">The first value to be incorporated into the calculation.</param>
+    /// <param name="v2">The second value to be incorporated into the calculation.</param>
+    /// <param name="v3">The third value to be incorporated into the calculation.</param>
+    /// <param name="v4">The fourth value to be incorporated into the calculation.</param>
+    /// <param name="v5">The fifth value to be incorporated into the calculation.</param>
+    /// <param name="v6">The sixth value to be incorporated into the calculation.</param>
+    /// <param name="v7">The seventh value to be incorporated into the calculation.</param>
+    /// <param name="v8">The eighth value to be incorporated into the calculation.</param>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static int Combine<T1, T2, T3, T4, T5, T6, T7, T8>(T1 v1, T2 v2, T3 v3, T4 v4, T5 v5, T6 v6, T7 v7,
+        T8 v8)
+    {
+        var hash = 0;
+        hash = ChiHash32.HashValue(v1, hash);
+        hash = ChiHash32.HashValue(v2, hash);
+        hash = ChiHash32.HashValue(v3, hash);
+        hash = ChiHash32.HashValue(v4, hash);
+        hash = ChiHash32.HashValue(v5, hash);
+        hash = ChiHash32.HashValue(v6, hash);
+        hash = ChiHash32.HashValue(v7, hash);
+        hash = ChiHash32.HashValue(v8, hash);
+
+        return hash;
+    }
 
     /// <summary>
     ///     Gets the current 32-bit hash code based on all values added so far.
@@ -365,5 +568,24 @@ public ref struct ChiHash
         foreach (var value in values)
             Hash = ChiHash32.HashValue(value, Hash);
         return this;
+    }
+
+    /// <returns>A 32-bit signed integer hash code derived from the combined values.</returns>
+    /// <exception cref="NotSupportedException">
+    ///     Thrown when any value is of an unsupported type.
+    /// </exception>
+    /// <remarks>
+    ///     Supported types include all numeric types implementing
+    ///     <see cref="System.Numerics.INumberBase{T}" />, <see cref="string" />, <see cref="bool" />, enums,
+    ///     <see cref="System.Guid" />, <see cref="System.Numerics.Complex" />, <see cref="System.DateTime" />,
+    ///     <see cref="System.DateTimeOffset" />, and <see cref="System.TimeSpan" />.
+    ///     A null <see cref="string" /> is treated as empty.
+    ///     Produces the same value as adding the same values, in the same order,
+    ///     to a new <see cref="ChiHash" /> instance.
+    /// </remarks>
+    // ReSharper disable once UnusedMember.Local
+    private static int CombineSharedDoc()
+    {
+        return 0;
     }
 }

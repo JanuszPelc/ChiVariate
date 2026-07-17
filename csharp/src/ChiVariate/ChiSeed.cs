@@ -2,6 +2,7 @@
 // See LICENSE file for full terms
 
 using System.Buffers.Binary;
+using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Security.Cryptography;
 using ChiVariate.Internal;
@@ -9,11 +10,38 @@ using ChiVariate.Internal;
 namespace ChiVariate;
 
 /// <summary>
-///     Provides static utility methods for generating and manipulating long seed values
+///     A deterministic seed builder that provides cross-platform reproducible 64-bit seed values
 ///     for pseudo-random number generation.
 /// </summary>
-public static class ChiSeed
+/// <remarks>
+///     <para>
+///         ChiSeed produces deterministic seed values that remain consistent across
+///         different platforms, .NET versions, and application runs. This makes it
+///         suitable for scenarios requiring reproducible seeding: save files,
+///         procedural generation, networking protocols, and distributed simulations.
+///     </para>
+///     <para>
+///         For a non-deterministic seed, use <see cref="GetEntropy" />.
+///     </para>
+/// </remarks>
+/// <example>
+///     <code>
+/// // One-shot seed derivation
+/// var rng = new ChiRng(ChiSeed.Scramble("Overworld", chunkX, chunkY));
+///  
+/// // Incremental seed building
+/// var seed = new ChiSeed()
+///     .Add("Overworld")
+///     .Add(chunkX)
+///     .Add(chunkY)
+///     .Seed;
+///     </code>
+/// </example>
+public ref struct ChiSeed
 {
+    private long _mix;
+    private int _count;
+
     /// <summary>
     ///     Generates an unpredictable seed value.
     /// </summary>
@@ -33,6 +61,317 @@ public static class ChiSeed
         return BinaryPrimitives.ReadInt64LittleEndian(buffer);
     }
 
+    /// <summary>
+    ///     Gets the current 64-bit seed value based on all values added so far.
+    /// </summary>
+    /// <value>A 64-bit signed integer seed value.</value>
+    public readonly long Seed => FinalizeScramble(_count == 0 ? ChiHash64.InitialValue : _mix, _count);
+
+    /// <summary>
+    ///     Adds a string to the seed.
+    /// </summary>
+    /// <param name="value">The value to add. Null is treated as an empty string.</param>
+    /// <returns>The current instance for chaining.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public ChiSeed Add(string? value)
+    {
+        Mix(value ?? "");
+        return this;
+    }
+
+    /// <summary>
+    ///     Adds an unsigned 8-bit integer to the seed.
+    /// </summary>
+    /// <param name="value">The value to add.</param>
+    /// <returns>The current instance for chaining.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public ChiSeed Add(byte value)
+    {
+        Mix(value);
+        return this;
+    }
+
+    /// <summary>
+    ///     Adds a signed 8-bit integer to the seed.
+    /// </summary>
+    /// <param name="value">The value to add.</param>
+    /// <returns>The current instance for chaining.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public ChiSeed Add(sbyte value)
+    {
+        Mix(value);
+        return this;
+    }
+
+    /// <summary>
+    ///     Adds a signed 16-bit integer to the seed.
+    /// </summary>
+    /// <param name="value">The value to add.</param>
+    /// <returns>The current instance for chaining.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public ChiSeed Add(short value)
+    {
+        Mix(value);
+        return this;
+    }
+
+    /// <summary>
+    ///     Adds an unsigned 16-bit integer to the seed.
+    /// </summary>
+    /// <param name="value">The value to add.</param>
+    /// <returns>The current instance for chaining.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public ChiSeed Add(ushort value)
+    {
+        Mix(value);
+        return this;
+    }
+
+    /// <summary>
+    ///     Adds a Unicode character to the seed.
+    /// </summary>
+    /// <param name="value">The value to add.</param>
+    /// <returns>The current instance for chaining.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public ChiSeed Add(char value)
+    {
+        Mix(value);
+        return this;
+    }
+
+    /// <summary>
+    ///     Adds a signed 32-bit integer to the seed.
+    /// </summary>
+    /// <param name="value">The value to add.</param>
+    /// <returns>The current instance for chaining.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public ChiSeed Add(int value)
+    {
+        Mix(value);
+        return this;
+    }
+
+    /// <summary>
+    ///     Adds an unsigned 32-bit integer to the seed.
+    /// </summary>
+    /// <param name="value">The value to add.</param>
+    /// <returns>The current instance for chaining.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public ChiSeed Add(uint value)
+    {
+        Mix(value);
+        return this;
+    }
+
+    /// <summary>
+    ///     Adds a signed 64-bit integer to the seed.
+    /// </summary>
+    /// <param name="value">The value to add.</param>
+    /// <returns>The current instance for chaining.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public ChiSeed Add(long value)
+    {
+        Mix(value);
+        return this;
+    }
+
+    /// <summary>
+    ///     Adds an unsigned 64-bit integer to the seed.
+    /// </summary>
+    /// <param name="value">The value to add.</param>
+    /// <returns>The current instance for chaining.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public ChiSeed Add(ulong value)
+    {
+        Mix(value);
+        return this;
+    }
+
+    /// <summary>
+    ///     Adds a signed 128-bit integer to the seed.
+    /// </summary>
+    /// <param name="value">The value to add.</param>
+    /// <returns>The current instance for chaining.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public ChiSeed Add(Int128 value)
+    {
+        Mix(value);
+        return this;
+    }
+
+    /// <summary>
+    ///     Adds an unsigned 128-bit integer to the seed.
+    /// </summary>
+    /// <param name="value">The value to add.</param>
+    /// <returns>The current instance for chaining.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public ChiSeed Add(UInt128 value)
+    {
+        Mix(value);
+        return this;
+    }
+
+    /// <summary>
+    ///     Adds a single-precision floating-point value to the seed.
+    /// </summary>
+    /// <param name="value">The value to add.</param>
+    /// <returns>The current instance for chaining.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public ChiSeed Add(float value)
+    {
+        Mix(value);
+        return this;
+    }
+
+    /// <summary>
+    ///     Adds a double-precision floating-point value to the seed.
+    /// </summary>
+    /// <param name="value">The value to add.</param>
+    /// <returns>The current instance for chaining.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public ChiSeed Add(double value)
+    {
+        Mix(value);
+        return this;
+    }
+
+    /// <summary>
+    ///     Adds a half-precision floating-point value to the seed.
+    /// </summary>
+    /// <param name="value">The value to add.</param>
+    /// <returns>The current instance for chaining.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public ChiSeed Add(Half value)
+    {
+        Mix(value);
+        return this;
+    }
+
+    /// <summary>
+    ///     Adds a decimal value to the seed.
+    /// </summary>
+    /// <param name="value">The value to add.</param>
+    /// <returns>The current instance for chaining.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public ChiSeed Add(decimal value)
+    {
+        Mix(value);
+        return this;
+    }
+
+    /// <summary>
+    ///     Adds a boolean value to the seed.
+    /// </summary>
+    /// <param name="value">The value to add.</param>
+    /// <returns>The current instance for chaining.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public ChiSeed Add(bool value)
+    {
+        Mix(value);
+        return this;
+    }
+
+    /// <summary>
+    ///     Adds a GUID to the seed.
+    /// </summary>
+    /// <param name="value">The value to add.</param>
+    /// <returns>The current instance for chaining.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public ChiSeed Add(Guid value)
+    {
+        Mix(value);
+        return this;
+    }
+
+    /// <summary>
+    ///     Adds a complex number to the seed.
+    /// </summary>
+    /// <param name="value">The value to add.</param>
+    /// <returns>The current instance for chaining.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public ChiSeed Add(Complex value)
+    {
+        Mix(value);
+        return this;
+    }
+
+    /// <summary>
+    ///     Adds a date and time value to the seed.
+    /// </summary>
+    /// <param name="value">The value to add.</param>
+    /// <returns>The current instance for chaining.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public ChiSeed Add(DateTime value)
+    {
+        Mix(value);
+        return this;
+    }
+
+    /// <summary>
+    ///     Adds a date, time, and offset value to the seed.
+    /// </summary>
+    /// <param name="value">The value to add.</param>
+    /// <returns>The current instance for chaining.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public ChiSeed Add(DateTimeOffset value)
+    {
+        Mix(value);
+        return this;
+    }
+
+    /// <summary>
+    ///     Adds a time interval to the seed.
+    /// </summary>
+    /// <param name="value">The value to add.</param>
+    /// <returns>The current instance for chaining.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public ChiSeed Add(TimeSpan value)
+    {
+        Mix(value);
+        return this;
+    }
+
+    /// <summary>
+    ///     Adds an enum value to the seed.
+    /// </summary>
+    /// <typeparam name="T">The enum type.</typeparam>
+    /// <param name="value">The value to add.</param>
+    /// <returns>The current instance for chaining.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public ChiSeed Add<T>(T value) where T : struct, Enum
+    {
+        Mix(value);
+        return this;
+    }
+
+    /// <summary>
+    ///     Adds a span of values to the seed.
+    /// </summary>
+    /// <typeparam name="T">The type of values in the span.</typeparam>
+    /// <param name="values">The values to add.</param>
+    /// <returns>The current instance for chaining.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public ChiSeed Add<T>(scoped ReadOnlySpan<T> values)
+    {
+        foreach (var value in values)
+            Mix(value);
+        return this;
+    }
+
+    /// <summary>
+    ///     Adds a span of values to the seed.
+    /// </summary>
+    /// <typeparam name="T">The type of values in the span.</typeparam>
+    /// <param name="values">The values to add.</param>
+    /// <returns>The current instance for chaining.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public ChiSeed Add<T>(scoped Span<T> values)
+    {
+        foreach (var value in values)
+            Mix(value);
+        return this;
+    }
+
     /// <inheritdoc cref="ScrambleSharedDoc" />
     /// <summary>
     ///     Produces a well-mixed 64-bit value by combining any number of values of the same type.
@@ -43,9 +382,9 @@ public static class ChiSeed
     [OverloadResolutionPriority(1)]
     public static long Scramble<T>(params ReadOnlySpan<T> args)
     {
-        var state = ChiMix64.InitialValue;
+        var state = ChiHash64.InitialValue;
         foreach (var arg in args)
-            state = ChiMix64.MixValue(state, arg);
+            state = ChiHash64.HashValue(arg, state);
 
         return FinalizeScramble(state, args.Length);
     }
@@ -61,9 +400,9 @@ public static class ChiSeed
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static long Scramble<T1, T2>(T1 v1, T2 v2)
     {
-        var state = ChiMix64.InitialValue;
-        state = ChiMix64.MixValue(state, v1);
-        state = ChiMix64.MixValue(state, v2);
+        var state = ChiHash64.InitialValue;
+        state = ChiHash64.HashValue(v1, state);
+        state = ChiHash64.HashValue(v2, state);
 
         return FinalizeScramble(state, 2);
     }
@@ -81,10 +420,10 @@ public static class ChiSeed
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static long Scramble<T1, T2, T3>(T1 v1, T2 v2, T3 v3)
     {
-        var state = ChiMix64.InitialValue;
-        state = ChiMix64.MixValue(state, v1);
-        state = ChiMix64.MixValue(state, v2);
-        state = ChiMix64.MixValue(state, v3);
+        var state = ChiHash64.InitialValue;
+        state = ChiHash64.HashValue(v1, state);
+        state = ChiHash64.HashValue(v2, state);
+        state = ChiHash64.HashValue(v3, state);
 
         return FinalizeScramble(state, 3);
     }
@@ -104,11 +443,11 @@ public static class ChiSeed
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static long Scramble<T1, T2, T3, T4>(T1 v1, T2 v2, T3 v3, T4 v4)
     {
-        var state = ChiMix64.InitialValue;
-        state = ChiMix64.MixValue(state, v1);
-        state = ChiMix64.MixValue(state, v2);
-        state = ChiMix64.MixValue(state, v3);
-        state = ChiMix64.MixValue(state, v4);
+        var state = ChiHash64.InitialValue;
+        state = ChiHash64.HashValue(v1, state);
+        state = ChiHash64.HashValue(v2, state);
+        state = ChiHash64.HashValue(v3, state);
+        state = ChiHash64.HashValue(v4, state);
 
         return FinalizeScramble(state, 4);
     }
@@ -130,12 +469,12 @@ public static class ChiSeed
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static long Scramble<T1, T2, T3, T4, T5>(T1 v1, T2 v2, T3 v3, T4 v4, T5 v5)
     {
-        var state = ChiMix64.InitialValue;
-        state = ChiMix64.MixValue(state, v1);
-        state = ChiMix64.MixValue(state, v2);
-        state = ChiMix64.MixValue(state, v3);
-        state = ChiMix64.MixValue(state, v4);
-        state = ChiMix64.MixValue(state, v5);
+        var state = ChiHash64.InitialValue;
+        state = ChiHash64.HashValue(v1, state);
+        state = ChiHash64.HashValue(v2, state);
+        state = ChiHash64.HashValue(v3, state);
+        state = ChiHash64.HashValue(v4, state);
+        state = ChiHash64.HashValue(v5, state);
 
         return FinalizeScramble(state, 5);
     }
@@ -159,13 +498,13 @@ public static class ChiSeed
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static long Scramble<T1, T2, T3, T4, T5, T6>(T1 v1, T2 v2, T3 v3, T4 v4, T5 v5, T6 v6)
     {
-        var state = ChiMix64.InitialValue;
-        state = ChiMix64.MixValue(state, v1);
-        state = ChiMix64.MixValue(state, v2);
-        state = ChiMix64.MixValue(state, v3);
-        state = ChiMix64.MixValue(state, v4);
-        state = ChiMix64.MixValue(state, v5);
-        state = ChiMix64.MixValue(state, v6);
+        var state = ChiHash64.InitialValue;
+        state = ChiHash64.HashValue(v1, state);
+        state = ChiHash64.HashValue(v2, state);
+        state = ChiHash64.HashValue(v3, state);
+        state = ChiHash64.HashValue(v4, state);
+        state = ChiHash64.HashValue(v5, state);
+        state = ChiHash64.HashValue(v6, state);
 
         return FinalizeScramble(state, 6);
     }
@@ -191,14 +530,14 @@ public static class ChiSeed
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static long Scramble<T1, T2, T3, T4, T5, T6, T7>(T1 v1, T2 v2, T3 v3, T4 v4, T5 v5, T6 v6, T7 v7)
     {
-        var state = ChiMix64.InitialValue;
-        state = ChiMix64.MixValue(state, v1);
-        state = ChiMix64.MixValue(state, v2);
-        state = ChiMix64.MixValue(state, v3);
-        state = ChiMix64.MixValue(state, v4);
-        state = ChiMix64.MixValue(state, v5);
-        state = ChiMix64.MixValue(state, v6);
-        state = ChiMix64.MixValue(state, v7);
+        var state = ChiHash64.InitialValue;
+        state = ChiHash64.HashValue(v1, state);
+        state = ChiHash64.HashValue(v2, state);
+        state = ChiHash64.HashValue(v3, state);
+        state = ChiHash64.HashValue(v4, state);
+        state = ChiHash64.HashValue(v5, state);
+        state = ChiHash64.HashValue(v6, state);
+        state = ChiHash64.HashValue(v7, state);
 
         return FinalizeScramble(state, 7);
     }
@@ -226,20 +565,30 @@ public static class ChiSeed
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static long Scramble<T1, T2, T3, T4, T5, T6, T7, T8>(T1 v1, T2 v2, T3 v3, T4 v4, T5 v5, T6 v6, T7 v7, T8 v8)
     {
-        var state = ChiMix64.InitialValue;
-        state = ChiMix64.MixValue(state, v1);
-        state = ChiMix64.MixValue(state, v2);
-        state = ChiMix64.MixValue(state, v3);
-        state = ChiMix64.MixValue(state, v4);
-        state = ChiMix64.MixValue(state, v5);
-        state = ChiMix64.MixValue(state, v6);
-        state = ChiMix64.MixValue(state, v7);
-        state = ChiMix64.MixValue(state, v8);
+        var state = ChiHash64.InitialValue;
+        state = ChiHash64.HashValue(v1, state);
+        state = ChiHash64.HashValue(v2, state);
+        state = ChiHash64.HashValue(v3, state);
+        state = ChiHash64.HashValue(v4, state);
+        state = ChiHash64.HashValue(v5, state);
+        state = ChiHash64.HashValue(v6, state);
+        state = ChiHash64.HashValue(v7, state);
+        state = ChiHash64.HashValue(v8, state);
 
         return FinalizeScramble(state, 8);
     }
 
-    #region Private and boierplate
+    #region Private and boilerplate
+
+    /// <summary>
+    ///     Mixes a single value into the accumulated builder state.
+    /// </summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private void Mix<T>(T value)
+    {
+        _mix = ChiHash64.HashValue(value, _count == 0 ? ChiHash64.InitialValue : _mix);
+        _count++;
+    }
 
     /// <returns>A <see cref="long" /> representing a well-mixed value derived from the input values. </returns>
     /// <exception cref="NotSupportedException">
@@ -251,6 +600,8 @@ public static class ChiSeed
     ///     <see cref="System.Guid" />, <see cref="System.Numerics.Complex" />, <see cref="System.DateTime" />,
     ///     <see cref="System.DateTimeOffset" />, and <see cref="System.TimeSpan" />.
     ///     A null <see cref="string" /> is treated as empty.
+    ///     Produces the same value as adding the same values, in the same order,
+    ///     to a new <see cref="ChiSeed" /> instance.
     /// </remarks>
     // ReSharper disable once UnusedMember.Local
     private static long ScrambleSharedDoc()
