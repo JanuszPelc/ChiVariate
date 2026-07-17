@@ -2,10 +2,8 @@
 // See LICENSE file for full terms
 
 using System.Buffers.Binary;
-using System.Diagnostics;
-using System.Globalization;
 using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
+using System.Security.Cryptography;
 using ChiVariate.Internal;
 
 namespace ChiVariate;
@@ -17,34 +15,22 @@ namespace ChiVariate;
 public static class ChiSeed
 {
     /// <summary>
-    ///     Generates a unique seed value with strong unpredictability characteristics.
+    ///     Generates an unpredictable seed value.
     /// </summary>
     /// <returns>
-    ///     A <see cref="long" /> value representing the generated pseudo-unique seed.
+    ///     A <see cref="long" /> value representing the generated seed.
     /// </returns>
     /// <remarks>
     ///     <para>
-    ///         Although the generated seed has a high level of resistance to attacks,
-    ///         this algorithm is not cryptographically secure and should not be used for
-    ///         security-sensitive purposes such as password hashing or digital signatures.
-    ///     </para>
-    ///     <para>
-    ///         Suitable for hash table DoS protection, procedural generation, and non-cryptographic
-    ///         applications requiring unpredictable seed values.
+    ///         The value is read from the operating system's cryptographically secure
+    ///         random source and is unpredictable on every supported platform.
     ///     </para>
     /// </remarks>
-    public static long GenerateUnique()
+    public static long GetEntropy()
     {
-        lock (Global.Lock)
-        {
-            unchecked
-            {
-                const ulong multiplierPrime = 0x1F844CB7FD2C1EAD;
-                Global.CurrentIndex = (Global.CurrentIndex ^ Global.TimerTicks) * multiplierPrime;
-
-                return Chi32.ApplyCascadingHashInterleave((long)Global.RuntimeSelector, (long)Global.CurrentIndex);
-            }
-        }
+        Span<byte> buffer = stackalloc byte[sizeof(long)];
+        RandomNumberGenerator.Fill(buffer);
+        return BinaryPrimitives.ReadInt64LittleEndian(buffer);
     }
 
     /// <inheritdoc cref="ScrambleSharedDoc" />
@@ -284,62 +270,6 @@ public static class ChiSeed
             var mixedLength = (long)BinaryPrimitives.ReverseEndianness(~(ulong)count * mixingPrime);
 
             return Chi32.ApplyCascadingHashInterleave(mixedLength, state);
-        }
-    }
-
-    private static class Global
-    {
-        public static ulong RuntimeSelector { get; } = (ulong)GatherRandomness(() => Math.Cbrt(TimerTicks));
-        public static ulong CurrentIndex { get; set; } = (ulong)GatherRandomness(() => Math.Sin(TimerTicks));
-
-        public static ulong TimerTicks => (ulong)Stopwatch.GetTimestamp();
-        public static object Lock { get; } = new();
-
-        private static long GatherRandomness(Func<double> valueFactory)
-        {
-            var selectorComponents = new List<string>();
-            AddComponent(selectorComponents, () => $"{valueFactory():C53}");
-            AddComponent(selectorComponents, () => RuntimeInformation.OSDescription);
-            AddComponent(selectorComponents, () => AppContext.BaseDirectory);
-            AddComponent(selectorComponents, () => Environment.Version.ToString());
-            AddComponent(selectorComponents, () => Environment.ProcessId.ToString());
-            var selector = FinalizeComponents(selectorComponents);
-
-            var indexComponents = new List<string>();
-            AddComponent(indexComponents, () => $"{valueFactory()}");
-            AddComponent(indexComponents, () => CultureInfo.CurrentCulture.DisplayName);
-            AddComponent(indexComponents, () => DateTime.Now.ToLongDateString());
-            AddComponent(indexComponents, () => DateTime.Now.ToLongTimeString());
-            AddComponent(indexComponents, () => DateTime.Now.Ticks.ToString());
-            var index = FinalizeComponents(indexComponents);
-
-            return Chi32.ApplyCascadingHashInterleave(selector, index);
-
-            static void AddComponent(List<string> components, Func<string> valueFactory)
-            {
-                try
-                {
-                    var componentValue = valueFactory();
-                    if (!string.IsNullOrEmpty(componentValue))
-                        components.Add(componentValue);
-                }
-                catch
-                {
-                    // Silently ignore failed sources
-                }
-            }
-
-            static long FinalizeComponents(List<string> components)
-            {
-                AddComponent(components, () => Guid.NewGuid().ToString());
-                AddComponent(components, () => TimerTicks.ToString());
-
-                new Random().Shuffle(CollectionsMarshal.AsSpan(components));
-
-                var listSeparator = CultureInfo.CurrentCulture.TextInfo.ListSeparator;
-                var finalizedString = string.Join(listSeparator, components);
-                return ChiMix64.MixValue(ChiMix64.InitialValue, finalizedString);
-            }
         }
     }
 

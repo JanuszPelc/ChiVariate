@@ -54,7 +54,7 @@ public ref struct ChiHash
     ///     (e.g., DoS protection in hash tables) while maintaining consistency within
     ///     the current application session.
     /// </remarks>
-    public static int Seed { get; } = new ChiHash().Add(ChiSeed.GenerateUnique()).Hash;
+    public static int Seed { get; } = new ChiHash().Add(ChiSeed.GetEntropy()).Hash;
 
     /// <summary>
     ///     Gets the current 32-bit hash code based on all values added so far.
